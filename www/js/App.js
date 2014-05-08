@@ -202,7 +202,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var shipDrawable = {
             id: 'ship',
             x: 320 / 2,
-            y: 480 / 3 * 2,
+            y: 480 / 8 * 5,
             img: ship
         };
         renderer.add(shipDrawable);
@@ -217,21 +217,34 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var fireDrawable = {
             id: 'fire',
             x: 320 / 2,
-            y: 480 / 3 * 2,
+            y: 480 / 8 * 5,
             sprite: fireSprite,
             img: fireFrames[0]
         };
         renderer.add(fireDrawable);
 
+        var shieldStatic = atlasMapper.get("shield3");
+
         var shieldsUpFrames = [];
         for (i = 0; i <= 5; i++) {
             shieldsUpFrames.push(atlasMapper.get("shields-up-anim/shields_up_000" + i));
         }
+        var shieldsUpSprite = new Sprite(shieldsUpFrames);
+
 
         var shieldsDownFrames = [];
         for (i = 0; i <= 5; i++) {
             shieldsDownFrames.push(atlasMapper.get("shields-down-anim/shields_down_000" + i));
         }
+        var shieldsDownSprite = new Sprite(shieldsDownFrames);
+
+        var shieldsDrawable = {
+            id: 'shields',
+            x: 320 / 2,
+            y: 480 / 8 * 5,
+            img: shieldStatic
+        };
+        renderer.add(shieldsDrawable);
 
         var tapFrames = [];
         for (i = 0; i <= 35; i++) {
@@ -241,6 +254,15 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 tapFrames.push(atlasMapper.get("tap-anim/tap_00" + i));
             }
         }
+        var tapSprite = new Sprite(tapFrames);
+        var tapDrawable = {
+            id: 'tap',
+            x: 320 / 16 * 9,
+            y: 480 / 8 * 7,
+            sprite: tapSprite,
+            img: tapFrames[0]
+        };
+        renderer.add(tapDrawable);
 
         var getReadyFrames = [];
         for (i = 0; i <= 41; i++) {
@@ -250,8 +272,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_00" + i));
             }
         }
+        var getReadySprite = new Sprite(getReadyFrames);
+        var getReadyDrawable = {
+            id: 'get_ready',
+            x: 320 / 2,
+            y: 480 / 3,
+            sprite: getReadySprite,
+            img: getReadyFrames[0]
+        };
+        renderer.add(getReadyDrawable);
 
-        var shieldStatic = atlasMapper.get("shield3");
+
         var ready3 = atlasMapper.get("ready3");
         var ready2 = atlasMapper.get("ready2");
         var ready1 = atlasMapper.get("ready1");
@@ -259,11 +290,20 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var logoFrames = [];
         for (i = 0; i <= 43; i++) {
             if (i < 10) {
-                getReadyFrames.push(atlasMapper.get("logo-anim/logo_000" + i));
+                logoFrames.push(atlasMapper.get("logo-anim/logo_000" + i));
             } else {
-                getReadyFrames.push(atlasMapper.get("logo-anim/logo_00" + i));
+                logoFrames.push(atlasMapper.get("logo-anim/logo_00" + i));
             }
         }
+        var logoSprite = new Sprite(logoFrames);
+        var logoDrawable = {
+            id: 'logo',
+            x: 320 / 2,
+            y: 480 / 6,
+            sprite: logoSprite,
+            img: logoFrames[0]
+        };
+        renderer.add(logoDrawable);
 
 
 //        startScreen.add(createScrollingBackElement(atlasMapper.get('title-screen-v001')), createTransitionPathForScrollingBackElement(atlasMapper.get('title-screen-v001'), screen), function() {
