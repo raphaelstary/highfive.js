@@ -43,9 +43,10 @@ var Scene = (function () {
 
                 node.time++;
             } else {
-                if (node.ready)
-                    node.ready();
                 delete this.sceneDict[key];
+                if (node.ready) {
+                    node.ready();
+                }
             }
         }
 

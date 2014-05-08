@@ -9,7 +9,7 @@ var Renderer = (function () {
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
-        this.drawables = [];
+        this.drawableDict = {};
     }
 
     Renderer.prototype.resize = function (width, height) {
@@ -20,24 +20,32 @@ var Renderer = (function () {
     };
 
     Renderer.prototype.add = function (drawable) {
-        this.drawables.push(drawable);
+        this.drawableDict[drawable.id] = drawable;
+    };
+
+    Renderer.prototype.remove = function (drawable) {
+        delete this.drawableDict[drawable.id];
     };
 
     Renderer.prototype.draw = function () {
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
         var self = this;
-        this.drawables.forEach(function (elem) {
-            self.ctx.drawImage(self.atlas, elem.img.x, elem.img.y,
-                elem.img.width, elem.img.height,
-                self._getImgRenderXPoint(elem.x, elem.img),
-                self._getImgRenderYPoint(elem.y, elem.img),
-                self._getImgRenderWidth(elem.img),
-                self._getImgRenderHeight(elem.img));
-        });
+        for (var key in this.drawableDict) {
+            if (this.drawableDict.hasOwnProperty(key)) {
+                var elem = this.drawableDict[key];
+
+                self.ctx.drawImage(self.atlas, elem.img.x, elem.img.y,
+                    elem.img.width, elem.img.height,
+                    self._getImgRenderXPoint(elem.x, elem.img),
+                    self._getImgRenderYPoint(elem.y, elem.img),
+                    self._getImgRenderWidth(elem.img),
+                    self._getImgRenderHeight(elem.img));
+            }
+        }
     };
 
-    var baseTileWidth = 1920 / 480,
+    var baseTileWidth = 1,
         tileOffSet = Math.floor(baseTileWidth * 0.5);
 
     Renderer.prototype._getImgRenderXPoint = function (x, subImage) {

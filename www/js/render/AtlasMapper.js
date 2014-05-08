@@ -1,8 +1,8 @@
 var AtlasMapper = (function (SubImage) {
     "use strict";
 
-    var X_TILES = 480;
-//        Y_TILES = 320;
+    var X_TILES = 320;
+//        Y_TILES = 480;
 
     function AtlasMapper(referenceWidth) {
         this.referenceWidth = referenceWidth;
@@ -13,23 +13,7 @@ var AtlasMapper = (function (SubImage) {
         var factor = this._getActualTileWidth(screenWidth) / this.referenceWidth;
         var self = this;
         atlasInfo.frames.forEach(function (elem) {
-
-            var subImage = self._createSubImage(elem, factor);
-
-            if (elem.filename.search("-\\d+") != -1) {
-
-                // it's a sprite
-                var keyName = elem.filename.substring(0, elem.filename.lastIndexOf('-'));
-                if (self.atlasDict[keyName] == undefined) {
-                    self.atlasDict[keyName] = [subImage];
-                } else {
-                    self.atlasDict[keyName].push(subImage);
-                }
-
-            } else {
-                // it's just a sub image
-                self.atlasDict[elem.filename.substring(0, elem.filename.lastIndexOf('.'))] = subImage;
-            }
+            self.atlasDict[elem.filename] = self._createSubImage(elem, factor);
         });
     };
 

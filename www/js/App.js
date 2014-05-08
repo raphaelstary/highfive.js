@@ -10,8 +10,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     App.prototype.start = function (windowWidth, windowHeight) {
 
         var resourceLoader = new ResourceLoader(),
-            preGameAtlas = resourceLoader.addImage('gfx/pregame-atlas.png'),
-            preGameAtlasInfo = resourceLoader.addJSON('data/pregame-atlas.json'),
+            atlas = resourceLoader.addImage('gfx/atlas.png'),
+            atlasInfo = resourceLoader.addJSON('data/atlas.json'),
             initialScreen = new SimpleLoadingScreen(this.screenCtx);
 
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
@@ -19,50 +19,144 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         initialScreen.showNew(2, windowWidth, windowHeight);
 
-        var self = this;
-        resourceLoader.onComplete = function startMenu() {
-            self.resizeBus.remove('initial_screen');
-
-            var preGameAtlasMapper = new AtlasMapper(1920/480);
-            preGameAtlasMapper.init(preGameAtlasInfo, windowWidth);
-            self.resizeBus.add('pre_game_mapper', preGameAtlasMapper.resize.bind(preGameAtlasMapper));
-
-            var preGameRenderer = new Renderer(self.screen, self.screenCtx, preGameAtlas);
-            self.resizeBus.add('pre_game_renderer', preGameRenderer.resize.bind(preGameRenderer));
-
-            var startScreen = new Scene(preGameRenderer),
-                startScreenManager = new SceneManager(startScreen);
-
-            startScreen.add(createScrollingBackElement(preGameAtlasMapper.get('title-screen-v001')), createTransitionPathForScrollingBackElement(preGameAtlasMapper.get('title-screen-v001'), screen), function() {
-
-                var logo = createLogoElement(screen, preGameAtlasMapper.get('ninja-cat-logo-v002'));
-
-                startScreen.add(logo, createTransitionPathForLogoElement(logo, screen), function () {
-
-                    var start = createStartElement(screen, preGameAtlasMapper.get('start-target-v001'));
-
-                    startScreen.add(start, createTransitionPathForStartElement(start, screen));
-
-                    var desc = createDescElement(screen, preGameAtlasMapper.get('aim-fire-desc-v001'));
-
-                    startScreenManager.throttleAdd({item: desc, path: createTransitionPathForDescElement(desc, screen)}, 10);
-
-                    var changeToTouchElement = createTouchElement(screen, preGameAtlasMapper.get('change-touch-btn-v001'));
-
-                    startScreenManager.throttleAdd({item: changeToTouchElement, path: createTransitionPathForTouchElement(changeToTouchElement, screen), ready: function () {
-
-//                        startScreenInput.add(changeToTouchElement, function () {
-//                            console.log("you touched the right spot!");
-//                        });
-                    }}, 15);
-                });
-            });
-
-            var preGameLoop = new GameLoop(self.requestAnimationFrame, preGameRenderer, startScreen, startScreenManager);
-            preGameLoop.run();
-        };
+        resourceLoader.onComplete = this._showPreGame.bind(this, atlas, atlasInfo, windowWidth);
 
         resourceLoader.load();
+    };
+
+    App.prototype._showPreGame = function (atlas, atlasInfo, windowWidth) {
+        this.resizeBus.remove('initial_screen');
+
+        var atlasMapper = new AtlasMapper(1); // 1px is 1 tile length
+        atlasMapper.init(atlasInfo, windowWidth);
+        this.resizeBus.add('mapper', atlasMapper.resize.bind(atlasMapper));
+
+        var renderer = new Renderer(this.screen, this.screenCtx, atlas);
+        this.resizeBus.add('renderer', renderer.resize.bind(renderer));
+
+        var startScreen = new Scene(renderer),
+            startScreenManager = new SceneManager(startScreen);
+
+        var background = atlasMapper.get('background');
+        var backgroundDrawable = {
+            id: 'background',
+            x: 320/2,
+            y: 480/2,
+            img: background
+        };
+        renderer.add(backgroundDrawable);
+
+        var speed = atlasMapper.get('speed');
+        var speedDrawable = {
+            id: 'speed',
+            x: 320/4,
+            y: 0 - speed.height / 2,
+            img: speed
+        };
+        var speedPath = {
+            startX: speedDrawable.x,
+            startY: speedDrawable.y,
+            endX: speedDrawable.x,
+            endY: 480 + speed.height / 2,
+            length: 480 + speed.height,
+            duration: 30, //frames
+            timingFn: Transition.LINEAR
+        };
+        var used = false;
+        function addSpeed() {
+            if (used) {
+                renderer.remove(speedDrawable);
+            }
+            speedDrawable = {
+                id: 'speed',
+                x: 320/4,
+                y: 0 - speed.height / 2,
+                img: speed
+            };
+            startScreen.add(speedDrawable, speedPath, addSpeed);
+        }
+        used = true;
+        addSpeed();
+
+        var ship = atlasMapper.get('ship');
+
+        var fireFrames = [];
+        var i;
+        for (i = 0; i <= 7; i++) {
+            fireFrames.push(atlasMapper.get('fire-anim/fire_000' + i));
+        }
+
+        var shieldsUpFrames = [];
+        for (i = 0; i <= 5; i++) {
+            shieldsUpFrames.push(atlasMapper.get("shields-up-anim/shields_up_000" + i));
+        }
+
+        var shieldsDownFrames = [];
+        for (i = 0; i <= 5; i++) {
+            shieldsDownFrames.push(atlasMapper.get("shields-down-anim/shields_down_000" + i));
+        }
+
+        var tapFrames = [];
+        for (i = 0; i <= 35; i++) {
+            if (i < 10) {
+                tapFrames.push(atlasMapper.get("tap-anim/tap_000" + i));
+            } else {
+                tapFrames.push(atlasMapper.get("tap-anim/tap_00" + i));
+            }
+        }
+
+        var getReadyFrames = [];
+        for (i = 0; i <= 41; i++) {
+            if (i < 10) {
+                getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_000" + i));
+            } else {
+                getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_00" + i));
+            }
+        }
+
+        var shieldStatic = atlasMapper.get("shield3");
+        var ready3 = atlasMapper.get("ready3");
+        var ready2 = atlasMapper.get("ready2");
+        var ready1 = atlasMapper.get("ready1");
+
+        var logoFrames = [];
+        for (i = 0; i <= 43; i++) {
+            if (i < 10) {
+                getReadyFrames.push(atlasMapper.get("logo-anim/logo_000" + i));
+            } else {
+                getReadyFrames.push(atlasMapper.get("logo-anim/logo_00" + i));
+            }
+        }
+
+
+//        startScreen.add(createScrollingBackElement(atlasMapper.get('title-screen-v001')), createTransitionPathForScrollingBackElement(atlasMapper.get('title-screen-v001'), screen), function() {
+//
+//            var logo = createLogoElement(screen, atlasMapper.get('ninja-cat-logo-v002'));
+//
+//            startScreen.add(logo, createTransitionPathForLogoElement(logo, screen), function () {
+//
+//                var start = createStartElement(screen, atlasMapper.get('start-target-v001'));
+//
+//                startScreen.add(start, createTransitionPathForStartElement(start, screen));
+//
+//                var desc = createDescElement(screen, atlasMapper.get('aim-fire-desc-v001'));
+//
+//                startScreenManager.throttleAdd({item: desc, path: createTransitionPathForDescElement(desc, screen)}, 10);
+//
+//                var changeToTouchElement = createTouchElement(screen, atlasMapper.get('change-touch-btn-v001'));
+//
+//                startScreenManager.throttleAdd({item: changeToTouchElement, path: createTransitionPathForTouchElement(changeToTouchElement, screen), ready: function () {
+//
+////                        startScreenInput.add(changeToTouchElement, function () {
+////                            console.log("you touched the right spot!");
+////                        });
+//                }}, 15);
+//            });
+//        });
+
+        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startScreen, startScreenManager);
+        gameLoop.run();
+
     };
 
     function createScrollingBackElement(backImg) {
