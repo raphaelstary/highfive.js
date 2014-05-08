@@ -1,4 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite) {
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus) {
         this.screen = screen;
@@ -199,12 +199,29 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
         var ship = atlasMapper.get('ship');
+        var shipDrawable = {
+            id: 'ship',
+            x: 320 / 2,
+            y: 480 / 3 * 2,
+            img: ship
+        };
+        renderer.add(shipDrawable);
 
         var fireFrames = [];
         var i;
         for (i = 0; i <= 7; i++) {
             fireFrames.push(atlasMapper.get('fire-anim/fire_000' + i));
         }
+
+        var fireSprite = new Sprite(fireFrames);
+        var fireDrawable = {
+            id: 'fire',
+            x: 320 / 2,
+            y: 480 / 3 * 2,
+            sprite: fireSprite,
+            img: fireFrames[0]
+        };
+        renderer.add(fireDrawable);
 
         var shieldsUpFrames = [];
         for (i = 0; i <= 5; i++) {
@@ -385,4 +402,4 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     }
 
     return App;
-})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition);
+})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite);
