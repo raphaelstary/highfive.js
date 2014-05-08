@@ -1,5 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite,
-                     AnimationStudio, AnimationStudioManager) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager) {
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus) {
         this.screen = screen;
@@ -190,7 +189,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         };
 
         function addSpeedFive() {
-                renderer.remove(speedDrawableFive);
+            renderer.remove(speedDrawableFive);
             speedDrawableFive = {
                 id: 'speedFive',
                 x: 320 / 16,
@@ -199,6 +198,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             };
             startScreen.add(speedDrawableFive, speedFivePath, addSpeedFive);
         }
+
         startScreenManager.throttleAdd({item: speedDrawableFive, path: speedFivePath, ready: addSpeedFive}, 16);
 
 
@@ -217,7 +217,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             fireFrames.push(atlasMapper.get('fire-anim/fire_000' + i));
         }
 
-        var fireSprite = new Sprite(fireFrames);
+        var fireSprite = new Sprite(fireFrames, true);
         var fireDrawable = {
             id: 'fire',
             x: 320 / 2,
@@ -233,22 +233,40 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         for (i = 0; i <= 5; i++) {
             shieldsUpFrames.push(atlasMapper.get("shields-up-anim/shields_up_000" + i));
         }
-        var shieldsUpSprite = new Sprite(shieldsUpFrames);
+
 
 
         var shieldsDownFrames = [];
         for (i = 0; i <= 5; i++) {
             shieldsDownFrames.push(atlasMapper.get("shields-down-anim/shields_down_000" + i));
         }
-        var shieldsDownSprite = new Sprite(shieldsDownFrames);
 
-        var shieldsDrawable = {
-            id: 'shields',
-            x: 320 / 2,
-            y: 480 / 8 * 5,
-            img: shieldStatic
-        };
-//    todo next    startScreenManager.throttleAdd({})
+
+        var startTimer = 10;
+        function shieldsAnimation() {
+            var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
+            var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
+            var shieldsDrawable = {
+                id: 'shields',
+                x: 320 / 2,
+                y: 480 / 8 * 5,
+                sprite: shieldsUpSprite,
+                img: shieldsUpFrames[0]
+            };
+            animationStudioManager.throttleAdd({item: shieldsDrawable, ready: function () {
+                shieldsDrawable.img = shieldStatic;
+                animationStudioManager.throttleAdd({item: shieldsDrawable, ready: function () {
+                    renderer.remove(shieldsDrawable);
+                    startTimer = 20;
+                    shieldsAnimation();
+                }}, 28, function () {
+                    shieldsDrawable.sprite = shieldsDownSprite;
+                    shieldsDrawable.img = shieldsDownFrames[0];
+                })
+            }}, startTimer);
+        }
+
+        shieldsAnimation();
 
         var tapFrames = [];
         for (i = 0; i <= 35; i++) {
@@ -258,7 +276,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 tapFrames.push(atlasMapper.get("tap-anim/tap_00" + i));
             }
         }
-        var tapSprite = new Sprite(tapFrames);
+        var tapSprite = new Sprite(tapFrames, true);
         var tapDrawable = {
             id: 'tap',
             x: 320 / 16 * 9,
@@ -276,7 +294,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_00" + i));
             }
         }
-        var getReadySprite = new Sprite(getReadyFrames);
+        var getReadySprite = new Sprite(getReadyFrames, true);
         var getReadyDrawable = {
             id: 'get_ready',
             x: 320 / 2,
@@ -299,7 +317,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 logoFrames.push(atlasMapper.get("logo-anim/logo_00" + i));
             }
         }
-        var logoSprite = new Sprite(logoFrames);
+        var logoSprite = new Sprite(logoFrames, true);
         var logoDrawable = {
             id: 'logo',
             x: 320 / 2,

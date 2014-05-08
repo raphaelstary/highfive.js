@@ -16,7 +16,7 @@ var AnimationStudioManager = (function () {
 
             if (toAdd.duration < toAdd.time) {
 
-                this.studio.add(toAdd.item);
+                this.studio.add(toAdd.addable.item, toAdd.addable.ready);
 
                 if (toAdd.ready) {
                     toAdd.ready();
