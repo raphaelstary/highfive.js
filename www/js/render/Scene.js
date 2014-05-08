@@ -7,8 +7,9 @@ var Scene = (function () {
     }
 
     Scene.prototype.add = function (object, path, callback) {
-        if (path)
+        if (path) {
             var axis = path.startX === path.endX ? 'y' : 'x';
+        }
 
         this.sceneDict[object.id] = {
             item: object,

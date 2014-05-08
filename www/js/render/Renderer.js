@@ -45,23 +45,6 @@ var Renderer = (function () {
         }
     };
 
-    Renderer.prototype.nextFrame = function () {
-        for (var key in this.drawableDict) {
-            if (this.drawableDict.hasOwnProperty(key)) {
-                var elem = this.drawableDict[key];
-                if (elem.sprite === undefined) {
-                    continue;
-                }
-
-                elem.img = elem.sprite.frames[++elem.sprite.current];
-                if (elem.sprite.current >= elem.sprite.frames.length) {
-                    elem.sprite.current = 0;
-                    elem.img = elem.sprite.frames[0];
-                }
-            }
-        }
-    };
-
     var baseTileWidth = 1,
         tileOffSet = Math.floor(baseTileWidth * 0.5);
 

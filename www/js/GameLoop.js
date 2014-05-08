@@ -1,11 +1,13 @@
 var GameLoop = (function () {
     "use strict";
 
-    function GameLoop(animationFrame, renderer, scene, sceneManager) {
+    function GameLoop(animationFrame, renderer, scene, sceneManager, animationStudio, animationStudioManager) {
         this.animationFrame = animationFrame;
         this.renderer = renderer;
         this.scene = scene;
         this.sceneManager = sceneManager;
+        this.animationStudio = animationStudio;
+        this.animationStudioManager = animationStudioManager;
         this.ticker = 0;
     }
 
@@ -16,8 +18,9 @@ var GameLoop = (function () {
         this.scene.update();
         this.renderer.draw();
         if (this.ticker % 2 === 0) {
-            this.renderer.nextFrame();
+            this.animationStudio.nextFrame();
         }
+        this.animationStudioManager.update();
         this.ticker++;
     };
 

@@ -15,8 +15,9 @@ var SceneManager = (function () {
 
                 this.scene.add(toAdd.addable.item, toAdd.addable.path, toAdd.addable.ready);
 
-                if (toAdd.ready)
+                if (toAdd.ready) {
                     toAdd.ready();
+                }
 
                 this.todos.splice(i, 1);
 

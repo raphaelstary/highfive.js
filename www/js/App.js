@@ -1,4 +1,5 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite,
+                     AnimationStudio, AnimationStudioManager) {
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus) {
         this.screen = screen;
@@ -36,6 +37,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var startScreen = new Scene(renderer),
             startScreenManager = new SceneManager(startScreen);
+
+        var animationStudio = new AnimationStudio(renderer),
+            animationStudioManager = new AnimationStudioManager(animationStudio);
 
         var background = atlasMapper.get('background');
         var backgroundDrawable = {
@@ -221,7 +225,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: fireSprite,
             img: fireFrames[0]
         };
-        renderer.add(fireDrawable);
+        animationStudio.add(fireDrawable);
 
         var shieldStatic = atlasMapper.get("shield3");
 
@@ -244,7 +248,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             y: 480 / 8 * 5,
             img: shieldStatic
         };
-        renderer.add(shieldsDrawable);
+//    todo next    startScreenManager.throttleAdd({})
 
         var tapFrames = [];
         for (i = 0; i <= 35; i++) {
@@ -262,7 +266,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: tapSprite,
             img: tapFrames[0]
         };
-        renderer.add(tapDrawable);
+        animationStudio.add(tapDrawable);
 
         var getReadyFrames = [];
         for (i = 0; i <= 41; i++) {
@@ -280,7 +284,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: getReadySprite,
             img: getReadyFrames[0]
         };
-        renderer.add(getReadyDrawable);
+        animationStudio.add(getReadyDrawable);
 
 
         var ready3 = atlasMapper.get("ready3");
@@ -303,7 +307,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: logoSprite,
             img: logoFrames[0]
         };
-        renderer.add(logoDrawable);
+        animationStudio.add(logoDrawable);
 
 
 //        startScreen.add(createScrollingBackElement(atlasMapper.get('title-screen-v001')), createTransitionPathForScrollingBackElement(atlasMapper.get('title-screen-v001'), screen), function() {
@@ -331,7 +335,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 //            });
 //        });
 
-        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startScreen, startScreenManager);
+        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startScreen, startScreenManager,
+            animationStudio, animationStudioManager);
         gameLoop.run();
 
     };
@@ -442,4 +447,5 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     }
 
     return App;
-})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite);
+})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio,
+    AnimationStudioManager);
