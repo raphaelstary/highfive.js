@@ -34,8 +34,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var renderer = new Renderer(this.screen, this.screenCtx, atlas);
         this.resizeBus.add('renderer', renderer.resize.bind(renderer));
 
-        var startScreen = new MotionStudio(),
-            startScreenManager = new MotionStudioManager(startScreen);
+        var startMotions = new MotionStudio(),
+            startMotionsManager = new MotionStudioManager(startMotions);
 
         var animationStudio = new AnimationStudio(),
             animationStudioManager = new AnimationStudioManager(animationStudio);
@@ -50,14 +50,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var speedOnePath = new Path(speedDrawableOne.x, speedDrawableOne.y, speedDrawableOne.x, 480 + speed.height / 2,
                 480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreen.move(speedDrawableOne, speedOnePath);
+        startMotions.move(speedDrawableOne, speedOnePath);
         renderer.add(speedDrawableOne);
 
         var speedDrawableTwo = new Drawable('speedTwo', 320 / 3 * 2, 0 - speed.height / 2, speed);
         var speedTwoPath = new Path(speedDrawableTwo.x, speedDrawableTwo.y, speedDrawableTwo.x, 480 + speed.height / 2,
             480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreenManager.throttleAdd({item: speedDrawableTwo, path: speedTwoPath}, 34, function () {
+        startMotionsManager.throttleAdd({item: speedDrawableTwo, path: speedTwoPath}, 34, function () {
             renderer.add(speedDrawableTwo);
         });
 
@@ -65,7 +65,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var speedThreePath = new Path(speedDrawableThree.x, speedDrawableThree.y, speedDrawableThree.x, 480 + speed.height / 2,
             480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreenManager.throttleAdd({item: speedDrawableThree, path: speedThreePath}, 8, function () {
+        startMotionsManager.throttleAdd({item: speedDrawableThree, path: speedThreePath}, 8, function () {
             renderer.add(speedDrawableThree);
         });
 
@@ -73,7 +73,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var speedFourPath = new Path(speedDrawableFour.x, speedDrawableFour.y, speedDrawableFour.x, 480 + speed.height / 2,
             480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreenManager.throttleAdd({item: speedDrawableFour, path: speedFourPath}, 24, function () {
+        startMotionsManager.throttleAdd({item: speedDrawableFour, path: speedFourPath}, 24, function () {
             renderer.add(speedDrawableFour);
         });
 
@@ -81,7 +81,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var speedFivePath = new Path (speedDrawableFive.x, speedDrawableFive.y, speedDrawableFive.x, 480 + speed.height / 2,
             480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreenManager.throttleAdd({item: speedDrawableFive, path: speedFivePath}, 16, function () {
+        startMotionsManager.throttleAdd({item: speedDrawableFive, path: speedFivePath}, 16, function () {
             renderer.add(speedDrawableFive);
         });
 
@@ -180,7 +180,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         animationStudio.animate(logoDrawable, logoSprite);
         renderer.add(logoDrawable);
 
-        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startScreen, startScreenManager,
+        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
             animationStudio, animationStudioManager);
         gameLoop.run();
 
