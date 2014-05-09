@@ -6,6 +6,8 @@ var AnimationStudio = (function () {
     }
 
     AnimationStudio.prototype.animate = function (animatedItem, sprite, callback) {
+        animatedItem.img = sprite.frames[0];
+
         this.animationsDict[animatedItem.id] = {
             item: animatedItem,
             sprite: sprite,
@@ -37,16 +39,6 @@ var AnimationStudio = (function () {
                 }
             }
         }
-    };
-
-    AnimationStudio.prototype.nextSprite = function (item, sprite) {
-        this.animationsDict[item.id].sprite = sprite;
-        item.img = sprite.frames[0];
-    };
-
-    AnimationStudio.prototype.changeToStatic = function (item, img) {
-        item.img = img;
-        this.remove(item);
     };
 
     return AnimationStudio;

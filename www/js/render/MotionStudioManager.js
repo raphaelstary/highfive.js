@@ -1,19 +1,19 @@
-var SceneManager = (function () {
+var MotionStudioManager = (function () {
     "use strict";
 
-    function SceneManager(scene) {
+    function MotionStudioManager(scene) {
         this.scene = scene;
         this.todos = [];
     }
 
-    SceneManager.prototype.update = function () {
+    MotionStudioManager.prototype.update = function () {
 
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
 
             if (toAdd.duration < toAdd.time) {
 
-                this.scene.add(toAdd.addable.item, toAdd.addable.path, toAdd.addable.ready);
+                this.scene.move(toAdd.addable.item, toAdd.addable.path, toAdd.addable.ready);
 
                 if (toAdd.ready) {
                     toAdd.ready();
@@ -27,7 +27,7 @@ var SceneManager = (function () {
         }
     };
 
-    SceneManager.prototype.throttleAdd = function (itemToAdd, duration, callback) {
+    MotionStudioManager.prototype.throttleAdd = function (itemToAdd, duration, callback) {
         this.todos.push({
             addable: itemToAdd,
             duration: duration,
@@ -36,5 +36,5 @@ var SceneManager = (function () {
         });
     };
 
-    return SceneManager;
+    return MotionStudioManager;
 })();

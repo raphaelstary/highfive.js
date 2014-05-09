@@ -5,7 +5,7 @@ var ResizeBus = (function () {
         this.resizeDict = {};
     }
 
-    ResizeBus.prototype.animate = function (id, callback) {
+    ResizeBus.prototype.add = function (id, callback) {
         this.resizeDict[id] = callback;
     };
 

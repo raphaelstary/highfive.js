@@ -1,4 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus) {
         this.screen = screen;
@@ -34,181 +34,60 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var renderer = new Renderer(this.screen, this.screenCtx, atlas);
         this.resizeBus.add('renderer', renderer.resize.bind(renderer));
 
-        var startScreen = new Scene(renderer),
-            startScreenManager = new SceneManager(startScreen);
+        var startScreen = new MotionStudio(),
+            startScreenManager = new MotionStudioManager(startScreen);
 
-        var animationStudio = new AnimationStudio(renderer),
+        var animationStudio = new AnimationStudio(),
             animationStudioManager = new AnimationStudioManager(animationStudio);
 
         var background = atlasMapper.get('background');
-        var backgroundDrawable = {
-            id: 'background',
-            x: 320 / 2,
-            y: 480 / 2,
-            img: background
-        };
+        var backgroundDrawable = new Drawable('background', 320 / 2, 480 / 2, background);
         renderer.add(backgroundDrawable);
 
         var speed = atlasMapper.get('speed');
 
-        var speedDrawableOne = {
-            id: 'speedOne',
-            x: 320 / 4,
-            y: 0 - speed.height / 2,
-            img: speed
-        };
-        var speedOnePath = {
-            startX: speedDrawableOne.x,
-            startY: speedDrawableOne.y,
-            endX: speedDrawableOne.x,
-            endY: 480 + speed.height / 2,
-            length: 480 + speed.height,
-            duration: 30, //frames
-            timingFn: Transition.LINEAR
-        };
-        var usedOne = false;
+        var speedDrawableOne = new Drawable('speedOne', 320 / 4, 0 - speed.height / 2, speed);
+        var speedOnePath = new Path(speedDrawableOne.x, speedDrawableOne.y, speedDrawableOne.x, 480 + speed.height / 2,
+                480 + speed.height, 30, Transition.LINEAR, true);
 
-        function addSpeedOne() {
-            if (usedOne) {
-                renderer.remove(speedDrawableOne);
-            }
-            speedDrawableOne = {
-                id: 'speedOne',
-                x: 320 / 4,
-                y: 0 - speed.height / 2,
-                img: speed
-            };
-            startScreen.add(speedDrawableOne, speedOnePath, addSpeedOne);
-        }
+        startScreen.move(speedDrawableOne, speedOnePath);
+        renderer.add(speedDrawableOne);
 
-        usedOne = true;
-        addSpeedOne();
+        var speedDrawableTwo = new Drawable('speedTwo', 320 / 3 * 2, 0 - speed.height / 2, speed);
+        var speedTwoPath = new Path(speedDrawableTwo.x, speedDrawableTwo.y, speedDrawableTwo.x, 480 + speed.height / 2,
+            480 + speed.height, 30, Transition.LINEAR, true);
 
-        var speedDrawableTwo = {
-            id: 'speedTwo',
-            x: 320 / 3 * 2,
-            y: 0 - speed.height / 2,
-            img: speed
-        };
-        var speedTwoPath = {
-            startX: speedDrawableTwo.x,
-            startY: speedDrawableTwo.y,
-            endX: speedDrawableTwo.x,
-            endY: 480 + speed.height / 2,
-            length: 480 + speed.height,
-            duration: 30, //frames
-            timingFn: Transition.LINEAR
-        };
+        startScreenManager.throttleAdd({item: speedDrawableTwo, path: speedTwoPath}, 34, function () {
+            renderer.add(speedDrawableTwo);
+        });
 
-        function addSpeedTwo() {
-            renderer.remove(speedDrawableTwo);
-            speedDrawableTwo = {
-                id: 'speedTwo',
-                x: 320 / 3 * 2,
-                y: 0 - speed.height / 2,
-                img: speed
-            };
-            startScreen.add(speedDrawableTwo, speedTwoPath, addSpeedTwo);
-        }
+        var speedDrawableThree = new Drawable('speedThree', 320 / 8 * 7, 0 - speed.height / 2, speed);
+        var speedThreePath = new Path(speedDrawableThree.x, speedDrawableThree.y, speedDrawableThree.x, 480 + speed.height / 2,
+            480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreenManager.throttleAdd({item: speedDrawableTwo, path: speedTwoPath, ready: addSpeedTwo}, 34);
+        startScreenManager.throttleAdd({item: speedDrawableThree, path: speedThreePath}, 8, function () {
+            renderer.add(speedDrawableThree);
+        });
 
+        var speedDrawableFour = new Drawable('speedFour', 320 / 16 * 7, 0 - speed.height / 2, speed);
+        var speedFourPath = new Path(speedDrawableFour.x, speedDrawableFour.y, speedDrawableFour.x, 480 + speed.height / 2,
+            480 + speed.height, 30, Transition.LINEAR, true);
 
-        var speedDrawableThree = {
-            id: 'speedThree',
-            x: 320 / 8 * 7,
-            y: 0 - speed.height / 2,
-            img: speed
-        };
-        var speedThreePath = {
-            startX: speedDrawableThree.x,
-            startY: speedDrawableThree.y,
-            endX: speedDrawableThree.x,
-            endY: 480 + speed.height / 2,
-            length: 480 + speed.height,
-            duration: 30, //frames
-            timingFn: Transition.LINEAR
-        };
+        startScreenManager.throttleAdd({item: speedDrawableFour, path: speedFourPath}, 24, function () {
+            renderer.add(speedDrawableFour);
+        });
 
-        function addSpeedThree() {
-            renderer.remove(speedDrawableThree);
-            speedDrawableThree = {
-                id: 'speedThree',
-                x: 320 / 8 * 7,
-                y: 0 - speed.height / 2,
-                img: speed
-            };
-            startScreen.add(speedDrawableThree, speedThreePath, addSpeedThree);
-        }
+        var speedDrawableFive = new Drawable('speedFive', 320 / 16, 0 - speed.height / 2, speed);
+        var speedFivePath = new Path (speedDrawableFive.x, speedDrawableFive.y, speedDrawableFive.x, 480 + speed.height / 2,
+            480 + speed.height, 30, Transition.LINEAR, true);
 
-        startScreenManager.throttleAdd({item: speedDrawableThree, path: speedThreePath, ready: addSpeedThree}, 8);
-
-        var speedDrawableFour = {
-            id: 'speedFour',
-            x: 320 / 16 * 7,
-            y: 0 - speed.height / 2,
-            img: speed
-        };
-        var speedFourPath = {
-            startX: speedDrawableFour.x,
-            startY: speedDrawableFour.y,
-            endX: speedDrawableFour.x,
-            endY: 480 + speed.height / 2,
-            length: 480 + speed.height,
-            duration: 30, //frames
-            timingFn: Transition.LINEAR
-        };
-
-        function addSpeedFour() {
-            renderer.remove(speedDrawableFour);
-            speedDrawableFour = {
-                id: 'speedFour',
-                x: 320 / 16 * 7,
-                y: 0 - speed.height / 2,
-                img: speed
-            };
-            startScreen.add(speedDrawableFour, speedFourPath, addSpeedFour);
-        }
-
-        startScreenManager.throttleAdd({item: speedDrawableFour, path: speedFourPath, ready: addSpeedFour}, 24);
-
-        var speedDrawableFive = {
-            id: 'speedFive',
-            x: 320 / 16,
-            y: 0 - speed.height / 2,
-            img: speed
-        };
-        var speedFivePath = {
-            startX: speedDrawableFive.x,
-            startY: speedDrawableFive.y,
-            endX: speedDrawableFive.x,
-            endY: 480 + speed.height / 2,
-            length: 480 + speed.height,
-            duration: 30, //frames
-            timingFn: Transition.LINEAR
-        };
-
-        function addSpeedFive() {
-            renderer.remove(speedDrawableFive);
-            speedDrawableFive = {
-                id: 'speedFive',
-                x: 320 / 16,
-                y: 0 - speed.height / 2,
-                img: speed
-            };
-            startScreen.add(speedDrawableFive, speedFivePath, addSpeedFive);
-        }
-
-        startScreenManager.throttleAdd({item: speedDrawableFive, path: speedFivePath, ready: addSpeedFive}, 16);
+        startScreenManager.throttleAdd({item: speedDrawableFive, path: speedFivePath}, 16, function () {
+            renderer.add(speedDrawableFive);
+        });
 
 
         var ship = atlasMapper.get('ship');
-        var shipDrawable = {
-            id: 'ship',
-            x: 320 / 2,
-            y: 480 / 8 * 5,
-            img: ship
-        };
+        var shipDrawable = new Drawable('ship', 320 / 2, 480 / 8 * 5, ship);
         renderer.add(shipDrawable);
 
         var fireFrames = [];
@@ -217,15 +96,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             fireFrames.push(atlasMapper.get('fire-anim/fire_000' + i));
         }
 
-        var fireSprite = new Sprite(fireFrames, true);
-        var fireDrawable = {
-            id: 'fire',
-            x: 320 / 2,
-            y: 480 / 8 * 5,
-            sprite: fireSprite,
-            img: fireFrames[0]
-        };
-        animationStudio.animate(fireDrawable);
+        var fireSprite = new Sprite(fireFrames);
+        var fireDrawable = new Drawable('fire', 320 / 2, 480 / 8 * 5);
+
+        animationStudio.animate(fireDrawable, fireSprite);
+        renderer.add(fireDrawable);
 
         var shieldStatic = atlasMapper.get("shield3");
 
@@ -235,7 +110,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         }
 
 
-
         var shieldsDownFrames = [];
         for (i = 0; i <= 5; i++) {
             shieldsDownFrames.push(atlasMapper.get("shields-down-anim/shields_down_000" + i));
@@ -243,27 +117,22 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
         var startTimer = 10;
+
         function shieldsAnimation() {
             var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
             var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
-            var shieldsDrawable = {
-                id: 'shields',
-                x: 320 / 2,
-                y: 480 / 8 * 5,
-                sprite: shieldsUpSprite,
-                img: shieldsUpFrames[0]
-            };
-            animationStudioManager.throttleAdd({item: shieldsDrawable, ready: function () {
+            var shieldsDrawable = new Drawable('shields', 320 / 2, 480 / 8 * 5);
+
+            animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
                 shieldsDrawable.img = shieldStatic;
-                animationStudioManager.throttleAdd({item: shieldsDrawable, ready: function () {
+                animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
                     renderer.remove(shieldsDrawable);
                     startTimer = 20;
                     shieldsAnimation();
-                }}, 28, function () {
-                    shieldsDrawable.sprite = shieldsDownSprite;
-                    shieldsDrawable.img = shieldsDownFrames[0];
-                })
-            }}, startTimer);
+                }}, 28)
+            }}, startTimer, function () {
+                renderer.add(shieldsDrawable);
+            });
         }
 
         shieldsAnimation();
@@ -276,15 +145,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 tapFrames.push(atlasMapper.get("tap-anim/tap_00" + i));
             }
         }
-        var tapSprite = new Sprite(tapFrames, true);
-        var tapDrawable = {
-            id: 'tap',
-            x: 320 / 16 * 9,
-            y: 480 / 8 * 7,
-            sprite: tapSprite,
-            img: tapFrames[0]
-        };
-        animationStudio.animate(tapDrawable);
+        var tapSprite = new Sprite(tapFrames);
+        var tapDrawable = new Drawable('tap', 320 / 16 * 9, 480 / 8 * 7);
+        animationStudio.animate(tapDrawable, tapSprite);
+        renderer.add(tapDrawable);
 
         var getReadyFrames = [];
         for (i = 0; i <= 41; i++) {
@@ -294,16 +158,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_00" + i));
             }
         }
-        var getReadySprite = new Sprite(getReadyFrames, true);
-        var getReadyDrawable = {
-            id: 'get_ready',
-            x: 320 / 2,
-            y: 480 / 3,
-            sprite: getReadySprite,
-            img: getReadyFrames[0]
-        };
-        animationStudio.animate(getReadyDrawable);
-
+        var getReadySprite = new Sprite(getReadyFrames);
+        var getReadyDrawable = new Drawable('get_ready', 320 / 2, 480 / 3);
+        animationStudio.animate(getReadyDrawable, getReadySprite);
+        renderer.add(getReadyDrawable);
 
         var ready3 = atlasMapper.get("ready3");
         var ready2 = atlasMapper.get("ready2");
@@ -317,41 +175,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 logoFrames.push(atlasMapper.get("logo-anim/logo_00" + i));
             }
         }
-        var logoSprite = new Sprite(logoFrames, true);
-        var logoDrawable = {
-            id: 'logo',
-            x: 320 / 2,
-            y: 480 / 6,
-            sprite: logoSprite,
-            img: logoFrames[0]
-        };
-        animationStudio.animate(logoDrawable);
-
-
-//        startScreen.add(createScrollingBackElement(atlasMapper.get('title-screen-v001')), createTransitionPathForScrollingBackElement(atlasMapper.get('title-screen-v001'), screen), function() {
-//
-//            var logo = createLogoElement(screen, atlasMapper.get('ninja-cat-logo-v002'));
-//
-//            startScreen.add(logo, createTransitionPathForLogoElement(logo, screen), function () {
-//
-//                var start = createStartElement(screen, atlasMapper.get('start-target-v001'));
-//
-//                startScreen.add(start, createTransitionPathForStartElement(start, screen));
-//
-//                var desc = createDescElement(screen, atlasMapper.get('aim-fire-desc-v001'));
-//
-//                startScreenManager.throttleAdd({item: desc, path: createTransitionPathForDescElement(desc, screen)}, 10);
-//
-//                var changeToTouchElement = createTouchElement(screen, atlasMapper.get('change-touch-btn-v001'));
-//
-//                startScreenManager.throttleAdd({item: changeToTouchElement, path: createTransitionPathForTouchElement(changeToTouchElement, screen), ready: function () {
-//
-////                        startScreenInput.add(changeToTouchElement, function () {
-////                            console.log("you touched the right spot!");
-////                        });
-//                }}, 15);
-//            });
-//        });
+        var logoSprite = new Sprite(logoFrames);
+        var logoDrawable = new Drawable('logo', 320 / 2, 480 / 6);
+        animationStudio.animate(logoDrawable, logoSprite);
+        renderer.add(logoDrawable);
 
         var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startScreen, startScreenManager,
             animationStudio, animationStudioManager);
@@ -359,111 +186,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
     };
 
-    function createScrollingBackElement(backImg) {
-        return {
-            id: 'back',
-            x: 0,
-            y: -backImg.tileHeight / 2,
-            img: backImg
-        };
-    }
-
-    function createTransitionPathForScrollingBackElement(backImg) {
-        return {
-            startX: 0,
-            startY: -backImg.tileHeight / 2,
-            endX: 0,
-            endY: 320 / 2,
-            length: backImg.tileHeight,
-            duration: 120, //frames
-            timingFn: Transition.EASE_IN_OUT_EXPO
-        };
-    }
-
-    function createLogoElement(screen, backImg) {
-        return {
-            id: 'logo',
-            x: -backImg.width,
-            y: Math.floor(screen.height / 2),
-            img: backImg
-        };
-    }
-
-    function createTransitionPathForLogoElement(logo, screen) {
-        return {
-            startX: logo.x,
-            startY: logo.y,
-            endX: Math.floor(screen.width / 3),
-            endY: logo.y,
-            length: Math.floor(logo.img.width + screen.width / 3),
-            duration: 60,
-            timingFn: Transition.EASE_IN_OUT_EXPO
-        };
-    }
-
-    function createStartElement(screen, backImg) {
-        return {
-            id: 'start',
-            x: -backImg.width / 2,
-            y: Math.floor(screen.height / 3 * 2 - (backImg.width / 2)),
-            img: backImg
-        };
-    }
-
-    function createTransitionPathForStartElement(start, screen) {
-        return {
-            startX: start.x,
-            startY: start.y,
-            endX: Math.floor(screen.width / 6),
-            endY: start.y,
-            length: Math.floor(start.img.width + screen.width / 6),
-            duration: 60,
-            timingFn: Transition.EASE_IN_OUT_ELASTIC
-        };
-    }
-
-    function createDescElement(screen, backImg) {
-        return {
-            id: 'desc',
-            x: screen.width + backImg.width,
-            y: Math.floor(screen.height / 3),
-            img: backImg
-        };
-    }
-
-    function createTransitionPathForDescElement(desc, screen) {
-        return {
-            startX: desc.x,
-            startY: desc.y,
-            endX: Math.floor(screen.width / 3 * 2),
-            endY: desc.y,
-            length: -Math.floor(desc.img.width + screen.width / 3),
-            duration: 60,
-            timingFn: Transition.EASE_IN_OUT_ELASTIC
-        };
-    }
-
-    function createTouchElement(screen, backImg) {
-        return {
-            id: 'touch',
-            x: screen.width + backImg.width / 2,
-            y: Math.floor(screen.height / 3 * 2),
-            img: backImg
-        };
-    }
-
-    function createTransitionPathForTouchElement(touch, screen) {
-        return {
-            startX: touch.x,
-            startY: touch.y,
-            endX: Math.floor(screen.width / 3 * 2),
-            endY: touch.y,
-            length: -Math.floor(touch.img.width + screen.width / 3),
-            duration: 60,
-            timingFn: Transition.EASE_IN_OUT_ELASTIC
-        };
-    }
-
     return App;
 })(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio,
-    AnimationStudioManager);
+    AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager);

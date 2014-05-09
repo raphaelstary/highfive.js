@@ -4,7 +4,7 @@ var Sprite = (function () {
     function Sprite(frames, loop) {
         this.frames = frames;
         this.current = 0;
-        this.loop = loop;
+        this.loop = loop !== undefined ? loop : true;
     }
 
     return Sprite;

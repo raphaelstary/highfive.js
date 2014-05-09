@@ -1,12 +1,11 @@
-var Scene = (function () {
+var MotionStudio = (function () {
     "use strict";
 
-    function Scene(renderer) {
-        this.renderer = renderer;
+    function MotionStudio() {
         this.sceneDict = {};
     }
 
-    Scene.prototype.animate = function (object, path, callback) {
+    MotionStudio.prototype.move = function (object, path, callback) {
         if (path) {
             var axis = path.startX === path.endX ? 'y' : 'x';
         }
@@ -18,11 +17,9 @@ var Scene = (function () {
             time: 0,
             axis: axis
         };
-
-        this.renderer.add(object);
     };
 
-    Scene.prototype.update = function () {
+    MotionStudio.prototype.update = function () {
         for (var key in this.sceneDict) {
             if (!this.sceneDict.hasOwnProperty(key)) {
                 continue;
@@ -44,14 +41,18 @@ var Scene = (function () {
 
                 node.time++;
             } else {
-                delete this.sceneDict[key];
+                if (node.path.loop) {
+                    node.time = 0;
+                } else {
+                    delete this.sceneDict[key];
+                }
+
                 if (node.ready) {
                     node.ready();
                 }
             }
         }
-
     };
 
-    return Scene;
+    return MotionStudio;
 })();
