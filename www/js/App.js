@@ -1,10 +1,11 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
 
-    function App(screen, screenCtx, requestAnimationFrame, resizeBus) {
+    function App(screen, screenCtx, requestAnimationFrame, resizeBus, tapController) {
         this.screen = screen;
         this.screenCtx = screenCtx;
         this.requestAnimationFrame = requestAnimationFrame;
         this.resizeBus = resizeBus;
+        this.tapController = tapController;
     }
 
     App.prototype.start = function (windowWidth, windowHeight) {
@@ -55,7 +56,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var speedDrawableTwo = new Drawable('speedTwo', 320 / 3 * 2, 0 - speed.height / 2, speed);
         var speedTwoPath = new Path(speedDrawableTwo.x, speedDrawableTwo.y, speedDrawableTwo.x, 480 + speed.height / 2,
-            480 + speed.height, 30, Transition.LINEAR, true);
+                480 + speed.height, 30, Transition.LINEAR, true);
 
         startMotionsManager.throttleAdd({item: speedDrawableTwo, path: speedTwoPath}, 34, function () {
             renderer.add(speedDrawableTwo);
@@ -63,7 +64,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var speedDrawableThree = new Drawable('speedThree', 320 / 8 * 7, 0 - speed.height / 2, speed);
         var speedThreePath = new Path(speedDrawableThree.x, speedDrawableThree.y, speedDrawableThree.x, 480 + speed.height / 2,
-            480 + speed.height, 30, Transition.LINEAR, true);
+                480 + speed.height, 30, Transition.LINEAR, true);
 
         startMotionsManager.throttleAdd({item: speedDrawableThree, path: speedThreePath}, 8, function () {
             renderer.add(speedDrawableThree);
@@ -71,15 +72,15 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var speedDrawableFour = new Drawable('speedFour', 320 / 16 * 7, 0 - speed.height / 2, speed);
         var speedFourPath = new Path(speedDrawableFour.x, speedDrawableFour.y, speedDrawableFour.x, 480 + speed.height / 2,
-            480 + speed.height, 30, Transition.LINEAR, true);
+                480 + speed.height, 30, Transition.LINEAR, true);
 
         startMotionsManager.throttleAdd({item: speedDrawableFour, path: speedFourPath}, 24, function () {
             renderer.add(speedDrawableFour);
         });
 
         var speedDrawableFive = new Drawable('speedFive', 320 / 16, 0 - speed.height / 2, speed);
-        var speedFivePath = new Path (speedDrawableFive.x, speedDrawableFive.y, speedDrawableFive.x, 480 + speed.height / 2,
-            480 + speed.height, 30, Transition.LINEAR, true);
+        var speedFivePath = new Path(speedDrawableFive.x, speedDrawableFive.y, speedDrawableFive.x, 480 + speed.height / 2,
+                480 + speed.height, 30, Transition.LINEAR, true);
 
         startMotionsManager.throttleAdd({item: speedDrawableFive, path: speedFivePath}, 16, function () {
             renderer.add(speedDrawableFive);
@@ -117,7 +118,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
         var startTimer = 10;
-
+        var doTheShields = true;
         function shieldsAnimation() {
             var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
             var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
@@ -128,7 +129,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
                     renderer.remove(shieldsDrawable);
                     startTimer = 20;
-                    shieldsAnimation();
+                    if (doTheShields) {
+                        shieldsAnimation();
+                    }
                 }}, 28)
             }}, startTimer, function () {
                 renderer.add(shieldsDrawable);
@@ -179,6 +182,66 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var logoDrawable = new Drawable('logo', 320 / 2, 480 / 6);
         animationStudio.animate(logoDrawable, logoSprite);
         renderer.add(logoDrawable);
+
+        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, function () {
+            var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
+                    getReadyDrawable.x + getReadyFrames[0].width, getReadyDrawable.y, getReadyFrames[0].width, 60,
+                Transition.EASE_IN_OUT_EXPO);
+
+            startMotions.move(getReadyDrawable, getReadyOutPath, function () {
+                animationStudio.remove(getReadyDrawable);
+                renderer.remove(getReadyDrawable);
+
+                var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
+                var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
+                        320 + 2 * ready3.width, 90, Transition.EASE_IN_OUT_QUAD);
+
+                startMotions.move(ready3Drawable, ready3Path, function () {
+                    renderer.remove(ready3Drawable);
+
+                    var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
+                    var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
+                            320 + 2 * ready2.width, 90, Transition.EASE_IN_OUT_QUAD);
+
+                    startMotions.move(ready2Drawable, ready2Path, function () {
+                        renderer.remove(ready2Drawable);
+
+                        doTheShields = false;
+
+                        var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
+                        var ready1Path = new Path(-ready1.width, 480 / 3, 320 + ready1.width, 480 / 3,
+                                320 + 2 * ready1.width, 90, Transition.EASE_IN_OUT_QUAD);
+
+                        startMotions.move(ready1Drawable, ready1Path, function () {
+                            renderer.remove(ready1Drawable);
+
+                            var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            startMotions.move(logoDrawable, logoOut, function () {
+                                renderer.remove(logoDrawable);
+                                animationStudio.remove(logoDrawable);
+                            });
+
+                            var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            startMotions.move(tapDrawable, tapOut, function () {
+                                renderer.remove(tapDrawable);
+                                animationStudio.remove(tapDrawable);
+                            });
+
+                            var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
+                                shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
+
+                            startMotions.move(shipDrawable, dockShipToGamePosition);
+                            startMotions.move(fireDrawable, dockShipToGamePosition);
+
+                        });
+                        renderer.add(ready1Drawable);
+                    });
+                    renderer.add(ready2Drawable);
+
+                });
+                renderer.add(ready3Drawable);
+            })
+        });
 
         var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
             animationStudio, animationStudioManager);
