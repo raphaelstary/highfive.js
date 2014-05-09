@@ -6,7 +6,7 @@ var Scene = (function () {
         this.sceneDict = {};
     }
 
-    Scene.prototype.add = function (object, path, callback) {
+    Scene.prototype.animate = function (object, path, callback) {
         if (path) {
             var axis = path.startX === path.endX ? 'y' : 'x';
         }

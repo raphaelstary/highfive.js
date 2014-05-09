@@ -19,7 +19,7 @@ var Renderer = (function () {
         this.screenHeight = height;
     };
 
-    Renderer.prototype.add = function (drawable) {
+    Renderer.prototype.animate = function (drawable) {
         this.drawableDict[drawable.id] = drawable;
     };
 

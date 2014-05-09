@@ -1,18 +1,16 @@
 var AnimationStudio = (function () {
     "use strict";
 
-    function AnimationStudio(renderer) {
-        this.renderer = renderer;
+    function AnimationStudio() {
         this.animationsDict = {};
     }
 
-    AnimationStudio.prototype.add = function (animatedItem, callback) {
+    AnimationStudio.prototype.animate = function (animatedItem, sprite, callback) {
         this.animationsDict[animatedItem.id] = {
             item: animatedItem,
+            sprite: sprite,
             ready: callback
         };
-
-        this.renderer.add(animatedItem);
     };
 
     AnimationStudio.prototype.remove = function (animatedItem) {
@@ -22,19 +20,17 @@ var AnimationStudio = (function () {
     AnimationStudio.prototype.nextFrame = function () {
         for (var key in this.animationsDict) {
             if (this.animationsDict.hasOwnProperty(key)) {
-                var elem = this.animationsDict[key].item;
-                if (elem.sprite === undefined) {
-                    continue;
-                }
+                var item = this.animationsDict[key].item;
+                var sprite = this.animationsDict[key].sprite;
 
-                elem.img = elem.sprite.frames[++elem.sprite.current];
-                if (elem.sprite.current >= elem.sprite.frames.length) {
+                item.img = sprite.frames[++sprite.current];
+                if (sprite.current >= sprite.frames.length) {
                     if (this.animationsDict[key].ready !== undefined) {
                         this.animationsDict[key].ready();
                     }
-                    if (elem.sprite.loop) {
-                        elem.sprite.current = 0;
-                        elem.img = elem.sprite.frames[0];
+                    if (sprite.loop) {
+                        sprite.current = 0;
+                        item.img = sprite.frames[0];
                     } else {
                         delete this.animationsDict[key];
                     }
@@ -44,13 +40,13 @@ var AnimationStudio = (function () {
     };
 
     AnimationStudio.prototype.nextSprite = function (item, sprite) {
-        item.sprite = sprite;
+        this.animationsDict[item.id].sprite = sprite;
         item.img = sprite.frames[0];
     };
 
     AnimationStudio.prototype.changeToStatic = function (item, img) {
         item.img = img;
-        delete item.sprite;
+        this.remove(item);
     };
 
     return AnimationStudio;

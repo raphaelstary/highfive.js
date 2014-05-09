@@ -225,7 +225,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: fireSprite,
             img: fireFrames[0]
         };
-        animationStudio.add(fireDrawable);
+        animationStudio.animate(fireDrawable);
 
         var shieldStatic = atlasMapper.get("shield3");
 
@@ -284,7 +284,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: tapSprite,
             img: tapFrames[0]
         };
-        animationStudio.add(tapDrawable);
+        animationStudio.animate(tapDrawable);
 
         var getReadyFrames = [];
         for (i = 0; i <= 41; i++) {
@@ -302,7 +302,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: getReadySprite,
             img: getReadyFrames[0]
         };
-        animationStudio.add(getReadyDrawable);
+        animationStudio.animate(getReadyDrawable);
 
 
         var ready3 = atlasMapper.get("ready3");
@@ -325,7 +325,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite: logoSprite,
             img: logoFrames[0]
         };
-        animationStudio.add(logoDrawable);
+        animationStudio.animate(logoDrawable);
 
 
 //        startScreen.add(createScrollingBackElement(atlasMapper.get('title-screen-v001')), createTransitionPathForScrollingBackElement(atlasMapper.get('title-screen-v001'), screen), function() {
