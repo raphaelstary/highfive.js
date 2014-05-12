@@ -50,6 +50,27 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         return drawable;
     };
 
+    App.prototype._drawSpeedOne = function (atlasMapper, startMotionsManager, renderer) {
+
+        var speed = atlasMapper.get('speed');
+        var speedDrawableOne = new Drawable('speedOne', 320 / 4, 0 - speed.height / 2, speed);
+        var speedOnePath = new Path(speedDrawableOne.x, speedDrawableOne.y, speedDrawableOne.x, 480 + speed.height / 2,
+                480 + speed.height, 30, Transition.LINEAR, true);
+        startMotionsManager.throttleAdd({item: speedDrawableOne, path: speedOnePath}, 0, function () {
+            renderer.add(speedDrawableOne);
+        });
+    };
+
+    App.prototype._drawMoved = function (atlasMapper, startMotionsManager, renderer, imgId, id, x, y, endX, endY, delay) {
+        var subImage = atlasMapper.get(imgId);
+        var drawable = new Drawable(id, x, y, subImage);
+        var path = new Path(x, y, endX, endY,
+                Math.abs(x-endX) + Math.abs(y - endY), 30, Transition.LINEAR, true);
+        startMotionsManager.throttleAdd({item: drawable, path: path}, delay, function () {
+            renderer.add(drawable);
+        });
+    };
+
     App.prototype._showPreGame = function (atlas, atlasInfo, windowWidth) {
 
         this.resizeBus.remove('initial_screen');
@@ -69,15 +90,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         this._drawStatic(atlasMapper, renderer, 'background', 320 / 2, 480 / 2);
 
+        this._drawSpeedOne(atlasMapper, startMotionsManager, renderer);
+
         var speed = atlasMapper.get('speed');
-
-        var speedDrawableOne = new Drawable('speedOne', 320 / 4, 0 - speed.height / 2, speed);
-        var speedOnePath = new Path(speedDrawableOne.x, speedDrawableOne.y, speedDrawableOne.x, 480 + speed.height / 2,
-                480 + speed.height, 30, Transition.LINEAR, true);
-
-        startMotions.move(speedDrawableOne, speedOnePath);
-        renderer.add(speedDrawableOne);
-
         var speedDrawableTwo = new Drawable('speedTwo', 320 / 3 * 2, 0 - speed.height / 2, speed);
         var speedTwoPath = new Path(speedDrawableTwo.x, speedDrawableTwo.y, speedDrawableTwo.x, 480 + speed.height / 2,
                 480 + speed.height, 30, Transition.LINEAR, true);
