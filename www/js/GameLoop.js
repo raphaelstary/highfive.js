@@ -4,7 +4,7 @@ var GameLoop = (function () {
     function GameLoop(animationFrame, renderer, motionStudioManager, animationStudio, animationStudioManager) {
         this.animationFrame = animationFrame;
         this.renderer = renderer;
-        this.sceneManager = motionStudioManager;
+        this.motionStudioManager = motionStudioManager;
         this.animationStudio = animationStudio;
         this.animationStudioManager = animationStudioManager;
         this.ticker = 0;
@@ -13,7 +13,7 @@ var GameLoop = (function () {
     GameLoop.prototype.run = function () {
         this.animationFrame(this.run.bind(this));
 
-        this.sceneManager.update();
+        this.motionStudioManager.update();
         this.renderer.draw();
         if (this.ticker % 2 === 0) {
             this.animationStudio.nextFrame();

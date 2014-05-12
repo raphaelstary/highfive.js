@@ -1,17 +1,18 @@
 var MotionStudio = (function () {
     "use strict";
 
+    // handles low level moving of draw-ables
     function MotionStudio() {
         this.sceneDict = {};
     }
 
-    MotionStudio.prototype.move = function (object, path, callback) {
+    MotionStudio.prototype.move = function (drawable, path, callback) {
         if (path) {
             var axis = path.startX === path.endX ? 'y' : 'x';
         }
 
-        this.sceneDict[object.id] = {
-            item: object,
+        this.sceneDict[drawable.id] = {
+            item: drawable,
             path: path,
             ready: callback,
             time: 0,

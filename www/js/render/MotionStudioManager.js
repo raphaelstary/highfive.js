@@ -1,6 +1,7 @@
 var MotionStudioManager = (function () {
     "use strict";
 
+    // high level move methods
     function MotionStudioManager(startMotions) {
         this.startMotions = startMotions;
         this.todos = [];
@@ -32,7 +33,7 @@ var MotionStudioManager = (function () {
         this.startMotions.move(object, path, callback);
     };
 
-    MotionStudioManager.prototype.throttleAdd = function (itemToAdd, duration, callback) {
+    MotionStudioManager.prototype.moveLater = function (itemToAdd, duration, callback) {
         this.todos.push({
             addable: itemToAdd,
             duration: duration,

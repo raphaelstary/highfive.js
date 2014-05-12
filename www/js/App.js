@@ -68,7 +68,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             startMotionsManager.move(drawable, path);
             renderer.add(drawable);
         } else {
-            startMotionsManager.throttleAdd({item: drawable, path: path}, delay, function () {
+            startMotionsManager.moveLater({item: drawable, path: path}, delay, function () {
                 renderer.add(drawable);
             });
         }
