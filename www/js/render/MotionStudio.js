@@ -55,5 +55,9 @@ var MotionStudio = (function () {
         }
     };
 
+    MotionStudio.prototype.remove = function (drawable) {
+        delete this.sceneDict[drawable.id];
+    };
+
     return MotionStudio;
 })();

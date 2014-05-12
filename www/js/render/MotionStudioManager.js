@@ -42,5 +42,9 @@ var MotionStudioManager = (function () {
         });
     };
 
+    MotionStudioManager.prototype.remove = function (drawable) {
+        this.startMotions.remove(drawable);
+    };
+
     return MotionStudioManager;
 })();

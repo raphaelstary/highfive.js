@@ -78,6 +78,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 renderer.add(drawable);
             });
         }
+
+        return drawable;
     };
 
     App.prototype._preGameScene = function (atlas, atlasInfo, windowWidth) {
@@ -252,16 +254,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
 
-        startMotionsManager.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this, atlasMapper, startMotionsManager, renderer));
+        startMotionsManager.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this, atlasMapper, startMotionsManager, renderer, shipDrawable));
         startMotionsManager.move(fireDrawable, dockShipToGamePosition);
     };
 
 
     App.prototype._drawAsteroid = function (atlasMapper, startMotionsManager, renderer, file, id, x, speed) {
-        this._drawMoved(atlasMapper, startMotionsManager, renderer, file, id, x, -108 / 2, x, 480 + 108 / 2, speed, false, 0);
+        return this._drawMoved(atlasMapper, startMotionsManager, renderer, file, id, x, -108 / 2, x, 480 + 108 / 2, speed, false, 0);
     };
 
-    App.prototype._playGameScene = function(atlasMapper, startMotionsManager, renderer) {
+    App.prototype._playGameScene = function(atlasMapper, startMotionsManager, renderer, shipDrawable) {
         // level difficulty
         var maxTimeToFirst = 100;
         var percentageForAsteroid = 66;
@@ -306,12 +308,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
             counter = 0;
 
+            var drawable;
             // 2/3 asteroid, 1/3 star
             if (self._range(1, 100) <= percentageForAsteroid) {
-                self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid' + self._range(1, 4),
+                drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid' + self._range(1, 4),
                         'asteroid' + nextAsteroidId(), self._range(320/5, 4*320/5), asteroidSpeed);
                 nextCount = pauseAfterAsteroid + self._range(0, maxTimeToNextAfterAsteroid);
 
+                trackedAsteroids[drawable.id] = drawable;
             } else {
                 self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold',
                         'star' + nextStarId(), self._range(320/3, 2*320/3), starSpeed);
@@ -319,12 +323,32 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             }
         }
 
+        var trackedAsteroids = {};
+
+        function collisions() {
+            for (var key in trackedAsteroids) {
+                if (!trackedAsteroids.hasOwnProperty(key)) {
+                    continue;
+                }
+                var asteroid = trackedAsteroids[key];
+
+                if (asteroid.isBelow(shipDrawable, 20)) {
+                    startMotionsManager.remove(asteroid);
+                    renderer.remove(asteroid);
+
+                    // TODO next scene explosions + call endscene event
+                }
+            }
+        }
+
+        this.gameLoop.add('collisions', collisions);
         this.gameLoop.add('level', generateLevel);
 
 
 
         // TODO endscene event
         if (false) {
+            this.gameLoop.remove('collisions');
             this.gameLoop.remove('level');
             renderer.remove(shipDrawable);
             renderer.remove(fireDrawable);
