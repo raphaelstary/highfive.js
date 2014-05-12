@@ -50,22 +50,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         return drawable;
     };
 
-    App.prototype._drawSpeedOne = function (atlasMapper, startMotionsManager, renderer) {
-
-        var speed = atlasMapper.get('speed');
-        var speedDrawableOne = new Drawable('speedOne', 320 / 4, 0 - speed.height / 2, speed);
-        var speedOnePath = new Path(speedDrawableOne.x, speedDrawableOne.y, speedDrawableOne.x, 480 + speed.height / 2,
-                480 + speed.height, 30, Transition.LINEAR, true);
-        startMotionsManager.throttleAdd({item: speedDrawableOne, path: speedOnePath}, 0, function () {
-            renderer.add(speedDrawableOne);
-        });
+    App.prototype._drawSpeed = function (atlasMapper, startMotionsManager, renderer, id, x, delay) {
+        this._drawMoved(atlasMapper, startMotionsManager, renderer, 'speed', id, x, - 108/2, x, 480 + 108/2, delay);
     };
 
     App.prototype._drawMoved = function (atlasMapper, startMotionsManager, renderer, imgId, id, x, y, endX, endY, delay) {
         var subImage = atlasMapper.get(imgId);
         var drawable = new Drawable(id, x, y, subImage);
-        var path = new Path(x, y, endX, endY,
-                Math.abs(x-endX) + Math.abs(y - endY), 30, Transition.LINEAR, true);
+        var path = new Path(x, y, endX, endY, Math.abs(x-endX) + Math.abs(y - endY), 30, Transition.LINEAR, true);
         startMotionsManager.throttleAdd({item: drawable, path: path}, delay, function () {
             renderer.add(drawable);
         });
@@ -90,41 +82,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         this._drawStatic(atlasMapper, renderer, 'background', 320 / 2, 480 / 2);
 
-        this._drawSpeedOne(atlasMapper, startMotionsManager, renderer);
-
-        var speed = atlasMapper.get('speed');
-        var speedDrawableTwo = new Drawable('speedTwo', 320 / 3 * 2, 0 - speed.height / 2, speed);
-        var speedTwoPath = new Path(speedDrawableTwo.x, speedDrawableTwo.y, speedDrawableTwo.x, 480 + speed.height / 2,
-                480 + speed.height, 30, Transition.LINEAR, true);
-
-        startMotionsManager.throttleAdd({item: speedDrawableTwo, path: speedTwoPath}, 34, function () {
-            renderer.add(speedDrawableTwo);
-        });
-
-        var speedDrawableThree = new Drawable('speedThree', 320 / 8 * 7, 0 - speed.height / 2, speed);
-        var speedThreePath = new Path(speedDrawableThree.x, speedDrawableThree.y, speedDrawableThree.x, 480 + speed.height / 2,
-                480 + speed.height, 30, Transition.LINEAR, true);
-
-        startMotionsManager.throttleAdd({item: speedDrawableThree, path: speedThreePath}, 8, function () {
-            renderer.add(speedDrawableThree);
-        });
-
-        var speedDrawableFour = new Drawable('speedFour', 320 / 16 * 7, 0 - speed.height / 2, speed);
-        var speedFourPath = new Path(speedDrawableFour.x, speedDrawableFour.y, speedDrawableFour.x, 480 + speed.height / 2,
-                480 + speed.height, 30, Transition.LINEAR, true);
-
-        startMotionsManager.throttleAdd({item: speedDrawableFour, path: speedFourPath}, 24, function () {
-            renderer.add(speedDrawableFour);
-        });
-
-        var speedDrawableFive = new Drawable('speedFive', 320 / 16, 0 - speed.height / 2, speed);
-        var speedFivePath = new Path(speedDrawableFive.x, speedDrawableFive.y, speedDrawableFive.x, 480 + speed.height / 2,
-                480 + speed.height, 30, Transition.LINEAR, true);
-
-        startMotionsManager.throttleAdd({item: speedDrawableFive, path: speedFivePath}, 16, function () {
-            renderer.add(speedDrawableFive);
-        });
-
+        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedOne', 320 / 4, 0);
+        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedTwo', 320 / 3 * 2, 34);
+        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedThree', 320 / 8 * 7, 8);
+        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedFour', 320 / 16 * 7, 24);
+        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedFive', 320 / 16, 16);
 
         var shipDrawable = this._drawStatic(atlasMapper, renderer, 'ship', 320 / 2, 480 / 8 * 5);
 
