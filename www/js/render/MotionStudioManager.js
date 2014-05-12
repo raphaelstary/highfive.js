@@ -1,8 +1,8 @@
 var MotionStudioManager = (function () {
     "use strict";
 
-    function MotionStudioManager(scene) {
-        this.scene = scene;
+    function MotionStudioManager(startMotions) {
+        this.startMotions = startMotions;
         this.todos = [];
     }
 
@@ -12,8 +12,7 @@ var MotionStudioManager = (function () {
             var toAdd = this.todos[i];
 
             if (toAdd.duration < toAdd.time) {
-
-                this.scene.move(toAdd.addable.item, toAdd.addable.path, toAdd.addable.ready);
+                this.move(toAdd.addable.item, toAdd.addable.path, toAdd.addable.ready);
 
                 if (toAdd.ready) {
                     toAdd.ready();
@@ -25,6 +24,12 @@ var MotionStudioManager = (function () {
                 toAdd.time++;
             }
         }
+
+        this.startMotions.update();
+    };
+
+    MotionStudioManager.prototype.move = function (object, path, callback) {
+        this.startMotions.move(object, path, callback);
     };
 
     MotionStudioManager.prototype.throttleAdd = function (itemToAdd, duration, callback) {
