@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
-    var DEBUG_START_IMMEDIATELY = true;
+    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
@@ -103,10 +103,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
 
         if (DEBUG_START_IMMEDIATELY) {
-            this.gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotionsManager,
-                animationStudio, animationStudioManager);
-            this.gameLoop.run();
-
+            this._startGameLoop(renderer, startMotionsManager, animationStudioManager);
             this._startingPositionScene(atlasMapper, startMotionsManager, renderer, shipDrawable, fireDrawable);
 
             return;
@@ -165,12 +162,22 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             self.tapController.remove(touchable);
 
             // next scene
-            self._getReadyScene(atlasMapper, startMotionsManager, renderer,
-                animationStudio, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable);
+            self._getReadyScene(atlasMapper, startMotionsManager, renderer, animationStudio,
+                tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable);
         });
 
-        this.gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotionsManager,
-            animationStudio, animationStudioManager);
+        this._startGameLoop(renderer, startMotionsManager, animationStudioManager);
+    };
+
+    App.prototype._startGameLoop = function(renderer, startMotionsManager, animationStudioManager) {
+        this.gameLoop = new GameLoop(this.requestAnimationFrame);
+
+        this.gameLoop.add('drawAnimations', function() {
+            renderer.draw();
+            startMotionsManager.update();
+            animationStudioManager.update();
+        });
+
         this.gameLoop.run();
     };
 
@@ -261,7 +268,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             // nextCount = 30;
             nextCount = 100;
             var asteroid1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid1', self._range(320/5, 4*320/5));
-            var star1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold', self._range(320/3, 2*320/3));
+
+            // var star1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold', self._range(320/3, 2*320/3));
 
         }
 

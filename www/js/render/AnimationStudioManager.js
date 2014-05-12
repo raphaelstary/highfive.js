@@ -2,17 +2,24 @@ var AnimationStudioManager = (function () {
     "use strict";
 
     function AnimationStudioManager(animationStudio) {
-        this.studio = animationStudio;
+        this.animationStudio = animationStudio;
         this.todos = [];
+        this.ticker = 0;
     }
 
     AnimationStudioManager.prototype.update = function () {
+        if (this.ticker % 2 === 0) {
+            this.animationStudio.nextFrame();
+            this.ticker = 0;
+        }
+        this.ticker++;
+
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
 
             if (toAdd.duration < toAdd.time) {
 
-                this.studio.animate(toAdd.addable.item, toAdd.addable.sprite, toAdd.addable.ready);
+                this.animationStudio.animate(toAdd.addable.item, toAdd.addable.sprite, toAdd.addable.ready);
 
                 if (toAdd.ready) {
                     toAdd.ready();
