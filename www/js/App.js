@@ -96,6 +96,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var shipDrawable = this._drawStatic(atlasMapper, renderer, 'ship', 320 / 2, 480 / 8 * 5);
 
         var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
+
+        /*
+        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
+            animationStudio, animationStudioManager);
+        gameLoop.run();
+
+        this._startingPositionScene(atlasMapper, startMotionsManager, renderer, startMotions, shipDrawable, fireDrawable);
+
+        return;
+        */
+
         var shieldStatic = atlasMapper.get("shield3");
 
         var i;
@@ -142,8 +153,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         // end of screen
 
-        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, this._getReadyScene.bind(this, atlasMapper, startMotionsManager, renderer,
-            startMotions, animationStudio, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable));
+
+        var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
+        this.tapController.add(touchable, function() {
+            // end event
+            self.tapController.remove(touchable);
+
+            // next scene
+            self._getReadyScene(atlasMapper, startMotionsManager, renderer,
+                startMotions, animationStudio, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable);
+        });
 
         var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
             animationStudio, animationStudioManager);

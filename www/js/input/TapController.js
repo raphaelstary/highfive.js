@@ -46,6 +46,10 @@ var TapController = (function () {
         this.touchElements[touchable.id] = {item: touchable, action: callback}
     };
 
+    TapController.prototype.remove = function (touchable) {
+        delete this.touchElements[touchable.id];
+    };
+
     TapController.prototype._isHit = function (pointer, element) {
         return pointer.clientX > element.item.x && pointer.clientX < element.item.x + element.item.width &&
             pointer.clientY > element.item.y && pointer.clientY < element.item.y + element.item.height;
