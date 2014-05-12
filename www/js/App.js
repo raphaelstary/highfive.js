@@ -1,4 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
+    var DEBUG_START_IMMEDIATELY = true;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
@@ -97,15 +98,15 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
 
-        /*
-        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
-            animationStudio, animationStudioManager);
-        gameLoop.run();
+        if (DEBUG_START_IMMEDIATELY) {
+            var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
+                animationStudio, animationStudioManager);
+            gameLoop.run();
 
-        this._startingPositionScene(atlasMapper, startMotionsManager, renderer, startMotions, shipDrawable, fireDrawable);
+            this._startingPositionScene(atlasMapper, startMotionsManager, renderer, startMotions, shipDrawable, fireDrawable);
 
-        return;
-        */
+            return;
+        }
 
         var shieldStatic = atlasMapper.get("shield3");
 
