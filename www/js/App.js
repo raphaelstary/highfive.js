@@ -57,13 +57,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._drawSpeed = function (atlasMapper, startMotionsManager, renderer, id, x, delay) {
-        this._drawMoved(atlasMapper, startMotionsManager, renderer, 'speed', id, x, -108 / 2, x, 480 + 108 / 2, delay);
+        this._drawMoved(atlasMapper, startMotionsManager, renderer, 'speed', id, x, -108 / 2, x, 480 + 108 / 2, 30, true, delay);
     };
 
-    App.prototype._drawMoved = function (atlasMapper, startMotionsManager, renderer, imgId, id, x, y, endX, endY, delay) {
+    App.prototype._drawMoved = function (atlasMapper, startMotionsManager, renderer, imgId, id, x, y, endX, endY, speed, loop, delay) {
         var subImage = atlasMapper.get(imgId);
         var drawable = new Drawable(id, x, y, subImage);
-        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), 30, Transition.LINEAR, true);
+        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, Transition.LINEAR, loop);
         startMotionsManager.throttleAdd({item: drawable, path: path}, delay, function () {
             renderer.add(drawable);
         });
@@ -239,8 +239,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         startMotions.move(fireDrawable, dockShipToGamePosition);
     };
 
+
+    App.prototype._drawAsteroid = function (atlasMapper, startMotionsManager, renderer, id, x) {
+        this._drawMoved(atlasMapper, startMotionsManager, renderer, id, id, x, -108 / 2, x, 480 + 108 / 2, 90, false, 0);
+    };
+
     App.prototype._playGameScene = function(atlasMapper, startMotionsManager, renderer) {
-        var asterioid1Drawable = this._drawMoved(atlasMapper, startMotionsManager, renderer, 'asteroid1', 'asteroid1', 320 / 3, -108 / 2, 320 / 3, 480 + 108 / 2, 0);
+        var asteroid1Drawable = this._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid1', 320 / 3);
     };
 
     return App;
