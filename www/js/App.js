@@ -251,20 +251,31 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
 
-    App.prototype._drawAsteroid = function (atlasMapper, startMotionsManager, renderer, file, id, x) {
-        this._drawMoved(atlasMapper, startMotionsManager, renderer, file, id, x, -108 / 2, x, 480 + 108 / 2, 90, false, 0);
+    App.prototype._drawAsteroid = function (atlasMapper, startMotionsManager, renderer, file, id, x, speed) {
+        this._drawMoved(atlasMapper, startMotionsManager, renderer, file, id, x, -108 / 2, x, 480 + 108 / 2, speed, false, 0);
     };
 
     App.prototype._playGameScene = function(atlasMapper, startMotionsManager, renderer) {
-        var self = this;
+        // level difficulty
+        var maxTimeToFirst = 100;
+        var percentageForAsteroid = 66;
+
+        var asteroidSpeed = 90;
+        var pauseAfterAsteroid = 30;
+        var maxTimeToNextAfterAsteroid = 100;
+
+        var starSpeed = 90;
+        var pauseAfterStar = 20;
+        var maxTimeToNextAfterStar = 100;
+
+        // -------------------
 
         var counter = 0;
         // im interval 0 - 100 kommt ein element
-        var nextCount = this._range(0, 100);
+        var nextCount = this._range(0, maxTimeToFirst);
 
         var asteroidId = 0;
         var starId = 0;
-
         function nextAsteroidId() {
             ++asteroidId;
             if (asteroidId > 10) {
@@ -280,7 +291,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             return starId;
         }
 
-
+        var self = this;
         function generateLevel() {
             counter += 1;
             if (counter <= nextCount) {
@@ -289,20 +300,18 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
             counter = 0;
 
-            // danach 30 mind pause
-            nextCount = 30 + self._range(0, 100);
-
             // 2/3 asteroid, 1/3 star
-            if (self._range(0, 8) < 6) {
-                var asteroid1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid' + self._range(1, 4),
-                        'asteroid' + nextAsteroidId(), self._range(320/5, 4*320/5));
+            if (self._range(1, 100) <= percentageForAsteroid) {
+                self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid' + self._range(1, 4),
+                        'asteroid' + nextAsteroidId(), self._range(320/5, 4*320/5), asteroidSpeed);
+                nextCount = pauseAfterAsteroid + self._range(0, maxTimeToNextAfterAsteroid);
+
             } else {
-                var star1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold',
-                        'star' + nextStarId(), self._range(320/3, 2*320/3));
+                self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold',
+                        'star' + nextStarId(), self._range(320/3, 2*320/3), starSpeed);
+                nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
             }
-
         }
-
 
         this.gameLoop.add('level', generateLevel);
 
