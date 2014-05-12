@@ -8,14 +8,13 @@ window.onload = function () {
         window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
     }
 
-    function installInputListeners(screenInput) {
+    function installInputListeners(screen, screenInput) {
         screen.addEventListener('touchstart', screenInput.touchStart.bind(screenInput));
         screen.addEventListener('click', screenInput.click.bind(screenInput));
     }
 
-    function startApp(rAF, resizeBus, screenInput) {
-        var screen = document.getElementById('screen'),
-            ctx = screen.getContext('2d'),
+    function startApp(rAF, resizeBus, screenInput, screen) {
+        var ctx = screen.getContext('2d'),
             app = new App(screen, ctx, rAF, resizeBus, screenInput);
 
         app.start(window.innerWidth, window.innerHeight);
@@ -23,10 +22,10 @@ window.onload = function () {
 
     var rAF = window.requestAnimationFrame.bind(window),
         resizeBus = new ResizeBus(),
-        screenInput = new TapController();
+        screenInput = new TapController(),
+        screen = document.getElementById('screen');
 
     installResizeHandler(rAF, resizeBus);
-    installInputListeners(screenInput);
-    startApp(rAF, resizeBus, screenInput);
-
+    installInputListeners(screen, screenInput);
+    startApp(rAF, resizeBus, screenInput, screen);
 };
