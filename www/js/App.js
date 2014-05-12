@@ -131,6 +131,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
         var shieldStatic = atlasMapper.get("shield3");
 
+        var i;
         var shieldsUpFrames = [];
         for (i = 0; i <= 5; i++) {
             shieldsUpFrames.push(atlasMapper.get("shields-up-anim/shields_up_000" + i));
@@ -180,7 +181,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         this.tapController.add({x: 0, y: 0, width: 320, height: 480}, function () {
             var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
-                    getReadyDrawable.x + getReadyFrames[0].width, getReadyDrawable.y, getReadyFrames[0].width, 60,
+                    getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
                 Transition.EASE_IN_OUT_EXPO);
 
             startMotions.move(getReadyDrawable, getReadyOutPath, function () {
