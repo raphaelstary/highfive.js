@@ -26,10 +26,28 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         resourceLoader.load();
     };
 
-    App.prototype._draw = function(atlasMapper, renderer, id, x, y) {
+    App.prototype._drawStatic = function (atlasMapper, renderer, id, x, y) {
         var img = atlasMapper.get(id);
         var drawable = new Drawable(id, x, y, img);
         renderer.add(drawable);
+        return drawable;
+    };
+
+    App.prototype._drawAnimated = function(atlasMapper, animationStudio, renderer, numFrames, path, id, x, y) {
+        var frames = [];
+        var i;
+        for (i = 0; i <= numFrames; i++) {
+            if (i < 10) {
+                frames.push(atlasMapper.get(path + '_000' + i));
+            } else {
+                frames.push(atlasMapper.get(path + '_00' + i));
+            }
+        }
+        var sprite = new Sprite(frames);
+        var drawable = new Drawable(id, x, y);
+        animationStudio.animate(drawable, sprite);
+        renderer.add(drawable);
+        return drawable;
     };
 
     App.prototype._showPreGame = function (atlas, atlasInfo, windowWidth) {
@@ -49,7 +67,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var animationStudio = new AnimationStudio(),
             animationStudioManager = new AnimationStudioManager(animationStudio);
 
-        this._draw(atlasMapper, renderer, 'background', 320 / 2, 480 / 2);
+        this._drawStatic(atlasMapper, renderer, 'background', 320 / 2, 480 / 2);
 
         var speed = atlasMapper.get('speed');
 
@@ -93,20 +111,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
 
 
-        this._draw(atlasMapper, renderer, 'ship', 320 / 2, 480 / 8 * 5);
+        var shipDrawable = this._drawStatic(atlasMapper, renderer, 'ship', 320 / 2, 480 / 8 * 5);
 
-        var fireFrames = [];
-        var i;
-        for (i = 0; i <= 7; i++) {
-            fireFrames.push(atlasMapper.get('fire-anim/fire_000' + i));
-        }
-
-        var fireSprite = new Sprite(fireFrames);
-        var fireDrawable = new Drawable('fire', 320 / 2, 480 / 8 * 5);
-
-        animationStudio.animate(fireDrawable, fireSprite);
-        renderer.add(fireDrawable);
-
+        var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
         var shieldStatic = atlasMapper.get("shield3");
 
         var shieldsUpFrames = [];
@@ -144,48 +151,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         shieldsAnimation();
 
-        var tapFrames = [];
-        for (i = 0; i <= 35; i++) {
-            if (i < 10) {
-                tapFrames.push(atlasMapper.get("tap-anim/tap_000" + i));
-            } else {
-                tapFrames.push(atlasMapper.get("tap-anim/tap_00" + i));
-            }
-        }
-        var tapSprite = new Sprite(tapFrames);
-        var tapDrawable = new Drawable('tap', 320 / 16 * 9, 480 / 8 * 7);
-        animationStudio.animate(tapDrawable, tapSprite);
-        renderer.add(tapDrawable);
+        var tapDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 35, 'tap-anim/tap', 'tap', 320 / 16 * 9, 480 / 8 * 7);
 
-        var getReadyFrames = [];
-        for (i = 0; i <= 41; i++) {
-            if (i < 10) {
-                getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_000" + i));
-            } else {
-                getReadyFrames.push(atlasMapper.get("ready-anim/get_ready_00" + i));
-            }
-        }
-        var getReadySprite = new Sprite(getReadyFrames);
-        var getReadyDrawable = new Drawable('get_ready', 320 / 2, 480 / 3);
-        animationStudio.animate(getReadyDrawable, getReadySprite);
-        renderer.add(getReadyDrawable);
+        var getReadyDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 41, 'ready-anim/get_ready', 'get_ready', 320 / 2, 480 / 3);
+
 
         var ready3 = atlasMapper.get("ready3");
         var ready2 = atlasMapper.get("ready2");
         var ready1 = atlasMapper.get("ready1");
 
-        var logoFrames = [];
-        for (i = 0; i <= 43; i++) {
-            if (i < 10) {
-                logoFrames.push(atlasMapper.get("logo-anim/logo_000" + i));
-            } else {
-                logoFrames.push(atlasMapper.get("logo-anim/logo_00" + i));
-            }
-        }
-        var logoSprite = new Sprite(logoFrames);
-        var logoDrawable = new Drawable('logo', 320 / 2, 480 / 6);
-        animationStudio.animate(logoDrawable, logoSprite);
-        renderer.add(logoDrawable);
+        var logoDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 43, 'logo-anim/logo', 'logo', 320 / 2, 480 / 6);
+
 
         this.tapController.add({x: 0, y: 0, width: 320, height: 480}, function () {
             var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
