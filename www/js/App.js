@@ -33,7 +33,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         return drawable;
     };
 
-    App.prototype._drawAnimated = function(atlasMapper, animationStudio, renderer, numFrames, path, id, x, y) {
+    App.prototype._drawAnimated = function (atlasMapper, animationStudio, renderer, numFrames, path, id, x, y) {
         var frames = [];
         var i;
         for (i = 0; i <= numFrames; i++) {
@@ -51,13 +51,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._drawSpeed = function (atlasMapper, startMotionsManager, renderer, id, x, delay) {
-        this._drawMoved(atlasMapper, startMotionsManager, renderer, 'speed', id, x, - 108/2, x, 480 + 108/2, delay);
+        this._drawMoved(atlasMapper, startMotionsManager, renderer, 'speed', id, x, -108 / 2, x, 480 + 108 / 2, delay);
     };
 
     App.prototype._drawMoved = function (atlasMapper, startMotionsManager, renderer, imgId, id, x, y, endX, endY, delay) {
         var subImage = atlasMapper.get(imgId);
         var drawable = new Drawable(id, x, y, subImage);
-        var path = new Path(x, y, endX, endY, Math.abs(x-endX) + Math.abs(y - endY), 30, Transition.LINEAR, true);
+        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), 30, Transition.LINEAR, true);
         startMotionsManager.throttleAdd({item: drawable, path: path}, delay, function () {
             renderer.add(drawable);
         });
@@ -105,9 +105,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             shieldsDownFrames.push(atlasMapper.get("shields-down-anim/shields_down_000" + i));
         }
 
-
         var startTimer = 10;
-        var doTheShields = true;
+        this.doTheShields = true;
+        var self = this;
         function shieldsAnimation() {
             var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
             var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
@@ -118,7 +118,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
                     renderer.remove(shieldsDrawable);
                     startTimer = 20;
-                    if (doTheShields) {
+                    if (self.doTheShields) {
                         shieldsAnimation();
                     }
                 }}, 28)
@@ -133,80 +133,85 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var getReadyDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 41, 'ready-anim/get_ready', 'get_ready', 320 / 2, 480 / 3);
 
+        var logoDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 43, 'logo-anim/logo', 'logo', 320 / 2, 480 / 6);
+
+        // end of screen
+
+        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, this._showReady.bind(this, atlasMapper, startMotions, animationStudio,
+            renderer, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable));
+
+        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
+            animationStudio, animationStudioManager);
+        gameLoop.run();
+    };
+
+    App.prototype._showReady = function (atlasMapper, startMotions, animationStudio, renderer,
+                                         tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable) {
+        var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
+                getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
+            Transition.EASE_IN_OUT_EXPO);
 
         var ready3 = atlasMapper.get("ready3");
         var ready2 = atlasMapper.get("ready2");
         var ready1 = atlasMapper.get("ready1");
 
-        var logoDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 43, 'logo-anim/logo', 'logo', 320 / 2, 480 / 6);
+        var self = this;
+        startMotions.move(getReadyDrawable, getReadyOutPath, function () {
+            animationStudio.remove(getReadyDrawable);
+            renderer.remove(getReadyDrawable);
 
+            var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
+            var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
+                    320 + 2 * ready3.width, 90, Transition.EASE_IN_OUT_QUAD);
 
-        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, function () {
-            var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
-                    getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
-                Transition.EASE_IN_OUT_EXPO);
+            startMotions.move(ready3Drawable, ready3Path, function () {
+                renderer.remove(ready3Drawable);
 
-            startMotions.move(getReadyDrawable, getReadyOutPath, function () {
-                animationStudio.remove(getReadyDrawable);
-                renderer.remove(getReadyDrawable);
+                var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
+                var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
+                        320 + 2 * ready2.width, 90, Transition.EASE_IN_OUT_QUAD);
 
-                var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
-                var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
-                        320 + 2 * ready3.width, 90, Transition.EASE_IN_OUT_QUAD);
+                startMotions.move(ready2Drawable, ready2Path, function () {
+                    renderer.remove(ready2Drawable);
 
-                startMotions.move(ready3Drawable, ready3Path, function () {
-                    renderer.remove(ready3Drawable);
+                    self.doTheShields = false;
 
-                    var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
-                    var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
-                            320 + 2 * ready2.width, 90, Transition.EASE_IN_OUT_QUAD);
+                    var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
+                    var ready1Path = new Path(-ready1.width, 480 / 3, 320 + ready1.width, 480 / 3,
+                            320 + 2 * ready1.width, 90, Transition.EASE_IN_OUT_QUAD);
 
-                    startMotions.move(ready2Drawable, ready2Path, function () {
-                        renderer.remove(ready2Drawable);
+                    startMotions.move(ready1Drawable, ready1Path, function () {
+                        renderer.remove(ready1Drawable);
 
-                        doTheShields = false;
-
-                        var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
-                        var ready1Path = new Path(-ready1.width, 480 / 3, 320 + ready1.width, 480 / 3,
-                                320 + 2 * ready1.width, 90, Transition.EASE_IN_OUT_QUAD);
-
-                        startMotions.move(ready1Drawable, ready1Path, function () {
-                            renderer.remove(ready1Drawable);
-
-                            var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
-                            startMotions.move(logoDrawable, logoOut, function () {
-                                renderer.remove(logoDrawable);
-                                animationStudio.remove(logoDrawable);
-                            });
-
-                            var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
-                            startMotions.move(tapDrawable, tapOut, function () {
-                                renderer.remove(tapDrawable);
-                                animationStudio.remove(tapDrawable);
-                            });
-
-                            var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
-                                shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
-
-                            startMotions.move(shipDrawable, dockShipToGamePosition);
-                            startMotions.move(fireDrawable, dockShipToGamePosition);
-
+                        var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                        startMotions.move(logoDrawable, logoOut, function () {
+                            renderer.remove(logoDrawable);
+                            animationStudio.remove(logoDrawable);
                         });
-                        renderer.add(ready1Drawable);
+
+                        var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                        startMotions.move(tapDrawable, tapOut, function () {
+                            renderer.remove(tapDrawable);
+                            animationStudio.remove(tapDrawable);
+                        });
+
+                        var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
+                            shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
+
+                        startMotions.move(shipDrawable, dockShipToGamePosition);
+                        startMotions.move(fireDrawable, dockShipToGamePosition);
+
                     });
-                    renderer.add(ready2Drawable);
-
+                    renderer.add(ready1Drawable);
                 });
-                renderer.add(ready3Drawable);
-            })
+                renderer.add(ready2Drawable);
+
+            });
+            renderer.add(ready3Drawable);
         });
-
-        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
-            animationStudio, animationStudioManager);
-        gameLoop.run();
-
     };
 
     return App;
+
 })(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio,
     AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager);
