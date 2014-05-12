@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
-    var DEBUG_START_IMMEDIATELY = false;
+    var DEBUG_START_IMMEDIATELY = true;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
@@ -103,9 +103,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
 
         if (DEBUG_START_IMMEDIATELY) {
-            var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotionsManager,
+            this.gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotionsManager,
                 animationStudio, animationStudioManager);
-            gameLoop.run();
+            this.gameLoop.run();
 
             this._startingPositionScene(atlasMapper, startMotionsManager, renderer, shipDrawable, fireDrawable);
 
@@ -169,9 +169,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 animationStudio, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable);
         });
 
-        var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotionsManager,
+        this.gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotionsManager,
             animationStudio, animationStudioManager);
-        gameLoop.run();
+        this.gameLoop.run();
     };
 
     App.prototype._getReadyScene = function (atlasMapper, startMotionsManager, renderer, animationStudio,
@@ -249,7 +249,31 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._playGameScene = function(atlasMapper, startMotionsManager, renderer) {
-        var asteroid1Drawable = this._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid1', 320 / 3);
+        var self = this;
+        var counter = 0;
+        var nextCount = 0;
+        function generateLevel() {
+            counter += 1;
+            if (counter <= nextCount) {
+                return;
+            }
+            counter = 0;
+            // nextCount = 30;
+            nextCount = 100;
+            var asteroid1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid1', self._range(320/5, 4*320/5));
+            var star1Drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold', self._range(320/3, 2*320/3));
+
+        }
+
+        this.gameLoop.add('level', generateLevel);
+
+
+
+        // TODO endscene event unregister('level');
+    };
+
+    App.prototype._range = function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
     return App;
