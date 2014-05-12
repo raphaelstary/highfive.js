@@ -8,8 +8,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.tapController = screenInput;
     }
 
-    App.prototype.start = function (windowWidth, windowHeight) {
-        // 1st screen: show loading screen, load binary resources
+    App.prototype.start = function(windowWidth, windowHeight) {
+        // idea to create list of all scenes and just use nextScene() to advance
+        this._loadingScene(windowWidth, windowHeight);
+    };
+
+    App.prototype._loadingScene = function(windowWidth, windowHeight) {
+        // show loading screen, load binary resources
 
         var resourceLoader = new ResourceLoader(),
             atlas = resourceLoader.addImage('gfx/atlas.png'),
@@ -21,7 +26,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         initialScreen.showNew(2, windowWidth, windowHeight);
 
-        resourceLoader.onComplete = this._showPreGame.bind(this, atlas, atlasInfo, windowWidth);
+        resourceLoader.onComplete = this._preGameScene.bind(this, atlas, atlasInfo, windowWidth);
 
         resourceLoader.load();
     };
@@ -63,7 +68,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
     };
 
-    App.prototype._showPreGame = function (atlas, atlasInfo, windowWidth) {
+    App.prototype._preGameScene = function (atlas, atlasInfo, windowWidth) {
 
         this.resizeBus.remove('initial_screen');
 
@@ -137,7 +142,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         // end of screen
 
-        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, this._showReady.bind(this, atlasMapper, startMotions, animationStudio,
+        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, this._getReadyScene.bind(this, atlasMapper, startMotions, animationStudio,
             renderer, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable));
 
         var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
@@ -145,7 +150,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         gameLoop.run();
     };
 
-    App.prototype._showReady = function (atlasMapper, startMotions, animationStudio, renderer,
+    App.prototype._getReadyScene = function (atlasMapper, startMotions, animationStudio, renderer,
                                          tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable) {
         var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
                 getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
@@ -181,6 +186,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             320 + 2 * ready1.width, 90, Transition.EASE_IN_OUT_QUAD);
 
                     startMotions.move(ready1Drawable, ready1Path, function () {
+                        // create end event method to end scene, this is endGetReadyScene
                         renderer.remove(ready1Drawable);
 
                         var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
@@ -195,20 +201,26 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             animationStudio.remove(tapDrawable);
                         });
 
-                        var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
-                            shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
-
-                        startMotions.move(shipDrawable, dockShipToGamePosition);
-                        startMotions.move(fireDrawable, dockShipToGamePosition);
-
+                        self._startingPositionScene(startMotions, shipDrawable, fireDrawable);
                     });
                     renderer.add(ready1Drawable);
                 });
                 renderer.add(ready2Drawable);
-
             });
             renderer.add(ready3Drawable);
         });
+    };
+
+    App.prototype._startingPositionScene = function(startMotions, shipDrawable, fireDrawable) {
+        var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
+            shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
+
+        startMotions.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this));
+        startMotions.move(fireDrawable, dockShipToGamePosition);
+    };
+
+    App.prototype._playGameScene = function() {
+
     };
 
     return App;
