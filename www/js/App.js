@@ -142,15 +142,15 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         // end of screen
 
-        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, this._getReadyScene.bind(this, atlasMapper, startMotions, animationStudio,
-            renderer, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable));
+        this.tapController.add({x: 0, y: 0, width: 320, height: 480}, this._getReadyScene.bind(this, atlasMapper, startMotionsManager, renderer,
+            startMotions, animationStudio, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable));
 
         var gameLoop = new GameLoop(this.requestAnimationFrame, renderer, startMotions, startMotionsManager,
             animationStudio, animationStudioManager);
         gameLoop.run();
     };
 
-    App.prototype._getReadyScene = function (atlasMapper, startMotions, animationStudio, renderer,
+    App.prototype._getReadyScene = function (atlasMapper, startMotionsManager, renderer, startMotions, animationStudio,
                                          tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable) {
         var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
                 getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
@@ -201,7 +201,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             animationStudio.remove(tapDrawable);
                         });
 
-                        self._startingPositionScene(startMotions, shipDrawable, fireDrawable);
+                        self._startingPositionScene(atlasMapper, startMotionsManager, renderer, startMotions, shipDrawable, fireDrawable);
                     });
                     renderer.add(ready1Drawable);
                 });
@@ -211,16 +211,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
     };
 
-    App.prototype._startingPositionScene = function(startMotions, shipDrawable, fireDrawable) {
+    App.prototype._startingPositionScene = function(atlasMapper, startMotionsManager, renderer, startMotions, shipDrawable, fireDrawable) {
         var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
 
-        startMotions.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this));
+        startMotions.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this, atlasMapper, startMotionsManager, renderer));
         startMotions.move(fireDrawable, dockShipToGamePosition);
     };
 
-    App.prototype._playGameScene = function() {
-
+    App.prototype._playGameScene = function(atlasMapper, startMotionsManager, renderer) {
+        var asterioid1Drawable = this._drawMoved(atlasMapper, startMotionsManager, renderer, 'asteroid1', 'asteroid1', 320 / 3, -108 / 2, 320 / 3, 480 + 108 / 2, 0);
     };
 
     return App;
