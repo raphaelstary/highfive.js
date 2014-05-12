@@ -1,14 +1,15 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
 
-    function App(screen, screenCtx, requestAnimationFrame, resizeBus, tapController) {
+    function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
         this.screenCtx = screenCtx;
         this.requestAnimationFrame = requestAnimationFrame;
         this.resizeBus = resizeBus;
-        this.tapController = tapController;
+        this.tapController = screenInput;
     }
 
     App.prototype.start = function (windowWidth, windowHeight) {
+        // 1st screen: show loading screen, load binary resources
 
         var resourceLoader = new ResourceLoader(),
             atlas = resourceLoader.addImage('gfx/atlas.png'),
@@ -25,7 +26,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         resourceLoader.load();
     };
 
+    App.prototype._draw = function(atlasMapper, renderer, id, x, y) {
+        var img = atlasMapper.get(id);
+        var drawable = new Drawable(id, x, y, img);
+        renderer.add(drawable);
+    };
+
     App.prototype._showPreGame = function (atlas, atlasInfo, windowWidth) {
+
         this.resizeBus.remove('initial_screen');
 
         var atlasMapper = new AtlasMapper(1); // 1px is 1 tile length
@@ -41,9 +49,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var animationStudio = new AnimationStudio(),
             animationStudioManager = new AnimationStudioManager(animationStudio);
 
-        var background = atlasMapper.get('background');
-        var backgroundDrawable = new Drawable('background', 320 / 2, 480 / 2, background);
-        renderer.add(backgroundDrawable);
+        this._draw(atlasMapper, renderer, 'background', 320 / 2, 480 / 2);
 
         var speed = atlasMapper.get('speed');
 
@@ -87,9 +93,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
 
 
-        var ship = atlasMapper.get('ship');
-        var shipDrawable = new Drawable('ship', 320 / 2, 480 / 8 * 5, ship);
-        renderer.add(shipDrawable);
+        this._draw(atlasMapper, renderer, 'ship', 320 / 2, 480 / 8 * 5);
 
         var fireFrames = [];
         var i;
