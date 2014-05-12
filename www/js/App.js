@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
-    var DEBUG_START_IMMEDIATELY = true;
+    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
@@ -64,11 +64,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var subImage = atlasMapper.get(imgId);
         var drawable = new Drawable(id, x, y, subImage);
         var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, Transition.LINEAR, loop);
+
+        var finishMovement = loop ? undefined : function () {
+            renderer.remove(drawable);
+        };
+
         if (delay === 0) {
-            startMotionsManager.move(drawable, path);
+            startMotionsManager.move(drawable, path, finishMovement);
             renderer.add(drawable);
         } else {
-            startMotionsManager.moveLater({item: drawable, path: path}, delay, function () {
+            var movedItem = {item: drawable, path: path, ready: finishMovement};
+            startMotionsManager.moveLater(movedItem, delay, function () {
                 renderer.add(drawable);
             });
         }
@@ -317,7 +323,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
 
-        // TODO endscene event unregister('level');
+        // TODO endscene event
+        if (false) {
+            this.gameLoop.remove('level');
+            renderer.remove(shipDrawable);
+            renderer.remove(fireDrawable);
+        }
     };
 
     App.prototype._range = function (min, max) {
