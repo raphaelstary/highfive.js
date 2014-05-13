@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
-    var DEBUG_START_IMMEDIATELY = true;
+    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
@@ -144,6 +144,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.doTheShields = true;
         var self = this;
         function shieldsAnimation() {
+
+            var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
+            var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
+            var shieldsDrawable = new Drawable('shields', 320 / 2, 480 / 8 * 5);
+
             animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
                 shieldsDrawable.img = shieldStatic;
                 animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
