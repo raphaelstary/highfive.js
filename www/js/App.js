@@ -1,4 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector) {
     var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
@@ -40,7 +40,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         return drawable;
     };
 
-    App.prototype._drawAnimated = function (atlasMapper, animationStudio, renderer, numFrames, path, id, x, y) {
+    App.prototype._drawAnimated = function (atlasMapper, animations, renderer, numFrames, path, id, x, y) {
         var frames = [];
         var i;
         for (i = 0; i <= numFrames; i++) {
@@ -52,16 +52,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         }
         var sprite = new Sprite(frames);
         var drawable = new Drawable(id, x, y);
-        animationStudio.animate(drawable, sprite);
+        animations.animate(drawable, sprite);
         renderer.add(drawable);
         return drawable;
     };
 
-    App.prototype._drawSpeed = function (atlasMapper, startMotionsManager, renderer, id, x, delay) {
-        this._drawMoved(atlasMapper, startMotionsManager, renderer, 'speed', id, x, -108 / 2, x, 480 + 108 / 2, 30, true, delay);
+    App.prototype._drawSpeed = function (atlasMapper, motions, renderer, id, x, delay) {
+        this._drawMoved(atlasMapper, motions, renderer, 'speed', id, x, -108 / 2, x, 480 + 108 / 2, 30, true, delay);
     };
 
-    App.prototype._drawMoved = function (atlasMapper, startMotionsManager, renderer, imgId, id, x, y, endX, endY, speed, loop, delay) {
+    App.prototype._drawMoved = function (atlasMapper, motions, renderer, imgId, id, x, y, endX, endY, speed, loop, delay) {
         var subImage = atlasMapper.get(imgId);
         var drawable = new Drawable(id, x, y, subImage);
         var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, Transition.LINEAR, loop);
@@ -71,11 +71,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         };
 
         if (delay === 0) {
-            startMotionsManager.move(drawable, path, finishMovement);
+            motions.move(drawable, path, finishMovement);
             renderer.add(drawable);
         } else {
             var movedItem = {item: drawable, path: path, ready: finishMovement};
-            startMotionsManager.moveLater(movedItem, delay, function () {
+            motions.moveLater(movedItem, delay, function () {
                 renderer.add(drawable);
             });
         }
@@ -94,22 +94,21 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var renderer = new Renderer(this.screen, this.screenCtx, atlas);
         this.resizeBus.add('renderer', renderer.resize.bind(renderer));
 
-        var startMotionsManager = new MotionStudioManager(new MotionStudio());
+        var motions = new MotionDirector(new MotionStudio());
 
-        var animationStudio = new AnimationStudio(),
-            animationStudioManager = new AnimationStudioManager(animationStudio);
+        var animations = new AnimationDirector(new AnimationStudio());
 
         this._drawStatic(atlasMapper, renderer, 'background', 320 / 2, 480 / 2);
 
-        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedOne', 320 / 4, 0);
-        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedTwo', 320 / 3 * 2, 34);
-        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedThree', 320 / 8 * 7, 8);
-        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedFour', 320 / 16 * 7, 24);
-        this._drawSpeed(atlasMapper, startMotionsManager, renderer, 'speedFive', 320 / 16, 16);
+        this._drawSpeed(atlasMapper, motions, renderer, 'speedOne', 320 / 4, 0);
+        this._drawSpeed(atlasMapper, motions, renderer, 'speedTwo', 320 / 3 * 2, 34);
+        this._drawSpeed(atlasMapper, motions, renderer, 'speedThree', 320 / 8 * 7, 8);
+        this._drawSpeed(atlasMapper, motions, renderer, 'speedFour', 320 / 16 * 7, 24);
+        this._drawSpeed(atlasMapper, motions, renderer, 'speedFive', 320 / 16, 16);
 
         var shipDrawable = this._drawStatic(atlasMapper, renderer, 'ship', 320 / 2, 480 / 8 * 5);
 
-        var fireDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
+        var fireDrawable = this._drawAnimated(atlasMapper, animations, renderer, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
 
         var shieldStatic = atlasMapper.get("shield3");
 
@@ -131,11 +130,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         //------------------------------- DEBUG_ONLY start
         if (DEBUG_START_IMMEDIATELY) {
-            this._startGameLoop(renderer, startMotionsManager, animationStudioManager);
-            this._startingPositionScene(atlasMapper, startMotionsManager, animationStudioManager, renderer, shipDrawable, fireDrawable,
-                shieldsDrawable, shieldsUpSprite,
-                shieldsDownSprite,
-                shieldStatic);
+            this._startGameLoop(renderer, motions, animations);
+            this._startingPositionScene(atlasMapper, motions, animations, renderer, shipDrawable, fireDrawable,
+                shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic);
 
             return;
         }
@@ -146,13 +143,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var self = this;
         function shieldsAnimation() {
 
-            var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
-            var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
-            var shieldsDrawable = new Drawable('shields', 320 / 2, 480 / 8 * 5);
+//            var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
+//            var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
+//            var shieldsDrawable = new Drawable('shields', 320 / 2, 480 / 8 * 5);
 
-            animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
+            animations.animateLater({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
                 shieldsDrawable.img = shieldStatic;
-                animationStudioManager.throttleAnimate({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
+                animations.animateLater({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
                     renderer.remove(shieldsDrawable);
                     startTimer = 20;
                     if (self.doTheShields) {
@@ -166,11 +163,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         shieldsAnimation();
 
-        var tapDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 35, 'tap-anim/tap', 'tap', 320 / 16 * 9, 480 / 8 * 7);
+        var tapDrawable = this._drawAnimated(atlasMapper, animations, renderer, 35, 'tap-anim/tap', 'tap', 320 / 16 * 9, 480 / 8 * 7);
 
-        var getReadyDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 41, 'ready-anim/get_ready', 'get_ready', 320 / 2, 480 / 3);
+        var getReadyDrawable = this._drawAnimated(atlasMapper, animations, renderer, 41, 'ready-anim/get_ready', 'get_ready', 320 / 2, 480 / 3);
 
-        var logoDrawable = this._drawAnimated(atlasMapper, animationStudio, renderer, 43, 'logo-anim/logo', 'logo', 320 / 2, 480 / 6);
+        var logoDrawable = this._drawAnimated(atlasMapper, animations, renderer, 43, 'logo-anim/logo', 'logo', 320 / 2, 480 / 6);
 
         // end of screen
 
@@ -181,28 +178,28 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             self.tapController.remove(touchable);
 
             // next scene
-            self._getReadyScene(atlasMapper, startMotionsManager, animationStudioManager, renderer, animationStudio,
+            self._getReadyScene(atlasMapper, motions, animations, renderer,
                 tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable, shieldsDrawable,
                 shieldsUpSprite, shieldsDownSprite, shieldStatic);
         });
 
-        this._startGameLoop(renderer, startMotionsManager, animationStudioManager);
+        this._startGameLoop(renderer, motions, animations);
     };
 
-    App.prototype._startGameLoop = function(renderer, startMotionsManager, animationStudioManager) {
+    App.prototype._startGameLoop = function(renderer, motions, animations) {
         this.gameLoop = new GameLoop(this.requestAnimationFrame);
 
         this.gameLoop.add('drawAnimations', function() {
             renderer.draw();
-            startMotionsManager.update();
-            animationStudioManager.update();
+            motions.update();
+            animations.update();
         });
 
         this.gameLoop.run();
     };
 
-    App.prototype._getReadyScene = function (atlasMapper, startMotionsManager, animationStudioManager, renderer,
-                                             animationStudio, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
+    App.prototype._getReadyScene = function (atlasMapper, motions, animations, renderer,
+                                             tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
                                              fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
                                              shieldStatic) {
 
@@ -215,22 +212,22 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var ready1 = atlasMapper.get("ready1");
 
         var self = this;
-        startMotionsManager.move(getReadyDrawable, getReadyOutPath, function () {
-            animationStudio.remove(getReadyDrawable);
+        motions.move(getReadyDrawable, getReadyOutPath, function () {
+            animations.remove(getReadyDrawable);
             renderer.remove(getReadyDrawable);
 
             var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
             var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
                     320 + 2 * ready3.width, 90, Transition.EASE_IN_OUT_QUAD);
 
-            startMotionsManager.move(ready3Drawable, ready3Path, function () {
+            motions.move(ready3Drawable, ready3Path, function () {
                 renderer.remove(ready3Drawable);
 
                 var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
                 var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
                         320 + 2 * ready2.width, 90, Transition.EASE_IN_OUT_QUAD);
 
-                startMotionsManager.move(ready2Drawable, ready2Path, function () {
+                motions.move(ready2Drawable, ready2Path, function () {
                     renderer.remove(ready2Drawable);
 
                     self.doTheShields = false;
@@ -239,23 +236,23 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                     var ready1Path = new Path(-ready1.width, 480 / 3, 320 + ready1.width, 480 / 3,
                             320 + 2 * ready1.width, 90, Transition.EASE_IN_OUT_QUAD);
 
-                    startMotionsManager.move(ready1Drawable, ready1Path, function () {
+                    motions.move(ready1Drawable, ready1Path, function () {
                         // create end event method to end scene, this is endGetReadyScene
                         renderer.remove(ready1Drawable);
 
                         var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
-                        startMotionsManager.move(logoDrawable, logoOut, function () {
+                        motions.move(logoDrawable, logoOut, function () {
                             renderer.remove(logoDrawable);
-                            animationStudio.remove(logoDrawable);
+                            animations.remove(logoDrawable);
                         });
 
                         var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
-                        startMotionsManager.move(tapDrawable, tapOut, function () {
+                        motions.move(tapDrawable, tapOut, function () {
                             renderer.remove(tapDrawable);
-                            animationStudio.remove(tapDrawable);
+                            animations.remove(tapDrawable);
                         });
 
-                        self._startingPositionScene(atlasMapper, startMotionsManager, animationStudioManager, renderer,
+                        self._startingPositionScene(atlasMapper, motions, animations, renderer,
                             shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
                             shieldStatic);
                     });
@@ -267,7 +264,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
     };
 
-    App.prototype._startingPositionScene = function(atlasMapper, startMotionsManager, animationStudioManager, renderer,
+    App.prototype._startingPositionScene = function(atlasMapper, motions, animations, renderer,
                                                     shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite,
                                                     shieldsDownSprite,
                                                     shieldStatic) {
@@ -275,19 +272,19 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
 
-        startMotionsManager.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this, atlasMapper,
-            startMotionsManager, animationStudioManager, renderer, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
+        motions.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this, atlasMapper,
+            motions, animations, renderer, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
             shieldStatic));
 
-        startMotionsManager.move(fireDrawable, dockShipToGamePosition);
+        motions.move(fireDrawable, dockShipToGamePosition);
     };
 
 
-    App.prototype._drawAsteroid = function (atlasMapper, startMotionsManager, renderer, file, id, x, speed) {
-        return this._drawMoved(atlasMapper, startMotionsManager, renderer, file, id, x, -108 / 2, x, 480 + 108 / 2, speed, false, 0);
+    App.prototype._drawAsteroid = function (atlasMapper, motions, renderer, file, id, x, speed) {
+        return this._drawMoved(atlasMapper, motions, renderer, file, id, x, -108 / 2, x, 480 + 108 / 2, speed, false, 0);
     };
 
-    App.prototype._playGameScene = function(atlasMapper, startMotionsManager, animationStudioManager, renderer,
+    App.prototype._playGameScene = function(atlasMapper, motions, animations, renderer,
                                             shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
                                             shieldStatic) {
         // level difficulty
@@ -339,13 +336,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             var drawable;
             // 2/3 asteroid, 1/3 star
             if (self._range(1, 100) <= percentageForAsteroid) {
-                drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'asteroid' + self._range(1, 4),
+                drawable = self._drawAsteroid(atlasMapper, motions, renderer, 'asteroid' + self._range(1, 4),
                         'asteroid' + nextAsteroidId(), self._range(320/5, 4*320/5), asteroidSpeed);
                 nextCount = pauseAfterAsteroid + self._range(0, maxTimeToNextAfterAsteroid);
 
                 trackedAsteroids[drawable.id] = drawable;
             } else {
-                drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold',
+                drawable = self._drawAsteroid(atlasMapper, motions, renderer, 'star_gold',
                         'star' + nextStarId(), self._range(320/3, 2*320/3), starSpeed);
                 nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
 
@@ -362,7 +359,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var asteroid = trackedAsteroids[key];
 
                 if (needPreciseCollisionDetection(asteroid) && isHit(asteroid)) {
-                    startMotionsManager.remove(asteroid);
+                    motions.remove(asteroid);
                     renderer.remove(asteroid);
                     delete trackedAsteroids[key];
 
@@ -377,7 +374,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var star = trackedStars[key];
 
                 if (needPreciseCollisionDetection(star) && isHit(star)) {
-                    startMotionsManager.remove(star);
+                    motions.remove(star);
                     renderer.remove(star);
                     delete trackedStars[key];
 
@@ -432,11 +429,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
         this.gameController.add(touchable, function() {
             renderer.add(shieldsDrawable);
-            animationStudioManager.animate(shieldsDrawable, shieldsUpSprite, function () {
+            animations.animate(shieldsDrawable, shieldsUpSprite, function () {
                 shieldsDrawable.img = shieldStatic;
             });
         }, function () {
-            animationStudioManager.animate(shieldsDrawable, shieldsDownSprite, function () {
+            animations.animate(shieldsDrawable, shieldsDownSprite, function () {
                 renderer.remove(shieldsDrawable);
             })
         });
@@ -458,4 +455,4 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     return App;
 
 })(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio,
-    AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager);
+    AnimationDirector, Path, Drawable, MotionStudio, MotionDirector);

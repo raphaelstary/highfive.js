@@ -1,13 +1,13 @@
-var MotionStudioManager = (function () {
+var MotionDirector = (function () {
     "use strict";
 
     // high level move methods
-    function MotionStudioManager(startMotions) {
+    function MotionDirector(startMotions) {
         this.startMotions = startMotions;
         this.todos = [];
     }
 
-    MotionStudioManager.prototype.update = function () {
+    MotionDirector.prototype.update = function () {
 
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
@@ -29,11 +29,11 @@ var MotionStudioManager = (function () {
         this.startMotions.update();
     };
 
-    MotionStudioManager.prototype.move = function (object, path, callback) {
+    MotionDirector.prototype.move = function (object, path, callback) {
         this.startMotions.move(object, path, callback);
     };
 
-    MotionStudioManager.prototype.moveLater = function (itemToAdd, duration, callback) {
+    MotionDirector.prototype.moveLater = function (itemToAdd, duration, callback) {
         this.todos.push({
             addable: itemToAdd,
             duration: duration,
@@ -42,9 +42,9 @@ var MotionStudioManager = (function () {
         });
     };
 
-    MotionStudioManager.prototype.remove = function (drawable) {
+    MotionDirector.prototype.remove = function (drawable) {
         this.startMotions.remove(drawable);
     };
 
-    return MotionStudioManager;
+    return MotionDirector;
 })();

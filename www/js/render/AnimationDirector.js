@@ -1,19 +1,13 @@
-var AnimationStudioManager = (function () {
+var AnimationDirector = (function () {
     "use strict";
 
-    function AnimationStudioManager(animationStudio) {
+    function AnimationDirector(animationStudio) {
         this.animationStudio = animationStudio;
         this.todos = [];
         this.ticker = 0;
     }
 
-    AnimationStudioManager.prototype.update = function () {
-        if (this.ticker % 2 === 0) {
-            this.animationStudio.nextFrame();
-            this.ticker = 0;
-        }
-        this.ticker++;
-
+    AnimationDirector.prototype.update = function () {
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
 
@@ -31,9 +25,15 @@ var AnimationStudioManager = (function () {
                 toAdd.time++;
             }
         }
+
+        if (this.ticker % 2 === 0) {
+            this.animationStudio.nextFrame();
+            this.ticker = 0;
+        }
+        this.ticker++;
     };
 
-    AnimationStudioManager.prototype.throttleAnimate = function (itemToAdd, duration, callback) {
+    AnimationDirector.prototype.animateLater = function (itemToAdd, duration, callback) {
         this.todos.push({
             addable: itemToAdd,
             duration: duration,
@@ -42,13 +42,13 @@ var AnimationStudioManager = (function () {
         });
     };
 
-    AnimationStudioManager.prototype.animate = function (animatedItem, sprite, callback) {
+    AnimationDirector.prototype.animate = function (animatedItem, sprite, callback) {
         this.animationStudio.animate(animatedItem, sprite, callback);
     };
 
-    AnimationStudioManager.prototype.remove = function (animatedItem) {
+    AnimationDirector.prototype.remove = function (animatedItem) {
         this.animationStudio.remove(animatedItem);
     };
 
-    return AnimationStudioManager;
+    return AnimationDirector;
 })();
