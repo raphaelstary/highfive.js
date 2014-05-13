@@ -42,5 +42,13 @@ var AnimationStudioManager = (function () {
         });
     };
 
+    AnimationStudioManager.prototype.animate = function (animatedItem, sprite, callback) {
+        this.animationStudio.animate(animatedItem, sprite, callback);
+    };
+
+    AnimationStudioManager.prototype.remove = function (animatedItem) {
+        this.animationStudio.remove(animatedItem);
+    };
+
     return AnimationStudioManager;
 })();
