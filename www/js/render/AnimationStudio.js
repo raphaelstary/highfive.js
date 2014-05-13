@@ -5,19 +5,23 @@ var AnimationStudio = (function () {
         this.animationsDict = {};
     }
 
-    AnimationStudio.prototype.animate = function (animatedItem, sprite, callback) {
-        animatedItem.img = sprite.frames[0];
+    AnimationStudio.prototype.animate = function (drawable, sprite, callback) {
+        drawable.img = sprite.frames[0];
 
-        this.animationsDict[animatedItem.id] = {
-            item: animatedItem,
+        this.animationsDict[drawable.id] = {
+            item: drawable,
             sprite: sprite,
             ready: callback,
             time: 0
         };
     };
 
-    AnimationStudio.prototype.remove = function (animatedItem) {
-        delete this.animationsDict[animatedItem.id];
+    AnimationStudio.prototype.remove = function (drawable) {
+        delete this.animationsDict[drawable.id];
+    };
+
+    AnimationStudio.prototype.has = function (drawable) {
+        return this.animationsDict[drawable.id] !== undefined;
     };
 
     AnimationStudio.prototype.nextFrame = function () {

@@ -27,6 +27,10 @@ var Renderer = (function () {
         delete this.drawableDict[drawable.id];
     };
 
+    Renderer.prototype.has = function (drawable) {
+        return this.drawableDict[drawable.id] !== undefined;
+    };
+
     Renderer.prototype.draw = function () {
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 

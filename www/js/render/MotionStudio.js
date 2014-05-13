@@ -3,7 +3,7 @@ var MotionStudio = (function () {
 
     // handles low level moving of draw-ables
     function MotionStudio() {
-        this.sceneDict = {};
+        this.motionsDict = {};
     }
 
     MotionStudio.prototype.move = function (drawable, path, callback) {
@@ -11,7 +11,7 @@ var MotionStudio = (function () {
             var axis = path.startX === path.endX ? 'y' : 'x';
         }
 
-        this.sceneDict[drawable.id] = {
+        this.motionsDict[drawable.id] = {
             item: drawable,
             path: path,
             ready: callback,
@@ -21,42 +21,44 @@ var MotionStudio = (function () {
     };
 
     MotionStudio.prototype.update = function () {
-        for (var key in this.sceneDict) {
-            if (!this.sceneDict.hasOwnProperty(key)) {
+        for (var key in this.motionsDict) {
+            if (!this.motionsDict.hasOwnProperty(key)) {
                 continue;
             }
 
-            var node = this.sceneDict[key];
+            var motion = this.motionsDict[key];
 
-            if (!node.path)
-                continue;
+            var path = motion.path;
+            if (path.duration > motion.time) {
 
-            if (node.path.duration > node.time) {
+                if (motion.axis === 'x') {
+                    motion.item.x = Math.floor(path.timingFn(motion.time, path.startX, path.length, path.duration));
 
-                if (node.axis === 'x') {
-                    node.item.x = Math.floor(node.path.timingFn(node.time, node.path.startX, node.path.length, node.path.duration));
-
-                } else if (node.axis === 'y') {
-                    node.item.y = Math.floor(node.path.timingFn(node.time, node.path.startY, node.path.length, node.path.duration));
+                } else if (motion.axis === 'y') {
+                    motion.item.y = Math.floor(path.timingFn(motion.time, path.startY, path.length, path.duration));
                 }
 
-                node.time++;
+                motion.time++;
             } else {
-                if (node.path.loop) {
-                    node.time = 0;
+                if (path.loop) {
+                    motion.time = 0;
                 } else {
-                    delete this.sceneDict[key];
+                    delete this.motionsDict[key];
                 }
 
-                if (node.ready) {
-                    node.ready();
+                if (motion.ready) {
+                    motion.ready();
                 }
             }
         }
     };
 
     MotionStudio.prototype.remove = function (drawable) {
-        delete this.sceneDict[drawable.id];
+        delete this.motionsDict[drawable.id];
+    };
+
+    MotionStudio.prototype.has = function (drawable) {
+        return this.motionsDict[drawable.id] !== undefined;
     };
 
     return MotionStudio;

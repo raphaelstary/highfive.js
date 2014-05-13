@@ -33,21 +33,25 @@ var AnimationDirector = (function () {
         this.ticker++;
     };
 
-    AnimationDirector.prototype.animateLater = function (itemToAdd, duration, callback) {
+    AnimationDirector.prototype.animateLater = function (drawableToAdd, duration, callback) {
         this.todos.push({
-            addable: itemToAdd,
+            addable: drawableToAdd,
             duration: duration,
             time: 0,
             ready: callback
         });
     };
 
-    AnimationDirector.prototype.animate = function (animatedItem, sprite, callback) {
-        this.animationStudio.animate(animatedItem, sprite, callback);
+    AnimationDirector.prototype.animate = function (drawable, sprite, callback) {
+        this.animationStudio.animate(drawable, sprite, callback);
     };
 
-    AnimationDirector.prototype.remove = function (animatedItem) {
-        this.animationStudio.remove(animatedItem);
+    AnimationDirector.prototype.remove = function (drawable) {
+        this.animationStudio.remove(drawable);
+    };
+
+    AnimationDirector.prototype.has = function (drawable) {
+        this.animationStudio.has(drawable);
     };
 
     return AnimationDirector;
