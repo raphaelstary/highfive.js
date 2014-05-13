@@ -7,6 +7,7 @@ var AnimationStudio = (function () {
 
     AnimationStudio.prototype.animate = function (animatedItem, sprite, callback) {
         animatedItem.img = sprite.frames[0];
+        sprite.current = 0;
 
         this.animationsDict[animatedItem.id] = {
             item: animatedItem,

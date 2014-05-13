@@ -1,12 +1,13 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
     var DEBUG_START_IMMEDIATELY = false;
 
-    function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
+    function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
         this.screen = screen;
         this.screenCtx = screenCtx;
         this.requestAnimationFrame = requestAnimationFrame;
         this.resizeBus = resizeBus;
         this.tapController = screenInput;
+        this.gameController = gameController;
     }
 
     App.prototype.start = function(windowWidth, windowHeight) {
@@ -429,11 +430,15 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         shieldsDrawable.y = shipDrawable.y;
 
         var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
-        this.tapController.add(touchable, function() {
+        this.gameController.add(touchable, function() {
             renderer.add(shieldsDrawable);
             animationStudioManager.animate(shieldsDrawable, shieldsUpSprite, function () {
                 shieldsDrawable.img = shieldStatic;
             });
+        }, function () {
+            animationStudioManager.animate(shieldsDrawable, shieldsDownSprite, function () {
+                renderer.remove(shieldsDrawable);
+            })
         });
 
         // TODO endscene event
