@@ -299,6 +299,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             return starId;
         }
 
+        var trackedAsteroids = {};
+        var trackedStars = {};
         var self = this;
         function generateLevel() {
             counter += 1;
@@ -317,25 +319,41 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                 trackedAsteroids[drawable.id] = drawable;
             } else {
-                self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold',
+                drawable = self._drawAsteroid(atlasMapper, startMotionsManager, renderer, 'star_gold',
                         'star' + nextStarId(), self._range(320/3, 2*320/3), starSpeed);
                 nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
+
+                trackedStars[drawable.id] = drawable;
             }
         }
 
-        var trackedAsteroids = {};
-
         function collisions() {
-            for (var key in trackedAsteroids) {
+            var key;
+            for (key in trackedAsteroids) {
                 if (!trackedAsteroids.hasOwnProperty(key)) {
                     continue;
                 }
                 var asteroid = trackedAsteroids[key];
 
-                if (needPreciseCollisionDetection(asteroid) && isCrash(asteroid)) {
+                if (needPreciseCollisionDetection(asteroid) && isHit(asteroid)) {
                     startMotionsManager.remove(asteroid);
                     renderer.remove(asteroid);
                     delete trackedAsteroids[key];
+
+                    // TODO next scene explosions + call endscene event
+                }
+            }
+
+            for (key in trackedStars) {
+                if (!trackedStars.hasOwnProperty(key)) {
+                    continue;
+                }
+                var star = trackedStars[key];
+
+                if (needPreciseCollisionDetection(star) && isHit(star)) {
+                    startMotionsManager.remove(star);
+                    renderer.remove(star);
+                    delete trackedStars[key];
 
                     // TODO next scene explosions + call endscene event
                 }
@@ -351,7 +369,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         collisionCanvas.width = shipDrawable.img.width;
         collisionCanvas.height = shipDrawable.img.height;
 
-        function isCrash(element) {
+        function isHit(element) {
             ccCtx.clearRect(0, 0, shipDrawable.width, shipDrawable.height);
 
             var shipImg = shipDrawable.img;
@@ -379,7 +397,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             return false;
         }
 
-        this.gameLoop.add('z_collisions', collisions);
+        this.gameLoop.add('collisions', collisions);
         this.gameLoop.add('level', generateLevel);
 
 
