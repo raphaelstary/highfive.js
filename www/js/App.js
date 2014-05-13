@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationStudioManager, Path, Drawable, MotionStudio, MotionStudioManager) {
-    var DEBUG_START_IMMEDIATELY = false;
+    var DEBUG_START_IMMEDIATELY = true;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput) {
         this.screen = screen;
@@ -332,16 +332,54 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 }
                 var asteroid = trackedAsteroids[key];
 
-                if (asteroid.isBelow(shipDrawable, 20)) {
+                if (needPreciseCollisionDetection(asteroid) && isCrash(asteroid)) {
                     startMotionsManager.remove(asteroid);
                     renderer.remove(asteroid);
+                    delete trackedAsteroids[key];
 
                     // TODO next scene explosions + call endscene event
                 }
             }
         }
 
-        this.gameLoop.add('collisions', collisions);
+        function needPreciseCollisionDetection(element) {
+            return shipDrawable.getCornerY() <= element.getEndY();
+        }
+
+        var collisionCanvas = document.createElement('canvas');
+        var ccCtx = collisionCanvas.getContext('2d');
+        collisionCanvas.width = shipDrawable.img.width;
+        collisionCanvas.height = shipDrawable.img.height;
+
+        function isCrash(element) {
+            ccCtx.clearRect(0, 0, shipDrawable.width, shipDrawable.height);
+
+            var shipImg = shipDrawable.img;
+            var elemImg = element.img;
+
+            ccCtx.drawImage(renderer.atlas, shipImg.x, shipImg.y, shipImg.width, shipImg.height, 0, 0, shipImg.width, shipImg.height);
+
+            ccCtx.save();
+            ccCtx.globalCompositeOperation = 'source-in';
+
+            var x = element.getCornerX() - shipDrawable.getCornerX();
+            var y = element.getCornerY() - shipDrawable.getCornerY();
+            ccCtx.drawImage(renderer.atlas, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width, elemImg.height);
+
+            ccCtx.restore();
+
+            var rawPixelData = ccCtx.getImageData(0, 0, x + elemImg.width, y + elemImg.height).data;
+
+            for (var i = 0; i < rawPixelData.length; i += 4) {
+                var alphaValue = rawPixelData[i + 3];
+                if (alphaValue != 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        this.gameLoop.add('z_collisions', collisions);
         this.gameLoop.add('level', generateLevel);
 
 

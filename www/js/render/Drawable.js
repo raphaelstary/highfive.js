@@ -8,13 +8,16 @@ var Drawable = (function () {
         this.img = img;
     }
 
+    Drawable.prototype.getCornerX = function () {
+        return this.x - this.img.width / 2;
+    };
+
     Drawable.prototype.getCornerY = function () {
         return this.y - this.img.height / 2;
     };
 
-    Drawable.prototype.isBelow = function (otherDrawable, tolerance) {
-        // TODO make bettewr with circles?
-        return this.getCornerY() + this.img.height - tolerance >= otherDrawable.getCornerY();
+    Drawable.prototype.getEndY = function () {
+        return this.y + this.img.height / 2;
     };
 
     return Drawable;
