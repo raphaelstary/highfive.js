@@ -34,52 +34,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         resourceLoader.load();
     };
 
-    App.prototype._drawStatic = function (atlasMapper, stage, id, x, y) {
-        var img = atlasMapper.get(id);
-        var drawable = new Drawable(id, x, y, img);
-        stage.draw(drawable);
-        return drawable;
-    };
-
-    App.prototype._drawAnimated = function (atlasMapper, stage, numberOfFrames, filePath, id, x, y) {
-        var frames = [];
-        var i;
-        for (i = 0; i <= numberOfFrames; i++) {
-            if (i < 10) {
-                frames.push(atlasMapper.get(filePath + '_000' + i));
-            } else {
-                frames.push(atlasMapper.get(filePath + '_00' + i));
-            }
-        }
-        var sprite = new Sprite(frames);
-        var drawable = new Drawable(id, x, y);
-
-        stage.animate(drawable, sprite);
-
-        return drawable;
-    };
-
-    App.prototype._drawSpeed = function (atlasMapper, stage, id, x, delay) {
-        this._drawMoved(atlasMapper, stage, 'speed', id, x, -108 / 2, x, 480 + 108 / 2, 30, true, delay);
-    };
-
-    App.prototype._drawMoved = function (atlasMapper, stage, imgId, id, x, y, endX, endY, speed, loop, delay) {
-        var subImage = atlasMapper.get(imgId);
-        var drawable = new Drawable(id, x, y, subImage);
-        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, Transition.LINEAR, loop);
-
-        var finishMovement = loop ? undefined : function () {
-            stage.remove(drawable);
-        };
-
-        if (delay === 0) {
-            stage.move(drawable, path, finishMovement);
-        } else {
-            var movedItem = {item: drawable, path: path, ready: finishMovement};
-            stage.moveLater(movedItem, delay);
-        }
-
-        return drawable;
+    App.prototype._drawSpeed = function (stage, x, delay) {
+        stage.moveFresh(x, -108 / 2, 'speed' , x, 480 + 108 / 2, 30, true, delay);
     };
 
     App.prototype._preGameScene = function (atlas, atlasInfo, windowWidth) {
@@ -94,17 +50,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
 
-        this._drawStatic(atlasMapper, stage, 'background', 320 / 2, 480 / 2);
+        stage.drawFresh(320 / 2, 480 / 2, 'background');
 
-        this._drawSpeed(atlasMapper, stage, 'speedOne', 320 / 4, 0);
-        this._drawSpeed(atlasMapper, stage, 'speedTwo', 320 / 3 * 2, 34);
-        this._drawSpeed(atlasMapper, stage, 'speedThree', 320 / 8 * 7, 8);
-        this._drawSpeed(atlasMapper, stage, 'speedFour', 320 / 16 * 7, 24);
-        this._drawSpeed(atlasMapper, stage, 'speedFive', 320 / 16, 16);
+        this._drawSpeed(stage, 320 / 4, 0);
+        this._drawSpeed(stage, 320 / 3 * 2, 34);
+        this._drawSpeed(stage, 320 / 8 * 7, 8);
+        this._drawSpeed(stage, 320 / 16 * 7, 24);
+        this._drawSpeed(stage, 320 / 16, 16);
 
-        var shipDrawable = this._drawStatic(atlasMapper, stage, 'ship', 320 / 2, 480 / 8 * 5);
+        var shipDrawable = stage.drawFresh(320 / 2, 480 / 8 * 5, 'ship');
 
-        var fireDrawable = this._drawAnimated(atlasMapper, stage, 7, 'fire-anim/fire', 'fire', 320 / 2, 480 / 8 * 5);
+        var fireDrawable = stage.animateFresh(320 / 2, 480 / 8 * 5, 'fire-anim/fire', 7);
 
         var shieldStatic = atlasMapper.get("shield3");
 
@@ -157,11 +113,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         shieldsAnimation();
 
-        var tapDrawable = this._drawAnimated(atlasMapper, stage, 35, 'tap-anim/tap', 'tap', 320 / 16 * 9, 480 / 8 * 7);
+        var tapDrawable = stage.animateFresh(320 / 16 * 9, 480 / 8 * 7, 'tap-anim/tap', 35);
 
-        var getReadyDrawable = this._drawAnimated(atlasMapper, stage, 41, 'ready-anim/get_ready', 'get_ready', 320 / 2, 480 / 3);
+        var getReadyDrawable = stage.animateFresh(320 / 2, 480 / 3, 'ready-anim/get_ready', 41);
 
-        var logoDrawable = this._drawAnimated(atlasMapper, stage, 43, 'logo-anim/logo', 'logo', 320 / 2, 480 / 6);
+        var logoDrawable = stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 43);
 
         // end of screen
 
@@ -257,8 +213,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
 
-    App.prototype._drawAsteroid = function (atlasMapper, stage, file, id, x, speed) {
-        return this._drawMoved(atlasMapper, stage, file, id, x, -108 / 2, x, 480 + 108 / 2, speed, false, 0);
+    App.prototype._drawAsteroid = function (stage, imgName, x, speed) {
+        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, false, 0);
     };
 
     App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
@@ -281,23 +237,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         // im interval 0 - 100 kommt ein element
         var nextCount = this._range(0, maxTimeToFirst);
 
-        var asteroidId = 0;
-        var starId = 0;
-        function nextAsteroidId() {
-            ++asteroidId;
-            if (asteroidId > 10) {
-                asteroidId = 1;
-            }
-            return asteroidId;
-        }
-        function nextStarId() {
-            ++starId;
-            if (starId > 10) {
-                starId = 1;
-            }
-            return starId;
-        }
-
         var trackedAsteroids = {};
         var trackedStars = {};
         var self = this;
@@ -312,14 +251,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             var drawable;
             // 2/3 asteroid, 1/3 star
             if (self._range(1, 100) <= percentageForAsteroid) {
-                drawable = self._drawAsteroid(atlasMapper, stage, 'asteroid' + self._range(1, 4),
-                        'asteroid' + nextAsteroidId(), self._range(320/5, 4*320/5), asteroidSpeed);
+                drawable = self._drawAsteroid(stage, 'asteroid' + self._range(1, 4), self._range(320/5, 4*320/5), asteroidSpeed);
                 nextCount = pauseAfterAsteroid + self._range(0, maxTimeToNextAfterAsteroid);
 
                 trackedAsteroids[drawable.id] = drawable;
             } else {
-                drawable = self._drawAsteroid(atlasMapper, stage, 'star_gold',
-                        'star' + nextStarId(), self._range(320/3, 2*320/3), starSpeed);
+                drawable = self._drawAsteroid(stage, 'star_gold', self._range(320/3, 2*320/3), starSpeed);
                 nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
 
                 trackedStars[drawable.id] = drawable;
