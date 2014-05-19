@@ -9,7 +9,7 @@ var Renderer = (function () {
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
-        this.drawableDict = {};
+        this.drawableDict = {'0': {}, '1': {}, '2': {}, '3': {}};
     }
 
     Renderer.prototype.resize = function (width, height) {
@@ -20,31 +20,39 @@ var Renderer = (function () {
     };
 
     Renderer.prototype.add = function (drawable) {
-        this.drawableDict[drawable.id] = drawable;
+        this.drawableDict[drawable.zIndex][drawable.id] = drawable;
     };
 
     Renderer.prototype.remove = function (drawable) {
-        delete this.drawableDict[drawable.id];
+        delete this.drawableDict[drawable.zIndex][drawable.id];
     };
 
     Renderer.prototype.has = function (drawable) {
-        return this.drawableDict[drawable.id] !== undefined;
+        return this.drawableDict[drawable.zIndex][drawable.id] !== undefined;
     };
 
     Renderer.prototype.draw = function () {
+        var self = this;
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
-        var self = this;
         for (var key in this.drawableDict) {
             if (this.drawableDict.hasOwnProperty(key)) {
-                var elem = this.drawableDict[key];
+                iterate(this.drawableDict[key]);
+            }
+        }
 
-                self.ctx.drawImage(self.atlas, elem.img.x, elem.img.y,
-                    elem.img.width, elem.img.height,
-                    self._getImgRenderXPoint(elem.x, elem.img),
-                    self._getImgRenderYPoint(elem.y, elem.img),
-                    self._getImgRenderWidth(elem.img),
-                    self._getImgRenderHeight(elem.img));
+        function iterate(dict) {
+            for (var key in dict) {
+                if (dict.hasOwnProperty(key)) {
+                    var elem = dict[key];
+
+                    self.ctx.drawImage(self.atlas, elem.img.x, elem.img.y,
+                        elem.img.width, elem.img.height,
+                        self._getImgRenderXPoint(elem.x, elem.img),
+                        self._getImgRenderYPoint(elem.y, elem.img),
+                        self._getImgRenderWidth(elem.img),
+                        self._getImgRenderHeight(elem.img));
+                }
             }
         }
     };

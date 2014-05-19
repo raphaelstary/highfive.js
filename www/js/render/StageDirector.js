@@ -11,6 +11,7 @@ var StageDirector = (function (Drawable, Sprite, Path) {
     }
 
     StageDirector.prototype.animateFresh = function (x, y, imgName, numberOfFrames) {
+        //todo refactoring: extract init stuff into method of static factory class
         var frames = [];
         for (var i = 0; i <= numberOfFrames; i++) {
             if (i < 10) {
@@ -50,10 +51,12 @@ var StageDirector = (function (Drawable, Sprite, Path) {
         this.animations.animateLater(drawableToAdd, duration, extendedCallback);
     };
 
-    StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, loop, delay) {
+    StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, loop, delay, spacing) {
+        //todo refactoring: extract init stuff into method of static factory class
         var subImage = this.atlasMapper.get(imgName);
         var drawable = new Drawable(imgName + (++this._id), x, y, subImage);
-        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, Transition.LINEAR, loop);
+        var spacingFn = spacing === undefined ? Transition.LINEAR : spacing;
+        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, spacingFn, loop);
 
         var self = this;
         var finishMovement = loop ? undefined : function () {
@@ -61,6 +64,7 @@ var StageDirector = (function (Drawable, Sprite, Path) {
         };
 
         if (delay === 0) {
+            //todo refactoring: split into moveFreshLater
             this.move(drawable, path, finishMovement);
         } else {
             var movedItem = {item: drawable, path: path, ready: finishMovement};
@@ -93,9 +97,10 @@ var StageDirector = (function (Drawable, Sprite, Path) {
         this.motions.moveLater(drawableToAdd, duration, extendedCallback);
     };
 
-    StageDirector.prototype.drawFresh = function (x, y, imgName) {
+    StageDirector.prototype.drawFresh = function (x, y, imgName, zIndex) {
+        //todo refactoring: extract init stuff into method of static factory class
         var img = this.atlasMapper.get(imgName);
-        var drawable = new Drawable(imgName + (++this._id), x, y, img);
+        var drawable = new Drawable(imgName + (++this._id), x, y, img, zIndex);
         this.draw(drawable);
 
         return drawable;

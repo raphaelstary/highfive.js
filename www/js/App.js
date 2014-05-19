@@ -29,19 +29,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         initialScreen.showNew(2, windowWidth, windowHeight);
 
-        resourceLoader.onComplete = this._preGameScene.bind(this, atlas, atlasInfo, windowWidth);
+        var self = this;
+        resourceLoader.onComplete = function () {
+            self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, self._introScene.bind(self));
+            self.resizeBus.remove('initial_screen');
+        };
 
         resourceLoader.load();
     };
 
-    App.prototype._drawSpeed = function (stage, x, delay) {
-        stage.moveFresh(x, -108 / 2, 'speed' , x, 480 + 108 / 2, 30, true, delay);
-    };
-
-    App.prototype._preGameScene = function (atlas, atlasInfo, windowWidth) {
-
-        this.resizeBus.remove('initial_screen');
-
+    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, firstScene) {
         var atlasMapper = new AtlasMapper(1); // 1px is 1 tile length
         atlasMapper.init(atlasInfo, windowWidth);
 
@@ -50,13 +47,113 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
 
-        stage.drawFresh(320 / 2, 480 / 2, 'background');
+        this._startGameLoop(stage);
 
-        this._drawSpeed(stage, 320 / 4, 0);
-        this._drawSpeed(stage, 320 / 3 * 2, 34);
-        this._drawSpeed(stage, 320 / 8 * 7, 8);
-        this._drawSpeed(stage, 320 / 16 * 7, 24);
-        this._drawSpeed(stage, 320 / 16, 16);
+        firstScene(stage, atlasMapper);
+
+
+    };
+
+    App.prototype._introScene = function (stage, atlasMapper) {
+
+        var firstBg = stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
+        var firstBgPath = new Path(320 / 2, 480 / 2, 320 / 2, 480 / 2 - 480, -480, 120, Transition.LINEAR);
+
+        var bg = atlasMapper.get('background');
+        var scrollingBackGround = new Drawable('background_scrolling', 320 / 2, 480 / 2 + 480, bg, 0);
+        var scrollingBgPath = new Path(320 / 2, 480 / 2 + 480, 320 / 2, 480 / 2, -480, 120, Transition.LINEAR);
+
+        var self = this;
+
+        var speedY = 0; // 600
+        var speedImg = atlasMapper.get('speed');
+
+        var speedDrawableOne = new Drawable('speedOne', 320 / 4, speedY, speedImg, 1);
+        var speedDrawableTwo = new Drawable('speedTwo', 320 / 8 * 7, speedY - 100, speedImg, 1);
+        var speedDrawableThree = new Drawable('speedThree', 320 / 16, speedY - 200, speedImg, 1);
+        var speedDrawableFour = new Drawable('speedFour', 320 / 16 * 7, speedY - 300, speedImg, 1);
+        var speedDrawableFive = new Drawable('speedFive', 320 / 16, speedY - 400, speedImg, 1);
+        var speedDrawableSix = new Drawable('speedSix', 320 / 3 * 2, speedY - 450, speedImg, 1);
+
+        var x = 320 / 2,
+            y = 480 + 20,
+            yEnd = -20,
+            length = -520;
+
+        var letsplayIOLogo = atlasMapper.get('letsplayIO');
+        var letsplayIO = new Drawable('letsplayIO', x, y + 50, letsplayIOLogo, 2);
+        var letsplayIOPath = new Path(x, y + 50, x, yEnd - 50, length - 100, 120, Transition.EASE_OUT_IN_SIN);
+
+        var presentsImg = atlasMapper.get('presents');
+        var presentsDrawable = new Drawable('presents', x, y, presentsImg, 2);
+        var presentsPath = new Path(x, y + 100, x, 30, length - 50, 120, Transition.EASE_OUT_IN_SIN);
+
+        var logoYEnd = 480 / 6;
+        var logoDrawable = stage.animateFresh(x, y, 'logo-anim/logo', 43);
+        var logoInPath = new Path(x, y, x, logoYEnd, -420, 120, Transition.EASE_OUT_QUAD);
+
+        var lastY = letsplayIO.y;
+        var speedos = [speedDrawableOne, speedDrawableTwo, speedDrawableThree, speedDrawableFour, speedDrawableFive, speedDrawableSix];
+        speedos.forEach(function (speeeed) {
+            stage.draw(speeeed);
+        });
+
+        var hasNotStarted = true;
+        this.gameLoop.add('z_parallax', function () {
+            var delta = lastY - letsplayIO.y;
+            lastY = letsplayIO.y;
+            
+            speedos.forEach(function (speeeeeeed) {
+                speeeeeeed.y += 10;
+                
+                speeeeeeed.y -= delta * 2;
+
+                if (speeeeeeed.y > 600) {
+                    stage.remove(speeeeeeed);
+                }
+            });
+
+            if (speedDrawableOne.y >= 480 && hasNotStarted) {
+                hasNotStarted = false;
+
+                stage.move(firstBg, firstBgPath, function () {
+                    stage.remove(firstBg);
+                });
+                stage.move(scrollingBackGround, scrollingBgPath, function () {
+                    scrollingBackGround.y = 480 / 2;
+                });
+
+                stage.move(letsplayIO, letsplayIOPath, function () {
+                    stage.remove(letsplayIO);
+                });
+
+                stage.move(presentsDrawable, presentsPath, function () {
+                    stage.remove(presentsDrawable);
+                });
+
+                stage.moveLater({item: logoDrawable, path: logoInPath, ready: function () {
+
+                    self.gameLoop.remove('z_parallax');
+                    self._preGameScene(stage, atlasMapper, logoDrawable);
+
+                }}, 90, function () {
+                    var delay = 30;
+                    self._drawSpeed(stage, 320 / 4, 0 + delay);
+                    self._drawSpeed(stage, 320 / 3 * 2, 34 + delay);
+                    self._drawSpeed(stage, 320 / 8 * 7, 8 + delay);
+                    self._drawSpeed(stage, 320 / 16 * 7, 24 + delay);
+                    self._drawSpeed(stage, 320 / 16, 16 + delay);
+                });
+            }
+        });
+
+    };
+
+    App.prototype._drawSpeed = function (stage, x, delay) {
+        stage.moveFresh(x, -108 / 2, 'speed' , x, 480 + 108 / 2, 30, true, delay);
+    };
+
+    App.prototype._preGameScene = function (stage, atlasMapper, logoDrawable) {
 
         var shipDrawable = stage.drawFresh(320 / 2, 480 / 8 * 5, 'ship');
 
@@ -95,10 +192,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var self = this;
         function shieldsAnimation() {
 
-//            var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
-//            var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
-//            var shieldsDrawable = new Drawable('shields', 320 / 2, 480 / 8 * 5);
-
             stage.animateLater({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
                 shieldsDrawable.img = shieldStatic;
                 stage.animateLater({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
@@ -117,7 +210,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var getReadyDrawable = stage.animateFresh(320 / 2, 480 / 3, 'ready-anim/get_ready', 41);
 
-        var logoDrawable = stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 43);
+//        var logoDrawable = stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 43);
 
         // end of screen
 
@@ -131,8 +224,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             self._getReadyScene(atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
                 fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic);
         });
-
-        this._startGameLoop(stage);
     };
 
     App.prototype._startGameLoop = function(stage) {
