@@ -1,6 +1,6 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite,
                      AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector) {
-    var DEBUG_START_IMMEDIATELY = false;
+    var DEBUG_START_IMMEDIATELY = true;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
         this.screen = screen;
@@ -355,7 +355,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             var fourthDigitDrawable = stage.moveFresh(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, loop, 12);
 
             self._playGameScene(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
-                shieldStatic)
+                shieldStatic, energyBarDrawable)
         });
 
         stage.move(fireDrawable, dockShipToGamePosition);
@@ -373,7 +373,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
-                                            shieldsDownSprite, shieldStatic) {
+                                            shieldsDownSprite, shieldStatic, energyBarDrawable) {
         // level difficulty
         var maxTimeToFirst = 100;
         var percentageForAsteroid = 66;
@@ -494,16 +494,105 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         shieldsDrawable.x = shipDrawable.x;
         shieldsDrawable.y = shipDrawable.y;
 
-        var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
-        this.gameController.add(touchable, function() {
-            stage.animate(shieldsDrawable, shieldsUpSprite, function () {
-                shieldsDrawable.img = shieldStatic;
-            });
-        }, function () {
+        var shieldsOn = false;
+
+        var energyDrainSprite;
+        var energyLoadSprite;
+        var energyEmptyStatic;
+        var energyFullStatic;
+
+        function initEnergyRenderStuff() {
+            var i;
+            var energyDrainFrames = [];
+            for (i = 0; i <= 89; i++) {
+                if (i < 10) {
+                    energyDrainFrames.push(atlasMapper.get("energy-drain-anim/energy_drain_000" + i));
+                } else {
+                    energyDrainFrames.push(atlasMapper.get("energy-drain-anim/energy_drain_00" + i));
+                }
+            }
+            energyDrainSprite = new Sprite(energyDrainFrames, false);
+
+            var energyLoadFrames = [];
+            for (i = 0; i <= 89; i++) {
+                if (i < 10) {
+                    energyLoadFrames.push(atlasMapper.get("energy-load-anim/energy_load_000" + i));
+                } else {
+                    energyLoadFrames.push(atlasMapper.get("energy-load-anim/energy_load_00" + i));
+                }
+            }
+            energyLoadSprite = new Sprite(energyLoadFrames, false);
+
+            energyEmptyStatic = atlasMapper.get('energy_bar_empty');
+            energyFullStatic = atlasMapper.get('energy_bar_full');
+        }
+
+        function drainEnergy() {
+            function turnShieldsOn() {
+                shieldsOn = true;
+                stage.animate(shieldsDrawable, shieldsUpSprite, function () {
+                    shieldsDrawable.img = shieldStatic;
+                });
+            }
+            function startDraining() {
+                var position = 0;
+                if (stage.animations.has(energyBarDrawable)) {
+                    position = 89 - stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time;
+                }
+
+                stage.animate(energyBarDrawable, energyDrainSprite, energyEmpty);
+
+                stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
+                energyBarDrawable.img = stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
+            }
+            turnShieldsOn();
+            startDraining();
+        }
+
+        function energyEmpty() {
+            function setEnergyBarEmpty() {
+                energyBarDrawable.img = energyEmptyStatic;
+            }
+            turnShieldsOff();
+            setEnergyBarEmpty();
+        }
+
+        function turnShieldsOff() {
+            shieldsOn = false;
             stage.animate(shieldsDrawable, shieldsDownSprite, function () {
                 stage.remove(shieldsDrawable);
-            })
-        });
+            });
+        }
+
+        function loadEnergy() {
+            function startLoading() {
+                var position = 0;
+                if (stage.animations.has(energyBarDrawable)) {
+                    position = 89 - stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time;
+                }
+                stage.animate(energyBarDrawable, energyLoadSprite, energyFull);
+
+                stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
+                energyBarDrawable.img = stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
+            }
+
+            if (shieldsOn) {
+                turnShieldsOff();
+            }
+            startLoading();
+        }
+
+        function energyFull() {
+            function setEnergyBarFull() {
+                energyBarDrawable.img = energyFullStatic;
+            }
+            setEnergyBarFull();
+        }
+
+        initEnergyRenderStuff();
+
+        var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
+        this.gameController.add(touchable, drainEnergy, loadEnergy);
 
         // TODO endscene event
         if (false) {
@@ -513,6 +602,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             stage.remove(fireDrawable);
             this.tapController.remove(touchable);
         }
+        //TODO next thing: DRAW STATE MACHINE
     };
 
     App.prototype._range = function (min, max) {

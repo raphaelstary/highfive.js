@@ -51,7 +51,7 @@ var AnimationDirector = (function () {
     };
 
     AnimationDirector.prototype.has = function (drawable) {
-        this.animationStudio.has(drawable);
+        return this.animationStudio.has(drawable);
     };
 
     return AnimationDirector;
