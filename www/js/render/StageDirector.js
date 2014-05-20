@@ -60,16 +60,12 @@ var StageDirector = (function (Drawable, Sprite, Path) {
         if (endY < y || endX < x) {
             path.length = -path.length;
         }
-        var self = this;
-        var finishMovement = loop ? undefined : function () {
-            self.motions.remove(drawable);
-        };
 
-        if (delay === 0) {
+        if (delay === undefined || delay === 0) {
             //todo refactoring: split into moveFreshLater
-            this.move(drawable, path, finishMovement);
+            this.move(drawable, path);
         } else {
-            var movedItem = {item: drawable, path: path, ready: finishMovement};
+            var movedItem = {item: drawable, path: path};
             this.moveLater(movedItem, delay);
         }
 

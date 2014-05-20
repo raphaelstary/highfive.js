@@ -361,9 +361,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         stage.move(fireDrawable, dockShipToGamePosition);
     };
 
+    App.prototype._drawStar = function (stage, img, x, speed) {
+        var star = this._drawAsteroid(stage, img, x)
+    };
 
     App.prototype._drawAsteroid = function (stage, imgName, x, speed) {
-        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR, false, false);
+        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR, false);
     };
 
     App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
