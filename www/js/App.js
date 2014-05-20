@@ -31,8 +31,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var self = this;
         resourceLoader.onComplete = function () {
-            self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, self._introScene.bind(self));
+
             self.resizeBus.remove('initial_screen');
+            var firstSceneFn;
+
+            if (DEBUG_START_IMMEDIATELY) {
+                firstSceneFn = self._preGameScene.bind(self);
+            } else {
+                firstSceneFn = self._introScene.bind(self)
+            }
+
+            self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, firstSceneFn);
         };
 
         resourceLoader.load();
@@ -138,15 +147,20 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                 }}, 90, function () {
                     var delay = 30;
-                    self._drawSpeed(stage, 320 / 4, 0 + delay);
-                    self._drawSpeed(stage, 320 / 3 * 2, 34 + delay);
-                    self._drawSpeed(stage, 320 / 8 * 7, 8 + delay);
-                    self._drawSpeed(stage, 320 / 16 * 7, 24 + delay);
-                    self._drawSpeed(stage, 320 / 16, 16 + delay);
+                    self._animateSpeedStripes(stage, delay);
                 });
             }
         });
+    };
 
+    App.prototype._animateSpeedStripes = function (stage, delay) {
+        var self = this;
+
+        self._drawSpeed(stage, 320 / 4, 0 + delay);
+        self._drawSpeed(stage, 320 / 3 * 2, 34 + delay);
+        self._drawSpeed(stage, 320 / 8 * 7, 8 + delay);
+        self._drawSpeed(stage, 320 / 16 * 7, 24 + delay);
+        self._drawSpeed(stage, 320 / 16, 16 + delay);
     };
 
     App.prototype._drawSpeed = function (stage, x, delay) {
@@ -194,7 +208,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         //------------------------------- DEBUG_ONLY start
         if (DEBUG_START_IMMEDIATELY) {
-            this._startGameLoop(stage);
+//            this._startGameLoop(stage);
+//            stage.remove(logoDrawable);
+            stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
+            this._animateSpeedStripes(stage, 0);
             this._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
                 shieldsUpSprite, shieldsDownSprite, shieldStatic);
 
@@ -240,7 +257,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.tapController.add(touchable, function() {
             // end event
             self.tapController.remove(touchable);
-
             // next scene
             self._getReadyScene(atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
                 fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic);
