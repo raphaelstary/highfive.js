@@ -51,16 +51,18 @@ var StageDirector = (function (Drawable, Sprite, Path) {
         this.animations.animateLater(drawableToAdd, duration, extendedCallback);
     };
 
-    StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, loop, delay, spacing) {
+    StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, delay) {
         //todo refactoring: extract init stuff into method of static factory class
         var subImage = this.atlasMapper.get(imgName);
         var drawable = new Drawable(imgName + (++this._id), x, y, subImage);
         var spacingFn = spacing === undefined ? Transition.LINEAR : spacing;
         var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, spacingFn, loop);
-
+        if (endY < y || endX < x) {
+            path.length = -path.length;
+        }
         var self = this;
         var finishMovement = loop ? undefined : function () {
-            self.remove(drawable);
+            self.motions.remove(drawable);
         };
 
         if (delay === 0) {

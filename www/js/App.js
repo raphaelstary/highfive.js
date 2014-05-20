@@ -150,7 +150,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._drawSpeed = function (stage, x, delay) {
-        stage.moveFresh(x, -108 / 2, 'speed' , x, 480 + 108 / 2, 30, true, delay);
+        stage.moveFresh(x, -108 / 2, 'speed', x, 480 + 108 / 2, 30, Transition.LINEAR, true, delay);
     };
 
     App.prototype._preGameScene = function (stage, atlasMapper, logoDrawable) {
@@ -271,14 +271,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
             var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
             var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
-                    320 + 2 * ready3.width, 90, Transition.EASE_IN_OUT_QUAD);
+                    320 + 2 * ready3.width, 90, Transition.EASE_OUT_IN_SIN);
 
             stage.move(ready3Drawable, ready3Path, function () {
                 stage.remove(ready3Drawable);
 
                 var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
                 var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
-                        320 + 2 * ready2.width, 90, Transition.EASE_IN_OUT_QUAD);
+                        320 + 2 * ready2.width, 90, Transition.EASE_OUT_IN_SIN);
 
                 stage.move(ready2Drawable, ready2Path, function () {
                     stage.remove(ready2Drawable);
@@ -287,7 +287,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                     var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
                     var ready1Path = new Path(-ready1.width, 480 / 3, 320 + ready1.width, 480 / 3,
-                            320 + 2 * ready1.width, 90, Transition.EASE_IN_OUT_QUAD);
+                            320 + 2 * ready1.width, 90, Transition.EASE_OUT_IN_SIN);
 
                     stage.move(ready1Drawable, ready1Path, function () {
                         // create end event method to end scene, this is endGetReadyScene
@@ -317,16 +317,37 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
 
-        stage.move(shipDrawable, dockShipToGamePosition, this._playGameScene.bind(this, atlasMapper,
-            stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
-            shieldStatic));
+        var self = this;
+        stage.move(shipDrawable, dockShipToGamePosition, function () {
+            var loop = false;
+            var zero = 'num/numeral0';
+            var spacing = Transition.EASE_IN_OUT_ELASTIC;
+            var speed = 60;
+            var yTop = 480 / 20;
+            var yBottom = yTop * 19;
+            var lifeX = 320 / 8;
+            var lifeDrawable = stage.moveFresh(lifeX - lifeX*2, yTop, 'playerlife', lifeX, yTop, speed, spacing, loop, 10);
+            var energyX = 320 / 5 + 5;
+            var energyBarDrawable = stage.moveFresh(energyX - energyX*2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing, loop, 0);
+            var digitX = 320 / 3 * 2 + 10;
+            var firstDigit = digitX + 75;
+            var firstDigitDrawable = stage.moveFresh(firstDigit + 60, yTop, zero, firstDigit, yTop, speed, spacing, loop, 10);
+            var secondDigit = digitX + 50;
+            var secondDigitDrawable = stage.moveFresh(secondDigit + 60, yTop, zero, secondDigit, yTop, speed, spacing, loop, 13);
+            var thirdDigit = digitX + 25;
+            var thirdDigitDrawable = stage.moveFresh(thirdDigit + 60, yTop, zero, thirdDigit, yTop, speed, spacing, loop, 17);
+            var fourthDigitDrawable = stage.moveFresh(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, loop, 12);
+
+            self._playGameScene(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
+                shieldStatic)
+        });
 
         stage.move(fireDrawable, dockShipToGamePosition);
     };
 
 
     App.prototype._drawAsteroid = function (stage, imgName, x, speed) {
-        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, false, 0);
+        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR, false, false);
     };
 
     App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
