@@ -147,13 +147,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                 }}, 90, function () {
                     var delay = 30;
-                    self._animateSpeedStripes(stage, delay);
+                    self._showSpeedStripes(stage, delay);
                 });
             }
         });
     };
 
-    App.prototype._animateSpeedStripes = function (stage, delay) {
+    App.prototype._showSpeedStripes = function (stage, delay) {
         var self = this;
 
         self._drawSpeed(stage, 320 / 4, 0 + delay);
@@ -211,7 +211,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 //            this._startGameLoop(stage);
 //            stage.remove(logoDrawable);
             stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
-            this._animateSpeedStripes(stage, 0);
+            this._showSpeedStripes(stage, 0);
             this._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
                 shieldsUpSprite, shieldsDownSprite, shieldStatic);
 
@@ -361,12 +361,15 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         stage.move(fireDrawable, dockShipToGamePosition);
     };
 
-    App.prototype._drawStar = function (stage, img, x, speed) {
-        var star = this._drawAsteroid(stage, img, x)
+    App.prototype._drawStar = function (stage, imgName, x, speed) {
+        var star = stage.animateFresh(x, -108 / 2, imgName, 29);
+        stage.move(star, new Path(x, -108 / 2, x, 480 + 108 / 2, 108 + 480, speed, Transition.LINEAR));
+
+        return star;
     };
 
     App.prototype._drawAsteroid = function (stage, imgName, x, speed) {
-        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR, false);
+        return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR);
     };
 
     App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
@@ -408,7 +411,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                 trackedAsteroids[drawable.id] = drawable;
             } else {
-                drawable = self._drawAsteroid(stage, 'star_gold', self._range(320/3, 2*320/3), starSpeed);
+                var starNum = self._range(1, 4);
+                var starPath = 'star' + starNum + '-anim/star' + starNum;
+                drawable = self._drawStar(stage, starPath, self._range(320/3, 2*320/3), starSpeed);
                 nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
 
                 trackedStars[drawable.id] = drawable;

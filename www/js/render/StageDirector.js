@@ -10,10 +10,10 @@ var StageDirector = (function (Drawable, Sprite, Path) {
         this._id = 0;
     }
 
-    StageDirector.prototype.animateFresh = function (x, y, imgName, numberOfFrames) {
+    StageDirector.prototype.animateFresh = function (x, y, imgName, lastFrameIndex) {
         //todo refactoring: extract init stuff into method of static factory class
         var frames = [];
-        for (var i = 0; i <= numberOfFrames; i++) {
+        for (var i = 0; i <= lastFrameIndex; i++) { //TODO change to numberOfFrames
             if (i < 10) {
                 frames.push(this.atlasMapper.get(imgName + '_000' + i));
             } else {
