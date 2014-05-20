@@ -443,12 +443,100 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var star = trackedStars[key];
 
                 if (needPreciseCollisionDetection(star) && isHit(star)) {
+                    collectStar();
+                    showScoredPoints(star.x, star.y);
+                    increaseTotalScore(10);
+
                     stage.remove(star);
                     delete trackedStars[key];
-
-                    // TODO next scene explosions + call endscene event
                 }
             }
+        }
+
+
+        var scoredPointsSprite, scoredPointsDrawable;
+        function initScoredPointsRenderStuff() {
+            var i;
+            var imgPath = 'score-10-anim/score_10';
+            var frames = [];
+            for (i = 0; i <= 19; i++) {
+                if (i < 10) {
+
+                    frames.push(atlasMapper.get(imgPath + '_000' + i));
+                } else {
+                    frames.push(atlasMapper.get(imgPath + '_00' + i));
+                }
+            }
+            scoredPointsSprite = new Sprite(frames, false);
+            scoredPointsDrawable = new Drawable('score_10', 0, 0, scoredPointsSprite.frames[0], 3);
+        }
+        initScoredPointsRenderStuff();
+
+        function showScoredPoints(x, y) {
+            var yOffSet = 50
+            scoredPointsDrawable.x = x;
+            scoredPointsDrawable.y = y - yOffSet;
+            stage.animate(scoredPointsDrawable, scoredPointsSprite, function () {
+                stage.remove(scoredPointsDrawable);
+            });
+        }
+
+
+        var sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0;
+        function initIncreaseTotalScoreRenderStuff() {
+            function createNewSprite(imgPath, lastFrameIndex) {
+                var frames = [];
+                for (var i = 0; i <= lastFrameIndex; i++) {
+                    if (i < 10) {
+
+                        frames.push(atlasMapper.get(imgPath + "_000" + i));
+                    } else {
+                        frames.push(atlasMapper.get(imgPath + "_00" + i));
+                    }
+                }
+                return new Sprite(frames, false);
+            }
+
+            sprite0_1 = createNewSprite('0_1-anim/0_1', 14);
+            sprite1_2 = createNewSprite('1_2-anim/1_2', 14);
+            sprite2_3 = createNewSprite('2_3-anim/2_3', 14);
+            sprite3_4 = createNewSprite('3_4-anim/3_4', 14);
+            sprite4_5 = createNewSprite('4_5-anim/4_5', 14);
+            sprite5_6 = createNewSprite('5_6-anim/5_6', 14);
+            sprite6_7 = createNewSprite('6_7-anim/6_7', 14);
+            sprite7_8 = createNewSprite('7_8-anim/7_8', 14);
+            sprite8_9 = createNewSprite('8_9-anim/8_9', 14);
+            sprite9_0 = createNewSprite('9_0-anim/9_0', 14);
+        }
+        initIncreaseTotalScoreRenderStuff();
+
+        var totalScore = 0;
+        function increaseTotalScore(points) {
+            var oldScore = totalScore;
+
+            totalScore += points;
+        }
+
+
+        var collectSprite;
+        function initCollectRenderStuff() {
+            var i;
+            var collect = [];
+            for (i = 0; i <= 29; i++) {
+                if (i < 10) {
+                    collect.push(atlasMapper.get("collect-star-anim/collect_star_000" + i));
+                } else {
+                    collect.push(atlasMapper.get("collect-star-anim/collect_star_00" + i));
+                }
+            }
+            collectSprite = new Sprite(collect, false);
+        }
+        initCollectRenderStuff();
+
+        function collectStar() {
+            stage.animate(shipDrawable, collectSprite, function () {
+                shipDrawable.img = atlasMapper.get('ship');
+            });
         }
 
         function needPreciseCollisionDetection(element) {
@@ -602,7 +690,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             stage.remove(fireDrawable);
             this.tapController.remove(touchable);
         }
-        //TODO next thing: DRAW STATE MACHINE
     };
 
     App.prototype._range = function (min, max) {
