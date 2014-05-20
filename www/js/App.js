@@ -355,7 +355,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             var fourthDigitDrawable = stage.moveFresh(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, loop, 12);
 
             self._playGameScene(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
-                shieldStatic, energyBarDrawable)
+                shieldStatic, energyBarDrawable, lifeDrawable, firstDigitDrawable, secondDigitDrawable,
+                thirdDigitDrawable, fourthDigitDrawable);
         });
 
         stage.move(fireDrawable, dockShipToGamePosition);
@@ -373,7 +374,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
-                                            shieldsDownSprite, shieldStatic, energyBarDrawable) {
+                                            shieldsDownSprite, shieldStatic, energyBarDrawable, lifeDrawable,
+                                            firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable,
+                                            fourthDigitDrawable) {
         // level difficulty
         var maxTimeToFirst = 100;
         var percentageForAsteroid = 66;
@@ -445,7 +448,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 if (needPreciseCollisionDetection(star) && isHit(star)) {
                     collectStar();
                     showScoredPoints(star.x, star.y);
-                    increaseTotalScore(10);
+                    increaseTotalScore(20);
 
                     stage.remove(star);
                     delete trackedStars[key];
@@ -473,7 +476,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         initScoredPointsRenderStuff();
 
         function showScoredPoints(x, y) {
-            var yOffSet = 50
+            var yOffSet = 50;
             scoredPointsDrawable.x = x;
             scoredPointsDrawable.y = y - yOffSet;
             stage.animate(scoredPointsDrawable, scoredPointsSprite, function () {
@@ -483,6 +486,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
         var sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0;
+        var countSprites;
+        var countDrawables;
+        var countStatics;
         function initIncreaseTotalScoreRenderStuff() {
             function createNewSprite(imgPath, lastFrameIndex) {
                 var frames = [];
@@ -507,14 +513,53 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             sprite7_8 = createNewSprite('7_8-anim/7_8', 14);
             sprite8_9 = createNewSprite('8_9-anim/8_9', 14);
             sprite9_0 = createNewSprite('9_0-anim/9_0', 14);
+            countSprites = [sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0];
+            countDrawables = [firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable];
+            countStatics = [atlasMapper.get('num/numeral0'), atlasMapper.get('num/numeral1'), atlasMapper.get('num/numeral2'),
+                atlasMapper.get('num/numeral3'), atlasMapper.get('num/numeral4'), atlasMapper.get('num/numeral5'),
+                atlasMapper.get('num/numeral6'), atlasMapper.get('num/numeral7'), atlasMapper.get('num/numeral8'),
+                atlasMapper.get('num/numeral9')];
         }
         initIncreaseTotalScoreRenderStuff();
 
-        var totalScore = 0;
-        function increaseTotalScore(points) {
-            var oldScore = totalScore;
+        var totalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        function increaseTotalScore(score) {
+            var scoreString = score.toString();
 
-            totalScore += points;
+            var u = 0,
+                overflow = 0;
+
+            for (var i = scoreString.length - 1; i > -1; i--) {
+                addDigit(parseInt(scoreString[i], 10));
+            }
+            while (overflow > 0) {
+                addDigit(0);
+            }
+
+            function addDigit(intToAdd) {
+                var currentDigit = totalScore[u];
+                var tmpAmount = currentDigit + intToAdd + overflow;
+                overflow = Math.floor(tmpAmount / 10);
+                var newDigit = tmpAmount % 10;
+
+                var delta = tmpAmount - currentDigit;
+                var currentDrawable = countDrawables[u];
+                for (var v = 0; v < delta; v++) {
+                    var currentSprite = countSprites[(currentDigit + v) % 10];
+                    (function (currentDrawable, currentDigit, v) {
+                        stage.animate(currentDrawable, currentSprite, function () {
+                            currentDrawable.img = countStatics[(currentDigit + 1 + v) % 10];
+                        })
+                    })(currentDrawable, currentDigit, v);
+                    if ((currentDigit + v) % 10 === newDigit) {
+                        break;
+                    }
+                }
+
+                totalScore[u] = newDigit;
+
+                u++;
+            }
         }
 
 
