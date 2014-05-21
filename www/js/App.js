@@ -1,5 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite,
-                     AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector) {
     var DEBUG_START_IMMEDIATELY = true;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
@@ -11,12 +10,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.gameController = gameController;
     }
 
-    App.prototype.start = function(windowWidth, windowHeight) {
+    App.prototype.start = function (windowWidth, windowHeight) {
         // idea to create list of all scenes and just use nextScene() to advance
         this._loadingScene(windowWidth, windowHeight);
     };
 
-    App.prototype._loadingScene = function(windowWidth, windowHeight) {
+    App.prototype._loadingScene = function (windowWidth, windowHeight) {
         // show loading screen, load binary resources
 
         var resourceLoader = new ResourceLoader(),
@@ -111,10 +110,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.gameLoop.add('z_parallax', function () {
             var delta = lastY - letsplayIO.y;
             lastY = letsplayIO.y;
-            
+
             speedos.forEach(function (speeeeeeed) {
                 speeeeeeed.y += 10;
-                
+
                 speeeeeeed.y -= delta * 2;
 
                 if (speeeeeeed.y > 600) {
@@ -222,6 +221,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var startTimer = 10;
         this.doTheShields = true;
         var self = this;
+
         function shieldsAnimation() {
 
             stage.animateLater({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
@@ -254,7 +254,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
         var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
-        this.tapController.add(touchable, function() {
+        this.tapController.add(touchable, function () {
             // end event
             self.tapController.remove(touchable);
             // next scene
@@ -263,15 +263,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
     };
 
-    App.prototype._startGameLoop = function(stage) {
+    App.prototype._startGameLoop = function (stage) {
         this.gameLoop = new GameLoop(this.requestAnimationFrame);
         this.gameLoop.add('stage', stage.tick.bind(stage));
         this.gameLoop.run();
     };
 
-    App.prototype._getReadyScene = function (atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable,
-                                             shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite,
-                                             shieldsDownSprite, shieldStatic) {
+    App.prototype._getReadyScene = function (atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic) {
 
         var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
                 getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
@@ -327,8 +325,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         });
     };
 
-    App.prototype._startingPositionScene = function(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
-                                                    shieldsUpSprite, shieldsDownSprite, shieldStatic) {
+    App.prototype._startingPositionScene = function (atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic) {
 
         var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
@@ -342,9 +339,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             var yTop = 480 / 20;
             var yBottom = yTop * 19;
             var lifeX = 320 / 8;
-            var lifeDrawable = stage.moveFresh(lifeX - lifeX*2, yTop, 'playerlife', lifeX, yTop, speed, spacing, loop, 10);
+            var lifeDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX, yTop, speed, spacing, loop, 10);
             var energyX = 320 / 5 + 5;
-            var energyBarDrawable = stage.moveFresh(energyX - energyX*2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing, loop, 0);
+            var energyBarDrawable = stage.moveFresh(energyX - energyX * 2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing, loop, 0);
             var digitX = 320 / 3 * 2 + 10;
             var firstDigit = digitX + 75;
             var firstDigitDrawable = stage.moveFresh(firstDigit + 60, yTop, zero, firstDigit, yTop, speed, spacing, loop, 10);
@@ -373,10 +370,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR);
     };
 
-    App.prototype._playGameScene = function(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite,
-                                            shieldsDownSprite, shieldStatic, energyBarDrawable, lifeDrawable,
-                                            firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable,
-                                            fourthDigitDrawable) {
+    App.prototype._playGameScene = function (atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, energyBarDrawable, lifeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable) {
+        var shieldsOn = false; //part of global game state
+
         // level difficulty
         var maxTimeToFirst = 100;
         var percentageForAsteroid = 66;
@@ -398,6 +394,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var trackedAsteroids = {};
         var trackedStars = {};
         var self = this;
+
         function generateLevel() {
             counter += 1;
             if (counter <= nextCount) {
@@ -409,19 +406,29 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             var drawable;
             // 2/3 asteroid, 1/3 star
             if (self._range(1, 100) <= percentageForAsteroid) {
-                drawable = self._drawAsteroid(stage, 'asteroid' + self._range(1, 4), self._range(320/5, 4*320/5), asteroidSpeed);
+                drawable = self._drawAsteroid(stage, 'asteroid' + self._range(1, 4), self._range(320 / 5, 4 * 320 / 5), asteroidSpeed);
                 nextCount = pauseAfterAsteroid + self._range(0, maxTimeToNextAfterAsteroid);
 
                 trackedAsteroids[drawable.id] = drawable;
             } else {
                 var starNum = self._range(1, 4);
                 var starPath = 'star' + starNum + '-anim/star' + starNum;
-                drawable = self._drawStar(stage, starPath, self._range(320/3, 2*320/3), starSpeed);
+                drawable = self._drawStar(stage, starPath, self._range(320 / 3, 2 * 320 / 3), starSpeed);
                 nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
 
                 trackedStars[drawable.id] = drawable;
             }
         }
+
+        var elemHitsShieldsSprite;
+        var shieldsGetHitSprite;
+
+        function initShieldsHitRenderStuff() {
+            elemHitsShieldsSprite = createNewSprite('shield-hit-anim/shield_hit', 11);
+            shieldsGetHitSprite = createNewSprite('shiels-hit-anim/shields_hit', 9); //TODO change sprite name
+        }
+
+        initShieldsHitRenderStuff();
 
         function collisions() {
             var key;
@@ -431,11 +438,31 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 }
                 var asteroid = trackedAsteroids[key];
 
+                if (shieldsOn && needPreciseCollisionDetectionForShields(asteroid) && isShieldsHit(asteroid)) {
+                    stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
+                        if (shieldsOn) {
+                            shieldsDrawable.img = shieldStatic
+                        } else {
+                            stage.remove(shieldsDrawable);
+                        }
+                    });
+                    (function (asteroid) {
+                        stage.remove(asteroid);
+                        stage.animate(asteroid, elemHitsShieldsSprite, function () {
+                            stage.remove(asteroid);
+                        })
+                    })(asteroid);
+
+                    delete trackedAsteroids[key];
+                    continue;
+                }
+
                 if (needPreciseCollisionDetection(asteroid) && isHit(asteroid)) {
                     stage.remove(asteroid);
                     delete trackedAsteroids[key];
 
                     // TODO next scene explosions + call endscene event
+                    continue;
                 }
             }
 
@@ -445,19 +472,40 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 }
                 var star = trackedStars[key];
 
+                if (shieldsOn && needPreciseCollisionDetectionForShields(star) && isShieldsHit(star)) {
+                    stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
+                        if (shieldsOn) {
+                            shieldsDrawable.img = shieldStatic
+                        } else {
+                            stage.remove(shieldsDrawable);
+                        }
+                    });
+                    (function (star) {
+                        stage.remove(star);
+                        stage.animate(star, elemHitsShieldsSprite, function () {
+                            stage.remove(star);
+                        })
+                    })(star);
+
+                    delete trackedStars[key];
+                    continue;
+                }
+
                 if (needPreciseCollisionDetection(star) && isHit(star)) {
                     collectStar();
                     showScoredPoints(star.x, star.y);
-                    increaseTotalScore(20);
+                    increaseTotalScore(10);
 
                     stage.remove(star);
                     delete trackedStars[key];
+                    continue;
                 }
             }
         }
 
 
         var scoredPointsSprite, scoredPointsDrawable;
+
         function initScoredPointsRenderStuff() {
             var i;
             var imgPath = 'score-10-anim/score_10';
@@ -473,6 +521,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             scoredPointsSprite = new Sprite(frames, false);
             scoredPointsDrawable = new Drawable('score_10', 0, 0, scoredPointsSprite.frames[0], 3);
         }
+
         initScoredPointsRenderStuff();
 
         function showScoredPoints(x, y) {
@@ -484,24 +533,25 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             });
         }
 
+        function createNewSprite(imgPath, lastFrameIndex) {
+            var frames = [];
+            for (var i = 0; i <= lastFrameIndex; i++) {
+                if (i < 10) {
+
+                    frames.push(atlasMapper.get(imgPath + "_000" + i));
+                } else {
+                    frames.push(atlasMapper.get(imgPath + "_00" + i));
+                }
+            }
+            return new Sprite(frames, false);
+        }
 
         var sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0;
         var countSprites;
         var countDrawables;
         var countStatics;
-        function initIncreaseTotalScoreRenderStuff() {
-            function createNewSprite(imgPath, lastFrameIndex) {
-                var frames = [];
-                for (var i = 0; i <= lastFrameIndex; i++) {
-                    if (i < 10) {
 
-                        frames.push(atlasMapper.get(imgPath + "_000" + i));
-                    } else {
-                        frames.push(atlasMapper.get(imgPath + "_00" + i));
-                    }
-                }
-                return new Sprite(frames, false);
-            }
+        function initIncreaseTotalScoreRenderStuff() {
 
             sprite0_1 = createNewSprite('0_1-anim/0_1', 14);
             sprite1_2 = createNewSprite('1_2-anim/1_2', 14);
@@ -520,9 +570,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 atlasMapper.get('num/numeral6'), atlasMapper.get('num/numeral7'), atlasMapper.get('num/numeral8'),
                 atlasMapper.get('num/numeral9')];
         }
+
         initIncreaseTotalScoreRenderStuff();
 
         var totalScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         function increaseTotalScore(score) {
             var scoreString = score.toString();
 
@@ -564,6 +616,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
         var collectSprite;
+
         function initCollectRenderStuff() {
             var i;
             var collect = [];
@@ -576,6 +629,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             }
             collectSprite = new Sprite(collect, false);
         }
+
         initCollectRenderStuff();
 
         function collectStar() {
@@ -588,11 +642,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             return shipDrawable.getCornerY() <= element.getEndY();
         }
 
+        function needPreciseCollisionDetectionForShields(element) {
+            return shieldsDrawable.getCornerY() <= element.getEndY();
+        }
+
         var collisionCanvas = document.createElement('canvas');
         var ccCtx = collisionCanvas.getContext('2d');
         var shipStaticImg = atlasMapper.get('ship');
-        collisionCanvas.width = shipStaticImg.width;
-        collisionCanvas.height = shipStaticImg.height;
+        collisionCanvas.width = shieldStatic.width; //shipStaticImg.width;
+        collisionCanvas.height = shieldStatic.height; //shipStaticImg.height;
+        var collisionCanvasWidth = shieldStatic.width;
+        var collisionCanvasHeight = shieldStatic.height;
 
         function getStaticShipCornerX() {
             return shipDrawable.x - shipStaticImg.width / 2;
@@ -603,7 +663,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         }
 
         function isHit(element) {
-            ccCtx.clearRect(0, 0, shipStaticImg.width, shipStaticImg.height);
+            ccCtx.clearRect(0, 0, collisionCanvasWidth, collisionCanvasHeight);
 
             var shipImg = shipStaticImg;
             var elemImg = element.img;
@@ -630,13 +690,41 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             return false;
         }
 
+        function isShieldsHit(element) {
+            ccCtx.clearRect(0, 0, collisionCanvasWidth, collisionCanvasHeight);
+
+            var shieldsImg = shieldsDrawable.img;
+            var elemImg = element.img;
+
+            ccCtx.drawImage(stage.renderer.atlas, shieldsImg.x, shieldsImg.y, shieldsImg.width, shieldsImg.height, 0, 0, shieldsImg.width, shieldsImg.height);
+
+            ccCtx.save();
+            ccCtx.globalCompositeOperation = 'source-in';
+
+            var x = element.getCornerX() - shieldsDrawable.getCornerX();
+            var y = element.getCornerY() - shieldsDrawable.getCornerY();
+            ccCtx.drawImage(stage.renderer.atlas, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width, elemImg.height);
+
+            ccCtx.restore();
+
+            var rawPixelData = ccCtx.getImageData(0, 0, x + elemImg.width, y + elemImg.height).data;
+
+            for (var i = 0; i < rawPixelData.length; i += 4) {
+                var alphaValue = rawPixelData[i + 3];
+                if (alphaValue != 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         this.gameLoop.add('collisions', collisions);
         this.gameLoop.add('level', generateLevel);
 
         shieldsDrawable.x = shipDrawable.x;
         shieldsDrawable.y = shipDrawable.y;
 
-        var shieldsOn = false;
 
         var energyDrainSprite;
         var energyLoadSprite;
@@ -676,6 +764,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                     shieldsDrawable.img = shieldStatic;
                 });
             }
+
             function startDraining() {
                 var position = 0;
                 if (stage.animations.has(energyBarDrawable)) {
@@ -687,6 +776,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
                 energyBarDrawable.img = stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
             }
+
             turnShieldsOn();
             startDraining();
         }
@@ -695,6 +785,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             function setEnergyBarEmpty() {
                 energyBarDrawable.img = energyEmptyStatic;
             }
+
             turnShieldsOff();
             setEnergyBarEmpty();
         }
@@ -728,6 +819,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             function setEnergyBarFull() {
                 energyBarDrawable.img = energyFullStatic;
             }
+
             setEnergyBarFull();
         }
 

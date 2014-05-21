@@ -47,7 +47,7 @@ var MotionDirector = (function () {
     };
 
     MotionDirector.prototype.has = function (drawable) {
-        this.motionStudio.has(drawable);
+        return this.motionStudio.has(drawable);
     };
 
     return MotionDirector;
