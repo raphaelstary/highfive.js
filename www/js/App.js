@@ -590,13 +590,22 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var collisionCanvas = document.createElement('canvas');
         var ccCtx = collisionCanvas.getContext('2d');
-        collisionCanvas.width = shipDrawable.img.width;
-        collisionCanvas.height = shipDrawable.img.height;
+        var shipStaticImg = atlasMapper.get('ship');
+        collisionCanvas.width = shipStaticImg.width;
+        collisionCanvas.height = shipStaticImg.height;
+
+        function getStaticShipCornerX() {
+            return shipDrawable.x - shipStaticImg.width / 2;
+        }
+
+        function getStaticShipCornerY() {
+            return shipDrawable.y - shipStaticImg.height / 2;
+        }
 
         function isHit(element) {
-            ccCtx.clearRect(0, 0, shipDrawable.width, shipDrawable.height);
+            ccCtx.clearRect(0, 0, shipStaticImg.width, shipStaticImg.height);
 
-            var shipImg = shipDrawable.img;
+            var shipImg = shipStaticImg;
             var elemImg = element.img;
 
             ccCtx.drawImage(stage.renderer.atlas, shipImg.x, shipImg.y, shipImg.width, shipImg.height, 0, 0, shipImg.width, shipImg.height);
@@ -604,8 +613,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             ccCtx.save();
             ccCtx.globalCompositeOperation = 'source-in';
 
-            var x = element.getCornerX() - shipDrawable.getCornerX();
-            var y = element.getCornerY() - shipDrawable.getCornerY();
+            var x = element.getCornerX() - getStaticShipCornerX();
+            var y = element.getCornerY() - getStaticShipCornerY();
             ccCtx.drawImage(stage.renderer.atlas, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width, elemImg.height);
 
             ccCtx.restore();
