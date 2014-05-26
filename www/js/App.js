@@ -862,6 +862,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         //end scene todo move to own scene
         function endGame() {
+            for (var key in lifeDrawables) {
+                if (lifeDrawables.hasOwnProperty(key)) {
+                    stage.remove(lifeDrawables[key]);
+                }
+            }
+
             self.gameLoop.remove('collisions');
             self.gameLoop.remove('level');
 
@@ -917,11 +923,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
     App.prototype._postGameScene = function (stage, atlasMapper, points) {
 
-
+        var self = this;
         var gameOverX = 320 / 2;
         var gameOverY = 480 / 4 - 25;
         var gameOverStartY = gameOverY - 480;
-//        var gameOverPathOut = new Path(gameOverDrawable.x, gameOverDrawable.y, gameOverDrawable.x, gameOverDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
 
         var gameOverDrawable = stage.moveFresh(gameOverX, gameOverStartY, 'gameover', gameOverX, gameOverY, 60,
             Transition.EASE_OUT_ELASTIC, false, 0, function () {
@@ -930,7 +935,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var scoreX = 320 / 2;
                 var scoreY = 480 / 3;
                 var scoreStartY = scoreY - 480;
-//        var scorePathOut = new Path(scoreDrawable.x, scoreDrawable.y, scoreDrawable.x, scoreDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
 
                 var scoreDrawable = stage.moveFresh(scoreX, scoreStartY, 'score', scoreX, scoreY, 60, Transition.EASE_OUT_BOUNCE);
 
@@ -952,15 +956,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             commonKeyPartForNumbers + pointsInString[i], x, newScoreY, 60, Transition.EASE_OUT_BOUNCE, false, 5);
                     newScoreDigits.push(scoreDigitDrawable);
                 }
-//        var newScorePathOut = new Path(0, newScoreDigits[0].y, 0, newScoreDigits[0].y + 480, 480, 30, Transition.EASE_IN_EXPO);
-
 
                 var bestX = 320 / 2;
                 var bestY = 480 / 2;
                 var bestStartY = bestY - 480;
 
                 var bestDrawable = stage.moveFresh(bestX, bestStartY, 'best', bestX, bestY, 60, Transition.EASE_OUT_BOUNCE, false, 10);
-//        var bestPathOut = new Path(bestDrawable.x, bestDrawable.y, bestDrawable.x, bestDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
 
                 var allTimeHighScore = localStorage.getItem('allTimeHighScore');
                 if (allTimeHighScore == null) {
@@ -979,15 +980,56 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             commonKeyPartForNumbers + allTimeHighScore[i], x, highScoreY, 60, Transition.EASE_OUT_BOUNCE, false, 15);
                     highScoreDigits.push(highScoreDigitDrawable);
                 }
-//        var highScorePathOut = new Path(highScoreDigits[0].x, highScoreDigits[0].y, highScoreDigits[0].x, highScoreDigits[0].y + 480, 480, 30, Transition.EASE_IN_EXPO);
 
                 var playX = 320 / 2;
                 var playY = 480 / 4 * 3;
                 var playStartY = playY - 480;
-                var playDrawable = stage.moveFresh(playX, playStartY, 'play', playX, playY, 60, Transition.EASE_OUT_BOUNCE, false, 20);
                 var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
-//        var playPathOut = new Path(playDrawable.x, playDrawable.y, playDrawable.x, playDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                var playDrawable = stage.moveFresh(playX, playStartY, 'play', playX, playY, 60, Transition.EASE_OUT_BOUNCE, false, 20, function () {
 
+                    var touchable = {id: 'play_again_tap', x: 0, y: 0, width: 320, height: 480};
+                    self.tapController.add(touchable, function () {
+                        // end event
+                        self.tapController.remove(touchable);
+
+                        stage.animate(playDrawable, pressPlaySprite, function () {
+                            playDrawable.img = atlasMapper.get('play');
+
+                            var playPathOut = new Path(playDrawable.x, playDrawable.y, playDrawable.x, playDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            stage.move(playDrawable, playPathOut, function () {
+                                stage.remove(playDrawable);
+                            });
+                            var highScorePathOut = new Path(highScoreDigits[0].x, highScoreDigits[0].y, highScoreDigits[0].x, highScoreDigits[0].y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            highScoreDigits.forEach(function (elem, index) {
+                                stage.moveLater({item: elem, path: highScorePathOut, ready: function () {
+                                    stage.remove(elem);
+                                }}, 5 + index);
+                            });
+                            var bestPathOut = new Path(bestDrawable.x, bestDrawable.y, bestDrawable.x, bestDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            stage.moveLater({item: bestDrawable, path: bestPathOut, ready: function () {
+                                stage.remove(bestDrawable);
+                            }}, 10);
+                            var newScorePathOut = new Path(0, newScoreDigits[0].y, 0, newScoreDigits[0].y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            newScoreDigits.forEach(function (elem, index) {
+                                stage.moveLater({item: elem, path: newScorePathOut, ready: function () {
+                                    stage.remove(elem);
+                                }}, 15 + index);
+                            });
+                            var scorePathOut = new Path(scoreDrawable.x, scoreDrawable.y, scoreDrawable.x, scoreDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            stage.moveLater({item: scoreDrawable, path: scorePathOut, ready: function () {
+                                stage.remove(scoreDrawable);
+                            }}, 20);
+                            var gameOverPathOut = new Path(gameOverDrawable.x, gameOverDrawable.y, gameOverDrawable.x, gameOverDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            stage.moveLater({item: gameOverDrawable, path: gameOverPathOut, ready: function () {
+                                stage.remove(gameOverDrawable);
+                            }}, 25);
+                        });
+
+                        // next scene
+//                        self._getReadyScene(atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
+//                            fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes);
+                    });
+                });
             });
     };
 
