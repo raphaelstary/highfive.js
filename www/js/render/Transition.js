@@ -32,6 +32,23 @@ var Transition = (function () {
             Math.sin((currentTime * duration - s) * (2 * Math.PI) / period) + changeInValue + startValue;
     }
 
+    function elasticEasingOut(currentTime, startValue, changeInValue, duration) {
+        if (currentTime == 0) {
+            return startValue;
+        }
+        if ((currentTime /= duration) == 1) {
+            return startValue + changeInValue;
+        }
+        var period = duration * .3;
+        var s;
+        if (changeInValue < Math.abs(changeInValue)) {
+            s = period / 4;
+        } else {
+            s = period / (2 * Math.PI) * Math.asin(changeInValue / changeInValue);
+        }
+        return changeInValue * Math.pow(2, -10 * currentTime) * Math.sin((currentTime * duration - s) * (2 * Math.PI) / period) + changeInValue + startValue;
+    }
+
     function quadraticEasingInAndOut(currentTime, startValue, changeInValue, duration) {
         if ((currentTime /= duration / 2) < 1) {
             return changeInValue / 2 * currentTime * currentTime + startValue;
@@ -69,31 +86,51 @@ var Transition = (function () {
         return changeInValue / 2 * (--currentTime * currentTime * currentTime * currentTime * currentTime + 1) + startValue;
     }
 
-    function sinusoidalEasingOutAndIn(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * (Math.sin(Math.PI * t / 2) ) + b;
-        return -c / 2 * (Math.cos(Math.PI * --t / 2) - 2) + b;
+    function sinusoidalEasingOutAndIn(currentTime, startValue, changeInValue, duration) {
+        if ((currentTime /= duration / 2) < 1) return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2) ) + startValue;
+        return -changeInValue / 2 * (Math.cos(Math.PI * --currentTime / 2) - 2) + startValue;
     }
 
-    function sinusoidalEasingIn(t, b, c, d) {
-        return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+    function sinusoidalEasingIn(currentTime, startValue, changeInValue, duration) {
+        return -changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
     }
 
-    function sinusoidalEasingOut(t, b, c, d) {
-        return c * Math.sin(t / d * (Math.PI / 2)) + b;
+    function sinusoidalEasingOut(currentTime, startValue, changeInValue, duration) {
+        return changeInValue * Math.sin(currentTime / duration * (Math.PI / 2)) + startValue;
+    }
+
+    function bouncingEasingOut(currentTime, startValue, changeInValue, duration) {
+        if ((currentTime /= duration) < (1 / 2.75)) {
+            return changeInValue * (7.5625 * currentTime * currentTime) + startValue;
+        } else if (currentTime < (2 / 2.75)) {
+            return changeInValue * (7.5625 * (currentTime -= (1.5 / 2.75)) * currentTime + .75) + startValue;
+        } else if (currentTime < (2.5 / 2.75)) {
+            return changeInValue * (7.5625 * (currentTime -= (2.25 / 2.75)) * currentTime + .9375) + startValue;
+        } else {
+            return changeInValue * (7.5625 * (currentTime -= (2.625 / 2.75)) * currentTime + .984375) + startValue;
+        }
     }
 
     return {
         LINEAR: linearTweening,
-        EASE_IN_OUT_EXPO: exponentialEasingInAndOut,
+
+        EASE_OUT_BOUNCE: bouncingEasingOut,
+
+        EASE_OUT_ELASTIC: elasticEasingOut,
         EASE_IN_OUT_ELASTIC: elasticEasingInAndOut,
-        EASE_IN_OUT_QUAD: quadraticEasingInAndOut,
+
         EASE_IN_EXPO: exponentialEasingIn,
         EASE_OUT_EXPO: exponentialEasingOut,
+        EASE_IN_OUT_EXPO: exponentialEasingInAndOut,
+
         EASE_IN_QUAD: quadraticEasingIn,
         EASE_OUT_QUAD: quadraticEasingOut,
+        EASE_IN_OUT_QUAD: quadraticEasingInAndOut,
+
         EASE_OUT_IN_QUINT: quinticEasingOutAndIn,
-        EASE_OUT_IN_SIN: sinusoidalEasingOutAndIn,
+
         EASE_IN_SIN: sinusoidalEasingIn,
-        EASE_OUT_SIN: sinusoidalEasingOut
+        EASE_OUT_SIN: sinusoidalEasingOut,
+        EASE_OUT_IN_SIN: sinusoidalEasingOutAndIn
     }
 })();
