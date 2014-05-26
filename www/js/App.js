@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector) {
-    var DEBUG_START_IMMEDIATELY = true;
+    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
         this.screen = screen;
@@ -1022,12 +1022,20 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             var gameOverPathOut = new Path(gameOverDrawable.x, gameOverDrawable.y, gameOverDrawable.x, gameOverDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
                             stage.moveLater({item: gameOverDrawable, path: gameOverPathOut, ready: function () {
                                 stage.remove(gameOverDrawable);
-                            }}, 25);
-                        });
 
-                        // next scene
-//                        self._getReadyScene(atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
-//                            fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes);
+                                if (DEBUG_START_IMMEDIATELY) {
+                                    self._preGameScene(stage, atlasMapper, null, null);
+                                } else {
+                                    self._preGameScene(stage, atlasMapper,
+                                        stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 43),
+                                        self._showSpeedStripes(stage, 0));
+                                }
+                            }}, 25, function () {
+                                if (points > parseInt(allTimeHighScore, 10)) {
+                                    localStorage.setItem('allTimeHighScore', points);
+                                }
+                            });
+                        });
                     });
                 });
             });
