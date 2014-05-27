@@ -1,5 +1,5 @@
 var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector) {
-    var DEBUG_START_IMMEDIATELY = false;
+    var DEBUG_START_IMMEDIATELY = true;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
         this.screen = screen;
@@ -378,8 +378,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._playGameScene = function (atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable, speedStripes) {
+        var shaker = [shipDrawable, shieldsDrawable, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable];
+        speedStripes.forEach(function (stripe) {
+            shaker.push(stripe);
+        });
+        var shaking = false;
+        var smallShaking = false;
+        var bigShaking = false;
+
         var shieldsOn = false; //part of global game state
-        var lives = 1; //3; //part of global game state
+        var lives = 3; //3; //part of global game state
+        var initialLives = 3; // needed for right render stuff after collect or similar
         var points = 0; //part of global game state
 
         var lifeDrawables = {1: lifeOneDrawable, 2: lifeTwoDrawable, 3: lifeThreeDrawable};
@@ -429,6 +438,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                 trackedStars[drawable.id] = drawable;
             }
+//            shaker.push(drawable);
         }
 
         var elemHitsShieldsSprite;
@@ -473,6 +483,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             stage.remove(asteroid);
                         })
                     })(asteroid);
+                    smallScreenShake();
 
                     delete trackedAsteroids[key];
                     continue;
@@ -483,6 +494,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                     delete trackedAsteroids[key];
 
                     shipGotHit();
+                    bigScreenShake();
+
                     if (lives <= 0) {
                         endGame();
                     }
@@ -536,9 +549,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
             if (--lives > 0) {
                 stage.animate(shipDrawable, shipHullHitSprite, function () {
-                    if (lives == 2) {
+                    if (lives == initialLives - 1) {
                         shipDrawable.img = atlasMapper.get('damaged-ship2');
-                    } else if (lives == 1) {
+                    } else if (lives == initialLives - 2) {
                         shipDrawable.img = atlasMapper.get('damaged-ship3');
                     } else {
                         shipDrawable.img = atlasMapper.get('ship');
@@ -666,7 +679,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         function collectStar() {
             stage.animate(shipDrawable, collectSprite, function () {
-                shipDrawable.img = atlasMapper.get('ship');
+                if (lives == initialLives - 1) {
+                    shipDrawable.img = atlasMapper.get('damaged-ship2');
+                } else if (lives == initialLives - 2) {
+                    shipDrawable.img = atlasMapper.get('damaged-ship3');
+                } else {
+                    shipDrawable.img = atlasMapper.get('ship');
+                }
             });
         }
 
@@ -750,7 +769,118 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             return false;
         }
 
+        var time = 0;
+        var duration = 60;
+        var lastOffSetY;
+        function shakeTheScreen() {
+            if (shaking) {
+                if (smallShaking) {
+                    var offSet = elasticOutShake(time, duration, 25, 5);
+                    shaker.forEach(function (item) {
+                        if (time == 0) {
+                            item._startValueX = item.x;
+                        }
+                        if (offSet != 0) {
+                            item.x = item._startValueX + offSet;
+                        } else {
+                            item.x = item._startValueX;
+                        }
+                    });
 
+                } else if (bigShaking) {
+                    var amplitude = 150;
+                    var period = 5;
+                    var offSetX = elasticOutShake(time, duration, amplitude - 50, period + 5);
+                    var offSetY = elasticOutShake(time, duration, amplitude, period);
+
+                    shaker.forEach(function (item) {
+                        if (time == 0) {
+                            item._startValueX = item.x;
+//                            item._startValueY = item.y;
+                            lastOffSetY = 0;
+                        }
+                        if (offSetX != 0) {
+                            item.x = item._startValueX + offSetX;
+                        } else {
+                            item.x = item._startValueX;
+                        }
+                        if (offSetY != 0) {
+                            item.y = (item.y - lastOffSetY) + offSetY;
+                        } else {
+                            item.y = (item.y - lastOffSetY);
+                        }
+                    });
+                    lastOffSetY = offSetY;
+                }
+
+                time++;
+                if (time >= duration) {
+                    time = 0;
+                    shaking = false;
+
+                    shaker.forEach(function (item) {
+                        item.x = item._startValueX;
+                        delete item._startValueX;
+
+                        if (bigShaking) {
+                            item.y = item.y - lastOffSetY;
+                            lastOffSetY = 0;
+                        }
+                    });
+
+                    smallShaking = false;
+                    bigShaking = false;
+                }
+            }
+        }
+
+        function smallScreenShake() {
+            if (shaking) {
+                if (bigShaking) {
+                    return;
+                }
+                shaker.forEach(function (item) {
+                    item.x = item._startValueX;
+                });
+            }
+
+            shaking = true;
+            time = 0;
+            smallShaking = true;
+        }
+
+        function bigScreenShake() {
+            if (shaking) {
+                if (smallShaking) {
+                    smallShaking = false;
+                }
+
+                shaker.forEach(function (item) {
+                    item.x = item._startValueX;
+                });
+
+                if (bigShaking) {
+                    shaker.forEach(function (item) {
+                        item.y = item.y - lastOffSetY;
+                    });
+                    lastOffSetY = 0;
+                }
+            }
+
+            shaking = true;
+            time = 0;
+            bigShaking = true;
+        }
+
+        function elasticOutShake(currentTime, duration, amplitude, period) {
+            if (currentTime == 0 || (currentTime /= duration) == 1) {
+                return 0;
+            }
+
+            return Math.floor(amplitude * Math.pow(2, -10 * currentTime) * Math.sin((currentTime * duration) * (2 * Math.PI) / period));
+        }
+
+        this.gameLoop.add('shake', shakeTheScreen);
         this.gameLoop.add('collisions', collisions);
         this.gameLoop.add('level', generateLevel);
 
@@ -868,6 +998,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 }
             }
 
+            self.gameLoop.remove('shake');
             self.gameLoop.remove('collisions');
             self.gameLoop.remove('level');
 
@@ -878,7 +1009,19 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 stage.remove(energyBarDrawable);
             });
 
-            self._endGameScene(stage, atlasMapper, shipDrawable, fireDrawable, speedStripes, points, countDrawables);
+            if (DEBUG_START_IMMEDIATELY) {
+                stage.remove(shipDrawable);
+                stage.remove(fireDrawable);
+                speedStripes.forEach(function (speedStripe) {
+                    stage.remove(speedStripe);
+                });
+                countDrawables.forEach(function (count) {
+                    stage.remove(count);
+                });
+                self._postGameScene(stage, atlasMapper, points);
+            } else {
+                self._endGameScene(stage, atlasMapper, shipDrawable, fireDrawable, speedStripes, points, countDrawables);
+            }
         }
     };
 
