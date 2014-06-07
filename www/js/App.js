@@ -173,6 +173,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._preGameScene = function (stage, atlasMapper, logoDrawable, speedStripes) {
+        var self = this;
 
         var shipStartY = 600;
         var shipEndY = 480 / 8 * 5;
@@ -181,14 +182,12 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var fireDrawable = stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 7);
         var tapDrawable;
-        var pressPlay = new Drawable('press_play', 320/2, 480/3, atlasMapper.get('play'));
+        var pressPlay = new Drawable('press_play', 320 / 2, 480 / 3, atlasMapper.get('play'));
         var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
-//        var getReadyDrawable;
         stage.move(shipDrawable, shipInPath, function () {
             shipDrawable.y = shipEndY;
             shieldsAnimation();
             tapDrawable = stage.animateFresh(320 / 16 * 9, 480 / 8 * 7, 'tap-anim/tap', 35);
-//            getReadyDrawable = stage.animateFresh(320 / 2, 480 / 3, 'ready-anim/get_ready', 41);
             stage.draw(pressPlay);
 
 
@@ -204,8 +203,6 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         stage.move(fireDrawable, shipInPath, function () {
             fireDrawable.y = shipEndY;
         });
-
-        var shieldStatic = atlasMapper.get("shield3");
 
         var i;
         var shieldsUpFrames = [];
@@ -225,31 +222,28 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         //------------------------------- DEBUG_ONLY start
         if (DEBUG_START_IMMEDIATELY) {
-//            this._startGameLoop(stage);
-//            stage.remove(logoDrawable);
             stage.remove(pressPlay);
             self.tapController.remove(touchable);
             stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
             var stripes = this._showSpeedStripes(stage, 0);
             this._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
-                shieldsUpSprite, shieldsDownSprite, shieldStatic, stripes);
+                shieldsUpSprite, shieldsDownSprite, stripes);
 
             return;
         }
         //------------------------------- DEBUG_ONLY end
 
         var startTimer = 10;
-        this.doTheShields = true;
-        var self = this;
+        var doTheShields = true;
 
         function shieldsAnimation() {
 
             stage.animateLater({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
-                shieldsDrawable.img = shieldStatic;
+                shieldsDrawable.img = atlasMapper.get("shield3");
                 stage.animateLater({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
                     stage.remove(shieldsDrawable);
                     startTimer = 20;
-                    if (self.doTheShields) {
+                    if (doTheShields) {
                         shieldsAnimation();
                     }
                 }}, 28)
@@ -262,9 +256,30 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             stage.remove(pressPlay);
             // end event
             self.tapController.remove(touchable);
-            // next scene
-            self._getReadyScene(atlasMapper, stage, tapDrawable, logoDrawable, shipDrawable,
-                fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes);
+
+            var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+            stage.move(logoDrawable, logoOut, function () {
+                stage.remove(logoDrawable);
+            });
+            var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+            stage.move(tapDrawable, tapOut, function () {
+                stage.remove(tapDrawable);
+            });
+
+            var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
+                shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
+
+            doTheShields = false;
+            stage.remove(shieldsDrawable);
+
+            stage.move(shipDrawable, dockShipToGamePosition, function () {
+                // next scene
+                self._startingPositionScene(atlasMapper, stage, shipDrawable,
+                    fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, speedStripes);
+            });
+
+            stage.move(fireDrawable, dockShipToGamePosition);
+
         }
     };
 
@@ -274,147 +289,112 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.gameLoop.run();
     };
 
-    App.prototype._getReadyScene = function (atlasMapper, stage, tapDrawable, logoDrawable, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes) {
-
+    App.prototype._tutorialScene = function (atlasMapper, stage, nxtSceneFn) {
         var self = this;
+        var offSet = 480 / 4 / 2;
+        var touchHoldDrawable = stage.animateFresh(-320, 480 / 4 - offSet, 'touch_hold-anim/touch_hold', 59);
+        var crushAsteroidsDrawable = stage.animateFresh(-320, 480 / 2 - offSet, 'crush_asteroids-anim/crush_asteroids', 44);
+        var shieldsEnergyDrawable = stage.animateFresh(-320, 480 / 4 * 3 - offSet, 'shields_energy-anim/shields_energy', 59);
+        var collectBonusDrawable = stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 44);
+        var pathIn = new Path(-320, 0, 320 / 2, 0, 320 + 320 / 2, 60, Transition.EASE_OUT_BOUNCE);
+
+        stage.move(touchHoldDrawable, pathIn);
+        stage.moveLater({item: crushAsteroidsDrawable, path: pathIn}, 5);
+        stage.moveLater({item: shieldsEnergyDrawable, path: pathIn}, 10);
+        stage.moveLater({item: collectBonusDrawable, path: pathIn, ready: function () {
+            var pressPlay = new Drawable('press_play', 320 / 2, 480 / 4 * 3, atlasMapper.get('play'));
+            stage.draw(pressPlay);
+            var touchable = {id: 'play_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
+                width: pressPlay.getEndX() - pressPlay.getCornerX(),
+                height: pressPlay.getEndY() - pressPlay.getCornerY()};
+
+            self.tapController.add(touchable, function () {
+                // end event
+                self.tapController.remove(touchable);
+
+                var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
+                stage.animate(pressPlay, pressPlaySprite, function () {
+
+                    stage.remove(pressPlay);
+
+                    var pathOut = new Path(320 / 2, 0, 320 * 2, 0, 320 + 320 / 2, 60, Transition.EASE_IN_EXPO);
+
+                    stage.move(touchHoldDrawable, pathOut);
+                    stage.moveLater({item: crushAsteroidsDrawable, path: pathOut}, 5);
+                    stage.moveLater({item: shieldsEnergyDrawable, path: pathOut}, 10);
+                    stage.moveLater({item: collectBonusDrawable, path: pathOut, ready: function () {
+                        stage.remove(touchHoldDrawable);
+                        stage.remove(crushAsteroidsDrawable);
+                        stage.remove(shieldsEnergyDrawable);
+                        stage.remove(collectBonusDrawable);
+
+                        nxtSceneFn();
+                    }}, 15);
+                });
+            });
+
+        }}, 15);
+
+        this.showTutorial = false;
+    };
+
+    App.prototype._getReadyScene = function (atlasMapper, stage, nxtSceneFn) {
 
         if (this.showTutorial) {
-            var offSet = 480/4/2;
-            var touchHoldDrawable = stage.animateFresh(-320, 480/4 - offSet, 'touch_hold-anim/touch_hold', 59);
-            var crushAsteroidsDrawable = stage.animateFresh(-320, 480/2 - offSet, 'crush_asteroids-anim/crush_asteroids', 44);
-            var shieldsEnergyDrawable = stage.animateFresh(-320, 480/4*3 - offSet, 'shields_energy-anim/shields_energy', 59);
-            var collectBonusDrawable = stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 44);
-            var pathIn = new Path(-320, 0, 320/2, 0, 320 + 320/2, 30, Transition.EASE_OUT_BOUNCE);
-
-            stage.move(touchHoldDrawable, pathIn);
-            stage.moveLater({item: crushAsteroidsDrawable, path: pathIn}, 5);
-            stage.moveLater({item: shieldsEnergyDrawable, path: pathIn}, 10);
-            stage.moveLater({item: collectBonusDrawable, path: pathIn, ready: function () {
-                var pressPlay = new Drawable('press_play', 320/2, 480/4*3, atlasMapper.get('play'));
-                stage.draw(pressPlay);
-                var touchable = {id: 'play_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
-                    width: pressPlay.getEndX() - pressPlay.getCornerX(),
-                    height: pressPlay.getEndY() - pressPlay.getCornerY()};
-
-                self.tapController.add(touchable, function () {
-                    // end event
-                    self.tapController.remove(touchable);
-
-                    var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
-                    stage.animate(pressPlay, pressPlaySprite, function () {
-
-                        stage.remove(pressPlay);
-
-                        var pathOut = new Path(320/2, 0, 320*2, 0, 320 + 320/2, 30, Transition.EASE_IN_EXPO);
-
-                        stage.move(touchHoldDrawable, pathOut);
-                        stage.moveLater({item: crushAsteroidsDrawable, path: pathOut}, 5);
-                        stage.moveLater({item: shieldsEnergyDrawable, path: pathOut}, 10);
-                        stage.moveLater({item: collectBonusDrawable, path: pathOut, ready: function () {
-                            stage.remove(touchHoldDrawable);
-                            stage.remove(crushAsteroidsDrawable);
-                            stage.remove(shieldsEnergyDrawable);
-                            stage.remove(collectBonusDrawable);
-
-                            extracted();
-                        }}, 15);
-                    });
-                });
-
-            }}, 15);
-
-            this.showTutorial = false;
+            this._tutorialScene(atlasMapper, stage, extracted);
         } else {
             extracted();
         }
 
         function extracted() {
             var getReadyStatic = atlasMapper.get('ready-anim/get_ready_0010');
-//        var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
-//                getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
-//            Transition.EASE_IN_OUT_EXPO);
-            var ready3 = atlasMapper.get("ready3");
-            var ready2 = atlasMapper.get("ready2");
-            var ready1 = atlasMapper.get("ready1");
 
-//        stage.move(getReadyDrawable, getReadyOutPath, function () {
-//            stage.remove(getReadyDrawable);
-//            var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
-//            var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
-//                    320 + 2 * ready3.width, 90, Transition.EASE_OUT_IN_SIN);
-//            stage.move(ready3Drawable, ready3Path, function () {
-//                stage.remove(ready3Drawable);
-//                var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
-//                var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
-//                        320 + 2 * ready2.width, 90, Transition.EASE_OUT_IN_SIN);
-//                stage.move(ready2Drawable, ready2Path, function () {
-//                    stage.remove(ready2Drawable);
-                    self.doTheShields = false;
+            var readyDrawable = new Drawable('ready', -getReadyStatic.width, 480 / 3, getReadyStatic);
 
-//                    var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
-                    var readyDrawable = new Drawable('ready', -getReadyStatic.width, 480 / 3, getReadyStatic);
+            var readyPath = new Path(-getReadyStatic.width, 480 / 3, 320 + getReadyStatic.width, 480 / 3,
+                    320 + 2 * getReadyStatic.width, 90, Transition.EASE_OUT_IN_SIN);
 
-                    var readyPath = new Path(-getReadyStatic.width, 480 / 3, 320 + getReadyStatic.width, 480 / 3,
-                            320 + 2 * getReadyStatic.width, 90, Transition.EASE_OUT_IN_SIN);
+            stage.move(readyDrawable, readyPath, function () {
 
-                    stage.move(readyDrawable, readyPath, function () {
+                // create end event method to end scene, this is endGetReadyScene
+                stage.remove(readyDrawable);
 
-
-
-                        // create end event method to end scene, this is endGetReadyScene
-                        stage.remove(readyDrawable);
-                        var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
-                        stage.move(logoDrawable, logoOut, function () {
-                            stage.remove(logoDrawable);
-                        });
-                        var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
-                        stage.move(tapDrawable, tapOut, function () {
-                            stage.remove(tapDrawable);
-                        });
-                        self._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
-                            shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes);
-                    });
-//                });
-//            });
-//        });
+                nxtSceneFn();
+            });
         }
-//        extracted.call(this);
     };
 
-    App.prototype._startingPositionScene = function (atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes) {
-
-        var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
-            shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
+    App.prototype._startingPositionScene = function (atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, speedStripes) {
 
         var self = this;
-        stage.move(shipDrawable, dockShipToGamePosition, function () {
-            var loop = false;
-            var zero = 'num/numeral0';
-            var spacing = Transition.EASE_IN_OUT_ELASTIC;
-            var speed = 60;
-            var yTop = 480 / 20;
-            var yBottom = yTop * 19;
-            var lifeX = 320 / 10;
-            var lifeOneDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX, yTop, speed, spacing, loop, 20);
-            var lifeTwoDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 40, yTop, speed, spacing, loop, 15);
-            var lifeThreeDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 80, yTop, speed, spacing, loop, 10);
-            var energyX = 320 / 5 + 5;
-            var energyBarDrawable = stage.moveFresh(energyX - energyX * 2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing, loop, 0);
-            var digitX = 320 / 3 * 2 + 10;
-            var firstDigit = digitX + 75;
-            var firstDigitDrawable = stage.moveFresh(firstDigit + 60, yTop, zero, firstDigit, yTop, speed, spacing, loop, 10);
-            var secondDigit = digitX + 50;
-            var secondDigitDrawable = stage.moveFresh(secondDigit + 60, yTop, zero, secondDigit, yTop, speed, spacing, loop, 13);
-            var thirdDigit = digitX + 25;
-            var thirdDigitDrawable = stage.moveFresh(thirdDigit + 60, yTop, zero, thirdDigit, yTop, speed, spacing, loop, 17);
-            var fourthDigitDrawable = stage.moveFresh(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, loop, 12);
-
-            self._playGameScene(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
-                shieldStatic, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable,
-                thirdDigitDrawable, fourthDigitDrawable, fireDrawable, speedStripes);
+        var loop = false;
+        var zero = 'num/numeral0';
+        var spacing = Transition.EASE_IN_OUT_ELASTIC;
+        var speed = 60;
+        var yTop = 480 / 20;
+        var yBottom = yTop * 19;
+        var lifeX = 320 / 10;
+        var lifeOneDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX, yTop, speed, spacing, loop, 20);
+        var lifeTwoDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 40, yTop, speed, spacing, loop, 15);
+        var lifeThreeDrawable = stage.moveFresh(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 80, yTop, speed, spacing, loop, 10);
+        var energyX = 320 / 5 + 5;
+        var energyBarDrawable = stage.moveFresh(energyX - energyX * 2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing, loop, 0);
+        var digitX = 320 / 3 * 2 + 10;
+        var firstDigit = digitX + 75;
+        var firstDigitDrawable = stage.moveFresh(firstDigit + 60, yTop, zero, firstDigit, yTop, speed, spacing, loop, 10);
+        var secondDigit = digitX + 50;
+        var secondDigitDrawable = stage.moveFresh(secondDigit + 60, yTop, zero, secondDigit, yTop, speed, spacing, loop, 13);
+        var thirdDigit = digitX + 25;
+        var thirdDigitDrawable = stage.moveFresh(thirdDigit + 60, yTop, zero, thirdDigit, yTop, speed, spacing, loop, 17);
+        var fourthDigitDrawable = stage.moveFresh(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, loop, 12, function () {
+            self._getReadyScene(atlasMapper, stage, nxtScene);
         });
 
-        stage.move(fireDrawable, dockShipToGamePosition);
+        function nxtScene() {
+            self._playGameScene(atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite,
+                energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable,
+                thirdDigitDrawable, fourthDigitDrawable, fireDrawable, speedStripes);
+        }
     };
 
     App.prototype._drawStar = function (stage, imgName, x, speed) {
@@ -428,7 +408,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR);
     };
 
-    App.prototype._playGameScene = function (atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable, speedStripes) {
+    App.prototype._playGameScene = function (atlasMapper, stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable, speedStripes) {
         var shaker = [shipDrawable, shieldsDrawable, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable];
         speedStripes.forEach(function (stripe) {
             shaker.push(stripe);
@@ -460,7 +440,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var counter = 0;
         // im interval 0 - 100 kommt ein element
-        var nextCount = this._range(0, maxTimeToFirst);
+        var nextCount = range(0, maxTimeToFirst);
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -476,16 +456,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
             var drawable;
             // 2/3 asteroid, 1/3 star
-            if (self._range(1, 100) <= percentageForAsteroid) {
-                drawable = self._drawAsteroid(stage, 'asteroid' + self._range(1, 4), self._range(320 / 5, 4 * 320 / 5), asteroidSpeed);
-                nextCount = pauseAfterAsteroid + self._range(0, maxTimeToNextAfterAsteroid);
+            if (range(1, 100) <= percentageForAsteroid) {
+                drawable = self._drawAsteroid(stage, 'asteroid' + range(1, 4), range(320 / 5, 4 * 320 / 5), asteroidSpeed);
+                nextCount = pauseAfterAsteroid + range(0, maxTimeToNextAfterAsteroid);
 
                 trackedAsteroids[drawable.id] = drawable;
             } else {
-                var starNum = self._range(1, 4);
+                var starNum = range(1, 4);
                 var starPath = 'star' + starNum + '-anim/star' + starNum;
-                drawable = self._drawStar(stage, starPath, self._range(320 / 3, 2 * 320 / 3), starSpeed);
-                nextCount = pauseAfterStar + self._range(0, maxTimeToNextAfterStar);
+                drawable = self._drawStar(stage, starPath, range(320 / 3, 2 * 320 / 3), starSpeed);
+                nextCount = pauseAfterStar + range(0, maxTimeToNextAfterStar);
 
                 trackedStars[drawable.id] = drawable;
             }
@@ -523,7 +503,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 if (shieldsOn && needPreciseCollisionDetectionForShields(asteroid) && isShieldsHit(asteroid)) {
                     stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
                         if (shieldsOn) {
-                            shieldsDrawable.img = shieldStatic
+                            shieldsDrawable.img = atlasMapper.get("shield3");
                         } else {
                             stage.remove(shieldsDrawable);
                         }
@@ -563,7 +543,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 if (shieldsOn && needPreciseCollisionDetectionForShields(star) && isShieldsHit(star)) {
                     stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
                         if (shieldsOn) {
-                            shieldsDrawable.img = shieldStatic
+                            shieldsDrawable.img = atlasMapper.get("shield3");
                         } else {
                             stage.remove(shieldsDrawable);
                         }
@@ -751,6 +731,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var collisionCanvas = document.createElement('canvas');
         var ccCtx = collisionCanvas.getContext('2d');
         var shipStaticImg = atlasMapper.get('ship');
+        var shieldStatic = atlasMapper.get("shield3");
         collisionCanvas.width = shieldStatic.width; //shipStaticImg.width;
         collisionCanvas.height = shieldStatic.height; //shipStaticImg.height;
         var collisionCanvasWidth = shieldStatic.width;
@@ -823,6 +804,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var time = 0;
         var duration = 60;
         var lastOffSetY;
+
         function shakeTheScreen() {
             if (shaking) {
                 if (smallShaking) {
@@ -974,7 +956,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             function turnShieldsOn() {
                 shieldsOn = true;
                 stage.animate(shieldsDrawable, shieldsUpSprite, function () {
-                    shieldsDrawable.img = shieldStatic;
+                    shieldsDrawable.img = atlasMapper.get("shield3");
                 });
             }
 
@@ -1235,9 +1217,9 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             });
     };
 
-    App.prototype._range = function (min, max) {
+    function range(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
+    }
 
     return App;
 
