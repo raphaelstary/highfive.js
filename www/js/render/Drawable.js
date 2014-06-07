@@ -17,6 +17,10 @@ var Drawable = (function () {
         return this.y - this.img.height / 2;
     };
 
+    Drawable.prototype.getEndX = function () {
+        return this.x + this.img.width / 2;
+    };
+
     Drawable.prototype.getEndY = function () {
         return this.y + this.img.height / 2;
     };

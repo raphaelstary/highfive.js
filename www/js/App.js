@@ -1,5 +1,5 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector) {
-    var DEBUG_START_IMMEDIATELY = true;
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage) {
+    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
         this.screen = screen;
@@ -8,6 +8,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.resizeBus = resizeBus;
         this.tapController = screenInput;
         this.gameController = gameController;
+        this.showTutorial = true;
     }
 
     App.prototype.start = function (windowWidth, windowHeight) {
@@ -180,12 +181,24 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var fireDrawable = stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 7);
         var tapDrawable;
-        var getReadyDrawable;
+        var pressPlay = new Drawable('press_play', 320/2, 480/3, atlasMapper.get('play'));
+        var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
+//        var getReadyDrawable;
         stage.move(shipDrawable, shipInPath, function () {
             shipDrawable.y = shipEndY;
             shieldsAnimation();
             tapDrawable = stage.animateFresh(320 / 16 * 9, 480 / 8 * 7, 'tap-anim/tap', 35);
-            getReadyDrawable = stage.animateFresh(320 / 2, 480 / 3, 'ready-anim/get_ready', 41);
+//            getReadyDrawable = stage.animateFresh(320 / 2, 480 / 3, 'ready-anim/get_ready', 41);
+            stage.draw(pressPlay);
+
+
+            self.tapController.add(touchable, function () {
+                var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
+                stage.animate(pressPlay, pressPlaySprite, function () {
+                    endOfScreen();
+                });
+
+            });
 
         });
         stage.move(fireDrawable, shipInPath, function () {
@@ -208,12 +221,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
         var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
-        var shieldsDrawable = new Drawable('shields', 320 / 2, shipEndY);
+        var shieldsDrawable = new Drawable('shields', 320 / 2, shipEndY, null, 2);
 
         //------------------------------- DEBUG_ONLY start
         if (DEBUG_START_IMMEDIATELY) {
 //            this._startGameLoop(stage);
 //            stage.remove(logoDrawable);
+            stage.remove(pressPlay);
+            self.tapController.remove(touchable);
             stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
             var stripes = this._showSpeedStripes(stage, 0);
             this._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
@@ -241,31 +256,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             }}, startTimer);
         }
 
-//        var tapDrawable = stage.animateFresh(320 / 16 * 9, 600, 'tap-anim/tap', 35);
-//        var tapInPath = new Path(320 / 16 * 9, 600, 320 / 16 * 9, 480 / 8 * 7, -(600 - 480 / 8 * 7), 60, Transition.EASE_IN_QUAD);
-
-//        stage.move(tapDrawable, tapInPath, function () {
-//            tapDrawable.y = 480 / 8 * 7;
-//        });
-
-//        var getReadyDrawable = stage.animateFresh(320 / 2, 480 / 3, 'ready-anim/get_ready', 41);
-//        var readyInPath = new Path(320 / 2, 600, 320 / 2, 480 / 3, -(600 - 480 / 3), 60, Transition.EASE_IN_QUAD);
-
-//        stage.move(getReadyDrawable, readyInPath, function () {
-//            getReadyDrawable.y = 480 / 3;
-//        });
-
         // end of screen
 
-
-        var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
-        this.tapController.add(touchable, function () {
+        function endOfScreen() {
+            stage.remove(pressPlay);
             // end event
             self.tapController.remove(touchable);
             // next scene
-            self._getReadyScene(atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable,
+            self._getReadyScene(atlasMapper, stage, tapDrawable, logoDrawable, shipDrawable,
                 fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes);
-        });
+        }
     };
 
     App.prototype._startGameLoop = function (stage) {
@@ -274,60 +274,111 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         this.gameLoop.run();
     };
 
-    App.prototype._getReadyScene = function (atlasMapper, stage, tapDrawable, getReadyDrawable, logoDrawable, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes) {
-
-        var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
-                getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
-            Transition.EASE_IN_OUT_EXPO);
-
-        var ready3 = atlasMapper.get("ready3");
-        var ready2 = atlasMapper.get("ready2");
-        var ready1 = atlasMapper.get("ready1");
+    App.prototype._getReadyScene = function (atlasMapper, stage, tapDrawable, logoDrawable, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes) {
 
         var self = this;
-        stage.move(getReadyDrawable, getReadyOutPath, function () {
-            stage.remove(getReadyDrawable);
 
-            var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
-            var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
-                    320 + 2 * ready3.width, 90, Transition.EASE_OUT_IN_SIN);
+        if (this.showTutorial) {
+            var offSet = 480/4/2;
+            var touchHoldDrawable = stage.animateFresh(-320, 480/4 - offSet, 'touch_hold-anim/touch_hold', 59);
+            var crushAsteroidsDrawable = stage.animateFresh(-320, 480/2 - offSet, 'crush_asteroids-anim/crush_asteroids', 44);
+            var shieldsEnergyDrawable = stage.animateFresh(-320, 480/4*3 - offSet, 'shields_energy-anim/shields_energy', 59);
+            var collectBonusDrawable = stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 44);
+            var pathIn = new Path(-320, 0, 320/2, 0, 320 + 320/2, 30, Transition.EASE_OUT_BOUNCE);
 
-            stage.move(ready3Drawable, ready3Path, function () {
-                stage.remove(ready3Drawable);
+            stage.move(touchHoldDrawable, pathIn);
+            stage.moveLater({item: crushAsteroidsDrawable, path: pathIn}, 5);
+            stage.moveLater({item: shieldsEnergyDrawable, path: pathIn}, 10);
+            stage.moveLater({item: collectBonusDrawable, path: pathIn, ready: function () {
+                var pressPlay = new Drawable('press_play', 320/2, 480/4*3, atlasMapper.get('play'));
+                stage.draw(pressPlay);
+                var touchable = {id: 'play_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
+                    width: pressPlay.getEndX() - pressPlay.getCornerX(),
+                    height: pressPlay.getEndY() - pressPlay.getCornerY()};
 
-                var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
-                var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
-                        320 + 2 * ready2.width, 90, Transition.EASE_OUT_IN_SIN);
+                self.tapController.add(touchable, function () {
+                    // end event
+                    self.tapController.remove(touchable);
 
-                stage.move(ready2Drawable, ready2Path, function () {
-                    stage.remove(ready2Drawable);
+                    var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
+                    stage.animate(pressPlay, pressPlaySprite, function () {
 
+                        stage.remove(pressPlay);
+
+                        var pathOut = new Path(320/2, 0, 320*2, 0, 320 + 320/2, 30, Transition.EASE_IN_EXPO);
+
+                        stage.move(touchHoldDrawable, pathOut);
+                        stage.moveLater({item: crushAsteroidsDrawable, path: pathOut}, 5);
+                        stage.moveLater({item: shieldsEnergyDrawable, path: pathOut}, 10);
+                        stage.moveLater({item: collectBonusDrawable, path: pathOut, ready: function () {
+                            stage.remove(touchHoldDrawable);
+                            stage.remove(crushAsteroidsDrawable);
+                            stage.remove(shieldsEnergyDrawable);
+                            stage.remove(collectBonusDrawable);
+
+                            extracted();
+                        }}, 15);
+                    });
+                });
+
+            }}, 15);
+
+            this.showTutorial = false;
+        } else {
+            extracted();
+        }
+
+        function extracted() {
+            var getReadyStatic = atlasMapper.get('ready-anim/get_ready_0010');
+//        var getReadyOutPath = new Path(getReadyDrawable.x, getReadyDrawable.y,
+//                getReadyDrawable.x + getReadyDrawable.img.width, getReadyDrawable.y, getReadyDrawable.img.width, 60,
+//            Transition.EASE_IN_OUT_EXPO);
+            var ready3 = atlasMapper.get("ready3");
+            var ready2 = atlasMapper.get("ready2");
+            var ready1 = atlasMapper.get("ready1");
+
+//        stage.move(getReadyDrawable, getReadyOutPath, function () {
+//            stage.remove(getReadyDrawable);
+//            var ready3Drawable = new Drawable('ready3', -ready3.width, 480 / 3, ready3);
+//            var ready3Path = new Path(-ready3.width, 480 / 3, 320 + ready3.width, 480 / 3,
+//                    320 + 2 * ready3.width, 90, Transition.EASE_OUT_IN_SIN);
+//            stage.move(ready3Drawable, ready3Path, function () {
+//                stage.remove(ready3Drawable);
+//                var ready2Drawable = new Drawable('ready2', -ready2.width, 480 / 3, ready2);
+//                var ready2Path = new Path(-ready2.width, 480 / 3, 320 + ready2.width, 480 / 3,
+//                        320 + 2 * ready2.width, 90, Transition.EASE_OUT_IN_SIN);
+//                stage.move(ready2Drawable, ready2Path, function () {
+//                    stage.remove(ready2Drawable);
                     self.doTheShields = false;
 
-                    var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
-                    var ready1Path = new Path(-ready1.width, 480 / 3, 320 + ready1.width, 480 / 3,
-                            320 + 2 * ready1.width, 90, Transition.EASE_OUT_IN_SIN);
+//                    var ready1Drawable = new Drawable('ready1', -ready1.width, 480 / 3, ready1);
+                    var readyDrawable = new Drawable('ready', -getReadyStatic.width, 480 / 3, getReadyStatic);
 
-                    stage.move(ready1Drawable, ready1Path, function () {
+                    var readyPath = new Path(-getReadyStatic.width, 480 / 3, 320 + getReadyStatic.width, 480 / 3,
+                            320 + 2 * getReadyStatic.width, 90, Transition.EASE_OUT_IN_SIN);
+
+                    stage.move(readyDrawable, readyPath, function () {
+
+
+
                         // create end event method to end scene, this is endGetReadyScene
-                        stage.remove(ready1Drawable);
-
+                        stage.remove(readyDrawable);
                         var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
                         stage.move(logoDrawable, logoOut, function () {
                             stage.remove(logoDrawable);
                         });
-
                         var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
                         stage.move(tapDrawable, tapOut, function () {
                             stage.remove(tapDrawable);
                         });
-
                         self._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
                             shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes);
                     });
-                });
-            });
-        });
+//                });
+//            });
+//        });
+        }
+//        extracted.call(this);
     };
 
     App.prototype._startingPositionScene = function (atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, shieldStatic, speedStripes) {
@@ -1191,4 +1242,4 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     return App;
 
 })(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio,
-    AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector);
+    AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage);
