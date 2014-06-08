@@ -18,6 +18,10 @@ var StageDirector = (function (Path, Sprites, Drawables) {
         return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames, loop);
     };
 
+    StageDirector.prototype.getSubImage = function (imgPathName) {
+        return this.atlasMapper.get(imgPathName);
+    };
+
     StageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames) {
         var sprite = this.getSprite(imgPathName, numberOfFrames);
         var drawable = this.getDrawable(x, y, imgPathName);
