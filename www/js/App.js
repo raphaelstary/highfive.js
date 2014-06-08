@@ -1,4 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio, AnimationDirector, Path, MotionStudio, MotionDirector, StageDirector, localStorage) {
 //    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
@@ -68,33 +68,29 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var firstBg = stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
         var firstBgPath = new Path(320 / 2, 480 / 2, 320 / 2, 480 / 2 - 480, -480, 120, Transition.LINEAR);
 
-        var bg = atlasMapper.get('background');
-        var scrollingBackGround = new Drawable('background_scrolling', 320 / 2, 480 / 2 + 480, bg, 0);
+        var scrollingBackGround = stage.getDrawable(320 / 2, 480 / 2 + 480, 'background', 0);
         var scrollingBgPath = new Path(320 / 2, 480 / 2 + 480, 320 / 2, 480 / 2, -480, 120, Transition.LINEAR);
 
         var self = this;
 
         var speedY = 0; // 600
-        var speedImg = atlasMapper.get('speed');
 
-        var speedDrawableOne = new Drawable('speedOne', 320 / 4, speedY, speedImg, 1);
-        var speedDrawableTwo = new Drawable('speedTwo', 320 / 8 * 7, speedY - 100, speedImg, 1);
-        var speedDrawableThree = new Drawable('speedThree', 320 / 16, speedY - 200, speedImg, 1);
-        var speedDrawableFour = new Drawable('speedFour', 320 / 16 * 7, speedY - 300, speedImg, 1);
-        var speedDrawableFive = new Drawable('speedFive', 320 / 16, speedY - 400, speedImg, 1);
-        var speedDrawableSix = new Drawable('speedSix', 320 / 3 * 2, speedY - 450, speedImg, 1);
+        var speedDrawableOne = stage.getDrawable(320 / 4, speedY, 'speed', 1);
+        var speedDrawableTwo = stage.getDrawable(320 / 8 * 7, speedY - 100, 'speed', 1);
+        var speedDrawableThree = stage.getDrawable(320 / 16, speedY - 200, 'speed', 1);
+        var speedDrawableFour = stage.getDrawable(320 / 16 * 7, speedY - 300, 'speed', 1);
+        var speedDrawableFive = stage.getDrawable(320 / 16, speedY - 400, 'speed', 1);
+        var speedDrawableSix = stage.getDrawable(320 / 3 * 2, speedY - 450, 'speed', 1);
 
         var x = 320 / 2,
             y = 480 + 20,
             yEnd = -20,
             length = -520;
 
-        var letsplayIOLogo = atlasMapper.get('letsplayIO');
-        var letsplayIO = new Drawable('letsplayIO', x, y + 50, letsplayIOLogo, 2);
+        var letsplayIO = stage.getDrawable(x, y + 50, 'letsplayIO', 2);
         var letsplayIOPath = new Path(x, y + 50, x, yEnd - 50, length - 100, 120, Transition.EASE_OUT_IN_SIN);
 
-        var presentsImg = atlasMapper.get('presents');
-        var presentsDrawable = new Drawable('presents', x, y, presentsImg, 2);
+        var presentsDrawable = stage.getDrawable(x, y, 'presents', 2);
         var presentsPath = new Path(x, y + 100, x, 30, length - 50, 120, Transition.EASE_OUT_IN_SIN);
 
         var logoYEnd = 480 / 6;
@@ -182,7 +178,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var fireDrawable = stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 8);
         var tapDrawable;
-        var pressPlay = new Drawable('press_play', 320 / 2, 480 / 3, atlasMapper.get('play'));
+        var pressPlay = stage.getDrawable(320 / 2, 480 / 3, 'play');
         var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
         stage.move(shipDrawable, shipInPath, function () {
             shipDrawable.y = shipEndY;
@@ -206,7 +202,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var shieldsDownSprite = stage.getSprite('shields-down-anim/shields_down', 6, false);
         var shieldsUpSprite = stage.getSprite('shields-up-anim/shields_up', 6, false);
-        var shieldsDrawable = new Drawable('shields', 320 / 2, shipEndY, null, 2);
+        var shieldsDrawable = stage.getDrawable(320 / 2, shipEndY, 'shields', 2);
 
         //------------------------------- DEBUG_ONLY start
 //        if (DEBUG_START_IMMEDIATELY) {
@@ -290,7 +286,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         stage.moveLater({item: crushAsteroidsDrawable, path: pathIn}, 5);
         stage.moveLater({item: shieldsEnergyDrawable, path: pathIn}, 10);
         stage.moveLater({item: collectBonusDrawable, path: pathIn, ready: function () {
-            var pressPlay = new Drawable('press_play', 320 / 2, 480 / 4 * 3, atlasMapper.get('play'));
+            var pressPlay = stage.getDrawable(320 / 2, 480 / 4 * 3, 'play');
             stage.draw(pressPlay);
             var touchable = {id: 'play_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
                 width: pressPlay.getEndX() - pressPlay.getCornerX(),
@@ -335,12 +331,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         }
 
         function extracted() {
-            var getReadyStatic = atlasMapper.get('ready-anim/get_ready_0010');
+            var readyDrawable = stage.getDrawable(-160, 480 / 3, 'ready-anim/get_ready_0010');
 
-            var readyDrawable = new Drawable('ready', -getReadyStatic.width, 480 / 3, getReadyStatic);
-
-            var readyPath = new Path(-getReadyStatic.width, 480 / 3, 320 + getReadyStatic.width, 480 / 3,
-                    320 + 2 * getReadyStatic.width, 90, Transition.EASE_OUT_IN_SIN);
+            var readyPath = new Path(-160, 480 / 3, 320 + 160, 480 / 3,
+                    320 + 2 * 160, 90, Transition.EASE_OUT_IN_SIN);
 
             stage.move(readyDrawable, readyPath, function () {
 
@@ -584,7 +578,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         function initScoredPointsRenderStuff() {
             scoredPointsSprite = stage.getSprite('score-10-anim/score_10', 20, false);
-            scoredPointsDrawable = new Drawable('score_10', 0, 0, scoredPointsSprite.frames[0], 3);
+            scoredPointsDrawable = stage.getDrawable(0, 0, 'score-10-anim/score_10_0000', 3);
         }
 
         initScoredPointsRenderStuff();
@@ -1156,4 +1150,4 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     return App;
 
 })(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio,
-    AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage);
+    AnimationDirector, Path, MotionStudio, MotionDirector, StageDirector, localStorage);
