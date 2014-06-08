@@ -1,4 +1,5 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio, AnimationDirector, MotionStudio, MotionDirector, StageDirector, localStorage) {
+var App = (function (require) {
+    "use strict";
 //    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
@@ -19,10 +20,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     App.prototype._loadingScene = function (windowWidth, windowHeight) {
         // show loading screen, load binary resources
 
-        var resourceLoader = new ResourceLoader(),
+        var resourceLoader = new require.ResourceLoader(),
             atlas = resourceLoader.addImage('gfx/atlas.png'),
             atlasInfo = resourceLoader.addJSON('data/atlas.json'),
-            initialScreen = new SimpleLoadingScreen(this.screenCtx);
+            initialScreen = new require.SimpleLoadingScreen(this.screenCtx);
 
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
         this.resizeBus.add('initial_screen', initialScreen.resize.bind(initialScreen));
@@ -48,11 +49,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, firstScene) {
-        var atlasMapper = new AtlasMapper(1); // 1px is 1 tile length
+        var atlasMapper = new require.AtlasMapper(1); // 1px is 1 tile length
         atlasMapper.init(atlasInfo, windowWidth);
 
-        var stage = new StageDirector(atlasMapper, new MotionDirector(new MotionStudio()),
-            new AnimationDirector(new AnimationStudio()), new Renderer(this.screen, this.screenCtx, atlas));
+        var stage = new require.StageDirector(atlasMapper, new require.MotionDirector(new require.MotionStudio()),
+            new require.AnimationDirector(new require.AnimationStudio()), new require.Renderer(this.screen, this.screenCtx, atlas));
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
 
@@ -267,7 +268,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._startGameLoop = function (stage) {
-        this.gameLoop = new GameLoop(this.requestAnimationFrame);
+        this.gameLoop = new require.GameLoop(this.requestAnimationFrame);
         this.gameLoop.add('stage', stage.tick.bind(stage));
         this.gameLoop.run();
     };
@@ -1145,5 +1146,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
     return App;
 
-})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio,
-    AnimationDirector, MotionStudio, MotionDirector, StageDirector, localStorage);
+})({
+    ResourceLoader: ResourceLoader,
+    SimpleLoadingScreen: SimpleLoadingScreen,
+    Renderer: Renderer,
+    GameLoop: GameLoop,
+    AtlasMapper: AtlasMapper,
+    Transition: Transition,
+    AnimationStudio: AnimationStudio,
+    AnimationDirector: AnimationDirector,
+    MotionStudio: MotionStudio,
+    MotionDirector: MotionDirector,
+    StageDirector: StageDirector,
+    localStorage: localStorage
+});
