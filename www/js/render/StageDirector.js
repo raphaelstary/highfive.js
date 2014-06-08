@@ -1,4 +1,4 @@
-var StageDirector = (function (Drawable, Path, Sprites) {
+var StageDirector = (function (Path, Sprites, Drawables) {
     "use strict";
 
     function StageDirector(atlasMapper, motions, animations, renderer) {
@@ -10,13 +10,17 @@ var StageDirector = (function (Drawable, Path, Sprites) {
         this._id = 0;
     }
 
+    StageDirector.prototype.getDrawable = function (x, y, imgPathName, zIndex) {
+        return Drawables.get(this.atlasMapper, ++this._id, x, y, imgPathName, zIndex);
+    };
+
     StageDirector.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
         return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames, loop);
     };
 
     StageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames) {
         var sprite = this.getSprite(imgPathName, numberOfFrames);
-        var drawable = new Drawable(imgPathName + (++this._id), x, y);
+        var drawable = this.getDrawable(x, y, imgPathName);
 
         this.animate(drawable, sprite);
 
@@ -48,8 +52,7 @@ var StageDirector = (function (Drawable, Path, Sprites) {
 
     StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, delay, callback) {
         //todo refactoring: extract init stuff into method of static factory class
-        var subImage = this.atlasMapper.get(imgName);
-        var drawable = new Drawable(imgName + (++this._id), x, y, subImage);
+        var drawable = this.getDrawable(x, y, imgName);
         var spacingFn = spacing === undefined ? Transition.LINEAR : spacing;
         var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, spacingFn, loop);
         if (endY < y || endX < x) {
@@ -92,8 +95,7 @@ var StageDirector = (function (Drawable, Path, Sprites) {
 
     StageDirector.prototype.drawFresh = function (x, y, imgName, zIndex) {
         //todo refactoring: extract init stuff into method of static factory class
-        var img = this.atlasMapper.get(imgName);
-        var drawable = new Drawable(imgName + (++this._id), x, y, img, zIndex);
+        var drawable = this.getDrawable(x, y, imgName, zIndex);
         this.draw(drawable);
 
         return drawable;
@@ -127,4 +129,4 @@ var StageDirector = (function (Drawable, Path, Sprites) {
     };
 
     return StageDirector;
-})(Drawable, Path, Sprites);
+})(Path, Sprites, Drawables);
