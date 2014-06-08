@@ -1,4 +1,4 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio, AnimationDirector, Path, MotionStudio, MotionDirector, StageDirector, localStorage) {
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio, AnimationDirector, MotionStudio, MotionDirector, StageDirector, localStorage) {
 //    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
@@ -66,10 +66,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     App.prototype._introScene = function (stage) {
 
         var firstBg = stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
-        var firstBgPath = new Path(320 / 2, 480 / 2, 320 / 2, 480 / 2 - 480, -480, 120, Transition.LINEAR);
+        var firstBgPath = stage.getPath(320 / 2, 480 / 2, 320 / 2, 480 / 2 - 480, 120, Transition.LINEAR);
 
         var scrollingBackGround = stage.getDrawable(320 / 2, 480 / 2 + 480, 'background', 0);
-        var scrollingBgPath = new Path(320 / 2, 480 / 2 + 480, 320 / 2, 480 / 2, -480, 120, Transition.LINEAR);
+        var scrollingBgPath = stage.getPath(320 / 2, 480 / 2 + 480, 320 / 2, 480 / 2, 120, Transition.LINEAR);
 
         var self = this;
 
@@ -84,18 +84,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var x = 320 / 2,
             y = 480 + 20,
-            yEnd = -20,
-            length = -520;
+            yEnd = -20;
 
         var letsplayIO = stage.getDrawable(x, y + 50, 'letsplayIO', 2);
-        var letsplayIOPath = new Path(x, y + 50, x, yEnd - 50, length - 100, 120, Transition.EASE_OUT_IN_SIN);
+        var letsplayIOPath = stage.getPath(x, y + 50, x, yEnd - 50, 120, Transition.EASE_OUT_IN_SIN);
 
         var presentsDrawable = stage.getDrawable(x, y, 'presents', 2);
-        var presentsPath = new Path(x, y + 100, x, 30, length - 50, 120, Transition.EASE_OUT_IN_SIN);
+        var presentsPath = stage.getPath(x, y + 100, x, 30, 120, Transition.EASE_OUT_IN_SIN);
 
         var logoYEnd = 480 / 6;
         var logoDrawable = stage.animateFresh(x, y, 'logo-anim/logo', 44);
-        var logoInPath = new Path(x, y, x, logoYEnd, -420, 120, Transition.EASE_OUT_QUAD);
+        var logoInPath = stage.getPath(x, y, x, logoYEnd, 120, Transition.EASE_OUT_QUAD);
 
         var lastY = letsplayIO.y;
         var speedos = [speedDrawableOne, speedDrawableTwo, speedDrawableThree, speedDrawableFour, speedDrawableFive, speedDrawableSix];
@@ -174,7 +173,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var shipStartY = 600;
         var shipEndY = 480 / 8 * 5;
         var shipDrawable = stage.drawFresh(320 / 2, shipStartY, 'ship');
-        var shipInPath = new Path(320 / 2, shipStartY, 320 / 2, shipEndY, -(600 - shipEndY), 60, Transition.EASE_IN_QUAD);
+        var shipInPath = stage.getPath(320 / 2, shipStartY, 320 / 2, shipEndY, 60, Transition.EASE_IN_QUAD);
 
         var fireDrawable = stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 8);
         var tapDrawable;
@@ -241,17 +240,17 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             // end event
             self.tapController.remove(touchable);
 
-            var logoOut = new Path(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+            var logoOut = stage.getPath(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
             stage.move(logoDrawable, logoOut, function () {
                 stage.remove(logoDrawable);
             });
-            var tapOut = new Path(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+            var tapOut = stage.getPath(tapDrawable.x, tapDrawable.y, tapDrawable.x, tapDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
             stage.move(tapDrawable, tapOut, function () {
                 stage.remove(tapDrawable);
             });
 
-            var dockShipToGamePosition = new Path(shipDrawable.x, shipDrawable.y,
-                shipDrawable.x, 400, 400 - shipDrawable.y, 30, Transition.EASE_IN_OUT_EXPO);
+            var dockShipToGamePosition = stage.getPath(shipDrawable.x, shipDrawable.y,
+                shipDrawable.x, 400, 30, Transition.EASE_IN_OUT_EXPO);
 
             doTheShields = false;
             stage.remove(shieldsDrawable);
@@ -280,7 +279,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var crushAsteroidsDrawable = stage.animateFresh(-320, 480 / 2 - offSet, 'crush_asteroids-anim/crush_asteroids', 45);
         var shieldsEnergyDrawable = stage.animateFresh(-320, 480 / 4 * 3 - offSet, 'shields_energy-anim/shields_energy', 60);
         var collectBonusDrawable = stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 45);
-        var pathIn = new Path(-320, 0, 320 / 2, 0, 320 + 320 / 2, 60, Transition.EASE_OUT_BOUNCE);
+        var pathIn = stage.getPath(-320, 0, 320 / 2, 0, 60, Transition.EASE_OUT_BOUNCE);
 
         stage.move(touchHoldDrawable, pathIn);
         stage.moveLater({item: crushAsteroidsDrawable, path: pathIn}, 5);
@@ -301,7 +300,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
                     stage.remove(pressPlay);
 
-                    var pathOut = new Path(320 / 2, 0, 320 * 2, 0, 320 + 320 / 2, 60, Transition.EASE_IN_EXPO);
+                    var pathOut = stage.getPath(320 / 2, 0, 320 * 2, 0, 60, Transition.EASE_IN_EXPO);
 
                     stage.move(touchHoldDrawable, pathOut);
                     stage.moveLater({item: crushAsteroidsDrawable, path: pathOut}, 5);
@@ -333,8 +332,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         function extracted() {
             var readyDrawable = stage.getDrawable(-160, 480 / 3, 'ready-anim/get_ready_0010');
 
-            var readyPath = new Path(-160, 480 / 3, 320 + 160, 480 / 3,
-                    320 + 2 * 160, 90, Transition.EASE_OUT_IN_SIN);
+            var readyPath = stage.getPath(-160, 480 / 3, 320 + 160, 480 / 3, 90, Transition.EASE_OUT_IN_SIN);
 
             stage.move(readyDrawable, readyPath, function () {
 
@@ -381,7 +379,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
     App.prototype._drawStar = function (stage, imgName, x, speed) {
         var star = stage.animateFresh(x, -108 / 2, imgName, 30);
-        stage.move(star, new Path(x, -108 / 2, x, 480 + 108 / 2, 108 + 480, speed, Transition.LINEAR));
+        stage.move(star, stage.getPath(x, -108 / 2, x, 480 + 108 / 2, speed, Transition.LINEAR));
 
         return star;
     };
@@ -976,7 +974,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
             self.gameController.remove(touchable);
 
-            var barOut = new Path(energyBarDrawable.x, energyBarDrawable.y, energyBarDrawable.x, energyBarDrawable.y + 100, 100, 60, Transition.EASE_OUT_EXPO);
+            var barOut = stage.getPath(energyBarDrawable.x, energyBarDrawable.y, energyBarDrawable.x, energyBarDrawable.y + 100, 60, Transition.EASE_OUT_EXPO);
             stage.move(energyBarDrawable, barOut, function () {
                 stage.remove(energyBarDrawable);
             });
@@ -1003,8 +1001,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             stage.remove(speedStripe);
         });
 
-        var dockShipToMiddlePosition = new Path(shipDrawable.x, shipDrawable.y,
-            shipDrawable.x, 480 / 2, -(shipDrawable.y - 480 / 2), 120, Transition.EASE_OUT_EXPO);
+        var dockShipToMiddlePosition = stage.getPath(shipDrawable.x, shipDrawable.y,
+            shipDrawable.x, 480 / 2, 120, Transition.EASE_OUT_EXPO);
 
         var explosionSprite = stage.getSprite('explosion-anim/explosion', 25, false);
 
@@ -1097,31 +1095,31 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                         stage.animate(playDrawable, pressPlaySprite, function () {
                             playDrawable.img = stage.getSubImage('play');
 
-                            var playPathOut = new Path(playDrawable.x, playDrawable.y, playDrawable.x, playDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            var playPathOut = stage.getPath(playDrawable.x, playDrawable.y, playDrawable.x, playDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
                             stage.move(playDrawable, playPathOut, function () {
                                 stage.remove(playDrawable);
                             });
-                            var highScorePathOut = new Path(highScoreDigits[0].x, highScoreDigits[0].y, highScoreDigits[0].x, highScoreDigits[0].y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            var highScorePathOut = stage.getPath(highScoreDigits[0].x, highScoreDigits[0].y, highScoreDigits[0].x, highScoreDigits[0].y + 480, 30, Transition.EASE_IN_EXPO);
                             highScoreDigits.forEach(function (elem, index) {
                                 stage.moveLater({item: elem, path: highScorePathOut, ready: function () {
                                     stage.remove(elem);
                                 }}, 5 + index);
                             });
-                            var bestPathOut = new Path(bestDrawable.x, bestDrawable.y, bestDrawable.x, bestDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            var bestPathOut = stage.getPath(bestDrawable.x, bestDrawable.y, bestDrawable.x, bestDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
                             stage.moveLater({item: bestDrawable, path: bestPathOut, ready: function () {
                                 stage.remove(bestDrawable);
                             }}, 10);
-                            var newScorePathOut = new Path(0, newScoreDigits[0].y, 0, newScoreDigits[0].y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            var newScorePathOut = stage.getPath(0, newScoreDigits[0].y, 0, newScoreDigits[0].y + 480, 30, Transition.EASE_IN_EXPO);
                             newScoreDigits.forEach(function (elem, index) {
                                 stage.moveLater({item: elem, path: newScorePathOut, ready: function () {
                                     stage.remove(elem);
                                 }}, 15 + index);
                             });
-                            var scorePathOut = new Path(scoreDrawable.x, scoreDrawable.y, scoreDrawable.x, scoreDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            var scorePathOut = stage.getPath(scoreDrawable.x, scoreDrawable.y, scoreDrawable.x, scoreDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
                             stage.moveLater({item: scoreDrawable, path: scorePathOut, ready: function () {
                                 stage.remove(scoreDrawable);
                             }}, 20);
-                            var gameOverPathOut = new Path(gameOverDrawable.x, gameOverDrawable.y, gameOverDrawable.x, gameOverDrawable.y + 480, 480, 30, Transition.EASE_IN_EXPO);
+                            var gameOverPathOut = stage.getPath(gameOverDrawable.x, gameOverDrawable.y, gameOverDrawable.x, gameOverDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
                             stage.moveLater({item: gameOverDrawable, path: gameOverPathOut, ready: function () {
                                 stage.remove(gameOverDrawable);
 
@@ -1149,4 +1147,4 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     return App;
 
 })(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio,
-    AnimationDirector, Path, MotionStudio, MotionDirector, StageDirector, localStorage);
+    AnimationDirector, MotionStudio, MotionDirector, StageDirector, localStorage);
