@@ -1,5 +1,5 @@
-var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage) {
-    var DEBUG_START_IMMEDIATELY = false;
+var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio, AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage) {
+//    var DEBUG_START_IMMEDIATELY = false;
 
     function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
         this.screen = screen;
@@ -35,11 +35,11 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             self.resizeBus.remove('initial_screen');
             var firstSceneFn;
 
-            if (DEBUG_START_IMMEDIATELY) {
-                firstSceneFn = self._preGameScene.bind(self);
-            } else {
-                firstSceneFn = self._introScene.bind(self)
-            }
+//            if (DEBUG_START_IMMEDIATELY) {
+//                firstSceneFn = self._preGameScene.bind(self);
+//            } else {
+                firstSceneFn = self._introScene.bind(self);
+//            }
 
             self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, firstSceneFn);
         };
@@ -192,7 +192,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
 
             self.tapController.add(touchable, function () {
-                var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
+                var pressPlaySprite = stage.getSprite('press-play-anim/press_play', 16);
                 stage.animate(pressPlay, pressPlaySprite, function () {
                     endOfScreen();
                 });
@@ -204,33 +204,21 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
             fireDrawable.y = shipEndY;
         });
 
-        var i;
-        var shieldsUpFrames = [];
-        for (i = 0; i <= 5; i++) {
-            shieldsUpFrames.push(atlasMapper.get("shields-up-anim/shields_up_000" + i));
-        }
-
-
-        var shieldsDownFrames = [];
-        for (i = 0; i <= 5; i++) {
-            shieldsDownFrames.push(atlasMapper.get("shields-down-anim/shields_down_000" + i));
-        }
-
-        var shieldsDownSprite = new Sprite(shieldsDownFrames, false);
-        var shieldsUpSprite = new Sprite(shieldsUpFrames, false);
+        var shieldsDownSprite = stage.getSprite('shields-down-anim/shields_down', 6, false);
+        var shieldsUpSprite = stage.getSprite('shields-up-anim/shields_up', 6, false);
         var shieldsDrawable = new Drawable('shields', 320 / 2, shipEndY, null, 2);
 
         //------------------------------- DEBUG_ONLY start
-        if (DEBUG_START_IMMEDIATELY) {
-            stage.remove(pressPlay);
-            self.tapController.remove(touchable);
-            stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
-            var stripes = this._showSpeedStripes(stage, 0);
-            this._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
-                shieldsUpSprite, shieldsDownSprite, stripes);
-
-            return;
-        }
+//        if (DEBUG_START_IMMEDIATELY) {
+//            stage.remove(pressPlay);
+//            self.tapController.remove(touchable);
+//            stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
+//            var stripes = this._showSpeedStripes(stage, 0);
+//            this._startingPositionScene(atlasMapper, stage, shipDrawable, fireDrawable, shieldsDrawable,
+//                shieldsUpSprite, shieldsDownSprite, stripes);
+//
+//            return;
+//        }
         //------------------------------- DEBUG_ONLY end
 
         var startTimer = 10;
@@ -312,7 +300,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 // end event
                 self.tapController.remove(touchable);
 
-                var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
+                var pressPlaySprite = stage.getSprite('press-play-anim/press_play', 16, false);
                 stage.animate(pressPlay, pressPlaySprite, function () {
 
                     stage.remove(pressPlay);
@@ -476,8 +464,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var shieldsGetHitSprite;
 
         function initShieldsHitRenderStuff() {
-            elemHitsShieldsSprite = createNewSprite('shield-hit-anim/shield_hit', 11, atlasMapper);
-            shieldsGetHitSprite = createNewSprite('shiels-hit-anim/shields_hit', 9, atlasMapper); //TODO change sprite name
+            elemHitsShieldsSprite = stage.getSprite('shield-hit-anim/shield_hit', 12, false);
+            shieldsGetHitSprite = stage.getSprite('shiels-hit-anim/shields_hit', 10, false); //TODO change sprite name
         }
 
         initShieldsHitRenderStuff();
@@ -486,8 +474,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var dumpLifeSprite;
 
         function initShipHullHitRenderStuff() {
-            shipHullHitSprite = createNewSprite('ship-hit-anim/ship_hit', 29, atlasMapper);
-            dumpLifeSprite = createNewSprite('lost-life-anim/lost_life', 19, atlasMapper);
+            shipHullHitSprite = stage.getSprite('ship-hit-anim/ship_hit', 30, false);
+            dumpLifeSprite = stage.getSprite('lost-life-anim/lost_life', 20, false);
         }
 
         initShipHullHitRenderStuff();
@@ -595,18 +583,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var scoredPointsSprite, scoredPointsDrawable;
 
         function initScoredPointsRenderStuff() {
-            var i;
-            var imgPath = 'score-10-anim/score_10';
-            var frames = [];
-            for (i = 0; i <= 19; i++) {
-                if (i < 10) {
-
-                    frames.push(atlasMapper.get(imgPath + '_000' + i));
-                } else {
-                    frames.push(atlasMapper.get(imgPath + '_00' + i));
-                }
-            }
-            scoredPointsSprite = new Sprite(frames, false);
+            scoredPointsSprite = stage.getSprite('score-10-anim/score_10', 20, false);
             scoredPointsDrawable = new Drawable('score_10', 0, 0, scoredPointsSprite.frames[0], 3);
         }
 
@@ -628,16 +605,16 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         function initIncreaseTotalScoreRenderStuff() {
 
-            sprite0_1 = createNewSprite('0_1-anim/0_1', 14, atlasMapper);
-            sprite1_2 = createNewSprite('1_2-anim/1_2', 14, atlasMapper);
-            sprite2_3 = createNewSprite('2_3-anim/2_3', 14, atlasMapper);
-            sprite3_4 = createNewSprite('3_4-anim/3_4', 14, atlasMapper);
-            sprite4_5 = createNewSprite('4_5-anim/4_5', 14, atlasMapper);
-            sprite5_6 = createNewSprite('5_6-anim/5_6', 14, atlasMapper);
-            sprite6_7 = createNewSprite('6_7-anim/6_7', 14, atlasMapper);
-            sprite7_8 = createNewSprite('7_8-anim/7_8', 14, atlasMapper);
-            sprite8_9 = createNewSprite('8_9-anim/8_9', 14, atlasMapper);
-            sprite9_0 = createNewSprite('9_0-anim/9_0', 14, atlasMapper);
+            sprite0_1 = stage.getSprite('0_1-anim/0_1', 15, false);
+            sprite1_2 = stage.getSprite('1_2-anim/1_2', 15, false);
+            sprite2_3 = stage.getSprite('2_3-anim/2_3', 15, false);
+            sprite3_4 = stage.getSprite('3_4-anim/3_4', 15, false);
+            sprite4_5 = stage.getSprite('4_5-anim/4_5', 15, false);
+            sprite5_6 = stage.getSprite('5_6-anim/5_6', 15, false);
+            sprite6_7 = stage.getSprite('6_7-anim/6_7', 15, false);
+            sprite7_8 = stage.getSprite('7_8-anim/7_8', 15, false);
+            sprite8_9 = stage.getSprite('8_9-anim/8_9', 15, false);
+            sprite9_0 = stage.getSprite('9_0-anim/9_0', 15, false);
             countSprites = [sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0];
             countDrawables = [firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable];
             countStatics = [atlasMapper.get('num/numeral0'), atlasMapper.get('num/numeral1'), atlasMapper.get('num/numeral2'),
@@ -694,16 +671,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var collectSprite;
 
         function initCollectRenderStuff() {
-            var i;
-            var collect = [];
-            for (i = 0; i <= 29; i++) {
-                if (i < 10) {
-                    collect.push(atlasMapper.get("collect-star-anim/collect_star_000" + i));
-                } else {
-                    collect.push(atlasMapper.get("collect-star-anim/collect_star_00" + i));
-                }
-            }
-            collectSprite = new Sprite(collect, false);
+            collectSprite = stage.getSprite('collect-star-anim/collect_star', 30, false);
         }
 
         initCollectRenderStuff();
@@ -927,26 +895,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var energyFullStatic;
 
         function initEnergyRenderStuff() {
-            var i;
-            var energyDrainFrames = [];
-            for (i = 0; i <= 89; i++) {
-                if (i < 10) {
-                    energyDrainFrames.push(atlasMapper.get("energy-drain-anim/energy_drain_000" + i));
-                } else {
-                    energyDrainFrames.push(atlasMapper.get("energy-drain-anim/energy_drain_00" + i));
-                }
-            }
-            energyDrainSprite = new Sprite(energyDrainFrames, false);
-
-            var energyLoadFrames = [];
-            for (i = 0; i <= 89; i++) {
-                if (i < 10) {
-                    energyLoadFrames.push(atlasMapper.get("energy-load-anim/energy_load_000" + i));
-                } else {
-                    energyLoadFrames.push(atlasMapper.get("energy-load-anim/energy_load_00" + i));
-                }
-            }
-            energyLoadSprite = new Sprite(energyLoadFrames, false);
+            energyDrainSprite = stage.getSprite('energy-drain-anim/energy_drain', 90, false);
+            energyLoadSprite = stage.getSprite('energy-load-anim/energy_load', 90, false);
 
             energyEmptyStatic = atlasMapper.get('energy_bar_empty');
             energyFullStatic = atlasMapper.get('energy_bar_full');
@@ -1042,34 +992,21 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 stage.remove(energyBarDrawable);
             });
 
-            if (DEBUG_START_IMMEDIATELY) {
-                stage.remove(shipDrawable);
-                stage.remove(fireDrawable);
-                speedStripes.forEach(function (speedStripe) {
-                    stage.remove(speedStripe);
-                });
-                countDrawables.forEach(function (count) {
-                    stage.remove(count);
-                });
-                self._postGameScene(stage, atlasMapper, points);
-            } else {
+//            if (DEBUG_START_IMMEDIATELY) {
+//                stage.remove(shipDrawable);
+//                stage.remove(fireDrawable);
+//                speedStripes.forEach(function (speedStripe) {
+//                    stage.remove(speedStripe);
+//                });
+//                countDrawables.forEach(function (count) {
+//                    stage.remove(count);
+//                });
+//                self._postGameScene(stage, atlasMapper, points);
+//            } else {
                 self._endGameScene(stage, atlasMapper, shipDrawable, fireDrawable, speedStripes, points, countDrawables);
-            }
+//            }
         }
     };
-
-    function createNewSprite(imgPath, lastFrameIndex, atlasMapper) {
-        var frames = [];
-        for (var i = 0; i <= lastFrameIndex; i++) {
-            if (i < 10) {
-
-                frames.push(atlasMapper.get(imgPath + "_000" + i));
-            } else {
-                frames.push(atlasMapper.get(imgPath + "_00" + i));
-            }
-        }
-        return new Sprite(frames, false);
-    }
 
     App.prototype._endGameScene = function (stage, atlasMapper, shipDrawable, fireDrawable, speedStripes, points, countDrawables) {
 
@@ -1080,7 +1017,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var dockShipToMiddlePosition = new Path(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, 480 / 2, -(shipDrawable.y - 480 / 2), 120, Transition.EASE_OUT_EXPO);
 
-        var explosionSprite = createNewSprite('explosion-anim/explosion', 24, atlasMapper);
+        var explosionSprite = stage.getSprite('explosion-anim/explosion', 25, false);
 
         var self = this;
         stage.move(shipDrawable, dockShipToMiddlePosition, function () {
@@ -1160,7 +1097,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var playX = 320 / 2;
                 var playY = 480 / 4 * 3;
                 var playStartY = playY - 480;
-                var pressPlaySprite = createNewSprite('press-play-anim/press_play', 15, atlasMapper);
+                var pressPlaySprite = stage.getSprite('press-play-anim/press_play', 16, false);
                 var playDrawable = stage.moveFresh(playX, playStartY, 'play', playX, playY, 60, Transition.EASE_OUT_BOUNCE, false, 20, function () {
 
                     var touchable = {id: 'play_again_tap', x: 0, y: 0, width: 320, height: 480};
@@ -1199,13 +1136,13 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                             stage.moveLater({item: gameOverDrawable, path: gameOverPathOut, ready: function () {
                                 stage.remove(gameOverDrawable);
 
-                                if (DEBUG_START_IMMEDIATELY) {
-                                    self._preGameScene(stage, atlasMapper, null, null);
-                                } else {
+//                                if (DEBUG_START_IMMEDIATELY) {
+//                                    self._preGameScene(stage, atlasMapper, null, null);
+//                                } else {
                                     self._preGameScene(stage, atlasMapper,
                                         stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 43),
                                         self._showSpeedStripes(stage, 0));
-                                }
+//                                }
                             }}, 25, function () {
                                 if (points > parseInt(allTimeHighScore, 10)) {
                                     localStorage.setItem('allTimeHighScore', points);
@@ -1223,5 +1160,5 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
     return App;
 
-})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, Sprite, AnimationStudio,
+})(ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, AtlasMapper, Transition, AnimationStudio,
     AnimationDirector, Path, Drawable, MotionStudio, MotionDirector, StageDirector, localStorage);

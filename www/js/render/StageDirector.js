@@ -10,6 +10,10 @@ var StageDirector = (function (Drawable, Path, Sprites) {
         this._id = 0;
     }
 
+    StageDirector.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
+        return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames - 1, loop);
+    };
+
     StageDirector.prototype.animateFresh = function (x, y, imgName, lastFrameIndex) {
         var sprite = Sprites.get(this.atlasMapper, imgName, lastFrameIndex);
         var drawable = new Drawable(imgName + (++this._id), x, y);
