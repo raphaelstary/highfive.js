@@ -1063,7 +1063,7 @@ var App = (function (require) {
 
                 var bestDrawable = stage.moveFreshLater(bestX, bestStartY, 'best', bestX, bestY, 60, Transition.EASE_OUT_BOUNCE, 10);
 
-                var allTimeHighScore = localStorage.getItem('allTimeHighScore');
+                var allTimeHighScore = require.localStorage.getItem('allTimeHighScore');
                 if (allTimeHighScore == null) {
                     allTimeHighScore = "0";
                 }
@@ -1131,7 +1131,7 @@ var App = (function (require) {
 //                                }
                             }}, 25, function () {
                                 if (points > parseInt(allTimeHighScore, 10)) {
-                                    localStorage.setItem('allTimeHighScore', points);
+                                    require.localStorage.setItem('allTimeHighScore', points);
                                 }
                             });
                         });
