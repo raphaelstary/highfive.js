@@ -98,7 +98,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var presentsPath = new Path(x, y + 100, x, 30, length - 50, 120, Transition.EASE_OUT_IN_SIN);
 
         var logoYEnd = 480 / 6;
-        var logoDrawable = stage.animateFresh(x, y, 'logo-anim/logo', 43);
+        var logoDrawable = stage.animateFresh(x, y, 'logo-anim/logo', 44);
         var logoInPath = new Path(x, y, x, logoYEnd, -420, 120, Transition.EASE_OUT_QUAD);
 
         var lastY = letsplayIO.y;
@@ -180,14 +180,14 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
         var shipDrawable = stage.drawFresh(320 / 2, shipStartY, 'ship');
         var shipInPath = new Path(320 / 2, shipStartY, 320 / 2, shipEndY, -(600 - shipEndY), 60, Transition.EASE_IN_QUAD);
 
-        var fireDrawable = stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 7);
+        var fireDrawable = stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 8);
         var tapDrawable;
         var pressPlay = new Drawable('press_play', 320 / 2, 480 / 3, atlasMapper.get('play'));
         var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
         stage.move(shipDrawable, shipInPath, function () {
             shipDrawable.y = shipEndY;
             shieldsAnimation();
-            tapDrawable = stage.animateFresh(320 / 16 * 9, 480 / 8 * 7, 'tap-anim/tap', 35);
+            tapDrawable = stage.animateFresh(320 / 16 * 9, 480 / 8 * 7, 'tap-anim/tap', 36);
             stage.draw(pressPlay);
 
 
@@ -280,10 +280,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     App.prototype._tutorialScene = function (atlasMapper, stage, nxtSceneFn) {
         var self = this;
         var offSet = 480 / 4 / 2;
-        var touchHoldDrawable = stage.animateFresh(-320, 480 / 4 - offSet, 'touch_hold-anim/touch_hold', 59);
-        var crushAsteroidsDrawable = stage.animateFresh(-320, 480 / 2 - offSet, 'crush_asteroids-anim/crush_asteroids', 44);
-        var shieldsEnergyDrawable = stage.animateFresh(-320, 480 / 4 * 3 - offSet, 'shields_energy-anim/shields_energy', 59);
-        var collectBonusDrawable = stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 44);
+        var touchHoldDrawable = stage.animateFresh(-320, 480 / 4 - offSet, 'touch_hold-anim/touch_hold', 60);
+        var crushAsteroidsDrawable = stage.animateFresh(-320, 480 / 2 - offSet, 'crush_asteroids-anim/crush_asteroids', 45);
+        var shieldsEnergyDrawable = stage.animateFresh(-320, 480 / 4 * 3 - offSet, 'shields_energy-anim/shields_energy', 60);
+        var collectBonusDrawable = stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 45);
         var pathIn = new Path(-320, 0, 320 / 2, 0, 320 + 320 / 2, 60, Transition.EASE_OUT_BOUNCE);
 
         stage.move(touchHoldDrawable, pathIn);
@@ -386,7 +386,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._drawStar = function (stage, imgName, x, speed) {
-        var star = stage.animateFresh(x, -108 / 2, imgName, 29);
+        var star = stage.animateFresh(x, -108 / 2, imgName, 30);
         stage.move(star, new Path(x, -108 / 2, x, 480 + 108 / 2, 108 + 480, speed, Transition.LINEAR));
 
         return star;
@@ -891,15 +891,10 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         var energyDrainSprite;
         var energyLoadSprite;
-        var energyEmptyStatic;
-        var energyFullStatic;
 
         function initEnergyRenderStuff() {
             energyDrainSprite = stage.getSprite('energy-drain-anim/energy_drain', 90, false);
             energyLoadSprite = stage.getSprite('energy-load-anim/energy_load', 90, false);
-
-            energyEmptyStatic = atlasMapper.get('energy_bar_empty');
-            energyFullStatic = atlasMapper.get('energy_bar_full');
         }
 
         function drainEnergy() {
@@ -928,7 +923,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         function energyEmpty() {
             function setEnergyBarEmpty() {
-                energyBarDrawable.img = energyEmptyStatic;
+                energyBarDrawable.img = atlasMapper.get('energy_bar_empty');
             }
 
             turnShieldsOff();
@@ -962,7 +957,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 
         function energyFull() {
             function setEnergyBarFull() {
-                energyBarDrawable.img = energyFullStatic;
+                energyBarDrawable.img = atlasMapper.get('energy_bar_full');
             }
 
             setEnergyBarFull();
@@ -1140,7 +1135,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 //                                    self._preGameScene(stage, atlasMapper, null, null);
 //                                } else {
                                     self._preGameScene(stage, atlasMapper,
-                                        stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 43),
+                                        stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 44),
                                         self._showSpeedStripes(stage, 0));
 //                                }
                             }}, 25, function () {

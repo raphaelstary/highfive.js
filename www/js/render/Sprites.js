@@ -1,9 +1,9 @@
 var Sprites = (function (Sprite) {
     "use strict";
 
-    function createNew(atlasMapper, imgPath, lastFrameIndex, loop) {
+    function createNew(atlasMapper, imgPath, numberOfFrames, loop) {
         var frames = [];
-        for (var i = 0; i <= lastFrameIndex; i++) {
+        for (var i = 0; i < numberOfFrames; i++) {
             if (i < 10) {
 
                 frames.push(atlasMapper.get(imgPath + "_000" + i));

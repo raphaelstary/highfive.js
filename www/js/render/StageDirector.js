@@ -11,12 +11,12 @@ var StageDirector = (function (Drawable, Path, Sprites) {
     }
 
     StageDirector.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
-        return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames - 1, loop);
+        return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames, loop);
     };
 
-    StageDirector.prototype.animateFresh = function (x, y, imgName, lastFrameIndex) {
-        var sprite = Sprites.get(this.atlasMapper, imgName, lastFrameIndex);
-        var drawable = new Drawable(imgName + (++this._id), x, y);
+    StageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames) {
+        var sprite = this.getSprite(imgPathName, numberOfFrames);
+        var drawable = new Drawable(imgPathName + (++this._id), x, y);
 
         this.animate(drawable, sprite);
 
