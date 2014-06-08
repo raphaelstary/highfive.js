@@ -1,4 +1,4 @@
-var StageDirector = (function (Path, Sprites, Drawables) {
+var StageDirector = (function (Sprites, Drawables, Paths) {
     "use strict";
 
     function StageDirector(atlasMapper, motions, animations, renderer) {
@@ -16,6 +16,10 @@ var StageDirector = (function (Path, Sprites, Drawables) {
 
     StageDirector.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
         return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames, loop);
+    };
+
+    StageDirector.prototype.getPath = function (x, y, endX, endY, speed, spacingFn, loop) {
+        return Paths.get(x, y, endX, endY, speed, spacingFn, loop);
     };
 
     StageDirector.prototype.getSubImage = function (imgPathName) {
@@ -55,13 +59,9 @@ var StageDirector = (function (Path, Sprites, Drawables) {
     };
 
     StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, delay, callback) {
-        //todo refactoring: extract init stuff into method of static factory class
         var drawable = this.getDrawable(x, y, imgName);
-        var spacingFn = spacing === undefined ? Transition.LINEAR : spacing;
-        var path = new Path(x, y, endX, endY, Math.abs(x - endX) + Math.abs(y - endY), speed, spacingFn, loop);
-        if (endY < y || endX < x) {
-            path.length = -path.length;
-        }
+        var spacingFn = spacing || Transition.LINEAR;
+        var path = this.getPath(x, y, endX, endY, speed, spacingFn, loop);
 
         if (delay === undefined || delay === 0) {
             //todo refactoring: split into moveFreshLater
@@ -72,6 +72,10 @@ var StageDirector = (function (Path, Sprites, Drawables) {
         }
 
         return drawable;
+    };
+
+    StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, loop, delay, callback) {
+
     };
 
     StageDirector.prototype.move = function (drawable, path, callback) {
@@ -98,7 +102,6 @@ var StageDirector = (function (Path, Sprites, Drawables) {
     };
 
     StageDirector.prototype.drawFresh = function (x, y, imgName, zIndex) {
-        //todo refactoring: extract init stuff into method of static factory class
         var drawable = this.getDrawable(x, y, imgName, zIndex);
         this.draw(drawable);
 
@@ -133,4 +136,4 @@ var StageDirector = (function (Path, Sprites, Drawables) {
     };
 
     return StageDirector;
-})(Path, Sprites, Drawables);
+})(Sprites, Drawables, Paths);
