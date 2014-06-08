@@ -38,7 +38,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 //            if (DEBUG_START_IMMEDIATELY) {
 //                firstSceneFn = self._preGameScene.bind(self);
 //            } else {
-                firstSceneFn = self._introScene.bind(self);
+            firstSceneFn = self._introScene.bind(self);
 //            }
 
             self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, firstSceneFn);
@@ -164,7 +164,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     };
 
     App.prototype._drawSpeed = function (stage, x, delay) {
-        return stage.moveFreshLater(x, -108 / 2, 'speed', x, 480 + 108 / 2, 30, Transition.LINEAR, true, delay);
+        return stage.moveFreshLater(x, -108 / 2, 'speed', x, 480 + 108 / 2, 30, Transition.LINEAR, delay, true);
     };
 
     App.prototype._preGameScene = function (stage, logoDrawable, speedStripes) {
@@ -347,26 +347,25 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
     App.prototype._startingPositionScene = function (stage, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, speedStripes) {
 
         var self = this;
-        var loop = false;
         var zero = 'num/numeral0';
         var spacing = Transition.EASE_IN_OUT_ELASTIC;
         var speed = 60;
         var yTop = 480 / 20;
         var yBottom = yTop * 19;
         var lifeX = 320 / 10;
-        var lifeOneDrawable = stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX, yTop, speed, spacing, loop, 20);
-        var lifeTwoDrawable = stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 40, yTop, speed, spacing, loop, 15);
-        var lifeThreeDrawable = stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 80, yTop, speed, spacing, loop, 10);
+        var lifeOneDrawable = stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX, yTop, speed, spacing, 20);
+        var lifeTwoDrawable = stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 40, yTop, speed, spacing, 15);
+        var lifeThreeDrawable = stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX + 80, yTop, speed, spacing, 10);
         var energyX = 320 / 5 + 5;
-        var energyBarDrawable = stage.moveFresh(energyX - energyX * 2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing, loop);
+        var energyBarDrawable = stage.moveFresh(energyX - energyX * 2, yBottom, 'energy_bar_full', energyX, yBottom, speed, spacing);
         var digitX = 320 / 3 * 2 + 10;
         var firstDigit = digitX + 75;
-        var firstDigitDrawable = stage.moveFreshLater(firstDigit + 60, yTop, zero, firstDigit, yTop, speed, spacing, loop, 10);
+        var firstDigitDrawable = stage.moveFreshLater(firstDigit + 60, yTop, zero, firstDigit, yTop, speed, spacing, 10);
         var secondDigit = digitX + 50;
-        var secondDigitDrawable = stage.moveFreshLater(secondDigit + 60, yTop, zero, secondDigit, yTop, speed, spacing, loop, 13);
+        var secondDigitDrawable = stage.moveFreshLater(secondDigit + 60, yTop, zero, secondDigit, yTop, speed, spacing, 13);
         var thirdDigit = digitX + 25;
-        var thirdDigitDrawable = stage.moveFreshLater(thirdDigit + 60, yTop, zero, thirdDigit, yTop, speed, spacing, loop, 17);
-        var fourthDigitDrawable = stage.moveFreshLater(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, loop, 12, function () {
+        var thirdDigitDrawable = stage.moveFreshLater(thirdDigit + 60, yTop, zero, thirdDigit, yTop, speed, spacing, 17);
+        var fourthDigitDrawable = stage.moveFreshLater(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, 12, false, function () {
             self._getReadyScene(stage, nxtScene);
         });
 
@@ -990,7 +989,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 //                });
 //                self._postGameScene(stage, points);
 //            } else {
-                self._endGameScene(stage, shipDrawable, fireDrawable, speedStripes, points, countDrawables);
+            self._endGameScene(stage, shipDrawable, fireDrawable, speedStripes, points, countDrawables);
 //            }
         }
     };
@@ -1053,7 +1052,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 for (i = 0; i < pointsInString.length; i++) {
                     x = scoreFirstDigitX + i * digitOffset;
                     var scoreDigitDrawable = stage.moveFreshLater(x, newScoreStartY,
-                            commonKeyPartForNumbers + pointsInString[i], x, newScoreY, 60, Transition.EASE_OUT_BOUNCE, false, 5);
+                            commonKeyPartForNumbers + pointsInString[i], x, newScoreY, 60, Transition.EASE_OUT_BOUNCE, 5);
                     newScoreDigits.push(scoreDigitDrawable);
                 }
 
@@ -1061,7 +1060,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var bestY = 480 / 2;
                 var bestStartY = bestY - 480;
 
-                var bestDrawable = stage.moveFreshLater(bestX, bestStartY, 'best', bestX, bestY, 60, Transition.EASE_OUT_BOUNCE, false, 10);
+                var bestDrawable = stage.moveFreshLater(bestX, bestStartY, 'best', bestX, bestY, 60, Transition.EASE_OUT_BOUNCE, 10);
 
                 var allTimeHighScore = localStorage.getItem('allTimeHighScore');
                 if (allTimeHighScore == null) {
@@ -1077,7 +1076,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 for (i = 0; i < allTimeHighScore.length; i++) {
                     x = highScoreFirstDigitX + i * digitOffset;
                     var highScoreDigitDrawable = stage.moveFreshLater(x, highScoreStartY,
-                            commonKeyPartForNumbers + allTimeHighScore[i], x, highScoreY, 60, Transition.EASE_OUT_BOUNCE, false, 15);
+                            commonKeyPartForNumbers + allTimeHighScore[i], x, highScoreY, 60, Transition.EASE_OUT_BOUNCE, 15);
                     highScoreDigits.push(highScoreDigitDrawable);
                 }
 
@@ -1085,7 +1084,7 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
                 var playY = 480 / 4 * 3;
                 var playStartY = playY - 480;
                 var pressPlaySprite = stage.getSprite('press-play-anim/press_play', 16, false);
-                var playDrawable = stage.moveFreshLater(playX, playStartY, 'play', playX, playY, 60, Transition.EASE_OUT_BOUNCE, false, 20, function () {
+                var playDrawable = stage.moveFreshLater(playX, playStartY, 'play', playX, playY, 60, Transition.EASE_OUT_BOUNCE, 20, false, function () {
 
                     var touchable = {id: 'play_again_tap', x: 0, y: 0, width: 320, height: 480};
                     self.tapController.add(touchable, function () {
@@ -1126,8 +1125,8 @@ var App = (function (ResourceLoader, SimpleLoadingScreen, Renderer, GameLoop, At
 //                                if (DEBUG_START_IMMEDIATELY) {
 //                                    self._preGameScene(stage, atlasMapper, null, null);
 //                                } else {
-                                    self._preGameScene(stage, stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 44),
-                                        self._showSpeedStripes(stage, 0));
+                                self._preGameScene(stage, stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 44),
+                                    self._showSpeedStripes(stage, 0));
 //                                }
                             }}, 25, function () {
                                 if (points > parseInt(allTimeHighScore, 10)) {
