@@ -1,4 +1,4 @@
-var StageDirector = (function (Drawable, Sprite, Path) {
+var StageDirector = (function (Drawable, Path, Sprites) {
     "use strict";
 
     function StageDirector(atlasMapper, motions, animations, renderer) {
@@ -11,16 +11,7 @@ var StageDirector = (function (Drawable, Sprite, Path) {
     }
 
     StageDirector.prototype.animateFresh = function (x, y, imgName, lastFrameIndex) {
-        //todo refactoring: extract init stuff into method of static factory class
-        var frames = [];
-        for (var i = 0; i <= lastFrameIndex; i++) { //TODO change to numberOfFrames
-            if (i < 10) {
-                frames.push(this.atlasMapper.get(imgName + '_000' + i));
-            } else {
-                frames.push(this.atlasMapper.get(imgName + '_00' + i));
-            }
-        }
-        var sprite = new Sprite(frames);
+        var sprite = Sprites.get(this.atlasMapper, imgName, lastFrameIndex);
         var drawable = new Drawable(imgName + (++this._id), x, y);
 
         this.animate(drawable, sprite);
@@ -132,4 +123,4 @@ var StageDirector = (function (Drawable, Sprite, Path) {
     };
 
     return StageDirector;
-})(Drawable, Sprite, Path);
+})(Drawable, Path, Sprites);
