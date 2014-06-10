@@ -1,13 +1,14 @@
 var PostGame = (function (localStorage, Transition) {
     "use strict";
 
-    function PostGame(stage, sceneStorage) {
+    function PostGame(stage, sceneStorage, tapController) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
+        this.tapController = tapController;
     }
 
-    PostGame.prototype.show = function () {
-        var points = this.sceneStorage['points'];
+    PostGame.prototype.show = function (nextScene) {
+        var points = this.sceneStorage.points;
 
         var self = this;
         var gameOverX = 320 / 2;
@@ -110,7 +111,8 @@ var PostGame = (function (localStorage, Transition) {
 //                                if (DEBUG_START_IMMEDIATELY) {
 //                                    self._preGameScene(stage, atlasMapper, null, null);
 //                                } else {
-                            self.next();
+//                            self.next();
+                            nextScene();
 //                                }
                         }}, 25, function () {
                             if (points > parseInt(allTimeHighScore, 10)) {

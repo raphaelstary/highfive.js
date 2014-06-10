@@ -1,13 +1,13 @@
 var Intro = (function (Transition) {
     "use strict";
 
-    function Intro(stage, gameLoop, sceneStorage) {
+    function Intro(stage, sceneStorage, gameLoop) {
         this.stage = stage;
-        this.gameLoop = gameLoop;
         this.sceneStorage = sceneStorage;
+        this.gameLoop = gameLoop;
     }
 
-    Intro.prototype.show = function () {
+    Intro.prototype.show = function (nextScene) {
         var firstBg = this.stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
         var firstBgPath = this.stage.getPath(320 / 2, 480 / 2, 320 / 2, 480 / 2 - 480, 120, Transition.LINEAR);
 
@@ -82,7 +82,7 @@ var Intro = (function (Transition) {
                 self.stage.moveLater({item: logoDrawable, path: logoInPath, ready: function () {
 
                     self.gameLoop.remove('z_parallax');
-                    self.next(logoDrawable, speedStripes);
+                    self.next(nextScene, logoDrawable, speedStripes);
 
                 }}, 90, function () {
                     var delay = 30;
@@ -108,9 +108,11 @@ var Intro = (function (Transition) {
         }
     };
 
-    Intro.prototype.next = function (logoDrawable, speedStripes) {
-        this.sceneStorage['logo'] = logoDrawable;
-        this.sceneStorage['speedStripes'] = speedStripes;
+    Intro.prototype.next = function (nextScene, logoDrawable, speedStripes) {
+        this.sceneStorage.logo = logoDrawable;
+        this.sceneStorage.speedStripes = speedStripes;
+
+        nextScene();
     };
 
     return Intro;

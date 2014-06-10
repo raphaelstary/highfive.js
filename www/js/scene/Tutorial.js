@@ -1,11 +1,12 @@
-var Tutorial = (function () {
+var Tutorial = (function (Transition) {
     "use strict";
 
-    function Tutorial(stage) {
+    function Tutorial(stage, tapController) {
         this.stage = stage;
+        this.tapController = tapController;
     }
 
-    Tutorial.prototype.show = function () {
+    Tutorial.prototype.show = function (nextScene) {
         var self = this;
         var offSet = 480 / 4 / 2;
         var touchHoldDrawable = self.stage.animateFresh(-320, 480 / 4 - offSet, 'touch_hold-anim/touch_hold', 60);
@@ -44,7 +45,7 @@ var Tutorial = (function () {
                         self.stage.remove(shieldsEnergyDrawable);
                         self.stage.remove(collectBonusDrawable);
 
-                        self.next();
+                        nextScene();
                     }}, 15);
                 });
             });
@@ -52,9 +53,5 @@ var Tutorial = (function () {
         }}, 15);
     };
 
-    Tutorial.prototype.next = function () {
-
-    };
-
     return Tutorial;
-})();
+})(Transition);

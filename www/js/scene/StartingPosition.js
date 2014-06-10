@@ -6,7 +6,7 @@ var StartingPosition = (function (Transition) {
         this.sceneStorage = sceneStorage;
     }
 
-    StartingPosition.prototype.show = function () {
+    StartingPosition.prototype.show = function (nextScene) {
         var self = this;
         var zero = 'num/numeral0';
         var spacing = Transition.EASE_IN_OUT_ELASTIC;
@@ -27,22 +27,20 @@ var StartingPosition = (function (Transition) {
         var thirdDigit = digitX + 25;
         var thirdDigitDrawable = self.stage.moveFreshLater(thirdDigit + 60, yTop, zero, thirdDigit, yTop, speed, spacing, 17);
         var fourthDigitDrawable = self.stage.moveFreshLater(digitX + 60, yTop, zero, digitX, yTop, speed, spacing, 12, false, function () {
-            self.next(energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable,
-                firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable)
-        });
 
+            var lifeDrawablesDict = {1: lifeOneDrawable, 2: lifeTwoDrawable, 3: lifeThreeDrawable};
+            var countDrawables = [firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable];
+
+            self.next(nextScene, energyBarDrawable, lifeDrawablesDict, countDrawables)
+        });
     };
 
-    StartingPosition.prototype.next = function (energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable,
-                                                firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable) {
-        this.sceneStorage['energyBar'] = energyBarDrawable;
-        this.sceneStorage['lifeOne'] = lifeOneDrawable;
-        this.sceneStorage['lifeTwo'] = lifeTwoDrawable;
-        this.sceneStorage['lifeThree'] = lifeThreeDrawable;
-        this.sceneStorage['firstDigit'] = firstDigitDrawable;
-        this.sceneStorage['secondDigit'] = secondDigitDrawable;
-        this.sceneStorage['thirdDigit'] = thirdDigitDrawable;
-        this.sceneStorage['fourthDigitDrawable'] = fourthDigitDrawable;
+    StartingPosition.prototype.next = function (nextScene, energyBarDrawable, lifeDrawablesDict, countDrawables) {
+        this.sceneStorage.energyBar = energyBarDrawable;
+        this.sceneStorage.lives = lifeDrawablesDict;
+        this.sceneStorage.counts = countDrawables;
+
+        nextScene();
     };
 
     return StartingPosition;

@@ -6,15 +6,15 @@ var KillScreen = (function (Transition) {
         this.sceneStorage = sceneStorage;
     }
 
-    KillScreen.prototype.show = function () {
-        var speedStripes = this.sceneStorage['speedStripes'];
-        delete this.sceneStorage['speedStripes'];
-        var shipDrawable = this.sceneStorage['ship'];
-        delete this.sceneStorage['ship'];
-        var fireDrawable = this.sceneStorage['fire'];
-        delete this.sceneStorage['fire'];
-        var countDrawables = this.sceneStorage['count'];
-        delete this.sceneStorage['count'];
+    KillScreen.prototype.show = function (nextScene) {
+        var speedStripes = this.sceneStorage.speedStripes;
+        delete this.sceneStorage.speedStripes;
+        var shipDrawable = this.sceneStorage.ship;
+        delete this.sceneStorage.ship;
+        var fireDrawable = this.sceneStorage.fire;
+        delete this.sceneStorage.fire;
+        var countDrawables = this.sceneStorage.counts;
+        delete this.sceneStorage.counts;
 
 
         var self = this;
@@ -37,14 +37,10 @@ var KillScreen = (function (Transition) {
                     self.stage.remove(count);
                 });
 
-                self.next();
+                nextScene()
             });
         });
         self.stage.move(fireDrawable, dockShipToMiddlePosition);
-    };
-
-    KillScreen.prototype.next = function () {
-
     };
 
     return KillScreen;

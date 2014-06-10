@@ -1,31 +1,36 @@
 var PlayGame = (function (Transition) {
     "use strict";
 
-    function PlayGame(stage, sceneStorage) {
+    function PlayGame(stage, sceneStorage, gameLoop, gameController) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
+        this.gameLoop = gameLoop;
+        this.gameController = gameController;
     }
     
-    PlayGame.prototype.show = function () {
+    PlayGame.prototype.show = function (nextScene) {
         var shipDrawable = this.sceneStorage.ship,
             shieldsDrawable = this.sceneStorage.shields,
             energyBarDrawable = this.sceneStorage.energyBar,
-            lifeOneDrawable = this.sceneStorage.lifeOne,
-            lifeTwoDrawable = this.sceneStorage.lifeTwo,
-            lifeThreeDrawable = this.sceneStorage.lifeThree,
-            firstDigitDrawable = this.sceneStorage.firstDigit,
-            secondDigitDrawable = this.sceneStorage.secondDigit,
-            thirdDigitDrawable = this.sceneStorage.thirdDigit,
-            fourthDigitDrawable = this.sceneStorage.fourthDigitDrawable,
+            lifeDrawablesDict = this.sceneStorage.lives,
+            countDrawables = this.sceneStorage.counts,
             fireDrawable = this.sceneStorage.fire,
-            speedStripes = this.sceneStorage.speedStripes;
+            speedStripes = this.sceneStorage.speedStripes,
+            shieldsUpSprite = this.sceneStorage.shieldsUp,
+            shieldsDownSprite = this.sceneStorage.shieldsDown;
 
+        delete this.sceneStorage.shields;
+        delete this.sceneStorage.energyBar;
+        delete this.sceneStorage.lives;
+        delete this.sceneStorage.shieldsUp;
+        delete this.sceneStorage.shieldsDown;
 
-        var shaker = [shipDrawable, shieldsDrawable, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable,
-            lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable];
-        speedStripes.forEach(function (stripe) {
-            shaker.push(stripe);
-        });
+        var shaker = [shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1], lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable];
+        function addElem (elem) {
+            shaker.push(elem);
+        }
+        countDrawables.forEach(addElem);
+        speedStripes.forEach(addElem);
         var shaking = false;
         var smallShaking = false;
         var bigShaking = false;
@@ -34,8 +39,6 @@ var PlayGame = (function (Transition) {
         var lives = 3; //3; //part of global game state
         var initialLives = 3; // needed for right render stuff after collect or similar
         var points = 0; //part of global game state
-
-        var lifeDrawables = {1: lifeOneDrawable, 2: lifeTwoDrawable, 3: lifeThreeDrawable};
 
         // level difficulty
         var maxTimeToFirst = 100;
@@ -186,9 +189,9 @@ var PlayGame = (function (Transition) {
 
         function shipGotHit() {
             var currentLife = lives;
-            self.stage.animate(lifeDrawables[currentLife], dumpLifeSprite, function () {
-                self.stage.remove(lifeDrawables[currentLife]);
-                delete lifeDrawables[currentLife];
+            self.stage.animate(lifeDrawablesDict[currentLife], dumpLifeSprite, function () {
+                self.stage.remove(lifeDrawablesDict[currentLife]);
+                delete lifeDrawablesDict[currentLife];
             });
 
             if (--lives > 0) {
@@ -225,7 +228,6 @@ var PlayGame = (function (Transition) {
 
         var sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0;
         var countSprites;
-        var countDrawables;
         var countStatics;
 
         function initIncreaseTotalScoreRenderStuff() {
@@ -241,7 +243,7 @@ var PlayGame = (function (Transition) {
             sprite8_9 = self.stage.getSprite('8_9-anim/8_9', 15, false);
             sprite9_0 = self.stage.getSprite('9_0-anim/9_0', 15, false);
             countSprites = [sprite0_1, sprite1_2, sprite2_3, sprite3_4, sprite4_5, sprite5_6, sprite6_7, sprite7_8, sprite8_9, sprite9_0];
-            countDrawables = [firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable];
+
             countStatics = [self.stage.getSubImage('num/numeral0'), self.stage.getSubImage('num/numeral1'), self.stage.getSubImage('num/numeral2'),
                 self.stage.getSubImage('num/numeral3'), self.stage.getSubImage('num/numeral4'), self.stage.getSubImage('num/numeral5'),
                 self.stage.getSubImage('num/numeral6'), self.stage.getSubImage('num/numeral7'), self.stage.getSubImage('num/numeral8'),
@@ -595,9 +597,9 @@ var PlayGame = (function (Transition) {
 
         //end scene todo move to own scene
         function endGame() {
-            for (var key in lifeDrawables) {
-                if (lifeDrawables.hasOwnProperty(key)) {
-                    self.stage.remove(lifeDrawables[key]);
+            for (var key in lifeDrawablesDict) {
+                if (lifeDrawablesDict.hasOwnProperty(key)) {
+                    self.stage.remove(lifeDrawablesDict[key]);
                 }
             }
 
@@ -623,7 +625,7 @@ var PlayGame = (function (Transition) {
 //                });
 //                self._postGameScene(self.stage, points);
 //            } else {
-            self.next(points, countDrawables);
+            self.next(nextScene, points);
 //            }
         }
 
@@ -643,12 +645,10 @@ var PlayGame = (function (Transition) {
         }
     };
     
-    PlayGame.prototype.next = function (points, countDrawables) {
-        // todo maybe delete not these fuckers
-        // shipDrawable, fireDrawable, speedStripes
-
+    PlayGame.prototype.next = function (nextScene, points) {
         this.sceneStorage.points = points;
-        this.sceneStorage.count = countDrawables;
+
+        nextScene();
     };
 
     return PlayGame;

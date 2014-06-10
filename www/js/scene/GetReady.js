@@ -5,7 +5,7 @@ var GetReady = (function (Transition) {
         this.stage = stage;
     }
 
-    GetReady.prototype.show = function () {
+    GetReady.prototype.show = function (nextScene) {
         var self = this;
         var readyDrawable = self.stage.getDrawable(-160, 480 / 3, 'ready-anim/get_ready_0010');
 
@@ -16,12 +16,8 @@ var GetReady = (function (Transition) {
             // create end event method to end scene, this is endGetReadyScene
             self.stage.remove(readyDrawable);
 
-            self.next();
+            nextScene();
         });
-    };
-
-    GetReady.prototype.next = function () {
-
     };
 
     return GetReady;

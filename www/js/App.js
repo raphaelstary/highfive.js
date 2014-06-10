@@ -9,7 +9,6 @@ var App = (function (require) {
         this.resizeBus = resizeBus;
         this.tapController = screenInput;
         this.gameController = gameController;
-        this.showTutorial = true;
     }
 
     App.prototype.start = function (windowWidth, windowHeight) {
@@ -34,21 +33,16 @@ var App = (function (require) {
         resourceLoader.onComplete = function () {
 
             self.resizeBus.remove('initial_screen');
-            var firstSceneFn;
 
-//            if (DEBUG_START_IMMEDIATELY) {
-//                firstSceneFn = self._preGameScene.bind(self);
-//            } else {
-            firstSceneFn = self._introScene.bind(self);
-//            }
-
-            self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, firstSceneFn);
+            var stage = self._initCommonSceneStuff(atlas, atlasInfo, windowWidth);
+            self._initScenes(stage);
+            self._doThePlay();
         };
 
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, firstScene) {
+    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth) {
         var atlasMapper = new require.AtlasMapper(1); // 1px is 1 tile length
         atlasMapper.init(atlasInfo, windowWidth);
 
@@ -59,17 +53,7 @@ var App = (function (require) {
 
         this._startGameLoop(stage);
 
-        firstScene(stage);
-
-
-    };
-
-    App.prototype._introScene = function (stage) {
-
-    };
-
-    App.prototype._preGameScene = function (stage, logoDrawable, speedStripes) {
-
+        return stage;
     };
 
     App.prototype._startGameLoop = function (stage) {
@@ -78,39 +62,33 @@ var App = (function (require) {
         this.gameLoop.run();
     };
 
-    App.prototype._tutorialScene = function (stage, nxtSceneFn) {
+    App.prototype._initScenes = function (stage) {
+        var sceneStorage = {};
 
-        this.showTutorial = false;
+        var intro = new require.Intro(stage, sceneStorage, this.gameLoop);
+        var preGame = new require.PreGame(stage, sceneStorage, this.tapController);
+        var startingPosition = new require.StartingPosition(stage, sceneStorage);
+        var tutorial = new require.Tutorial(stage, this.tapController);
+        var getReady = new require.GetReady(stage);
+        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController);
+        var killScreen = new require.KillScreen(stage, sceneStorage);
+        var postGame = new require.PostGame(stage, sceneStorage, this.tapController);
+
+        var sceneManager = this.sceneManager = new SceneManager();
+
+        sceneManager.add(intro.show.bind(intro), true);
+        sceneManager.add(preGame.show.bind(preGame), true);
+        sceneManager.add(startingPosition.show.bind(startingPosition));
+        sceneManager.add(tutorial.show.bind(tutorial), true);
+        sceneManager.add(getReady.show.bind(getReady));
+        sceneManager.add(playGame.show.bind(playGame));
+        sceneManager.add(killScreen.show.bind(killScreen));
+        sceneManager.add(postGame.show.bind(postGame));
     };
 
-    App.prototype._getReadyScene = function (stage, nxtSceneFn) {
-
-        if (this.showTutorial) {
-            this._tutorialScene(stage, this._getReadyScene());
-        } else {
-            this._getReadyScene();
-        }
+    App.prototype._doThePlay = function () {
+        this.sceneManager.next();
     };
-
-    App.prototype._startingPositionScene = function () {
-
-    };
-
-    App.prototype._playGameScene = function (stage, shipDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, energyBarDrawable, lifeOneDrawable, lifeTwoDrawable, lifeThreeDrawable, firstDigitDrawable, secondDigitDrawable, thirdDigitDrawable, fourthDigitDrawable, fireDrawable, speedStripes) {
-
-    };
-
-    App.prototype._endGameScene = function (stage, shipDrawable, fireDrawable, speedStripes, points, countDrawables) {
-
-
-    };
-
-    App.prototype._postGameScene = function (stage, points) {
-
-
-    };
-
-
 
     return App;
 
@@ -124,5 +102,14 @@ var App = (function (require) {
     AnimationDirector: AnimationDirector,
     MotionStudio: MotionStudio,
     MotionDirector: MotionDirector,
-    StageDirector: StageDirector
+    StageDirector: StageDirector,
+    Intro: Intro,
+    PreGame: PreGame,
+    StartingPosition: StartingPosition,
+    Tutorial: Tutorial,
+    GetReady: GetReady,
+    PlayGame: PlayGame,
+    KillScreen: KillScreen,
+    PostGame: PostGame,
+    SceneManager: SceneManager
 });

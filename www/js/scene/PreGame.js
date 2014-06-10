@@ -1,14 +1,15 @@
 var PreGame = (function (Transition) {
     "use strict";
 
-    function PreGame(stage, sceneStorage) {
+    function PreGame(stage, sceneStorage, tapController) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
+        this.tapController = tapController;
     }
 
-    PreGame.prototype.show = function () {
-        var logoDrawable = this.sceneStorage['logo'];
-        delete this.sceneStorage['logo'];
+    PreGame.prototype.show = function (nextScene) {
+        var logoDrawable = this.sceneStorage.logo;
+        delete this.sceneStorage.logo;
 
         var self = this;
 
@@ -99,7 +100,7 @@ var PreGame = (function (Transition) {
 
             self.stage.move(shipDrawable, dockShipToGamePosition, function () {
                 // next scene
-                self.next(shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite);
+                self.next(nextScene, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite);
             });
 
             self.stage.move(fireDrawable, dockShipToGamePosition);
@@ -107,12 +108,14 @@ var PreGame = (function (Transition) {
         }
     };
 
-    PreGame.prototype.next = function (shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite) {
-        this.sceneStorage['ship'] = shipDrawable;
-        this.sceneStorage['fire'] = fireDrawable;
-        this.sceneStorage['shields'] = shieldsDrawable;
-        this.sceneStorage['shieldsUp'] = shieldsUpSprite;
-        this.sceneStorage['shieldsDown'] = shieldsDownSprite;
+    PreGame.prototype.next = function (nextScene, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite) {
+        this.sceneStorage.ship = shipDrawable;
+        this.sceneStorage.fire = fireDrawable;
+        this.sceneStorage.shields = shieldsDrawable;
+        this.sceneStorage.shieldsUp = shieldsUpSprite;
+        this.sceneStorage.shieldsDown = shieldsDownSprite;
+
+        nextScene();
     };
 
     return PreGame;
