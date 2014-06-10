@@ -10,14 +10,14 @@ var PlayGame = (function (Transition) {
     
     PlayGame.prototype.show = function (nextScene) {
         var shipDrawable = this.sceneStorage.ship,
-            shieldsDrawable = this.sceneStorage.shields,
+            shieldsDrawable = this.sceneStorage.shields || this.stage.getDrawable(320 / 2, 400, 'shields'),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
             fireDrawable = this.sceneStorage.fire,
             speedStripes = this.sceneStorage.speedStripes,
-            shieldsUpSprite = this.sceneStorage.shieldsUp,
-            shieldsDownSprite = this.sceneStorage.shieldsDown;
+            shieldsUpSprite = this.sceneStorage.shieldsUp || this.stage.getSprite('shields-up-anim/shields_up', 6, false),
+            shieldsDownSprite = this.sceneStorage.shieldsDown || this.stage.getSprite('shields-down-anim/shields_down', 6, false);
 
         delete this.sceneStorage.shields;
         delete this.sceneStorage.energyBar;

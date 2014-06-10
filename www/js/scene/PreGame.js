@@ -44,7 +44,7 @@ var PreGame = (function (Transition) {
 
         var shieldsDownSprite = self.stage.getSprite('shields-down-anim/shields_down', 6, false);
         var shieldsUpSprite = self.stage.getSprite('shields-up-anim/shields_up', 6, false);
-        var shieldsDrawable = self.stage.getDrawable(320 / 2, shipEndY, 'shields', 2);
+        var shieldsDrawable = self.stage.getDrawable(320 / 2, shipEndY, 'shields');
 
         //------------------------------- DEBUG_ONLY start
 //        if (DEBUG_START_IMMEDIATELY) {

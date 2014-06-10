@@ -9,6 +9,7 @@ var PostGame = (function (localStorage, Transition) {
 
     PostGame.prototype.show = function (nextScene) {
         var points = this.sceneStorage.points;
+        delete this.sceneStorage.points;
 
         var self = this;
         var gameOverX = 320 / 2;
@@ -126,6 +127,8 @@ var PostGame = (function (localStorage, Transition) {
     };
 
     PostGame.prototype.next = function () {
+
+
 //        self._preGameScene(stage, self.stage.animateFresh(320 / 2, 480 / 6, 'logo-anim/logo', 44),
 //            self._showSpeedStripes(stage, 0)); //TODO show speed stripes in intro
     };

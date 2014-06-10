@@ -6,7 +6,21 @@ var StartingPosition = (function (Transition) {
         this.sceneStorage = sceneStorage;
     }
 
+    StartingPosition.prototype.checkPreConditions = function () {
+        if (this.sceneStorage.speedStripes === undefined) {
+            this.sceneStorage.speedStripes = showSpeedStripes(this.stage, 0);
+        }
+        if (!this.sceneStorage.ship) {
+            this.sceneStorage.ship = this.stage.drawFresh(320 / 2, 400, 'ship');
+        }
+        if (!this.sceneStorage.fire) {
+            this.sceneStorage.fire = this.stage.animateFresh(320 / 2, 400, 'fire-anim/fire', 8);
+        }
+    };
+
     StartingPosition.prototype.show = function (nextScene) {
+        this.checkPreConditions();
+
         var self = this;
         var zero = 'num/numeral0';
         var spacing = Transition.EASE_IN_OUT_ELASTIC;
@@ -42,6 +56,22 @@ var StartingPosition = (function (Transition) {
 
         nextScene();
     };
+
+    function showSpeedStripes(stage, delay) {
+        var speedStripes = [];
+
+        speedStripes.push(drawSpeed(stage, 320 / 4, 0 + delay));
+        speedStripes.push(drawSpeed(stage, 320 / 3 * 2, 34 + delay));
+        speedStripes.push(drawSpeed(stage, 320 / 8 * 7, 8 + delay));
+        speedStripes.push(drawSpeed(stage, 320 / 16 * 7, 24 + delay));
+        speedStripes.push(drawSpeed(stage, 320 / 16, 16 + delay));
+
+        return speedStripes;
+    }
+
+    function drawSpeed(stage, x, delay) {
+        return stage.moveFreshLater(x, -108 / 2, 'speed', x, 480 + 108 / 2, 30, Transition.LINEAR, delay, true);
+    }
 
     return StartingPosition;
 })(Transition);
