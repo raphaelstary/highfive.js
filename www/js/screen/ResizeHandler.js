@@ -1,9 +1,8 @@
-var ResizeHandler = (function () {
+var ResizeHandler = (function (requestAnimationFrame) {
     "use strict";
 
-    function ResizeHandler(screenSizer, requestAnimationFrame) {
+    function ResizeHandler(screenSizer) {
         this.screenSizer = screenSizer;
-        this.requestAnimationFrame = requestAnimationFrame;
 
         this.resizeFired = false;
         this.drawing = false;
@@ -26,11 +25,11 @@ var ResizeHandler = (function () {
             // actually do the resize
             this.screenSizer.resize(width, height);
 
-            this.requestAnimationFrame(this._initiateResize.bind(this, width, height));
+            requestAnimationFrame(this._initiateResize.bind(this, width, height));
         } else {
             this.drawing = false;
         }
     };
 
     return ResizeHandler;
-})();
+})(requestAnimationFrame);

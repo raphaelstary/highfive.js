@@ -1,9 +1,9 @@
 window.onload = function () {
     "use strict";
 
-    function installResizeHandler(rAF, resizeBus) {
+    function installResizeHandler(resizeBus) {
         var screenSizer = new ScreenSizer(resizeBus, window.innerWidth, window.innerHeight),
-            resizeHandler = new ResizeHandler(screenSizer, rAF);
+            resizeHandler = new ResizeHandler(screenSizer);
 
         window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
     }
@@ -19,20 +19,19 @@ window.onload = function () {
         screen.addEventListener('mouseup', gameController.mouseUp.bind(gameController));
     }
 
-    function startApp(rAF, resizeBus, screenInput, gameController, screen) {
+    function startApp(resizeBus, screenInput, gameController, screen) {
         var ctx = screen.getContext('2d'),
-            app = new App(screen, ctx, rAF, resizeBus, screenInput, gameController);
+            app = new App(screen, ctx, resizeBus, screenInput, gameController);
 
         app.start(window.innerWidth, window.innerHeight);
     }
 
-    var rAF = window.requestAnimationFrame.bind(window),
-        resizeBus = new ResizeBus(),
+    var resizeBus = new ResizeBus(),
         screenInput = new TapController(),
         screen = document.getElementById('screen'),
         gameController = new PushReleaseController();
 
-    installResizeHandler(rAF, resizeBus);
+    installResizeHandler(resizeBus);
     installInputListeners(screen, screenInput, gameController);
-    startApp(rAF, resizeBus, screenInput, gameController, screen);
+    startApp(resizeBus, screenInput, gameController, screen);
 };

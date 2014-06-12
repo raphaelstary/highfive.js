@@ -2,10 +2,9 @@ var App = (function (require) {
     "use strict";
 //    var DEBUG_START_IMMEDIATELY = false;
 
-    function App(screen, screenCtx, requestAnimationFrame, resizeBus, screenInput, gameController) {
+    function App(screen, screenCtx, resizeBus, screenInput, gameController) {
         this.screen = screen;
         this.screenCtx = screenCtx;
-        this.requestAnimationFrame = requestAnimationFrame;
         this.resizeBus = resizeBus;
         this.tapController = screenInput;
         this.gameController = gameController;
@@ -57,7 +56,7 @@ var App = (function (require) {
     };
 
     App.prototype._startGameLoop = function (stage) {
-        this.gameLoop = new require.GameLoop(this.requestAnimationFrame);
+        this.gameLoop = new require.GameLoop();
         this.gameLoop.add('stage', stage.tick.bind(stage));
         this.gameLoop.run();
     };
