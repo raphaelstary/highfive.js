@@ -1,10 +1,11 @@
 var PreGame = (function (Transition) {
     "use strict";
 
-    function PreGame(stage, sceneStorage, tapController) {
+    function PreGame(stage, sceneStorage, tapController, fullScreen) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.tapController = tapController;
+        this.fullScreen = fullScreen;
     }
 
     PreGame.prototype.show = function (nextScene) {
@@ -30,6 +31,7 @@ var PreGame = (function (Transition) {
 
 
             self.tapController.add(touchable, function () {
+                self.fullScreen.request();
                 var pressPlaySprite = self.stage.getSprite('press-play-anim/press_play', 16);
                 self.stage.animate(pressPlay, pressPlaySprite, function () {
                     endOfScreen();
