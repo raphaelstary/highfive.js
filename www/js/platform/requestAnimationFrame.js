@@ -1,7 +1,7 @@
 var requestAnimationFrame = (function (window) {
     "use strict";
 
-    return  (window.requestAnimationFrame ||
+    return (window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
