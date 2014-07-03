@@ -1,4 +1,4 @@
-var requestAnimationFrame = (function (window) {
+var requestAnimFrame = (function (window) {
     "use strict";
 
     return (window.requestAnimationFrame ||

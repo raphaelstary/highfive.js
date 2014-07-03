@@ -32,4 +32,4 @@ var ResizeHandler = (function (requestAnimationFrame) {
     };
 
     return ResizeHandler;
-})(requestAnimationFrame);
+})(requestAnimFrame);

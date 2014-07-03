@@ -26,4 +26,4 @@ var GameLoop = (function (requestAnimationFrame) {
     };
 
     return GameLoop;
-})(requestAnimationFrame);
+})(requestAnimFrame);
