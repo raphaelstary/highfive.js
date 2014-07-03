@@ -4,7 +4,8 @@ var ResourceLoader = (function () {
     var ResourceType = {
         IMAGE: 0,
         SOUND: 1,
-        JSON: 2
+        JSON: 2,
+        FONT: 3
     };
 
     function ResourceLoader() {
@@ -34,6 +35,17 @@ var ResourceLoader = (function () {
         return jsonObject;
     };
 
+    ResourceLoader.prototype.addFont = function (fontSrc) {
+        var font = {};
+        this.resources.push({
+            type: ResourceType.FONT,
+            file: font,
+            src: fontSrc
+        });
+
+        return font;
+    };
+
     ResourceLoader.prototype.load = function () {
         var self = this;
         self.resources.forEach(function (elem) {
@@ -57,8 +69,20 @@ var ResourceLoader = (function () {
                     }
                     self.onResourceLoad();
                 };
-
                 xhr.send();
+
+            } else if (elem.type === ResourceType.FONT) {
+                var xhrFont = new XMLHttpRequest();
+                xhrFont.open("GET", elem.src, true);
+                xhrFont.responseType = "arraybuffer";
+
+                xhrFont.onload = function () {
+                    elem.file.blob = new Blob([xhrFont.response], {type: "application/font-woff"});
+
+                    self.onResourceLoad();
+                };
+
+                xhrFont.send();
             }
         });
     };

@@ -7,6 +7,15 @@ var Tutorial = (function (Transition) {
     }
 
     Tutorial.prototype.show = function (nextScene) {
+        this.stage.draw({
+            id: 'supitxt',
+            x: 320 / 2,
+            y: 480 / 2,
+            txt: 'TEST',
+            fontFamily: 'KenPixelBlocks',
+            size: '20pt'
+        });
+
         var self = this;
         var offSet = 480 / 4 / 2;
         var touchHoldDrawable = self.stage.animateFresh(-320, 480 / 4 - offSet, 'touch_hold-anim/touch_hold', 60);

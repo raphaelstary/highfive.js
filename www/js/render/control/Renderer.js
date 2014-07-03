@@ -10,6 +10,7 @@ var Renderer = (function () {
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
         this.drawableDict = {'0': {}, '1': {}, '2': {}, '3': {}};
+        this.drawableTxtDict = {};
     }
 
     Renderer.prototype.resize = function (width, height) {
@@ -20,7 +21,11 @@ var Renderer = (function () {
     };
 
     Renderer.prototype.add = function (drawable) {
-        this.drawableDict[drawable.zIndex][drawable.id] = drawable;
+        if (drawable.txt) {
+            this.drawableTxtDict[drawable.id] = drawable;
+        } else {
+            this.drawableDict[drawable.zIndex][drawable.id] = drawable;
+        }
     };
 
     Renderer.prototype.remove = function (drawable) {
@@ -53,6 +58,17 @@ var Renderer = (function () {
                         self._getImgRenderWidth(elem.img),
                         self._getImgRenderHeight(elem.img));
                 }
+            }
+        }
+
+        for (key in this.drawableTxtDict) {
+            if (this.drawableTxtDict.hasOwnProperty(key)) {
+                var elem = this.drawableTxtDict[key];
+
+                this.ctx.save();
+                this.ctx.font = elem.size + ' ' + elem.fontFamily;
+                this.ctx.fillText(elem.txt, elem.x, elem.y);
+                this.ctx.restore();
             }
         }
     };
