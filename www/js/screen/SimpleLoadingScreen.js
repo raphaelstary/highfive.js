@@ -50,7 +50,8 @@ var SimpleLoadingScreen = (function () {
     SimpleLoadingScreen.prototype._initialRendering = function () {
         this.screenCtx.strokeRect(this.startBarX, this.startBarY, this.barWidth, this.barHeight);
 
-        this.screenCtx.font = 'italic 40pt Calibri';
+//        this.screenCtx.font = 'italic 40pt Calibri';
+        this.screenCtx.font = '40pt KenPixelBlocks';
         this.screenCtx.textAlign = 'center';
 
         this.screenCtx.fillText(this.txt, this.centerX, this.startBarY + this.barHeight + 40);
