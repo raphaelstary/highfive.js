@@ -6,8 +6,8 @@ var addFontToDOM = (function (document) {
         styleNode.type = "text/css";
 
         var styleText = "@font-face{";
-        styleText += "font-family:'" + name + "';";
-        styleText += "src:url('" + url + "')format('woff');";
+        styleText += "font-family:" + name + ";";
+        styleText += "src:url(" + url + ")format('woff');";
         styleText += "}";
 
         styleNode.innerHTML = styleText;

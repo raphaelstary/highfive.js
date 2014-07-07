@@ -1,11 +1,12 @@
 var Drawable = (function () {
     "use strict";
 
-    function Drawable(id, x, y, img, zIndex) {
+    function Drawable(id, x, y, img, txt, zIndex) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.img = img;
+        this.txt = txt;
         this.zIndex = zIndex === undefined ? 3 : zIndex;
     }
 

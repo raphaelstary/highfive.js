@@ -66,8 +66,16 @@ var Renderer = (function () {
                 var elem = this.drawableTxtDict[key];
 
                 this.ctx.save();
-                this.ctx.font = elem.size + ' ' + elem.fontFamily;
-                this.ctx.fillText(elem.txt, elem.x, elem.y);
+
+                this.ctx.textBaseline = 'middle';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = elem.txt.color;
+                this.ctx.font = elem.txt.size + 'px ' + elem.txt.fontFamily;
+                this.ctx.translate(elem.x, elem.y);
+                this.ctx.rotate(elem.txt.rotation);
+                this.ctx.translate(-elem.x, -elem.y);
+                this.ctx.fillText(elem.txt.msg, elem.x, elem.y);
+
                 this.ctx.restore();
             }
         }

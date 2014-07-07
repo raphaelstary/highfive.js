@@ -1,20 +1,16 @@
 var Tutorial = (function (Transition) {
     "use strict";
 
-    function Tutorial(stage, tapController) {
+    function Tutorial(stage, tapController, messages) {
         this.stage = stage;
         this.tapController = tapController;
+        this.messages = messages;
     }
 
     Tutorial.prototype.show = function (nextScene) {
-        this.stage.draw({
-            id: 'supitxt',
-            x: 320 / 2,
-            y: 480 / 2,
-            txt: 'TEST',
-            fontFamily: 'KenPixelBlocks',
-            size: '20pt'
-        });
+        var txt = this.stage.getDrawableText(320 / 2, 480 / 2, 1, this.messages.get('tutorial', 'drain_energy'), 30,
+            'KenPixelBlocks', 'white', Math.PI / 4);
+        this.stage.draw(txt);
 
         var self = this;
         var offSet = 480 / 4 / 2;

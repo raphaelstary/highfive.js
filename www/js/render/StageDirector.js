@@ -14,6 +14,10 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         return Drawables.get(this.atlasMapper, ++this._id, x, y, imgPathName, zIndex);
     };
 
+    StageDirector.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation) {
+        return Drawables.getTxt(++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation);
+    };
+
     StageDirector.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
         return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames, loop);
     };

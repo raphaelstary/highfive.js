@@ -22,6 +22,7 @@ var App = (function (require) {
             atlas = resourceLoader.addImage('gfx/atlas.png'),
             atlasInfo = resourceLoader.addJSON('data/atlas.json'),
             font = resourceLoader.addFont('data/kenpixel_blocks.woff'),
+            locales = resourceLoader.addJSON('data/locales.json'),
             initialScreen = new require.SimpleLoadingScreen(this.screenCtx);
 
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
@@ -34,15 +35,15 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var stage = self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, font);
-            self._initScenes(stage);
+            var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, font, locales);
+            self._initScenes(sceneStuff.stage, sceneStuff.messages);
             self._doThePlay();
         };
 
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, font) {
+    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, font, locales) {
         require.addFontToDOM('KenPixelBlocks', require.URL.createObjectURL(font.blob));
 
         var atlasMapper = new require.AtlasMapper(1); // 1px is 1 tile length
@@ -55,7 +56,10 @@ var App = (function (require) {
 
         this._startGameLoop(stage);
 
-        return stage;
+        return {
+            stage: stage,
+            messages: new require.UniversalTranslator(locales)
+        };
     };
 
     App.prototype._startGameLoop = function (stage) {
@@ -64,13 +68,13 @@ var App = (function (require) {
         this.gameLoop.run();
     };
 
-    App.prototype._initScenes = function (stage) {
+    App.prototype._initScenes = function (stage, messages) {
         var sceneStorage = {};
 
         var intro = new require.Intro(stage, sceneStorage, this.gameLoop);
         var preGame = new require.PreGame(stage, sceneStorage, this.tapController, new require.FullScreenController(this.screen));
         var startingPosition = new require.StartingPosition(stage, sceneStorage);
-        var tutorial = new require.Tutorial(stage, this.tapController);
+        var tutorial = new require.Tutorial(stage, this.tapController, messages);
         var getReady = new require.GetReady(stage);
         var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController);
         var killScreen = new require.KillScreen(stage, sceneStorage);
@@ -116,5 +120,6 @@ var App = (function (require) {
     SceneManager: SceneManager,
     FullScreenController: FullScreenController,
     addFontToDOM: addFontToDOM,
-    URL: window.URL
+    URL: window.URL,
+    UniversalTranslator: UniversalTranslator
 });
