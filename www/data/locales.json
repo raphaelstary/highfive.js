@@ -1,11 +1,15 @@
 {
     "en": {
         "tutorial": {
-            "touch_and_hold": "touch and hold anywhere to raise shields",
+            "touch_and_hold": "touch & hold anywhere to raise shields",
             "destroy_asteroids": "destroy asteroids with your shields",
             "drain_energy": "shields consume energy",
             "no_energy": "no energy, no shields",
-            "collect_stuff": "collect stars to score points"
+            "collect_stuff": "collect stars to score points",
+            "nice": "nice",
+            "good": "good job",
+            "well_done": "well done",
+            "awesome": "awesome"
         },
         "credits": {
             "a": "a",
