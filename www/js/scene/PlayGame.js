@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition) {
+var PlayGame = (function (Transition, ScreenShaker) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -25,15 +25,10 @@ var PlayGame = (function (Transition) {
         delete this.sceneStorage.shieldsUp;
         delete this.sceneStorage.shieldsDown;
 
-        var shaker = [shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1], lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable];
-        function addElem (elem) {
-            shaker.push(elem);
-        }
-        countDrawables.forEach(addElem);
-        speedStripes.forEach(addElem);
-        var shaking = false;
-        var smallShaking = false;
-        var bigShaking = false;
+        var shaker = new ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1], lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable]);
+
+        countDrawables.forEach(shaker.add.bind(shaker));
+        speedStripes.forEach(shaker.add.bind(shaker));
 
         var shieldsOn = false; //part of global game state
         var lives = 3; //3; //part of global game state
@@ -85,7 +80,6 @@ var PlayGame = (function (Transition) {
 
                 trackedStars[drawable.id] = drawable;
             }
-//            shaker.push(drawable);
         }
 
         var elemHitsShieldsSprite;
@@ -130,7 +124,7 @@ var PlayGame = (function (Transition) {
                             self.stage.remove(asteroid);
                         })
                     })(asteroid);
-                    smallScreenShake();
+                    shaker.startSmallShake();
 
                     delete trackedAsteroids[key];
                     continue;
@@ -141,7 +135,7 @@ var PlayGame = (function (Transition) {
                     delete trackedAsteroids[key];
 
                     shipGotHit();
-                    bigScreenShake();
+                    shaker.startBigShake();
 
                     if (lives <= 0) {
                         endGame();
@@ -396,125 +390,12 @@ var PlayGame = (function (Transition) {
             return false;
         }
 
-        var time = 0;
-        var duration = 60;
-        var lastOffSetY;
-
-        function shakeTheScreen() {
-            if (shaking) {
-                if (smallShaking) {
-                    var offSet = elasticOutShake(time, duration, 25, 5);
-                    shaker.forEach(function (item) {
-                        if (time == 0) {
-                            item._startValueX = item.x;
-                        }
-                        if (offSet != 0) {
-                            item.x = item._startValueX + offSet;
-                        } else {
-                            item.x = item._startValueX;
-                        }
-                    });
-
-                } else if (bigShaking) {
-                    var amplitude = 150;
-                    var period = 5;
-                    var offSetX = elasticOutShake(time, duration, amplitude - 50, period + 5);
-                    var offSetY = elasticOutShake(time, duration, amplitude, period);
-
-                    shaker.forEach(function (item) {
-                        if (time == 0) {
-                            item._startValueX = item.x;
-//                            item._startValueY = item.y;
-                            lastOffSetY = 0;
-                        }
-                        if (offSetX != 0) {
-                            item.x = item._startValueX + offSetX;
-                        } else {
-                            item.x = item._startValueX;
-                        }
-                        if (offSetY != 0) {
-                            item.y = (item.y - lastOffSetY) + offSetY;
-                        } else {
-                            item.y = (item.y - lastOffSetY);
-                        }
-                    });
-                    lastOffSetY = offSetY;
-                }
-
-                time++;
-                if (time >= duration) {
-                    time = 0;
-                    shaking = false;
-
-                    shaker.forEach(function (item) {
-                        item.x = item._startValueX;
-                        delete item._startValueX;
-
-                        if (bigShaking) {
-                            item.y = item.y - lastOffSetY;
-                            lastOffSetY = 0;
-                        }
-                    });
-
-                    smallShaking = false;
-                    bigShaking = false;
-                }
-            }
-        }
-
-        function smallScreenShake() {
-            if (shaking) {
-                if (bigShaking) {
-                    return;
-                }
-                shaker.forEach(function (item) {
-                    item.x = item._startValueX;
-                });
-            }
-
-            shaking = true;
-            time = 0;
-            smallShaking = true;
-        }
-
-        function bigScreenShake() {
-            if (shaking) {
-                if (smallShaking) {
-                    smallShaking = false;
-                }
-
-                shaker.forEach(function (item) {
-                    item.x = item._startValueX;
-                });
-
-                if (bigShaking) {
-                    shaker.forEach(function (item) {
-                        item.y = item.y - lastOffSetY;
-                    });
-                    lastOffSetY = 0;
-                }
-            }
-
-            shaking = true;
-            time = 0;
-            bigShaking = true;
-        }
-
-        function elasticOutShake(currentTime, duration, amplitude, period) {
-            if (currentTime == 0 || (currentTime /= duration) == 1) {
-                return 0;
-            }
-
-            return Math.floor(amplitude * Math.pow(2, -10 * currentTime) * Math.sin((currentTime * duration) * (2 * Math.PI) / period));
-        }
-
-        this.gameLoop.add('shake', shakeTheScreen);
+        this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', collisions);
         this.gameLoop.add('level', generateLevel);
 
         shieldsDrawable.x = shipDrawable.x;
         shieldsDrawable.y = shipDrawable.y;
-
 
         var energyDrainSprite;
         var energyLoadSprite;
@@ -652,4 +533,4 @@ var PlayGame = (function (Transition) {
     };
 
     return PlayGame;
-})(Transition);
+})(Transition, ScreenShaker);
