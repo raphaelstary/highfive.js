@@ -67,13 +67,19 @@ var Renderer = (function () {
 
                 this.ctx.save();
 
+                if (elem.txt.alpha || elem.txt.alpha === 0) {
+                    this.ctx.globalAlpha = elem.txt.alpha;
+                }
                 this.ctx.textBaseline = 'middle';
                 this.ctx.textAlign = 'center';
                 this.ctx.fillStyle = elem.txt.color;
                 this.ctx.font = elem.txt.size + 'px ' + elem.txt.fontFamily;
-                this.ctx.translate(elem.x, elem.y);
-                this.ctx.rotate(elem.txt.rotation);
-                this.ctx.translate(-elem.x, -elem.y);
+
+                if (elem.txt.rotation) {
+                    this.ctx.translate(elem.x, elem.y);
+                    this.ctx.rotate(elem.txt.rotation);
+                    this.ctx.translate(-elem.x, -elem.y);
+                }
                 this.ctx.fillText(elem.txt.msg, elem.x, elem.y);
 
                 this.ctx.restore();
