@@ -347,7 +347,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator) {
             return false;
         }
 
-        var level = new LevelGenerator(this.stage);
+        var level = new LevelGenerator(this.stage, trackedAsteroids, trackedStars);
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', collisions);

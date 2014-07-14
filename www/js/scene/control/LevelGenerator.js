@@ -1,8 +1,10 @@
-var LevelGenerator = (function () {
+var LevelGenerator = (function (Transition) {
     "use strict";
 
-    function LevelGenerator(stage) {
+    function LevelGenerator(stage, trackedAsteroids, trackedStars) {
         this.stage = stage;
+        this.trackedAsteroids = trackedAsteroids;
+        this.trackedStars = trackedStars;
 
         // level difficulty
         this.level = {
@@ -37,14 +39,14 @@ var LevelGenerator = (function () {
             drawable = drawAsteroid(this.stage, 'asteroid' + range(1, 4), range(320 / 5, 4 * 320 / 5), this.level.asteroidSpeed);
             this.nextCount = this.level.pauseAfterAsteroid + range(0, this.level.maxTimeToNextAfterAsteroid);
 
-            trackedAsteroids[drawable.id] = drawable;
+            this.trackedAsteroids[drawable.id] = drawable;
         } else {
             var starNum = range(1, 4);
             var starPath = 'star' + starNum + '-anim/star' + starNum;
             drawable = drawStar(this.stage, starPath, range(320 / 3, 2 * 320 / 3), this.level.starSpeed);
             this.nextCount = this.level.pauseAfterStar + range(0, this.level.maxTimeToNextAfterStar);
 
-            trackedStars[drawable.id] = drawable;
+            this.trackedStars[drawable.id] = drawable;
         }
     };
 
@@ -64,4 +66,4 @@ var LevelGenerator = (function () {
     }
 
     return LevelGenerator;
-})();
+})(Transition);
