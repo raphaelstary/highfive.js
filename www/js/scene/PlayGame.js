@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -35,52 +35,9 @@ var PlayGame = (function (Transition, ScreenShaker) {
         var initialLives = 3; // needed for right render stuff after collect or similar
         var points = 0; //part of global game state
 
-        // level difficulty
-        var maxTimeToFirst = 100;
-        var percentageForAsteroid = 66;
-
-        var asteroidSpeed = 90;
-        var pauseAfterAsteroid = 30;
-        var maxTimeToNextAfterAsteroid = 100;
-
-        var starSpeed = 90;
-        var pauseAfterStar = 20;
-        var maxTimeToNextAfterStar = 100;
-
-        // -------------------
-
-        var counter = 0;
-        // im interval 0 - 100 kommt ein element
-        var nextCount = range(0, maxTimeToFirst);
-
         var trackedAsteroids = {};
         var trackedStars = {};
         var self = this;
-
-        function generateLevel() {
-            counter += 1;
-            if (counter <= nextCount) {
-                return;
-            }
-
-            counter = 0;
-
-            var drawable;
-            // 2/3 asteroid, 1/3 star
-            if (range(1, 100) <= percentageForAsteroid) {
-                drawable = drawAsteroid(self.stage, 'asteroid' + range(1, 4), range(320 / 5, 4 * 320 / 5), asteroidSpeed);
-                nextCount = pauseAfterAsteroid + range(0, maxTimeToNextAfterAsteroid);
-
-                trackedAsteroids[drawable.id] = drawable;
-            } else {
-                var starNum = range(1, 4);
-                var starPath = 'star' + starNum + '-anim/star' + starNum;
-                drawable = drawStar(self.stage, starPath, range(320 / 3, 2 * 320 / 3), starSpeed);
-                nextCount = pauseAfterStar + range(0, maxTimeToNextAfterStar);
-
-                trackedStars[drawable.id] = drawable;
-            }
-        }
 
         var elemHitsShieldsSprite;
         var shieldsGetHitSprite;
@@ -390,9 +347,11 @@ var PlayGame = (function (Transition, ScreenShaker) {
             return false;
         }
 
+        var level = new LevelGenerator(this.stage);
+
         this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', collisions);
-        this.gameLoop.add('level', generateLevel);
+        this.gameLoop.add('level', level.update.bind(level));
 
         shieldsDrawable.x = shipDrawable.x;
         shieldsDrawable.y = shipDrawable.y;
@@ -495,35 +454,12 @@ var PlayGame = (function (Transition, ScreenShaker) {
                 self.stage.remove(energyBarDrawable);
             });
 
-//            if (DEBUG_START_IMMEDIATELY) {
-//                self.stage.remove(shipDrawable);
-//                self.stage.remove(fireDrawable);
-//                speedStripes.forEach(function (speedStripe) {
-//                    self.stage.remove(speedStripe);
-//                });
-//                countDrawables.forEach(function (count) {
-//                    self.stage.remove(count);
-//                });
-//                self._postGameScene(self.stage, points);
-//            } else {
             self.next(nextScene, points);
-//            }
         }
 
-        function drawStar(stage, imgName, x, speed) {
-            var star = stage.animateFresh(x, -108 / 2, imgName, 30);
-            stage.move(star, stage.getPath(x, -108 / 2, x, 480 + 108 / 2, speed, Transition.LINEAR));
 
-            return star;
-        }
 
-        function drawAsteroid(stage, imgName, x, speed) {
-            return stage.moveFresh(x, -108 / 2, imgName, x, 480 + 108 / 2, speed, Transition.LINEAR);
-        }
 
-        function range(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
     };
     
     PlayGame.prototype.next = function (nextScene, points) {
@@ -533,4 +469,4 @@ var PlayGame = (function (Transition, ScreenShaker) {
     };
 
     return PlayGame;
-})(Transition, ScreenShaker);
+})(Transition, ScreenShaker, LevelGenerator);
