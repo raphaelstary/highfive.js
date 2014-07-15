@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView, CanvasCollisionDetector) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView, CanvasCollisionDetector, GameWorld) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -32,155 +32,26 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         countDrawables.forEach(shaker.add.bind(shaker));
         speedStripes.forEach(shaker.add.bind(shaker));
 
-        var shieldsOn = false; //part of global game state
-        var lives = 3; //3; //part of global game state
-        var initialLives = 3; // needed for right render stuff after collect or similar
-        var points = 0; //part of global game state
+        var self = this;
+
+        var trackedAsteroids = {};
+        var trackedStars = {};
+
+        var level = new LevelGenerator(new ObstaclesView(this.stage, trackedAsteroids, trackedStars));
 
         var scoreDisplay = new Odometer(new OdometerView(this.stage, countDrawables));
-        var collectAnimator = new CollectView(this.stage, shipDrawable, initialLives);
+        var collectAnimator = new CollectView(this.stage, shipDrawable, 3);
         var scoreAnimator = new ScoreView(this.stage);
-
         var shipCollision =
             new CanvasCollisionDetector(this.stage.renderer.atlas, this.stage.getSubImage('ship'), shipDrawable);
         var shieldsCollision =
             new CanvasCollisionDetector(this.stage.renderer.atlas, this.stage.getSubImage('shield3'), shieldsDrawable);
 
-        var trackedAsteroids = {};
-        var trackedStars = {};
-        var self = this;
-
-        var elemHitsShieldsSprite;
-        var shieldsGetHitSprite;
-
-        function initShieldsHitRenderStuff() {
-            elemHitsShieldsSprite = self.stage.getSprite('shield-hit-anim/shield_hit', 12, false);
-            shieldsGetHitSprite = self.stage.getSprite('shiels-hit-anim/shields_hit', 10, false); //TODO change sprite name
-        }
-
-        initShieldsHitRenderStuff();
-
-        var shipHullHitSprite;
-        var dumpLifeSprite;
-
-        function initShipHullHitRenderStuff() {
-            shipHullHitSprite = self.stage.getSprite('ship-hit-anim/ship_hit', 30, false);
-            dumpLifeSprite = self.stage.getSprite('lost-life-anim/lost_life', 20, false);
-        }
-
-        initShipHullHitRenderStuff();
-
-        function collisions() {
-            var key;
-            for (key in trackedAsteroids) {
-                if (!trackedAsteroids.hasOwnProperty(key)) {
-                    continue;
-                }
-                var asteroid = trackedAsteroids[key];
-
-                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, asteroid) &&
-                    shieldsCollision.isHit(asteroid)) {
-
-                    self.stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
-                        if (shieldsOn) {
-                            shieldsDrawable.img = self.stage.getSubImage('shield3');
-                        } else {
-                            self.stage.remove(shieldsDrawable);
-                        }
-                    });
-                    (function (asteroid) {
-                        self.stage.remove(asteroid);
-                        self.stage.animate(asteroid, elemHitsShieldsSprite, function () {
-                            self.stage.remove(asteroid);
-                        })
-                    })(asteroid);
-                    shaker.startSmallShake();
-
-                    delete trackedAsteroids[key];
-                    continue;
-                }
-
-                if (needPreciseCollisionDetection(shipDrawable, asteroid) && shipCollision.isHit(asteroid)) {
-                    self.stage.remove(asteroid);
-                    delete trackedAsteroids[key];
-
-                    shipGotHit();
-                    shaker.startBigShake();
-
-                    if (lives <= 0) {
-                        endGame();
-                    }
-//                    continue;
-                }
-            }
-
-            for (key in trackedStars) {
-                if (!trackedStars.hasOwnProperty(key)) {
-                    continue;
-                }
-                var star = trackedStars[key];
-
-                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, star) && shieldsCollision.isHit(star)) {
-                    self.stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
-                        if (shieldsOn) {
-                            shieldsDrawable.img = self.stage.getSubImage('shield3');
-                        } else {
-                            self.stage.remove(shieldsDrawable);
-                        }
-                    });
-                    (function (star) {
-                        self.stage.remove(star);
-                        self.stage.animate(star, elemHitsShieldsSprite, function () {
-                            self.stage.remove(star);
-                        })
-                    })(star);
-
-                    delete trackedStars[key];
-                    continue;
-                }
-
-                if (needPreciseCollisionDetection(shipDrawable, star) && shipCollision.isHit(star)) {
-                    collectAnimator.collectStar(lives);
-                    scoreAnimator.showScoredPoints(star.x, star.y);
-                    var score = 10;
-                    scoreDisplay.addScore(score);
-                    points += score;
-
-                    self.stage.remove(star);
-                    delete trackedStars[key];
-//                    continue;
-                }
-            }
-        }
-
-        function shipGotHit() {
-            var currentLife = lives;
-            self.stage.animate(lifeDrawablesDict[currentLife], dumpLifeSprite, function () {
-                self.stage.remove(lifeDrawablesDict[currentLife]);
-                delete lifeDrawablesDict[currentLife];
-            });
-
-            if (--lives > 0) {
-                self.stage.animate(shipDrawable, shipHullHitSprite, function () {
-                    if (lives == initialLives - 1) {
-                        shipDrawable.img = self.stage.getSubImage('damaged-ship2');
-                    } else if (lives == initialLives - 2) {
-                        shipDrawable.img = self.stage.getSubImage('damaged-ship3');
-                    } else {
-                        shipDrawable.img = self.stage.getSubImage('ship');
-                    }
-                });
-            }
-        }
-
-        function needPreciseCollisionDetection(stationaryObject, movingObstacle) {
-            return stationaryObject.getCornerY() <= movingObstacle.getEndY();
-        }
-
-        var level = new LevelGenerator(new ObstaclesView(this.stage, trackedAsteroids, trackedStars));
+        var world = new GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
+            scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict, endGame);
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
-        this.gameLoop.add('collisions', collisions);
+        this.gameLoop.add('collisions', world.checkCollisions.bind(world));
         this.gameLoop.add('level', level.update.bind(level));
 
         shieldsDrawable.x = shipDrawable.x;
@@ -196,7 +67,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
 
         function drainEnergy() {
             function turnShieldsOn() {
-                shieldsOn = true;
+                world.shieldsOn = true;
                 self.stage.animate(shieldsDrawable, shieldsUpSprite, function () {
                     shieldsDrawable.img = self.stage.getSubImage("shield3");
                 });
@@ -229,7 +100,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         }
 
         function turnShieldsOff() {
-            shieldsOn = false;
+            world.shieldsOn = false;
             self.stage.animate(shieldsDrawable, shieldsDownSprite, function () {
                 self.stage.remove(shieldsDrawable);
             });
@@ -248,7 +119,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                     self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
             }
 
-            if (shieldsOn) {
+            if (world.shieldsOn) {
                 turnShieldsOff();
             }
             startLoading();
@@ -268,7 +139,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         this.gameController.add(touchable, drainEnergy, loadEnergy);
 
         //end scene todo move to own scene
-        function endGame() {
+        function endGame(points) {
             for (var key in lifeDrawablesDict) {
                 if (lifeDrawablesDict.hasOwnProperty(key)) {
                     self.stage.remove(lifeDrawablesDict[key]);
@@ -290,10 +161,6 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
 
             self.next(nextScene, points);
         }
-
-
-
-
     };
     
     PlayGame.prototype.next = function (nextScene, points) {
@@ -304,4 +171,4 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
 
     return PlayGame;
 })(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView,
-    CanvasCollisionDetector);
+    CanvasCollisionDetector, GameWorld);
