@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimationHelper, FlyingObstaclesDrawHelper) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, FlyingObstaclesDrawHelper) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -35,7 +35,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         var points = 0; //part of global game state
 
         var scoreDisplay = new Odometer(this.stage, countDrawables);
-        var collectAnimator = new CollectStarAnimationHelper(this.stage, shipDrawable, initialLives);
+        var collectAnimator = new CollectView(this.stage, shipDrawable, initialLives);
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -129,7 +129,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 }
 
                 if (needPreciseCollisionDetection(star) && isHit(star)) {
-                    collectAnimator.animate(lives);
+                    collectAnimator.collectStar(lives);
                     showScoredPoints(star.x, star.y);
                     var score = 10;
                     scoreDisplay.addScore(score);
@@ -384,4 +384,4 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimationHelper, FlyingObstaclesDrawHelper);
+})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, FlyingObstaclesDrawHelper);
