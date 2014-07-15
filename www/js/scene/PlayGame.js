@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -36,6 +36,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
 
         var scoreDisplay = new Odometer(new OdometerView(this.stage, countDrawables));
         var collectAnimator = new CollectView(this.stage, shipDrawable, initialLives);
+        var scoreAnimator = new ScoreView(this.stage);
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -69,7 +70,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 }
                 var asteroid = trackedAsteroids[key];
 
-                if (shieldsOn && needPreciseCollisionDetectionForShields(asteroid) && isShieldsHit(asteroid)) {
+                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, asteroid) && isShieldsHit(asteroid)) {
                     self.stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
                         if (shieldsOn) {
                             shieldsDrawable.img = self.stage.getSubImage('shield3');
@@ -89,7 +90,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                     continue;
                 }
 
-                if (needPreciseCollisionDetection(asteroid) && isHit(asteroid)) {
+                if (needPreciseCollisionDetection(shipDrawable, asteroid) && isHit(asteroid)) {
                     self.stage.remove(asteroid);
                     delete trackedAsteroids[key];
 
@@ -109,7 +110,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 }
                 var star = trackedStars[key];
 
-                if (shieldsOn && needPreciseCollisionDetectionForShields(star) && isShieldsHit(star)) {
+                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, star) && isShieldsHit(star)) {
                     self.stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
                         if (shieldsOn) {
                             shieldsDrawable.img = self.stage.getSubImage('shield3');
@@ -128,9 +129,9 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                     continue;
                 }
 
-                if (needPreciseCollisionDetection(star) && isHit(star)) {
+                if (needPreciseCollisionDetection(shipDrawable, star) && isHit(star)) {
                     collectAnimator.collectStar(lives);
-                    showScoredPoints(star.x, star.y);
+                    scoreAnimator.showScoredPoints(star.x, star.y);
                     var score = 10;
                     scoreDisplay.addScore(score);
                     points += score;
@@ -162,31 +163,8 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
             }
         }
 
-
-        var scoredPointsSprite, scoredPointsDrawable;
-
-        function initScoredPointsRenderStuff() {
-            scoredPointsSprite = self.stage.getSprite('score-10-anim/score_10', 20, false);
-            scoredPointsDrawable = self.stage.getDrawable(0, 0, 'score-10-anim/score_10_0000', 3);
-        }
-
-        initScoredPointsRenderStuff();
-
-        function showScoredPoints(x, y) {
-            var yOffSet = 50;
-            scoredPointsDrawable.x = x;
-            scoredPointsDrawable.y = y - yOffSet;
-            self.stage.animate(scoredPointsDrawable, scoredPointsSprite, function () {
-                self.stage.remove(scoredPointsDrawable);
-            });
-        }
-
-        function needPreciseCollisionDetection(element) {
-            return shipDrawable.getCornerY() <= element.getEndY();
-        }
-
-        function needPreciseCollisionDetectionForShields(element) {
-            return shieldsDrawable.getCornerY() <= element.getEndY();
+        function needPreciseCollisionDetection(stationaryObject, movingObstacle) {
+            return stationaryObject.getCornerY() <= movingObstacle.getEndY();
         }
 
         var collisionCanvas = document.createElement('canvas');
@@ -384,4 +362,4 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView);
+})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView);
