@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView, CanvasCollisionDetector, GameWorld) {
+var PlayGame = (function (require) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -7,7 +7,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         this.gameLoop = gameLoop;
         this.gameController = gameController;
     }
-    
+
     PlayGame.prototype.show = function (nextScene) {
         var shipDrawable = this.sceneStorage.ship,
             shieldsDrawable = this.sceneStorage.shields || this.stage.getDrawable(320 / 2, 400, 'shields'),
@@ -27,8 +27,8 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         delete this.sceneStorage.shieldsUp;
         delete this.sceneStorage.shieldsDown;
 
-        var shaker = new ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
-            lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable]);
+        var shaker = new require.ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
+            lifeDrawablesDict[2], lifeDrawablesDict[3], fireDrawable]);
         countDrawables.forEach(shaker.add.bind(shaker));
         speedStripes.forEach(shaker.add.bind(shaker));
 
@@ -37,18 +37,19 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         var trackedAsteroids = {};
         var trackedStars = {};
 
-        var level = new LevelGenerator(new ObstaclesView(this.stage, trackedAsteroids, trackedStars));
+        var level = new require.LevelGenerator(new require.ObstaclesView(this.stage, trackedAsteroids, trackedStars));
 
-        var scoreDisplay = new Odometer(new OdometerView(this.stage, countDrawables));
-        var collectAnimator = new CollectView(this.stage, shipDrawable, 3);
-        var scoreAnimator = new ScoreView(this.stage);
-        var shipCollision =
-            new CanvasCollisionDetector(this.stage.renderer.atlas, this.stage.getSubImage('ship'), shipDrawable);
-        var shieldsCollision =
-            new CanvasCollisionDetector(this.stage.renderer.atlas, this.stage.getSubImage('shield3'), shieldsDrawable);
+        var scoreDisplay = new require.Odometer(new require.OdometerView(this.stage, countDrawables));
+        var collectAnimator = new require.CollectView(this.stage, shipDrawable, 3);
+        var scoreAnimator = new require.ScoreView(this.stage);
+        var shipCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
+            this.stage.getSubImage('ship'), shipDrawable);
+        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
+            this.stage.getSubImage('shield3'), shieldsDrawable);
 
-        var world = new GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
-            scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict, endGame);
+        var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
+            scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
+            endGame);
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', world.checkCollisions.bind(world));
@@ -57,86 +58,12 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         shieldsDrawable.x = shipDrawable.x;
         shieldsDrawable.y = shipDrawable.y;
 
-        var energyDrainSprite;
-        var energyLoadSprite;
-
-        function initEnergyRenderStuff() {
-            energyDrainSprite = self.stage.getSprite('energy-drain-anim/energy_drain', 90, false);
-            energyLoadSprite = self.stage.getSprite('energy-load-anim/energy_load', 90, false);
-        }
-
-        function drainEnergy() {
-            function turnShieldsOn() {
-                world.shieldsOn = true;
-                self.stage.animate(shieldsDrawable, shieldsUpSprite, function () {
-                    shieldsDrawable.img = self.stage.getSubImage("shield3");
-                });
-            }
-
-            function startDraining() {
-                var position = 0;
-                if (self.stage.animations.has(energyBarDrawable)) {
-                    position = 89 - self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time;
-                }
-
-                self.stage.animate(energyBarDrawable, energyDrainSprite, energyEmpty);
-
-                self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
-                energyBarDrawable.img =
-                    self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
-            }
-
-            turnShieldsOn();
-            startDraining();
-        }
-
-        function energyEmpty() {
-            function setEnergyBarEmpty() {
-                energyBarDrawable.img = self.stage.getSubImage('energy_bar_empty');
-            }
-
-            turnShieldsOff();
-            setEnergyBarEmpty();
-        }
-
-        function turnShieldsOff() {
-            world.shieldsOn = false;
-            self.stage.animate(shieldsDrawable, shieldsDownSprite, function () {
-                self.stage.remove(shieldsDrawable);
-            });
-        }
-
-        function loadEnergy() {
-            function startLoading() {
-                var position = 0;
-                if (self.stage.animations.has(energyBarDrawable)) {
-                    position = 89 - self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time;
-                }
-                self.stage.animate(energyBarDrawable, energyLoadSprite, energyFull);
-
-                self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
-                energyBarDrawable.img =
-                    self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
-            }
-
-            if (world.shieldsOn) {
-                turnShieldsOff();
-            }
-            startLoading();
-        }
-
-        function energyFull() {
-            function setEnergyBarFull() {
-                energyBarDrawable.img = self.stage.getSubImage('energy_bar_full');
-            }
-
-            setEnergyBarFull();
-        }
-
-        initEnergyRenderStuff();
+        var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
+            shieldsDownSprite, energyBarDrawable);
 
         var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
-        this.gameController.add(touchable, drainEnergy, loadEnergy);
+        this.gameController.add(touchable,
+            energyStates.drainEnergy.bind(energyStates), energyStates.loadEnergy.bind(energyStates));
 
         //end scene todo move to own scene
         function endGame(points) {
@@ -153,7 +80,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
             self.gameController.remove(touchable);
 
             var barOut = self.stage.getPath(energyBarDrawable.x, energyBarDrawable.y,
-                    energyBarDrawable.x, energyBarDrawable.y + 100, 60, Transition.EASE_OUT_EXPO);
+                energyBarDrawable.x, energyBarDrawable.y + 100, 60, require.Transition.EASE_OUT_EXPO);
 
             self.stage.move(energyBarDrawable, barOut, function () {
                 self.stage.remove(energyBarDrawable);
@@ -162,7 +89,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
             self.next(nextScene, points);
         }
     };
-    
+
     PlayGame.prototype.next = function (nextScene, points) {
         this.sceneStorage.points = points;
 
@@ -170,5 +97,16 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView,
-    CanvasCollisionDetector, GameWorld);
+})({
+    Transition: Transition,
+    ScreenShaker: ScreenShaker,
+    LevelGenerator: LevelGenerator,
+    Odometer: Odometer,
+    CollectView: CollectView,
+    ObstaclesView: ObstaclesView,
+    OdometerView: OdometerView,
+    ScoreView: ScoreView,
+    CanvasCollisionDetector: CanvasCollisionDetector,
+    GameWorld: GameWorld,
+    EnergyStateMachine: EnergyStateMachine
+});
