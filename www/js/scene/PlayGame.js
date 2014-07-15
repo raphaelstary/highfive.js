@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, FlyingObstaclesDrawHelper) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -262,7 +262,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
             return false;
         }
 
-        var level = new LevelGenerator(new FlyingObstaclesDrawHelper(this.stage, trackedAsteroids, trackedStars));
+        var level = new LevelGenerator(new ObstaclesView(this.stage, trackedAsteroids, trackedStars));
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', collisions);
@@ -384,4 +384,4 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, FlyingObstaclesDrawHelper);
+})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView);
