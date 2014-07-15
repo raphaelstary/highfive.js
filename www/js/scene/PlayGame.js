@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimator) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -26,16 +26,16 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer) {
         delete this.sceneStorage.shieldsDown;
 
         var shaker = new ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1], lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable]);
-
         countDrawables.forEach(shaker.add.bind(shaker));
         speedStripes.forEach(shaker.add.bind(shaker));
-
-        var scoreDisplay = new Odometer(this.stage, countDrawables);
 
         var shieldsOn = false; //part of global game state
         var lives = 3; //3; //part of global game state
         var initialLives = 3; // needed for right render stuff after collect or similar
         var points = 0; //part of global game state
+
+        var scoreDisplay = new Odometer(this.stage, countDrawables);
+        var collectAnimator = new CollectStarAnimator(this.stage, shipDrawable, initialLives);
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -129,7 +129,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer) {
                 }
 
                 if (needPreciseCollisionDetection(star) && isHit(star)) {
-                    collectStar();
+                    collectAnimator.animate(lives);
                     showScoredPoints(star.x, star.y);
                     var score = 10;
                     scoreDisplay.addScore(score);
@@ -178,26 +178,6 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer) {
             scoredPointsDrawable.y = y - yOffSet;
             self.stage.animate(scoredPointsDrawable, scoredPointsSprite, function () {
                 self.stage.remove(scoredPointsDrawable);
-            });
-        }
-
-        var collectSprite;
-
-        function initCollectRenderStuff() {
-            collectSprite = self.stage.getSprite('collect-star-anim/collect_star', 30, false);
-        }
-
-        initCollectRenderStuff();
-
-        function collectStar() {
-            self.stage.animate(shipDrawable, collectSprite, function () {
-                if (lives == initialLives - 1) {
-                    shipDrawable.img = self.stage.getSubImage('damaged-ship2');
-                } else if (lives == initialLives - 2) {
-                    shipDrawable.img = self.stage.getSubImage('damaged-ship3');
-                } else {
-                    shipDrawable.img = self.stage.getSubImage('ship');
-                }
             });
         }
 
@@ -404,4 +384,4 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer) {
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer);
+})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimator);
