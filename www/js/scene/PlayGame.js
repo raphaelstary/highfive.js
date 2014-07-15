@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView, CanvasCollisionDetector) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -16,8 +16,10 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
             countDrawables = this.sceneStorage.counts,
             fireDrawable = this.sceneStorage.fire,
             speedStripes = this.sceneStorage.speedStripes,
-            shieldsUpSprite = this.sceneStorage.shieldsUp || this.stage.getSprite('shields-up-anim/shields_up', 6, false),
-            shieldsDownSprite = this.sceneStorage.shieldsDown || this.stage.getSprite('shields-down-anim/shields_down', 6, false);
+            shieldsUpSprite =
+                this.sceneStorage.shieldsUp || this.stage.getSprite('shields-up-anim/shields_up', 6, false),
+            shieldsDownSprite =
+                this.sceneStorage.shieldsDown || this.stage.getSprite('shields-down-anim/shields_down', 6, false);
 
         delete this.sceneStorage.shields;
         delete this.sceneStorage.energyBar;
@@ -25,7 +27,8 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         delete this.sceneStorage.shieldsUp;
         delete this.sceneStorage.shieldsDown;
 
-        var shaker = new ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1], lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable]);
+        var shaker = new ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
+            lifeDrawablesDict[2],lifeDrawablesDict[3], fireDrawable]);
         countDrawables.forEach(shaker.add.bind(shaker));
         speedStripes.forEach(shaker.add.bind(shaker));
 
@@ -37,6 +40,11 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         var scoreDisplay = new Odometer(new OdometerView(this.stage, countDrawables));
         var collectAnimator = new CollectView(this.stage, shipDrawable, initialLives);
         var scoreAnimator = new ScoreView(this.stage);
+
+        var shipCollision =
+            new CanvasCollisionDetector(this.stage.renderer.atlas, this.stage.getSubImage('ship'), shipDrawable);
+        var shieldsCollision =
+            new CanvasCollisionDetector(this.stage.renderer.atlas, this.stage.getSubImage('shield3'), shieldsDrawable);
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -70,7 +78,9 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 }
                 var asteroid = trackedAsteroids[key];
 
-                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, asteroid) && isShieldsHit(asteroid)) {
+                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, asteroid) &&
+                    shieldsCollision.isHit(asteroid)) {
+
                     self.stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
                         if (shieldsOn) {
                             shieldsDrawable.img = self.stage.getSubImage('shield3');
@@ -90,7 +100,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                     continue;
                 }
 
-                if (needPreciseCollisionDetection(shipDrawable, asteroid) && isHit(asteroid)) {
+                if (needPreciseCollisionDetection(shipDrawable, asteroid) && shipCollision.isHit(asteroid)) {
                     self.stage.remove(asteroid);
                     delete trackedAsteroids[key];
 
@@ -110,7 +120,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 }
                 var star = trackedStars[key];
 
-                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, star) && isShieldsHit(star)) {
+                if (shieldsOn && needPreciseCollisionDetection(shieldsDrawable, star) && shieldsCollision.isHit(star)) {
                     self.stage.animate(shieldsDrawable, shieldsGetHitSprite, function () {
                         if (shieldsOn) {
                             shieldsDrawable.img = self.stage.getSubImage('shield3');
@@ -129,7 +139,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                     continue;
                 }
 
-                if (needPreciseCollisionDetection(shipDrawable, star) && isHit(star)) {
+                if (needPreciseCollisionDetection(shipDrawable, star) && shipCollision.isHit(star)) {
                     collectAnimator.collectStar(lives);
                     scoreAnimator.showScoredPoints(star.x, star.y);
                     var score = 10;
@@ -167,79 +177,6 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
             return stationaryObject.getCornerY() <= movingObstacle.getEndY();
         }
 
-        var collisionCanvas = document.createElement('canvas');
-        var ccCtx = collisionCanvas.getContext('2d');
-        var shipStaticImg = self.stage.getSubImage('ship');
-        var shieldStatic = self.stage.getSubImage("shield3");
-        collisionCanvas.width = shieldStatic.width; //shipStaticImg.width;
-        collisionCanvas.height = shieldStatic.height; //shipStaticImg.height;
-        var collisionCanvasWidth = shieldStatic.width;
-        var collisionCanvasHeight = shieldStatic.height;
-
-        function getStaticShipCornerX() {
-            return shipDrawable.x - shipStaticImg.width / 2;
-        }
-
-        function getStaticShipCornerY() {
-            return shipDrawable.y - shipStaticImg.height / 2;
-        }
-
-        function isHit(element) {
-            ccCtx.clearRect(0, 0, collisionCanvasWidth, collisionCanvasHeight);
-
-            var shipImg = shipStaticImg;
-            var elemImg = element.img;
-
-            ccCtx.drawImage(self.stage.renderer.atlas, shipImg.x, shipImg.y, shipImg.width, shipImg.height, 0, 0, shipImg.width, shipImg.height);
-
-            ccCtx.save();
-            ccCtx.globalCompositeOperation = 'source-in';
-
-            var x = element.getCornerX() - getStaticShipCornerX();
-            var y = element.getCornerY() - getStaticShipCornerY();
-            ccCtx.drawImage(self.stage.renderer.atlas, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width, elemImg.height);
-
-            ccCtx.restore();
-
-            var rawPixelData = ccCtx.getImageData(0, 0, x + elemImg.width, y + elemImg.height).data;
-
-            for (var i = 0; i < rawPixelData.length; i += 4) {
-                var alphaValue = rawPixelData[i + 3];
-                if (alphaValue != 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function isShieldsHit(element) {
-            ccCtx.clearRect(0, 0, collisionCanvasWidth, collisionCanvasHeight);
-
-            var shieldsImg = shieldsDrawable.img;
-            var elemImg = element.img;
-
-            ccCtx.drawImage(self.stage.renderer.atlas, shieldsImg.x, shieldsImg.y, shieldsImg.width, shieldsImg.height, 0, 0, shieldsImg.width, shieldsImg.height);
-
-            ccCtx.save();
-            ccCtx.globalCompositeOperation = 'source-in';
-
-            var x = element.getCornerX() - shieldsDrawable.getCornerX();
-            var y = element.getCornerY() - shieldsDrawable.getCornerY();
-            ccCtx.drawImage(self.stage.renderer.atlas, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width, elemImg.height);
-
-            ccCtx.restore();
-
-            var rawPixelData = ccCtx.getImageData(0, 0, x + elemImg.width, y + elemImg.height).data;
-
-            for (var i = 0; i < rawPixelData.length; i += 4) {
-                var alphaValue = rawPixelData[i + 3];
-                if (alphaValue != 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         var level = new LevelGenerator(new ObstaclesView(this.stage, trackedAsteroids, trackedStars));
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
@@ -274,7 +211,8 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 self.stage.animate(energyBarDrawable, energyDrainSprite, energyEmpty);
 
                 self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
-                energyBarDrawable.img = self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
+                energyBarDrawable.img =
+                    self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
             }
 
             turnShieldsOn();
@@ -306,7 +244,8 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
                 self.stage.animate(energyBarDrawable, energyLoadSprite, energyFull);
 
                 self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].time = position;
-                energyBarDrawable.img = self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
+                energyBarDrawable.img =
+                    self.stage.animations.animationStudio.animationsDict[energyBarDrawable.id].sprite.frames[position];
             }
 
             if (shieldsOn) {
@@ -342,7 +281,9 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
 
             self.gameController.remove(touchable);
 
-            var barOut = self.stage.getPath(energyBarDrawable.x, energyBarDrawable.y, energyBarDrawable.x, energyBarDrawable.y + 100, 60, Transition.EASE_OUT_EXPO);
+            var barOut = self.stage.getPath(energyBarDrawable.x, energyBarDrawable.y,
+                    energyBarDrawable.x, energyBarDrawable.y + 100, 60, Transition.EASE_OUT_EXPO);
+
             self.stage.move(energyBarDrawable, barOut, function () {
                 self.stage.remove(energyBarDrawable);
             });
@@ -362,4 +303,5 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView);
+})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectView, ObstaclesView, OdometerView, ScoreView,
+    CanvasCollisionDetector);
