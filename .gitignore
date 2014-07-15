@@ -45,3 +45,4 @@ www-built
 www-ghdeploy
 www/js/lib
 node_modules
+www/sandbox*
