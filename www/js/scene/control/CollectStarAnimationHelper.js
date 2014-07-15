@@ -1,7 +1,7 @@
-var CollectStarAnimator = (function () {
+var CollectStarAnimationHelper = (function () {
     "use strict";
 
-    function CollectStarAnimator(stage, shipDrawable, initialLives) {
+    function CollectStarAnimationHelper(stage, shipDrawable, initialLives) {
         this.stage = stage;
         this.shipDrawable = shipDrawable;
         this.initialLives = initialLives;
@@ -9,7 +9,7 @@ var CollectStarAnimator = (function () {
         this.collectSprite = this.stage.getSprite('collect-star-anim/collect_star', 30, false);
     }
 
-    CollectStarAnimator.prototype.animate = function (lives) {
+    CollectStarAnimationHelper.prototype.animate = function (lives) {
         var self = this;
         this.stage.animate(this.shipDrawable, this.collectSprite, setRightShipImgAfterAnimation);
 
@@ -24,5 +24,5 @@ var CollectStarAnimator = (function () {
         }
     };
 
-    return CollectStarAnimator;
+    return CollectStarAnimationHelper;
 })();

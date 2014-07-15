@@ -1,4 +1,4 @@
-var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimator) {
+var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimationHelper) {
     "use strict";
 
     function PlayGame(stage, sceneStorage, gameLoop, gameController) {
@@ -35,7 +35,7 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
         var points = 0; //part of global game state
 
         var scoreDisplay = new Odometer(this.stage, countDrawables);
-        var collectAnimator = new CollectStarAnimator(this.stage, shipDrawable, initialLives);
+        var collectAnimator = new CollectStarAnimationHelper(this.stage, shipDrawable, initialLives);
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -384,4 +384,4 @@ var PlayGame = (function (Transition, ScreenShaker, LevelGenerator, Odometer, Co
     };
 
     return PlayGame;
-})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimator);
+})(Transition, ScreenShaker, LevelGenerator, Odometer, CollectStarAnimationHelper);
