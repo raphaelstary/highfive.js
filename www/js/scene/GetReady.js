@@ -7,7 +7,7 @@ var GetReady = (function (Transition) {
 
     GetReady.prototype.show = function (nextScene) {
         var self = this;
-        var readyDrawable = self.stage.getDrawable(-160, 480 / 3, 'ready-anim/get_ready_0010');
+        var readyDrawable = self.stage.getDrawable(-160, 480 / 3, 'getready');
 
         var readyPath = self.stage.getPath(-160, 480 / 3, 320 + 160, 480 / 3, 90, Transition.EASE_OUT_IN_SIN);
 
