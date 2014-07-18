@@ -26,8 +26,8 @@ var GameWorld = (function () {
         this.initialLives = this.lives;
         this.points = 0; //part of global game state
 
-        this.shieldsGetHitSprite = stage.getSprite('shiels-hit-anim/shields_hit', 10, false); //TODO change sprite name
-        this.elemHitsShieldsSprite = stage.getSprite('shield-hit-anim/shield_hit', 12, false);
+        this.shieldsGetHitSprite = stage.getSprite('shields-get-hit-anim/shields_get_hit', 10, false);
+        this.elemHitsShieldsSprite = stage.getSprite('object-destroyed-anim/object_destroyed', 12, false);
 
         this.shipHullHitSprite = stage.getSprite('ship-hit-anim/ship_hit', 30, false);
         this.dumpLifeSprite = stage.getSprite('lost-life-anim/lost_life', 20, false);
