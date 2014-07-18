@@ -76,7 +76,8 @@ var App = (function (require) {
         var sceneStorage = {};
 
         var intro = new require.Intro(stage, sceneStorage, this.gameLoop);
-        var preGame = new require.PreGame(stage, sceneStorage, this.tapController, new require.FullScreenController(this.screen));
+        var preGame = new require.PreGame(stage, sceneStorage, this.tapController,
+            new require.FullScreenController(this.screen), messages);
         var startingPosition = new require.StartingPosition(stage, sceneStorage);
 //        var tutorial = new require.Tutorial(stage, this.tapController, messages);
         var getReady = new require.GetReady(stage);

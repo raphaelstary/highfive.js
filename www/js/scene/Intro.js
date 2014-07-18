@@ -35,7 +35,7 @@ var Intro = (function (Transition) {
         var presentsDrawable = this.stage.getDrawable(x, y, 'presents', 2);
         var presentsPath = this.stage.getPath(x, y + 100, x, 30, 120, Transition.EASE_OUT_IN_SIN);
 
-        var logoYEnd = 480 / 6;
+        var logoYEnd = 480 / 32 * 7;
         var logoDrawable = this.stage.animateFresh(x, y, 'logo-anim/logo', 44);
         var logoInPath = this.stage.getPath(x, y, x, logoYEnd, 120, Transition.EASE_OUT_QUAD);
 

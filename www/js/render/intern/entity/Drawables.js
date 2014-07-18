@@ -7,8 +7,8 @@ var Drawables = (function (Drawable, CanvasText) {
         return new Drawable(imgPathName + seed, x, y, subImage, null, zIndex);
     }
 
-    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation) {
-        var txt = new CanvasText(msg, size, fontFamily, color, rotation, 1);
+    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha) {
+        var txt = new CanvasText(msg, size, fontFamily, color, rotation, alpha);
 
         return new Drawable(generateHash(msg) + seed, x, y, null, txt, zIndex);
     }

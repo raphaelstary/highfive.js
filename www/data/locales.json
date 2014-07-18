@@ -1,7 +1,8 @@
 {
     "en": {
         "tutorial": {
-            "touch_and_hold": "touch & hold anywhere to raise shields",
+            "touch_and_hold": "touch & hold anywhere",
+            "to_raise_shields": "to raise shields",
             "destroy_asteroids": "destroy asteroids with your shields",
             "drain_energy": "shields consume energy",
             "no_energy": "no energy, no shields",
@@ -25,6 +26,10 @@
         "game_over": {
             "score": "score",
             "best": "best"
+        },
+        "pre_game": {
+            "credits": "credits",
+            "more_games": "more games"
         }
     }
 }

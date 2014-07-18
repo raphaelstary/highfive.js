@@ -29,11 +29,16 @@ var Renderer = (function () {
     };
 
     Renderer.prototype.remove = function (drawable) {
-        delete this.drawableDict[drawable.zIndex][drawable.id];
+        if (drawable.txt) {
+            delete this.drawableTxtDict[drawable.id];
+        } else {
+            delete this.drawableDict[drawable.zIndex][drawable.id];
+        }
     };
 
     Renderer.prototype.has = function (drawable) {
-        return this.drawableDict[drawable.zIndex][drawable.id] !== undefined;
+        return this.drawableDict[drawable.zIndex][drawable.id] !== undefined ||
+            this.drawableTxtDict[drawable.id];
     };
 
     Renderer.prototype.draw = function () {
