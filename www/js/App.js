@@ -21,7 +21,8 @@ var App = (function (require) {
         var resourceLoader = new require.ResourceLoader(),
             atlas = resourceLoader.addImage('gfx/atlas.png'),
             atlasInfo = resourceLoader.addJSON('data/atlas.json'),
-            font = resourceLoader.addFont('data/kenpixel_blocks.woff'),
+            fontBlock = resourceLoader.addFont('data/kenpixel_blocks.woff'),
+            font = resourceLoader.addFont('data/kenpixel.woff'),
             locales = resourceLoader.addJSON('data/locales.json'),
             initialScreen = new require.SimpleLoadingScreen(this.screenCtx);
 
@@ -35,7 +36,7 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, font, locales);
+            var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, font, fontBlock, locales);
             self._initScenes(sceneStuff.stage, sceneStuff.messages);
             self._doThePlay();
         };
@@ -43,8 +44,11 @@ var App = (function (require) {
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, font, locales) {
-        require.addFontToDOM('KenPixelBlocks', require.URL.createObjectURL(font.blob));
+    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, font, fontBlock, locales) {
+        require.addFontToDOM([
+            {name: 'KenPixel', url: require.URL.createObjectURL(font.blob)},
+            {name: 'KenPixelBlocks', url: require.URL.createObjectURL(fontBlock.blob)}
+        ]);
 
         var atlasMapper = new require.AtlasMapper(1); // 1px is 1 tile length
         atlasMapper.init(atlasInfo, windowWidth);
