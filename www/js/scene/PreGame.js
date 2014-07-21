@@ -1,4 +1,4 @@
-var PreGame = (function (Transition) {
+var PreGame = (function (Transition, Credits) {
     "use strict";
 
     function PreGame(stage, sceneStorage, tapController, fullScreen, messages) {
@@ -43,14 +43,39 @@ var PreGame = (function (Transition) {
                 self.messages.get('pre_game', 'credits'), 15, 'KenPixel', '#fff', 0, 0.5);
             self.stage.draw(credits);
 
-            self.tapController.add(touchable, function () {
+            var creditsTouchable = {id: 'credits_tap', x: lightFrame.getCornerX(), y: lightFrame.getCornerY(),
+                width: lightFrame.getWidth(), height: lightFrame.getHeight()};
+            self.tapController.add(creditsTouchable, function () {
+                var creditsScreen = new Credits(self.stage, self.tapController, self.messages);
+                var allTouchables = [touchable];
+                allTouchables.forEach(self.tapController.remove.bind(self.tapController));
+                var touchablesDict = {play: {touchable: touchable, fn: startPlaying}};
+
+                function continuePreGame() {
+                    for (var key in touchablesDict) {
+                        if (touchablesDict.hasOwnProperty(key)) {
+                            var current = touchablesDict[key];
+                            self.tapController.add(current.touchable, current.fn);
+                        }
+                    }
+                    doTheShields = true;
+                }
+                doTheShields = false;
+                creditsScreen.show(continuePreGame,
+                    [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
+                        shipDrawable, fireDrawable]);
+            });
+
+            function startPlaying() {
                 pressPlay.img = self.stage.getSubImage('play-active');
 
                 setTimeout(function () {
                     self.fullScreen.request();
                     endOfScreen();
                 }, 300);
-            });
+            }
+
+            self.tapController.add(touchable, startPlaying);
 
         });
         self.stage.move(fireDrawable, shipInPath, function () {
@@ -117,4 +142,4 @@ var PreGame = (function (Transition) {
     };
 
     return PreGame;
-})(Transition);
+})(Transition, Credits);

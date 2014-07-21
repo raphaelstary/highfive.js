@@ -10,7 +10,7 @@ var addFontToDOM = (function (document) {
             styleText += "@font-face{";
             styleText += "font-family:" + font.name + ";";
             styleText += "src:url(" + font.url + ")format('woff');";
-            styleText += "};";
+            styleText += "} ";
         });
 
         styleNode.innerHTML = styleText;

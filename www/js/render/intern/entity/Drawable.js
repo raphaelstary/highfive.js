@@ -26,5 +26,13 @@ var Drawable = (function () {
         return this.y + this.img.height / 2;
     };
 
+    Drawable.prototype.getWidth = function () {
+        return this.img.width;
+    };
+
+    Drawable.prototype.getHeight = function () {
+        return this.img.height;
+    };
+
     return Drawable;
 })();
