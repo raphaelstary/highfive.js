@@ -14,7 +14,7 @@ var Credits = (function (Transition) {
         function fadeOut(drawables) {
             drawables.forEach(function (drawable) {
                 var path = self.stage.getPath(drawable.x, drawable.y, drawable.x - length, drawable.y, 60,
-                    Transition.EASE_IN_QUAD);
+                    Transition.EASE_IN_OUT_QUAD);
                 self.stage.move(drawable, path);
             });
         }
@@ -22,7 +22,7 @@ var Credits = (function (Transition) {
         function fadeIn(drawables) {
             drawables.forEach(function (drawable) {
                 var path = self.stage.getPath(drawable.x, drawable.y, drawable.x + length, drawable.y, 60,
-                    Transition.EASE_OUT_QUAD);
+                    Transition.EASE_IN_OUT_QUAD);
                 self.stage.move(drawable, path);
             });
         }
@@ -67,8 +67,12 @@ var Credits = (function (Transition) {
 
         function endScene() {
             fadeIn(creditsDrawables);
+            function removeDrawables() {
+                creditsDrawables.forEach(self.stage.remove.bind(self.stage));
+            }
             fadeIn(previousScenesDrawables);
             self.next(nextScene);
+            setTimeout(removeDrawables, 2000);
         }
 
     };
