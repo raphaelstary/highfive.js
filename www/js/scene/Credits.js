@@ -1,4 +1,4 @@
-var Credits = (function (Transition) {
+var Credits = (function (Transition, window) {
     "use strict";
 
     function Credits(stage, tapController, messages) {
@@ -58,14 +58,40 @@ var Credits = (function (Transition) {
             return [back, a_txt, game_txt, by_txt, letsplayIO, fb, twitter, graphics_txt, kenney];
         }
 
+        function registerTapListener() {
+            var twitterTouchable = {id: 'twitter_letsplayIO_tap', x: 320 / 2 + 18 - 20, y: 480 / 2 + 40 - 20,
+                width: 40, height: 40};
+            self.tapController.add(twitterTouchable, function () {
+                window.open('https://twitter.com/letsplayIO', '_blank');
+            });
+            var fbTouchable = {id: 'fb_letsplayIO_tap', x: 320 / 2 - 18 - 20, y: 480 / 2 + 40 - 20,
+                width: 40, height: 40};
+            self.tapController.add(fbTouchable, function () {
+                window.open('https://www.facebook.com/letsplayIO', '_blank');
+            });
+            var letsplayIOSiteTouchable = {id: 'letsplayIO_site_tap', x: 320 / 2 - 100, y: 480 / 2 - 20,
+                width: 200, height: 40};
+            self.tapController.add(letsplayIOSiteTouchable, function () {
+                window.open('http://letsplay.io/', '_blank');
+            });
+            return [twitterTouchable, fbTouchable, letsplayIOSiteTouchable];
+        }
+
+        function unRegisterTapListener(touchables) {
+            touchables.forEach(self.tapController.remove.bind(self.tapController));
+        }
+
         fadeOut(previousScenesDrawables);
         var creditsDrawables = drawCreditsScreen();
         fadeOut(creditsDrawables);
+        var touchables = registerTapListener();
 
         var backTouchable = {id: 'back_tap', x: 0, y: 0, width: 320 / 4, height: 480 / 4};
         self.tapController.add(backTouchable, endScene);
+        touchables.push(backTouchable);
 
         function endScene() {
+            unRegisterTapListener(touchables);
             fadeIn(creditsDrawables);
             function removeDrawables() {
                 creditsDrawables.forEach(self.stage.remove.bind(self.stage));
@@ -82,4 +108,4 @@ var Credits = (function (Transition) {
     };
 
     return Credits;
-})(Transition);
+})(Transition, window);

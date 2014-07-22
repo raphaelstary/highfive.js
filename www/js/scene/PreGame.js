@@ -22,7 +22,8 @@ var PreGame = (function (Transition, Credits) {
 
         var fireDrawable = self.stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 8);
         var pressPlay = self.stage.getDrawable(320 / 2, 480 / 4 * 3, 'play');
-        var touchable = {id: 'ready_tap', x: 0, y: 0, width: 320, height: 480};
+        var touchable = {id: 'ready_tap', x: pressPlay.getCornerX() - 30, y: pressPlay.getCornerY() - 30,
+            width: pressPlay.getWidth() + 60, height: pressPlay.getHeight() + 60};
 
         var shareFb, shareTw, credits, settings, lightFrame;
 
@@ -45,26 +46,30 @@ var PreGame = (function (Transition, Credits) {
 
             var creditsTouchable = {id: 'credits_tap', x: lightFrame.getCornerX(), y: lightFrame.getCornerY(),
                 width: lightFrame.getWidth(), height: lightFrame.getHeight()};
-            self.tapController.add(creditsTouchable, function () {
-                var creditsScreen = new Credits(self.stage, self.tapController, self.messages);
-                var allTouchables = [touchable];
-                allTouchables.forEach(self.tapController.remove.bind(self.tapController));
-                var touchablesDict = {play: {touchable: touchable, fn: startPlaying}};
 
+            function goToCreditsScreen() {
+                var creditsScreen = new Credits(self.stage, self.tapController, self.messages);
+                var allTouchables = [
+                    {touchable: touchable, fn: startPlaying},
+                    {touchable: creditsTouchable, fn: goToCreditsScreen}
+                ];
+                allTouchables.forEach(function (wrapper) {
+                    self.tapController.remove(wrapper.touchable);
+                });
                 function continuePreGame() {
-                    for (var key in touchablesDict) {
-                        if (touchablesDict.hasOwnProperty(key)) {
-                            var current = touchablesDict[key];
-                            self.tapController.add(current.touchable, current.fn);
-                        }
-                    }
+                    allTouchables.forEach(function (wrapper) {
+                        self.tapController.add(wrapper.touchable, wrapper.fn);
+                    });
                     doTheShields = true;
                 }
+
                 doTheShields = false;
                 creditsScreen.show(continuePreGame,
                     [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
                         shipDrawable, fireDrawable]);
-            });
+            }
+
+            self.tapController.add(creditsTouchable, goToCreditsScreen);
 
             function startPlaying() {
                 pressPlay.img = self.stage.getSubImage('play-active');
