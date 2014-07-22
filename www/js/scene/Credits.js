@@ -98,7 +98,7 @@ var Credits = (function (Transition, window) {
             }
             fadeIn(previousScenesDrawables);
             self.next(nextScene);
-            setTimeout(removeDrawables, 2000);
+            window.setTimeout(removeDrawables, 2000);
         }
 
     };

@@ -1,4 +1,4 @@
-var PreGame = (function (Transition, Credits) {
+var PreGame = (function (Transition, Credits, window) {
     "use strict";
 
     function PreGame(stage, sceneStorage, tapController, fullScreen, messages) {
@@ -61,6 +61,7 @@ var PreGame = (function (Transition, Credits) {
                         self.tapController.add(wrapper.touchable, wrapper.fn);
                     });
                     doTheShields = true;
+                    shieldsAnimation();
                 }
 
                 doTheShields = false;
@@ -74,7 +75,7 @@ var PreGame = (function (Transition, Credits) {
             function startPlaying() {
                 pressPlay.img = self.stage.getSubImage('play-active');
 
-                setTimeout(function () {
+                window.setTimeout(function () {
                     self.fullScreen.request();
                     endOfScreen();
                 }, 300);
@@ -147,4 +148,4 @@ var PreGame = (function (Transition, Credits) {
     };
 
     return PreGame;
-})(Transition, Credits);
+})(Transition, Credits, window);
