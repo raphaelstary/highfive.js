@@ -22,10 +22,25 @@ var PreGame = (function (Transition, Credits, window) {
 
         var fireDrawable = self.stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 8);
         var pressPlay = self.stage.getDrawable(320 / 2, 480 / 4 * 3, 'play');
-        var touchable = {id: 'ready_tap', x: pressPlay.getCornerX() - 30, y: pressPlay.getCornerY() - 30,
+        var playTouchable = {id: 'ready_tap', x: pressPlay.getCornerX() - 30, y: pressPlay.getCornerY() - 30,
             width: pressPlay.getWidth() + 60, height: pressPlay.getHeight() + 60};
 
         var shareFb, shareTw, credits, settings, lightFrame;
+        var allTouchables = [
+            {touchable: playTouchable, fn: startPlaying}
+        ];
+
+        function registerTapListener() {
+            allTouchables.forEach(function (wrapper) {
+                self.tapController.add(wrapper.touchable, wrapper.fn);
+            });
+        }
+
+        function unRegisterTapListener() {
+            allTouchables.forEach(function (wrapper) {
+                self.tapController.remove(wrapper.touchable);
+            });
+        }
 
         self.stage.move(shipDrawable, shipInPath, function () {
             shipDrawable.y = shipEndY;
@@ -47,23 +62,19 @@ var PreGame = (function (Transition, Credits, window) {
             var creditsTouchable = {id: 'credits_tap', x: lightFrame.getCornerX(), y: lightFrame.getCornerY(),
                 width: lightFrame.getWidth(), height: lightFrame.getHeight()};
 
+            allTouchables.push({touchable: creditsTouchable, fn: goToCreditsScreen});
+
             function goToCreditsScreen() {
                 credits.txt.alpha = 1;
                 window.setTimeout(function () {
                     credits.txt.alpha = 0.5;
                 }, 1500);
                 var creditsScreen = new Credits(self.stage, self.tapController, self.messages);
-                var allTouchables = [
-                    {touchable: touchable, fn: startPlaying},
-                    {touchable: creditsTouchable, fn: goToCreditsScreen}
-                ];
-                allTouchables.forEach(function (wrapper) {
-                    self.tapController.remove(wrapper.touchable);
-                });
+
+                unRegisterTapListener();
+
                 function continuePreGame() {
-                    allTouchables.forEach(function (wrapper) {
-                        self.tapController.add(wrapper.touchable, wrapper.fn);
-                    });
+                    registerTapListener();
                     doTheShields = true;
                     shieldsAnimation();
                 }
@@ -74,23 +85,22 @@ var PreGame = (function (Transition, Credits, window) {
                         shipDrawable, fireDrawable]);
             }
 
-            self.tapController.add(creditsTouchable, goToCreditsScreen);
-
-            function startPlaying() {
-                pressPlay.img = self.stage.getSubImage('play-active');
-
-                window.setTimeout(function () {
-                    self.fullScreen.request();
-                    endOfScreen();
-                }, 300);
-            }
-
-            self.tapController.add(touchable, startPlaying);
+            registerTapListener();
 
         });
+
         self.stage.move(fireDrawable, shipInPath, function () {
             fireDrawable.y = shipEndY;
         });
+
+        function startPlaying() {
+            pressPlay.img = self.stage.getSubImage('play-active');
+
+            window.setTimeout(function () {
+                self.fullScreen.request();
+                endOfScreen();
+            }, 300);
+        }
 
         var shieldsDownSprite = self.stage.getSprite('shields-down-anim/shields_down', 6, false);
         var shieldsUpSprite = self.stage.getSprite('shields-up-anim/shields_up', 6, false);
@@ -118,7 +128,7 @@ var PreGame = (function (Transition, Credits, window) {
         function endOfScreen() {
             [shareFb, shareTw, credits, settings, lightFrame, pressPlay].forEach(self.stage.remove.bind(self.stage));
             // end event
-            self.tapController.remove(touchable);
+            unRegisterTapListener();
 
             var logoOut = self.stage.getPath(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
             self.stage.move(logoDrawable, logoOut, function () {
