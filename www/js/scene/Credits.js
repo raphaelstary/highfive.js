@@ -26,11 +26,11 @@ var Credits = (function (Transition, window) {
                 self.stage.move(drawable, path);
             });
         }
-
+        var back;
         function drawCreditsScreen() {
             var offSet = length;
             var topRaster = 480 / 100 * 8;
-            var back = self.stage.drawFresh(320 / 10 + offSet, topRaster, 'back');
+            back = self.stage.drawFresh(320 / 10 + offSet, topRaster, 'back');
 
             var KEN_PIXEL_BLOCKS = 'KenPixelBlocks';
             var LIGHT_GREY = '#c4c4c4';
@@ -91,14 +91,18 @@ var Credits = (function (Transition, window) {
         touchables.push(backTouchable);
 
         function endScene() {
+            back.img = self.stage.getSubImage('back-active');
             unRegisterTapListener(touchables);
             fadeIn(creditsDrawables);
             function removeDrawables() {
                 creditsDrawables.forEach(self.stage.remove.bind(self.stage));
             }
             fadeIn(previousScenesDrawables);
-            self.next(nextScene);
-            window.setTimeout(removeDrawables, 2000);
+
+            window.setTimeout(function () {
+                self.next(nextScene);
+                removeDrawables();
+            }, 1500);
         }
 
     };

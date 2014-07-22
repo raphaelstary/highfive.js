@@ -48,6 +48,10 @@ var PreGame = (function (Transition, Credits, window) {
                 width: lightFrame.getWidth(), height: lightFrame.getHeight()};
 
             function goToCreditsScreen() {
+                credits.txt.alpha = 1;
+                window.setTimeout(function () {
+                    credits.txt.alpha = 0.5;
+                }, 1500);
                 var creditsScreen = new Credits(self.stage, self.tapController, self.messages);
                 var allTouchables = [
                     {touchable: touchable, fn: startPlaying},
