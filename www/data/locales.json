@@ -10,7 +10,8 @@
             "nice": "nice",
             "good": "good job",
             "well_done": "well done",
-            "awesome": "awesome"
+            "awesome": "awesome",
+            "skip": "skip tutorial >"
         },
         "credits": {
             "a": "a",

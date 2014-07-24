@@ -16,6 +16,9 @@ var StartingPosition = (function (Transition) {
         if (!this.sceneStorage.fire) {
             this.sceneStorage.fire = this.stage.animateFresh(320 / 2, 400, 'fire-anim/fire', 8);
         }
+        if (!this.sceneStorage.backGround) {
+            this.sceneStorage.backGround = this.stage.drawFresh(320 / 2, 480 / 2, 'background', 0);
+        }
     };
 
     StartingPosition.prototype.show = function (nextScene) {

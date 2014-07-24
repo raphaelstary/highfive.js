@@ -82,7 +82,7 @@ var Intro = (function (Transition) {
                 self.stage.moveLater({item: logoDrawable, path: logoInPath, ready: function () {
 
                     self.gameLoop.remove('z_parallax');
-                    self.next(nextScene, logoDrawable, speedStripes);
+                    self.next(nextScene, logoDrawable, speedStripes, scrollingBackGround);
 
                 }}, 90, function () {
                     var delay = 30;
@@ -108,9 +108,10 @@ var Intro = (function (Transition) {
         }
     };
 
-    Intro.prototype.next = function (nextScene, logoDrawable, speedStripes) {
+    Intro.prototype.next = function (nextScene, logoDrawable, speedStripes, backGround) {
         this.sceneStorage.logo = logoDrawable;
         this.sceneStorage.speedStripes = speedStripes;
+        this.sceneStorage.backGround = backGround;
 
         nextScene();
     };

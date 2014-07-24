@@ -79,7 +79,8 @@ var App = (function (require) {
         var preGame = new require.PreGame(stage, sceneStorage, this.tapController,
             new require.FullScreenController(this.screen), messages);
         var startingPosition = new require.StartingPosition(stage, sceneStorage);
-//        var tutorial = new require.Tutorial(stage, this.tapController, messages);
+        var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
+            messages, this.tapController);
         var getReady = new require.GetReady(stage);
         var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController);
         var killScreen = new require.KillScreen(stage, sceneStorage);
@@ -90,7 +91,7 @@ var App = (function (require) {
         sceneManager.add(intro.show.bind(intro), true);
         sceneManager.add(preGame.show.bind(preGame), true);
         sceneManager.add(startingPosition.show.bind(startingPosition));
-//        sceneManager.add(tutorial.show.bind(tutorial), true);
+        sceneManager.add(inGameTutorial.show.bind(inGameTutorial), true);
         sceneManager.add(getReady.show.bind(getReady));
         sceneManager.add(playGame.show.bind(playGame));
         sceneManager.add(killScreen.show.bind(killScreen));
@@ -118,6 +119,7 @@ var App = (function (require) {
     PreGame: PreGame,
     StartingPosition: StartingPosition,
     Tutorial: Tutorial,
+    InGameTutorial: InGameTutorial,
     GetReady: GetReady,
     PlayGame: PlayGame,
     KillScreen: KillScreen,
