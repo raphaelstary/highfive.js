@@ -56,9 +56,9 @@ var InGameTutorial = (function (require) {
         var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
             shieldsDownSprite, energyBarDrawable);
 
-        var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
-        this.gameController.add(touchable,
-            energyStates.drainEnergy.bind(energyStates), energyStates.loadEnergy.bind(energyStates));
+        var touchable = {id: 'shields_up_tutorial', x: 0, y: 0, width: 320, height: 480};
+
+        registerGameController();
 
         function removeEveryThing() {
             removeSkipStuff();
@@ -138,18 +138,19 @@ var InGameTutorial = (function (require) {
                 self.stage.remove(asteroid); //double remove just in case
         }
 
-        var drainTxt, shieldsEnergyDrawable, energyTxt, okButton, okTouchable;
+        var drainTxt, shieldsEnergyDrawable, energyTxt, okButton, okTouchable, dialogBack;
         function showEnergyTxtSubScene() {
             function createEnergyTxt() {
-                drainTxt = self.stage.getDrawableText(320 / 2, 480 / 4, 3,
+                dialogBack = self.stage.drawFresh(320 / 2, 480 / 2, 'background', 3);
+                drainTxt = self.stage.getDrawableText(320 / 2, 480 / 3, 3,
                     self.messages.get('tutorial', 'drain_energy'), 15, KEN_PIXEL, white);
                 self.stage.draw(drainTxt);
-                shieldsEnergyDrawable = self.stage.animateFresh(320 / 2, 480 / 4 + 70, 'shields_energy-anim/shields_energy',
-                    60);
-                energyTxt = self.stage.getDrawableText(320 / 2, 480 / 2 + 25, 3,
+                shieldsEnergyDrawable = self.stage.animateFresh(320 / 2, 480 / 2,
+                    'shields_energy-anim/shields_energy', 60);
+                energyTxt = self.stage.getDrawableText(320 / 2, 480 / 3 * 2, 3,
                     self.messages.get('tutorial', 'no_energy'), 15, KEN_PIXEL, white);
                 self.stage.draw(energyTxt);
-                okButton = self.stage.drawFresh(320 / 2, 480 / 3 * 2, 'ok');
+                okButton = self.stage.drawFresh(320 / 2, 480 / 16 * 13, 'ok');
                 okTouchable = {id: 'ok_tap', x: okButton.getCornerX(), y: okButton.getCornerY(),
                     width: okButton.getWidth(), height: okButton.getHeight()};
 
@@ -158,11 +159,12 @@ var InGameTutorial = (function (require) {
                     okButton.img = self.stage.getSubImage('ok-active');
                     require.window.setTimeout(function () {
                         removeEnergyStuff();
+                        registerGameController();
                         collectStarsSubScene();
                     }, 1500);
                 });
             }
-
+            unregisterGameController();
             createEnergyTxt();
         }
 
@@ -177,6 +179,8 @@ var InGameTutorial = (function (require) {
                 self.stage.remove(okButton);
             if (okTouchable)
                 self.tapController.remove(okTouchable);
+            if (dialogBack)
+                self.stage.remove(dialogBack);
         }
 
         var starTxts, star;
@@ -184,7 +188,7 @@ var InGameTutorial = (function (require) {
             function createFirstStar() {
                 var starNum = range(1, 4);
                 var starPath = 'star' + starNum + '-anim/star' + starNum;
-                var star = self.stage.animateFresh(320 / 3, -108 / 2, starPath, 30);
+                var star = self.stage.animateFresh(320 / 8 * 3, -108 / 2, starPath, 30);
                 trackedStars[star.id] = star;
                 self.stage.draw(star);
 
@@ -228,13 +232,22 @@ var InGameTutorial = (function (require) {
             self.gameLoop.remove('star_movement');
         }
 
+        function registerGameController() {
+            self.gameController.add(touchable, energyStates.drainEnergy.bind(energyStates),
+                energyStates.loadEnergy.bind(energyStates));
+        }
+
+        function unregisterGameController() {
+            self.gameController.remove(touchable);
+        }
+
         //end scene todo move to own scene
         function endGame() {
 
             self.gameLoop.remove('shake_tutorial');
             self.gameLoop.remove('collisions_tutorial');
 
-            self.gameController.remove(touchable);
+            unregisterGameController();
 
             self.next(nextScene);
         }
