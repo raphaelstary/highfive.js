@@ -137,8 +137,7 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         this.animations.update();
     };
 
-    StageDirector.prototype.resize = function (width, height, factorWidth) {
-        this.atlasMapper.resize(width, height, factorWidth);
+    StageDirector.prototype.resize = function (width, height) {
         this.renderer.resize(width, height);
     };
 

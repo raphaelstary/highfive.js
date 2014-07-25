@@ -58,10 +58,10 @@ var Renderer = (function () {
 
                     self.ctx.drawImage(self.atlas, elem.img.x, elem.img.y,
                         elem.img.width, elem.img.height,
-                        self._getImgRenderXPoint(elem.x, elem.img),
-                        self._getImgRenderYPoint(elem.y, elem.img),
-                        self._getImgRenderWidth(elem.img),
-                        self._getImgRenderHeight(elem.img));
+                        elem.x + elem.img.offSetX,
+                        elem.y + elem.img.offSetY,
+                        elem.img.trimmedTileWidth,
+                        elem.img.trimmedTileHeight);
                 }
             }
         }
@@ -117,25 +117,6 @@ var Renderer = (function () {
             }
             context.fillText(line, x, y);
         }
-    };
-
-    var baseTileWidth = 1,
-        tileOffSet = Math.floor(baseTileWidth * 0.5);
-
-    Renderer.prototype._getImgRenderXPoint = function (x, subImage) {
-        return x * baseTileWidth + (tileOffSet * subImage.tileWidth) + subImage.offSetX;
-    };
-
-    Renderer.prototype._getImgRenderYPoint = function (y, subImage) {
-        return y * baseTileWidth + (tileOffSet * subImage.tileHeight) + subImage.offSetY;
-    };
-
-    Renderer.prototype._getImgRenderWidth = function (subImage) {
-        return Math.floor(subImage.trimmedTileWidth * baseTileWidth);
-    };
-
-    Renderer.prototype._getImgRenderHeight = function (subImage) {
-        return Math.floor(subImage.trimmedTileHeight * baseTileWidth);
     };
 
     return Renderer;

@@ -36,7 +36,7 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, windowWidth, font, fontBlock, locales);
+            var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, font, fontBlock, locales);
             self._initScenes(sceneStuff.stage, sceneStuff.messages);
             self._doThePlay();
         };
@@ -44,14 +44,14 @@ var App = (function (require) {
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, windowWidth, font, fontBlock, locales) {
+    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, font, fontBlock, locales) {
         require.addFontToDOM([
             {name: 'KenPixel', url: require.URL.createObjectURL(font.blob)},
             {name: 'KenPixelBlocks', url: require.URL.createObjectURL(fontBlock.blob)}
         ]);
 
-        var atlasMapper = new require.AtlasMapper(1); // 1px is 1 tile length
-        atlasMapper.init(atlasInfo, windowWidth);
+        var atlasMapper = new require.AtlasMapper();
+        atlasMapper.init(atlasInfo);
 
         var stage = new require.StageDirector(atlasMapper, new require.MotionDirector(new require.MotionStudio()),
             new require.AnimationDirector(new require.AnimationStudio()), new require.Renderer(this.screen, this.screenCtx, atlas));
