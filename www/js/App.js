@@ -86,7 +86,7 @@ var App = (function (require) {
         var killScreen = new require.KillScreen(stage, sceneStorage);
         var postGame = new require.PostGame(stage, sceneStorage, this.tapController);
 
-        var sceneManager = this.sceneManager = new SceneManager();
+        var sceneManager = this.sceneManager = new require.SceneManager();
 
         sceneManager.add(intro.show.bind(intro), true);
         sceneManager.add(preGame.show.bind(preGame), true);

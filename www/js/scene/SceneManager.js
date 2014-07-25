@@ -24,7 +24,7 @@ var SceneManager = (function () {
             this.temp.push(scene);
         }
 
-        scene.sceneFn(this.next.bind(this));
+        scene.sceneFn(this.next.bind(this), window.innerWidth, window.innerHeight);
     };
 
     SceneManager.prototype.rewind = function () {

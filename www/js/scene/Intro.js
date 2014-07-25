@@ -11,9 +11,7 @@ var Intro = (function (Transition) {
         return Math.floor(domain / numerator * (denominator || 1));
     }
 
-    Intro.prototype.show = function (nextScene) {
-        var screenWidth = 320;
-        var screenHeight = 480;
+    Intro.prototype.show = function (nextScene, screenWidth, screenHeight) {
 
         var firstBg = this.stage.drawFresh(calcScreenConst(screenWidth, 2), calcScreenConst(screenHeight, 2),
             'background', 0);
