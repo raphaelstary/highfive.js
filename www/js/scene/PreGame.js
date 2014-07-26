@@ -1,4 +1,4 @@
-var PreGame = (function (Transition, Credits, window) {
+var PreGame = (function (Transition, Credits, window, calcScreenConst) {
     "use strict";
 
     function PreGame(stage, sceneStorage, tapController, fullScreen, messages) {
@@ -9,21 +9,23 @@ var PreGame = (function (Transition, Credits, window) {
         this.messages = messages;
     }
 
-    PreGame.prototype.show = function (nextScene) {
+    PreGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var logoDrawable = this.sceneStorage.logo;
         delete this.sceneStorage.logo;
 
         var self = this;
 
-        var shipStartY = 600;
-        var shipEndY = 480 / 2;
-        var shipDrawable = self.stage.drawFresh(320 / 2, shipStartY, 'ship');
-        var shipInPath = self.stage.getPath(320 / 2, shipStartY, 320 / 2, shipEndY, 60, Transition.EASE_IN_QUAD);
+        var shipStartY = calcScreenConst(self.stage.getSubImage('ship').height, 2) + screenHeight;
+        var shipEndY = calcScreenConst(screenHeight, 2);
+        var shipDrawable = self.stage.drawFresh(calcScreenConst(screenWidth, 2), shipStartY, 'ship');
+        var screenHalf = calcScreenConst(screenWidth, 2);
+        var shipInPath = self.stage.getPath(screenHalf, shipStartY, screenHalf, shipEndY, 60,
+            Transition.EASE_IN_QUAD);
 
-        var fireDrawable = self.stage.animateFresh(320 / 2, shipStartY, 'fire-anim/fire', 8);
-        var pressPlay = self.stage.getDrawable(320 / 2, 480 / 4 * 3, 'play');
-        var playTouchable = {id: 'ready_tap', x: pressPlay.getCornerX() - 30, y: pressPlay.getCornerY() - 30,
-            width: pressPlay.getWidth() + 60, height: pressPlay.getHeight() + 60};
+        var fireDrawable = self.stage.animateFresh(screenHalf, shipStartY, 'fire-anim/fire', 8);
+        var pressPlay = self.stage.getDrawable(screenHalf, calcScreenConst(screenHeight, 4, 3), 'play');
+        var playTouchable = {id: 'ready_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
+            width: pressPlay.getWidth(), height: pressPlay.getHeight()};
 
         var shareFb, shareTw, credits, settings, lightFrame;
         var allTouchables = [
@@ -46,17 +48,19 @@ var PreGame = (function (Transition, Credits, window) {
             shipDrawable.y = shipEndY;
             shieldsAnimation();
             self.stage.draw(pressPlay);
-            var topRaster = 480 / 100 * 8;
-            settings = self.stage.drawFresh(21, topRaster, 'settings');
-            var fivePerCent = 320 / 100 * 5;
-            var imgHalf = 36 / 2;
-            var padding = 43;
-            shareFb = self.stage.drawFresh(320 - fivePerCent - imgHalf - padding, topRaster, 'share-fb');
-            shareTw = self.stage.drawFresh(320 - fivePerCent - imgHalf, topRaster, 'share-twitter');
-            var bottomRaster = 480 / 100 * 94;
-            lightFrame = self.stage.drawFresh(320 / 4 * 3, bottomRaster, 'light-button-frame');
-            credits = self.stage.getDrawableText(320 / 4 * 3, bottomRaster, 3,
-                self.messages.get('pre_game', 'credits'), 15, 'KenPixel', '#fff', 0, 0.5);
+            var topRaster = calcScreenConst(screenHeight, 25, 2);
+            var settingsWidthHalf = calcScreenConst(self.stage.getSubImage('settings').width, 2);
+            settings = self.stage.drawFresh(settingsWidthHalf, topRaster, 'settings');
+            var fivePerCent = calcScreenConst(screenWidth, 20);
+            var imgHalf = calcScreenConst(self.stage.getSubImage('share-fb').width, 2);
+            var padding = self.stage.getSubImage('share-fb').width;
+            shareFb = self.stage.drawFresh(screenWidth - fivePerCent - imgHalf - padding, topRaster, 'share-fb');
+            shareTw = self.stage.drawFresh(screenWidth - fivePerCent - imgHalf, topRaster, 'share-twitter');
+            var bottomRaster = calcScreenConst(screenHeight, 50, 47);
+            var xButton = calcScreenConst(screenWidth, 4, 3);
+            lightFrame = self.stage.drawFresh(xButton, bottomRaster, 'light-button-frame');
+            credits = self.stage.getDrawableText(xButton, bottomRaster, 3, self.messages.get('pre_game', 'credits'), 15,
+                'KenPixel', '#fff', 0, 0.5);
             self.stage.draw(credits);
 
             var creditsTouchable = {id: 'credits_tap', x: lightFrame.getCornerX(), y: lightFrame.getCornerY(),
@@ -82,7 +86,7 @@ var PreGame = (function (Transition, Credits, window) {
                 doTheShields = false;
                 creditsScreen.show(continuePreGame,
                     [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
-                        shipDrawable, fireDrawable]);
+                        shipDrawable, fireDrawable], screenWidth, screenHeight);
             }
 
             registerTapListener();
@@ -104,7 +108,7 @@ var PreGame = (function (Transition, Credits, window) {
 
         var shieldsDownSprite = self.stage.getSprite('shields-down-anim/shields_down', 6, false);
         var shieldsUpSprite = self.stage.getSprite('shields-up-anim/shields_up', 6, false);
-        var shieldsDrawable = self.stage.getDrawable(320 / 2, shipEndY, 'shields');
+        var shieldsDrawable = self.stage.getDrawable(screenHalf, shipEndY, 'shields');
 
         var startTimer = 10;
         var doTheShields = true;
@@ -130,13 +134,14 @@ var PreGame = (function (Transition, Credits, window) {
             // end event
             unRegisterTapListener();
 
-            var logoOut = self.stage.getPath(logoDrawable.x, logoDrawable.y, logoDrawable.x, logoDrawable.y + 480, 30, Transition.EASE_IN_EXPO);
+            var logoOut = self.stage.getPath(logoDrawable.x, logoDrawable.y, logoDrawable.x,
+                    logoDrawable.y + screenHeight, 30, Transition.EASE_IN_EXPO);
             self.stage.move(logoDrawable, logoOut, function () {
                 self.stage.remove(logoDrawable);
             });
 
             var dockShipToGamePosition = self.stage.getPath(shipDrawable.x, shipDrawable.y,
-                shipDrawable.x, 400, 30, Transition.EASE_IN_OUT_EXPO);
+                shipDrawable.x, calcScreenConst(screenHeight, 6, 5), 30, Transition.EASE_IN_OUT_EXPO);
 
             doTheShields = false;
             self.stage.remove(shieldsDrawable);
@@ -162,4 +167,4 @@ var PreGame = (function (Transition, Credits, window) {
     };
 
     return PreGame;
-})(Transition, Credits, window);
+})(Transition, Credits, window, calcScreenConst);
