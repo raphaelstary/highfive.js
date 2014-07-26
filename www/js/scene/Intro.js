@@ -47,11 +47,13 @@ var Intro = (function (Transition) {
 
         var irgendwasLogo = calcScreenConst(screenHeight, 48, 5);
         var letsplayIO = this.stage.getDrawable(x, y + irgendwasLogo, 'letsplayIO', 2);
-        var letsplayIOPath = this.stage.getPath(x, y + irgendwasLogo, x, yEnd - irgendwasLogo, 120, Transition.EASE_OUT_IN_SIN);
+        var letsplayIOPath = this.stage.getPath(x, y + irgendwasLogo, x, yEnd - irgendwasLogo, 120,
+            Transition.EASE_OUT_IN_SIN);
 
         var presentsDrawable = this.stage.getDrawable(x, y, 'presents', 2);
         var irgendwasPresents = irgendwasLogo * 2;
-        var presentsPath = this.stage.getPath(x, y + irgendwasPresents, x, yEnd + irgendwasLogo, 120, Transition.EASE_OUT_IN_SIN);
+        var presentsPath = this.stage.getPath(x, y + irgendwasPresents, x, yEnd + irgendwasLogo, 120,
+            Transition.EASE_OUT_IN_SIN);
 
         var logoYEnd = calcScreenConst(screenHeight, 32, 7);
         var logoDrawable = this.stage.animateFresh(x, y, 'logo-anim/logo', 44);
