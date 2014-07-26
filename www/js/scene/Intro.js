@@ -1,4 +1,4 @@
-var Intro = (function (Transition) {
+var Intro = (function (Transition, calcScreenConst) {
     "use strict";
 
     function Intro(stage, sceneStorage, gameLoop) {
@@ -7,22 +7,20 @@ var Intro = (function (Transition) {
         this.gameLoop = gameLoop;
     }
 
-    function calcScreenConst(domain, numerator, denominator) {
-        return Math.floor(domain / numerator * (denominator || 1));
-    }
-
     Intro.prototype.show = function (nextScene, screenWidth, screenHeight) {
 
-        var firstBg = this.stage.drawFresh(calcScreenConst(screenWidth, 2), calcScreenConst(screenHeight, 2),
+        var screenWidthHalf = calcScreenConst(screenWidth, 2);
+        var screenHeightHalf = calcScreenConst(screenHeight, 2);
+        var firstBg = this.stage.drawFresh(screenWidthHalf, screenHeightHalf,
             'background', 0);
-        var firstBgPath = this.stage.getPath(calcScreenConst(screenWidth, 2), calcScreenConst(screenHeight, 2),
-            calcScreenConst(screenWidth, 2), calcScreenConst(screenHeight, 2) - screenHeight, 120, Transition.LINEAR);
+        var firstBgPath = this.stage.getPath(screenWidthHalf, screenHeightHalf,
+            screenWidthHalf, screenHeightHalf - screenHeight, 120, Transition.LINEAR);
 
-        var scrollingBackGround = this.stage.getDrawable(calcScreenConst(screenWidth, 2),
-                calcScreenConst(screenHeight, 2) + screenHeight, 'background', 0);
-        var scrollingBgPath = this.stage.getPath(calcScreenConst(screenWidth, 2),
-                calcScreenConst(screenHeight, 2) + screenHeight, calcScreenConst(screenWidth, 2),
-            calcScreenConst(screenHeight, 2), 120, Transition.LINEAR);
+        var scrollingBackGround = this.stage.getDrawable(screenWidthHalf,
+                screenHeightHalf + screenHeight, 'background', 0);
+        var scrollingBgPath = this.stage.getPath(screenWidthHalf,
+                screenHeightHalf + screenHeight, screenWidthHalf,
+            screenHeightHalf, 120, Transition.LINEAR);
 
         var self = this;
 
@@ -41,7 +39,7 @@ var Intro = (function (Transition) {
                 speedY - calcScreenConst(screenHeight, 16, 5), 'speed', 1);
 
         var irgendwas = calcScreenConst(screenHeight, 12);
-        var x = calcScreenConst(screenWidth, 2),
+        var x = screenWidthHalf,
             y = screenHeight + irgendwas,
             yEnd = - irgendwas;
 
@@ -89,7 +87,7 @@ var Intro = (function (Transition) {
                     self.stage.remove(firstBg);
                 });
                 self.stage.move(scrollingBackGround, scrollingBgPath, function () {
-                    scrollingBackGround.y = calcScreenConst(screenHeight, 2);
+                    scrollingBackGround.y = screenHeightHalf;
                 });
 
                 self.stage.move(letsplayIO, letsplayIOPath, function () {
@@ -126,8 +124,8 @@ var Intro = (function (Transition) {
         }
 
         function drawSpeed(stage, x, delay) {
-            var speedImgWidthHalf = Math.floor(stage.getSubImage('speed').width / 2);
-            return stage.moveFreshLater(x, - speedImgWidthHalf, 'speed', x, screenHeight + speedImgWidthHalf, 30,
+            var speedImgHeightHalf = Math.floor(stage.getSubImage('speed').height / 2);
+            return stage.moveFreshLater(x, - speedImgHeightHalf, 'speed', x, screenHeight + speedImgHeightHalf, 30,
                 Transition.LINEAR, delay, true);
         }
     };
@@ -141,4 +139,4 @@ var Intro = (function (Transition) {
     };
 
     return Intro;
-})(Transition);
+})(Transition, calcScreenConst);
