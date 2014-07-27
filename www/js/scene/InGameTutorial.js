@@ -10,9 +10,21 @@ var InGameTutorial = (function (require) {
         this.tapController = tapController;
     }
 
-    InGameTutorial.prototype.show = function (nextScene) {
+    InGameTutorial.prototype.show = function (nextScene, screenWidth, screenHeight) {
+        var widthHalf = require.calcScreenConst(screenWidth, 2),
+            widthThird = require.calcScreenConst(screenWidth, 3),
+            widthThreeQuarter = require.calcScreenConst(screenWidth, 4, 3),
+            widthEighth = require.calcScreenConst(screenWidth, 8);
+
+        var __400 = require.calcScreenConst(screenHeight, 6, 5);
+
+        var heightHalf = require.calcScreenConst(screenHeight, 2),
+            heightThird = require.calcScreenConst(screenHeight, 3),
+            heightQuarter = require.calcScreenConst(screenHeight, 4),
+            heightSixteenth = require.calcScreenConst(screenHeight, 16);
+
         var shipDrawable = this.sceneStorage.ship,
-            shieldsDrawable = this.sceneStorage.shields || this.stage.getDrawable(320 / 2, 400, 'shields'),
+            shieldsDrawable = this.sceneStorage.shields || this.stage.getDrawable(widthHalf, __400, 'shields'),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
@@ -37,7 +49,7 @@ var InGameTutorial = (function (require) {
 
         var scoreDisplay = new require.Odometer(new require.OdometerView(this.stage, countDrawables));
         var collectAnimator = new require.CollectView(this.stage, shipDrawable, 3);
-        var scoreAnimator = new require.ScoreView(this.stage);
+        var scoreAnimator = new require.ScoreView(this.stage, screenWidth, screenHeight);
         var shipCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
             this.stage.getSubImage('ship'), shipDrawable);
         var shieldsCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
@@ -56,7 +68,7 @@ var InGameTutorial = (function (require) {
         var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
             shieldsDownSprite, energyBarDrawable);
 
-        var touchable = {id: 'shields_up_tutorial', x: 0, y: 0, width: 320, height: 480};
+        var touchable = {id: 'shields_up_tutorial', x: 0, y: 0, width: screenWidth, height: screenHeight};
 
         registerGameController();
 
@@ -69,11 +81,11 @@ var InGameTutorial = (function (require) {
 
         var skipTxt, skipTouchable;
         function createSkipStuff() {
-            var topRaster = 480 / 100 * 15;
-            var x = 320 / 8 * 6;
+            var topRaster = require.calcScreenConst(screenHeight, 20, 3);
+            var x = widthEighth * 6;
             var y = topRaster;
-            skipTouchable = {id: 'skip_tap', x: 320 / 2, y: y - (480 / 16),
-                width: 320 / 2, height: 480 / 8};
+            skipTouchable = {id: 'skip_tap', x: widthHalf, y: y - heightSixteenth,
+                width: widthHalf, height: require.calcScreenConst(screenHeight, 8)};
             self.tapController.add(skipTouchable, function () {
                 skipTxt.txt.alpha = 1;
                 require.window.setTimeout(function () {
@@ -95,30 +107,38 @@ var InGameTutorial = (function (require) {
 
         function createFirstAsteroid() {
             var asteroidName = 'asteroid1';
-            var asteroid = self.stage.getDrawable(320 / 3, -108 / 2, asteroidName);
+            var asteroidHeightHalf = require.calcScreenConst(self.stage.getSubImage(asteroidName).height, 2);
+            var asteroidWidthHalf = require.calcScreenConst(self.stage.getSubImage(asteroidName).width, 2);
+            var asteroid = self.stage.getDrawable(widthHalf - asteroidWidthHalf, - asteroidHeightHalf, asteroidName);
             trackedAsteroids[asteroid.id] = asteroid;
             self.stage.draw(asteroid);
             return asteroid;
         }
         function createTouchNHoldTxt() {
-            var touch_txt = self.stage.getDrawableText(320 / 4 * 3, 480 / 3, 3,
-                self.messages.get('tutorial', 'touch_and_hold'), 20, KEN_PIXEL, white, Math.PI / 16, 1, 320 / 3 * 2,
+
+            var touch_txt = self.stage.getDrawableText(widthThreeQuarter, heightThird, 3,
+                self.messages.get('tutorial', 'touch_and_hold'), 20, KEN_PIXEL, white, Math.PI / 16, 1, widthThird * 2,
                 25);
             self.stage.draw(touch_txt);
-            var raise_txt = self.stage.getDrawableText(320 / 16 * 3, 480 / 2, 3,
-                self.messages.get('tutorial', 'to_raise_shields'), 17, KEN_PIXEL, white, -Math.PI / 16, 1, 320 / 3, 22);
+
+            var raise_txt = self.stage.getDrawableText(require.calcScreenConst(screenWidth, 16, 3), heightHalf, 3,
+                self.messages.get('tutorial', 'to_raise_shields'), 17, KEN_PIXEL, white, - Math.PI / 16, 1, widthThird,
+                22);
             self.stage.draw(raise_txt);
 
             return [touch_txt, raise_txt];
         }
 
+        var __4 = require.calcScreenConst(screenHeight, 100);
+        var __2 = require.calcScreenConst(screenHeight, 200);
+        var __1 = require.calcScreenConst(screenHeight, 400);
         function moveMyFirstAsteroids() {
-            if (asteroid.y < 480 / 4) {
-                asteroid.y += 4;
+            if (asteroid.y < heightQuarter) {
+                asteroid.y += __4;
             } else if (world.shieldsOn) {
-                asteroid.y += 2;
-            } else if (asteroid.y > 480 / 4) {
-                asteroid.y -= 2;
+                asteroid.y += __2;
+            } else if (asteroid.y > heightQuarter) {
+                asteroid.y -= __2;
             }
             if (!self.stage.has(asteroid)) {
                 removeTouchNHoldStuff();
@@ -141,16 +161,16 @@ var InGameTutorial = (function (require) {
         var drainTxt, shieldsEnergyDrawable, energyTxt, okButton, okTouchable, dialogBack;
         function showEnergyTxtSubScene() {
             function createEnergyTxt() {
-                dialogBack = self.stage.drawFresh(320 / 2, 480 / 2, 'background', 3);
-                drainTxt = self.stage.getDrawableText(320 / 2, 480 / 3, 3,
+                dialogBack = self.stage.drawFresh(widthHalf, heightHalf, 'background', 3);
+                drainTxt = self.stage.getDrawableText(widthHalf, heightThird, 3,
                     self.messages.get('tutorial', 'drain_energy'), 15, KEN_PIXEL, white);
                 self.stage.draw(drainTxt);
-                shieldsEnergyDrawable = self.stage.animateFresh(320 / 2, 480 / 2,
+                shieldsEnergyDrawable = self.stage.animateFresh(widthHalf, heightHalf,
                     'shields_energy-anim/shields_energy', 60);
-                energyTxt = self.stage.getDrawableText(320 / 2, 480 / 3 * 2, 3,
+                energyTxt = self.stage.getDrawableText(widthHalf, heightThird * 2, 3,
                     self.messages.get('tutorial', 'no_energy'), 15, KEN_PIXEL, white);
                 self.stage.draw(energyTxt);
-                okButton = self.stage.drawFresh(320 / 2, 480 / 16 * 13, 'ok');
+                okButton = self.stage.drawFresh(widthHalf, heightSixteenth * 13, 'ok');
                 okTouchable = {id: 'ok_tap', x: okButton.getCornerX(), y: okButton.getCornerY(),
                     width: okButton.getWidth(), height: okButton.getHeight()};
 
@@ -186,17 +206,19 @@ var InGameTutorial = (function (require) {
         var starTxts, star;
         function collectStarsSubScene() {
             function createFirstStar() {
-                var starNum = range(1, 4);
+                var starNum = require.range(1, 4);
                 var starPath = 'star' + starNum + '-anim/star' + starNum;
-                var star = self.stage.animateFresh(320 / 8 * 3, -108 / 2, starPath, 30);
+                var starHeightHalf = require.calcScreenConst(self.stage.getSubImage('star1-anim/star1_0000').height, 2);
+                var starWidthHalf = require.calcScreenConst(self.stage.getSubImage('star1-anim/star1_0000').height, 2);
+                var star = self.stage.animateFresh(widthHalf - starWidthHalf, - starHeightHalf, starPath, 30);
                 trackedStars[star.id] = star;
                 self.stage.draw(star);
 
                 return star;
             }
             function createCollectTxt() {
-                var collectTxt = self.stage.getDrawableText(320 / 4 * 3, 480 / 3, 3,
-                    self.messages.get('tutorial', 'collect_stuff'), 20, KEN_PIXEL, white, Math.PI / 16, 1, 320 / 2,
+                var collectTxt = self.stage.getDrawableText(widthThreeQuarter, heightThird, 3,
+                    self.messages.get('tutorial', 'collect_stuff'), 20, KEN_PIXEL, white, Math.PI / 16, 1, widthHalf,
                     25);
                 self.stage.draw(collectTxt);
 
@@ -204,12 +226,12 @@ var InGameTutorial = (function (require) {
             }
 
             function moveMyFirstStar() {
-                if (star.y < 480 / 4) {
-                    star.y += 4;
+                if (star.y < heightQuarter) {
+                    star.y += __4;
                 } else if (!world.shieldsOn) {
-                    star.y += 1;
-                } else if (star.y > 480 / 4) {
-                    star.y -= 2;
+                    star.y += __1;
+                } else if (star.y > heightQuarter) {
+                    star.y -= __2;
                 }
                 if (world.points < 1 && !self.stage.has(star)) {
                     star = createFirstStar();
@@ -259,15 +281,15 @@ var InGameTutorial = (function (require) {
 
     return InGameTutorial;
 })({
-    Transition: Transition,
     ScreenShaker: ScreenShaker,
     Odometer: Odometer,
     CollectView: CollectView,
-    ObstaclesView: ObstaclesView,
     OdometerView: OdometerView,
     ScoreView: ScoreView,
     CanvasCollisionDetector: CanvasCollisionDetector,
     GameWorld: GameWorld,
     EnergyStateMachine: EnergyStateMachine,
-    window: window
+    window: window,
+    range: range,
+    calcScreenConst: calcScreenConst
 });
