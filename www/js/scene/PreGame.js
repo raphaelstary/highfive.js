@@ -156,7 +156,8 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst) {
         }
     };
 
-    PreGame.prototype.next = function (nextScene, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite, shieldsDownSprite) {
+    PreGame.prototype.next = function (nextScene, shipDrawable, fireDrawable, shieldsDrawable, shieldsUpSprite,
+                                       shieldsDownSprite) {
         this.sceneStorage.ship = shipDrawable;
         this.sceneStorage.fire = fireDrawable;
         this.sceneStorage.shields = shieldsDrawable;
