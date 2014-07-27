@@ -1,4 +1,4 @@
-var KillScreen = (function (Transition) {
+var KillScreen = (function (Transition, calcScreenConst) {
     "use strict";
 
     function KillScreen(stage, sceneStorage) {
@@ -6,7 +6,7 @@ var KillScreen = (function (Transition) {
         this.sceneStorage = sceneStorage;
     }
 
-    KillScreen.prototype.show = function (nextScene) {
+    KillScreen.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var speedStripes = this.sceneStorage.speedStripes;
         delete this.sceneStorage.speedStripes;
         var shipDrawable = this.sceneStorage.ship;
@@ -16,15 +16,15 @@ var KillScreen = (function (Transition) {
         var countDrawables = this.sceneStorage.counts;
         delete this.sceneStorage.counts;
 
-
         var self = this;
 
         speedStripes.forEach(function (speedStripe) {
             self.stage.remove(speedStripe);
         });
 
+        var heightHalf = calcScreenConst(screenHeight, 2);
         var dockShipToMiddlePosition = self.stage.getPath(shipDrawable.x, shipDrawable.y,
-            shipDrawable.x, 480 / 2, 120, Transition.EASE_OUT_EXPO);
+            shipDrawable.x, heightHalf, 120, Transition.EASE_OUT_EXPO);
 
         var explosionSprite = self.stage.getSprite('explosion-anim/explosion', 25, false);
 
@@ -44,4 +44,4 @@ var KillScreen = (function (Transition) {
     };
 
     return KillScreen;
-})(Transition);
+})(Transition, calcScreenConst);
