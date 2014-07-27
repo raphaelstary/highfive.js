@@ -9,9 +9,11 @@ var PlayGame = (function (require) {
     }
 
     PlayGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
+        var __400 = require.calcScreenConst(screenHeight, 6, 5);
+
         var shipDrawable = this.sceneStorage.ship,
             shieldsDrawable = this.sceneStorage.shields ||
-                this.stage.getDrawable(require.calcScreenConst(screenWidth, 2), 400, 'shields'),
+                this.stage.getDrawable(require.calcScreenConst(screenWidth, 2), __400, 'shields'),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
