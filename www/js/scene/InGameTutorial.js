@@ -252,6 +252,8 @@ var InGameTutorial = (function (require) {
             if (starTxts)
                 starTxts.forEach(self.stage.remove.bind(self.stage));
             self.gameLoop.remove('star_movement');
+            if (star)
+                self.stage.remove(star);
         }
 
         function registerGameController() {
