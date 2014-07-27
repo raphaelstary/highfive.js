@@ -8,9 +8,10 @@ var PlayGame = (function (require) {
         this.gameController = gameController;
     }
 
-    PlayGame.prototype.show = function (nextScene) {
+    PlayGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var shipDrawable = this.sceneStorage.ship,
-            shieldsDrawable = this.sceneStorage.shields || this.stage.getDrawable(320 / 2, 400, 'shields'),
+            shieldsDrawable = this.sceneStorage.shields ||
+                this.stage.getDrawable(require.calcScreenConst(screenWidth, 2), 400, 'shields'),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
@@ -37,11 +38,12 @@ var PlayGame = (function (require) {
         var trackedAsteroids = {};
         var trackedStars = {};
 
-        var level = new require.LevelGenerator(new require.ObstaclesView(this.stage, trackedAsteroids, trackedStars));
+        var level = new require.LevelGenerator(new require.ObstaclesView(this.stage, trackedAsteroids, trackedStars,
+            screenWidth, screenHeight));
 
         var scoreDisplay = new require.Odometer(new require.OdometerView(this.stage, countDrawables));
         var collectAnimator = new require.CollectView(this.stage, shipDrawable, 3);
-        var scoreAnimator = new require.ScoreView(this.stage);
+        var scoreAnimator = new require.ScoreView(this.stage, screenWidth, screenHeight);
         var shipCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
             this.stage.getSubImage('ship'), shipDrawable);
         var shieldsCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
@@ -61,7 +63,7 @@ var PlayGame = (function (require) {
         var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
             shieldsDownSprite, energyBarDrawable);
 
-        var touchable = {id: 'shields_up', x: 0, y: 0, width: 320, height: 480};
+        var touchable = {id: 'shields_up', x: 0, y: 0, width: screenWidth, height: screenHeight};
         this.gameController.add(touchable,
             energyStates.drainEnergy.bind(energyStates), energyStates.loadEnergy.bind(energyStates));
 
@@ -78,9 +80,9 @@ var PlayGame = (function (require) {
             self.gameLoop.remove('level');
 
             self.gameController.remove(touchable);
-
+            var outOffSet = require.calcScreenConst(screenWidth, 3);
             var barOut = self.stage.getPath(energyBarDrawable.x, energyBarDrawable.y,
-                energyBarDrawable.x, energyBarDrawable.y + 100, 60, require.Transition.EASE_OUT_EXPO);
+                energyBarDrawable.x, energyBarDrawable.y + outOffSet, 60, require.Transition.EASE_OUT_EXPO);
 
             self.stage.move(energyBarDrawable, barOut, function () {
                 self.stage.remove(energyBarDrawable);
@@ -108,5 +110,6 @@ var PlayGame = (function (require) {
     ScoreView: ScoreView,
     CanvasCollisionDetector: CanvasCollisionDetector,
     GameWorld: GameWorld,
-    EnergyStateMachine: EnergyStateMachine
+    EnergyStateMachine: EnergyStateMachine,
+    calcScreenConst: calcScreenConst
 });
