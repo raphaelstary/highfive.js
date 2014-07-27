@@ -1,4 +1,4 @@
-var Tutorial = (function (Transition) {
+var Tutorial = (function (Transition, calcScreenConst) {
     "use strict";
 
     function Tutorial(stage, tapController, messages) {
@@ -7,24 +7,31 @@ var Tutorial = (function (Transition) {
         this.messages = messages;
     }
 
-    Tutorial.prototype.show = function (nextScene) {
-        var txt = this.stage.getDrawableText(320 / 2, 480 / 2, 1, this.messages.get('tutorial', 'drain_energy'), 30,
-            'KenPixelBlocks', 'white', Math.PI / 4);
+    Tutorial.prototype.show = function (nextScene, screenWidth, screenHeight) {
+        var widthHalf = calcScreenConst(screenWidth, 2);
+        var heightHalf = calcScreenConst(screenHeight, 2);
+        var txt = this.stage.getDrawableText(widthHalf, heightHalf, 1, this.messages.get('tutorial', 'drain_energy'),
+            30, 'KenPixelBlocks', 'white', Math.PI / 4);
         this.stage.draw(txt);
 
         var self = this;
-        var offSet = 480 / 4 / 2;
-        var touchHoldDrawable = self.stage.animateFresh(-320, 480 / 4 - offSet, 'touch_hold-anim/touch_hold', 60);
-        var crushAsteroidsDrawable = self.stage.animateFresh(-320, 480 / 2 - offSet, 'crush_asteroids-anim/crush_asteroids', 45);
-        var shieldsEnergyDrawable = self.stage.animateFresh(-320, 480 / 4 * 3 - offSet, 'shields_energy-anim/shields_energy', 60);
-        var collectBonusDrawable = self.stage.animateFresh(-320, 480 - offSet, 'collect_bonus-anim/collect_bonus', 45);
-        var pathIn = self.stage.getPath(-320, 0, 320 / 2, 0, 60, Transition.EASE_OUT_BOUNCE);
+        var offSet = calcScreenConst(screenHeight, 8);
+        var heightQuarter = calcScreenConst(screenHeight, 4);
+        var touchHoldDrawable = self.stage.animateFresh(-screenWidth, heightQuarter - offSet,
+            'touch_hold-anim/touch_hold', 60);
+        var crushAsteroidsDrawable = self.stage.animateFresh(-screenWidth, heightHalf - offSet,
+            'crush_asteroids-anim/crush_asteroids', 45);
+        var shieldsEnergyDrawable = self.stage.animateFresh(-screenWidth, heightQuarter * 3 - offSet,
+            'shields_energy-anim/shields_energy', 60);
+        var collectBonusDrawable = self.stage.animateFresh(-screenWidth, screenHeight - offSet,
+            'collect_bonus-anim/collect_bonus', 45);
+        var pathIn = self.stage.getPath(-screenWidth, 0, widthHalf, 0, 60, Transition.EASE_OUT_BOUNCE);
 
         self.stage.move(touchHoldDrawable, pathIn);
         self.stage.moveLater({item: crushAsteroidsDrawable, path: pathIn}, 5);
         self.stage.moveLater({item: shieldsEnergyDrawable, path: pathIn}, 10);
         self.stage.moveLater({item: collectBonusDrawable, path: pathIn, ready: function () {
-            var pressPlay = self.stage.getDrawable(320 / 2, 480 / 4 * 3, 'play');
+            var pressPlay = self.stage.getDrawable(widthHalf, heightQuarter * 3, 'play');
             self.stage.draw(pressPlay);
             var touchable = {id: 'play_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
                 width: pressPlay.getEndX() - pressPlay.getCornerX(),
@@ -39,7 +46,7 @@ var Tutorial = (function (Transition) {
 
                     self.stage.remove(pressPlay);
 
-                    var pathOut = self.stage.getPath(320 / 2, 0, 320 * 2, 0, 60, Transition.EASE_IN_EXPO);
+                    var pathOut = self.stage.getPath(widthHalf, 0, screenWidth * 2, 0, 60, Transition.EASE_IN_EXPO);
 
                     self.stage.move(touchHoldDrawable, pathOut);
                     self.stage.moveLater({item: crushAsteroidsDrawable, path: pathOut}, 5);
@@ -59,4 +66,4 @@ var Tutorial = (function (Transition) {
     };
 
     return Tutorial;
-})(Transition);
+})(Transition, calcScreenConst);
