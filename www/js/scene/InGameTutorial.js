@@ -77,6 +77,8 @@ var InGameTutorial = (function (require) {
             removeTouchNHoldStuff();
             removeEnergyStuff();
             removeStarStuff();
+            removeCommonGameLoopStuff();
+            unregisterGameController();
         }
 
         var skipTxt, skipTouchable;
@@ -90,7 +92,7 @@ var InGameTutorial = (function (require) {
                 skipTxt.txt.alpha = 1;
                 require.window.setTimeout(function () {
                     removeEveryThing();
-                    self.next(nextScene);
+                    endGame();
                 }, 1000);
             });
             skipTxt = self.stage.getDrawableText(x, y, 3,
@@ -237,8 +239,7 @@ var InGameTutorial = (function (require) {
                     star = createFirstStar();
                 }
                 if (!self.stage.has(star)) {
-                    removeStarStuff();
-                    removeSkipStuff();
+                    removeEveryThing();
                     endGame();
                 }
             }
@@ -262,17 +263,16 @@ var InGameTutorial = (function (require) {
         }
 
         function unregisterGameController() {
-            self.gameController.remove(touchable);
+            if (touchable)
+                self.gameController.remove(touchable);
         }
 
-        //end scene todo move to own scene
-        function endGame() {
-
+        function removeCommonGameLoopStuff() {
             self.gameLoop.remove('shake_tutorial');
             self.gameLoop.remove('collisions_tutorial');
+        }
 
-            unregisterGameController();
-
+        function endGame() {
             self.next(nextScene);
         }
     };
