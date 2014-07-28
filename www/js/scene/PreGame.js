@@ -84,6 +84,8 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst) {
                 }
 
                 doTheShields = false;
+                self.stage.remove(shieldsDrawable);
+
                 creditsScreen.show(continuePreGame,
                     [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
                         shipDrawable, fireDrawable], screenWidth, screenHeight);
@@ -123,8 +125,14 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst) {
                     if (doTheShields) {
                         shieldsAnimation();
                     }
-                }}, 48);
-            }}, startTimer);
+                }}, 48, checkIfShouldStopThisMadness);
+            }}, startTimer, checkIfShouldStopThisMadness);
+
+            function checkIfShouldStopThisMadness() {
+                if (!doTheShields) {
+                    self.stage.remove(shieldsDrawable);
+                }
+            }
         }
 
         // end of screen
@@ -152,7 +160,6 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst) {
             });
 
             self.stage.move(fireDrawable, dockShipToGamePosition);
-
         }
     };
 
