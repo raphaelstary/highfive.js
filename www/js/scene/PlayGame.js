@@ -71,7 +71,23 @@ var PlayGame = (function (require) {
 
         //end scene todo move to own scene
         function endGame(points) {
-            for (var key in lifeDrawablesDict) {
+            var key, elem;
+            for (key in trackedAsteroids) {
+                if (!trackedAsteroids.hasOwnProperty(key)) {
+                    continue;
+                }
+                elem = trackedAsteroids[key];
+                self.stage.remove(elem);
+            }
+            for (key in trackedStars) {
+                if (!trackedStars.hasOwnProperty(key)) {
+                    continue;
+                }
+                elem = trackedStars[key];
+                self.stage.remove(elem);
+            }
+
+            for (key in lifeDrawablesDict) {
                 if (lifeDrawablesDict.hasOwnProperty(key)) {
                     self.stage.remove(lifeDrawablesDict[key]);
                 }
