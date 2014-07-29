@@ -59,7 +59,10 @@ var Intro = (function (Transition, calcScreenConst) {
 
         changeCoords(drawableStorage.firstBg, screenWidthHalf, screenHeightHalf);
 
-        changeCoords(drawableStorage.scrollingBackGround, screenWidthHalf, screenHeightHalf + screenHeight);
+        if (this.backGroundHasNewPosition)
+            changeCoords(drawableStorage.scrollingBackGround, screenWidthHalf, screenHeightHalf);
+        else
+            changeCoords(drawableStorage.scrollingBackGround, screenWidthHalf, screenHeightHalf + screenHeight);
 
         var speedY = 0; // 600
         changeCoords(drawableStorage.speedDrawableOne, calcScreenConst(screenWidth, 4), speedY);
@@ -228,7 +231,7 @@ var Intro = (function (Transition, calcScreenConst) {
             });
             self.stage.move(this.drawableStorage.scrollingBackGround, this.motionStorage.scrollingBgPath, function () {
                 self.drawableStorage.scrollingBackGround.y = calcScreenConst(self.screenHeight, 2);
-                self.backGroundHasNewPosition = true; // todo refactor into own resizeFn attached to every drawable
+                self.backGroundHasNewPosition = true;
             });
 
             self.stage.move(this.drawableStorage.letsplayIO, this.motionStorage.letsplayIOPath, function () {
@@ -260,9 +263,6 @@ var Intro = (function (Transition, calcScreenConst) {
 
         this._resizeDrawables(width, height, this.drawableStorage);
         this._resizeMotion(width, height, this.motionStorage);
-
-        if (this.backGroundHasNewPosition)
-            this.drawableStorage.scrollingBackGround.y = calcScreenConst(height, 2);
     };
 
     Intro.prototype.next = function (nextScene, logoDrawable, speedStripes, backGround) {
