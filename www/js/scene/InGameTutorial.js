@@ -1,13 +1,14 @@
 var InGameTutorial = (function (require) {
     "use strict";
 
-    function InGameTutorial(stage, sceneStorage, gameLoop, gameController, messages, tapController) {
+    function InGameTutorial(stage, sceneStorage, gameLoop, gameController, messages, tapController, atlas) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
         this.gameController = gameController;
         this.messages = messages;
         this.tapController = tapController;
+        this.atlas = atlas;
     }
 
     InGameTutorial.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -50,10 +51,10 @@ var InGameTutorial = (function (require) {
         var scoreDisplay = new require.Odometer(new require.OdometerView(this.stage, countDrawables));
         var collectAnimator = new require.CollectView(this.stage, shipDrawable, 3);
         var scoreAnimator = new require.ScoreView(this.stage, screenWidth, screenHeight);
-        var shipCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
-            this.stage.getSubImage('ship'), shipDrawable);
-        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.renderer.atlas,
-            this.stage.getSubImage('shield3'), shieldsDrawable);
+        var shipCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('ship'),
+            shipDrawable);
+        var shieldsCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('shield3'),
+            shieldsDrawable);
 
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,

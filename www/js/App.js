@@ -37,7 +37,7 @@ var App = (function (require) {
             self.resizeBus.remove('initial_screen');
 
             var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, font, fontBlock, locales);
-            self._initScenes(sceneStuff.stage, sceneStuff.messages);
+            self._initScenes(sceneStuff.stage, sceneStuff.messages, atlas);
             self._doThePlay();
         };
 
@@ -72,7 +72,7 @@ var App = (function (require) {
         this.gameLoop.run();
     };
 
-    App.prototype._initScenes = function (stage, messages) {
+    App.prototype._initScenes = function (stage, messages, atlas) {
         var sceneStorage = {};
 
         var intro = new require.Intro(stage, sceneStorage, this.gameLoop);
@@ -80,9 +80,9 @@ var App = (function (require) {
             new require.FullScreenController(this.screen), messages);
         var startingPosition = new require.StartingPosition(stage, sceneStorage);
         var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
-            messages, this.tapController);
+            messages, this.tapController, atlas);
         var getReady = new require.GetReady(stage);
-        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController);
+        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, atlas);
         var killScreen = new require.KillScreen(stage, sceneStorage);
         var postGame = new require.PostGame(stage, sceneStorage, this.tapController);
 
