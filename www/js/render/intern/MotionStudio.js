@@ -40,6 +40,9 @@ var MotionStudio = (function () {
 
                 motion.time++;
             } else {
+                motion.item.x = path.endX;
+                motion.item.y = path.endY;
+
                 if (path.loop) {
                     motion.time = 0;
                 } else {
