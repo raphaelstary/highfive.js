@@ -75,7 +75,7 @@ var App = (function (require) {
     App.prototype._initScenes = function (stage, messages, atlas) {
         var sceneStorage = {};
 
-        var intro = new require.Intro(stage, sceneStorage, this.gameLoop);
+        var intro = new require.Intro(stage, sceneStorage, this.gameLoop, this.resizeBus);
         var preGame = new require.PreGame(stage, sceneStorage, this.tapController,
             new require.FullScreenController(this.screen), messages);
         var startingPosition = new require.StartingPosition(stage, sceneStorage);
