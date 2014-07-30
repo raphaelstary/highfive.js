@@ -1,4 +1,4 @@
-var Intro = (function (Transition, calcScreenConst, changeCoords, changePath) {
+var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, showSpeedStripes) {
     "use strict";
 
     function Intro(stage, sceneStorage, gameLoop, resizeBus) {
@@ -174,24 +174,6 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath) {
 
     };
 
-    function showSpeedStripes(stage, delay, screenWidth, screenHeight) {
-        var speedStripes = [];
-
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 4), 0 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 3, 2), 34 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 8, 7), 8 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 16, 7), 24 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 16), 16 + delay, screenHeight));
-
-        return speedStripes;
-    }
-
-    function drawSpeed(stage, x, delay, screenHeight) {
-        var speedImgHeightHalf = calcScreenConst(stage.getSubImage('speed').height, 2);
-        return stage.moveFreshLater(x, - speedImgHeightHalf, 'speed', x, screenHeight + speedImgHeightHalf, 30,
-            Transition.LINEAR, delay, true);
-    }
-
     Intro.prototype._parallaxUpdate = function () {
         var delta = this.lastY - this.drawableStorage.letsplayIO.y;
         this.lastY = this.drawableStorage.letsplayIO.y;
@@ -272,4 +254,4 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath) {
     };
 
     return Intro;
-})(Transition, calcScreenConst, changeCoords, changePath);
+})(Transition, calcScreenConst, changeCoords, changePath, showSpeedStripes);

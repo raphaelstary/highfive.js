@@ -1,4 +1,4 @@
-var StartingPosition = (function (Transition, calcScreenConst) {
+var StartingPosition = (function (Transition, calcScreenConst, showSpeedStripes, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster) {
     "use strict";
 
     function StartingPosition(stage, sceneStorage) {
@@ -7,21 +7,17 @@ var StartingPosition = (function (Transition, calcScreenConst) {
     }
 
     StartingPosition.prototype.checkPreConditions = function (screenWidth, screenHeight) {
-        var __400 = calcScreenConst(screenHeight, 6, 5);
-        var widthHalf = calcScreenConst(screenWidth, 2);
-
         if (this.sceneStorage.speedStripes === undefined) {
             this.sceneStorage.speedStripes = showSpeedStripes(this.stage, 0, screenWidth, screenHeight);
         }
         if (!this.sceneStorage.ship) {
-            this.sceneStorage.ship = this.stage.drawFresh(widthHalf, __400, 'ship');
+            this.sceneStorage.ship = ShipHelper.draw(this.stage, screenWidth, screenHeight);
         }
         if (!this.sceneStorage.fire) {
-            this.sceneStorage.fire = this.stage.animateFresh(widthHalf, __400, 'fire-anim/fire', 8);
+            this.sceneStorage.fire = FireHelper.draw(this.stage, screenWidth, screenHeight);
         }
         if (!this.sceneStorage.backGround) {
-            this.sceneStorage.backGround = this.stage.drawFresh(widthHalf, calcScreenConst(screenHeight, 2),
-                'background', 0);
+            this.sceneStorage.backGround = BackGroundHelper.draw(this.stage, screenWidth, screenHeight);
         }
     };
 
@@ -32,7 +28,9 @@ var StartingPosition = (function (Transition, calcScreenConst) {
         var zero = 'num/numeral0';
         var spacing = Transition.EASE_IN_OUT_ELASTIC;
         var speed = 60;
-        var yTop = calcScreenConst(screenHeight, 20);
+
+        var yTop = getTopRaster(screenHeight);
+
         var yBottom = yTop * 19;
         var lifeX = calcScreenConst(screenWidth, 10);
         var lifeOneDrawable = self.stage.moveFreshLater(lifeX - lifeX * 2, yTop, 'playerlife', lifeX, yTop, speed,
@@ -45,20 +43,20 @@ var StartingPosition = (function (Transition, calcScreenConst) {
         var energyX = calcScreenConst(screenWidth, 32, 7);
         var energyBarDrawable = self.stage.moveFresh(energyX - energyX * 2, yBottom, 'energy_bar_full', energyX,
             yBottom, speed, spacing);
-        var digitWidthHalf = calcScreenConst(self.stage.getSubImage('num/numeral0').width, 2);
-        var digitX = calcScreenConst(screenWidth, 3, 2) + digitWidthHalf;
-        var digitOffSet = calcScreenConst(self.stage.getSubImage('num/numeral0').width, 3, 4);
-        var firstDigit = digitX + digitOffSet * 3;
+
         var screenOffSet = calcScreenConst(screenWidth, 5);
-        var firstDigitDrawable = self.stage.moveFreshLater(firstDigit + screenOffSet, yTop, zero, firstDigit, yTop,
-            speed, spacing, 10);
-        var secondDigit = digitX + digitOffSet * 2;
-        var secondDigitDrawable = self.stage.moveFreshLater(secondDigit + screenOffSet, yTop, zero, secondDigit, yTop,
-            speed, spacing, 13);
-        var thirdDigit = digitX + digitOffSet;
-        var thirdDigitDrawable = self.stage.moveFreshLater(thirdDigit + screenOffSet, yTop, zero, thirdDigit, yTop,
-            speed, spacing, 17);
-        var fourthDigitDrawable = self.stage.moveFreshLater(digitX + screenOffSet, yTop, zero, digitX, yTop, speed,
+
+        var firstX = CountHelper.get1stX(self.stage, screenWidth);
+        var firstDigitDrawable = self.stage.moveFreshLater(firstX + screenOffSet, yTop, zero, firstX, yTop, speed,
+            spacing, 10);
+        var secondX = CountHelper.get2ndX(self.stage, screenWidth);
+        var secondDigitDrawable = self.stage.moveFreshLater(secondX + screenOffSet, yTop, zero, secondX, yTop, speed,
+            spacing, 13);
+        var thirdX = CountHelper.get3rdX(self.stage, screenWidth);
+        var thirdDigitDrawable = self.stage.moveFreshLater(thirdX + screenOffSet, yTop, zero, thirdX, yTop, speed,
+            spacing, 17);
+        var fourthX = CountHelper.get4thX(self.stage, screenWidth);
+        var fourthDigitDrawable = self.stage.moveFreshLater(fourthX + screenOffSet, yTop, zero, fourthX, yTop, speed,
             spacing, 12, false, function () {
 
             var lifeDrawablesDict = {1: lifeOneDrawable, 2: lifeTwoDrawable, 3: lifeThreeDrawable};
@@ -76,22 +74,5 @@ var StartingPosition = (function (Transition, calcScreenConst) {
         nextScene();
     };
 
-    function showSpeedStripes(stage, delay, screenWidth, screenHeight) {
-        var speedStripes = [];
-        var yOffSet = calcScreenConst(stage.getSubImage('speed').width, 2);
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 4), yOffSet, 0 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 3, 2), yOffSet, 34 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 8, 7), yOffSet, 8 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 16, 7), yOffSet, 24 + delay, screenHeight));
-        speedStripes.push(drawSpeed(stage, calcScreenConst(screenWidth, 16), yOffSet, 16 + delay, screenHeight));
-
-        return speedStripes;
-    }
-
-    function drawSpeed(stage, x, yOffSet, delay, screenHeight) {
-        return stage.moveFreshLater(x, - yOffSet, 'speed', x, screenHeight + yOffSet, 30, Transition.LINEAR, delay,
-            true);
-    }
-
     return StartingPosition;
-})(Transition, calcScreenConst);
+})(Transition, calcScreenConst, showSpeedStripes, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster);

@@ -128,12 +128,5 @@ var PostGame = (function (localStorage, Transition, calcScreenConst) {
         });
     };
 
-    PostGame.prototype.next = function () {
-
-
-//        self._preGameScene(stage, self.stage.animateFresh(widthHalf, screenHeight / 6, 'logo-anim/logo', 44),
-//            self._showSpeedStripes(stage, 0)); //TODO show speed stripes in intro
-    };
-
     return PostGame;
 })(window.localStorage, Transition, calcScreenConst);
