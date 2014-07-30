@@ -1,4 +1,4 @@
-var Credits = (function (Transition, window, calcScreenConst) {
+var Credits = (function (Transition, window, calcScreenConst, changeCoords, changePath, Repository) {
     "use strict";
 
     function Credits(stage, tapController, messages) {
@@ -11,20 +11,6 @@ var Credits = (function (Transition, window, calcScreenConst) {
         this.resizeRepoPaths = new Repository();
     }
 
-    function Repository() {
-        this.dict = {};
-        this.add = function (item, fn) {
-            this.dict[item.id] = fn;
-        };
-        this.remove = function (item) {
-            delete this.dict[item.id];
-        };
-        this.call = function () {
-            for (var key in this.dict)
-                this.dict[key]();
-        };
-    }
-
     Credits.prototype.resize = function (width, heigth) {
         this.screenWidth = width;
         this.screenHeight = heigth;
@@ -33,23 +19,6 @@ var Credits = (function (Transition, window, calcScreenConst) {
         this.resizeRepoTouchables.call();
         this.resizeRepoPaths.call();
     };
-
-    function changeCoords(drawable, x, y) {
-        drawable.x = x;
-        drawable.y = y;
-    }
-
-    function changePath(path, x, y, endX, endY) {
-        var length = Math.abs(x - endX) + Math.abs(y - endY);
-        if (endY < y || endX < x) {
-            length = -length;
-        }
-        path.startX = x;
-        path.startY = y;
-        path.endX = endX;
-        path.endY = endY;
-        path.length = length;
-    }
 
     Credits.prototype.show = function (nextScene, previousScenesDrawables, screenWidth, screenHeight) {
         this.screenWidth = screenWidth;
@@ -307,4 +276,4 @@ var Credits = (function (Transition, window, calcScreenConst) {
     };
 
     return Credits;
-})(Transition, window, calcScreenConst);
+})(Transition, window, calcScreenConst, changeCoords, changePath, Repository);

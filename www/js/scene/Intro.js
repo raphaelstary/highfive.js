@@ -1,4 +1,4 @@
-var Intro = (function (Transition, calcScreenConst) {
+var Intro = (function (Transition, calcScreenConst, changeCoords, changePath) {
     "use strict";
 
     function Intro(stage, sceneStorage, gameLoop, resizeBus) {
@@ -48,11 +48,6 @@ var Intro = (function (Transition, calcScreenConst) {
         return drawableStorage;
     };
 
-    function changeCoords(drawable, x, y) {
-        drawable.x = x;
-        drawable.y = y;
-    }
-
     Intro.prototype._resizeDrawables = function (screenWidth, screenHeight, drawableStorage) {
         var screenWidthHalf = calcScreenConst(screenWidth, 2);
         var screenHeightHalf = calcScreenConst(screenHeight, 2);
@@ -88,18 +83,6 @@ var Intro = (function (Transition, calcScreenConst) {
         changeCoords(drawableStorage.presentsDrawable, x, y);
         changeCoords(drawableStorage.logoDrawable, x, y);
     };
-
-    function changePath(path, x, y, endX, endY) {
-        var length = Math.abs(x - endX) + Math.abs(y - endY);
-        if (endY < y || endX < x) {
-            length = -length;
-        }
-        path.startX = x;
-        path.startY = y;
-        path.endX = endX;
-        path.endY = endY;
-        path.length = length;
-    }
 
     Intro.prototype._createMotion = function (screenWidth, screenHeight) {
         var motionStorage = {};
@@ -289,4 +272,4 @@ var Intro = (function (Transition, calcScreenConst) {
     };
 
     return Intro;
-})(Transition, calcScreenConst);
+})(Transition, calcScreenConst, changeCoords, changePath);
