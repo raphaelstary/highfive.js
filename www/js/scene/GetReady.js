@@ -21,7 +21,7 @@ var GetReady = (function (Transition, calcScreenConst, changeCoords, changePath)
             // create end event method to end scene, this is endGetReadyScene
             self.stage.remove(self.readyDrawable);
 
-            self.resizeBus.remove();
+            self.resizeBus.remove('get_ready_scene');
             delete self.readyDrawable;
             delete self.readyPath;
             nextScene();
