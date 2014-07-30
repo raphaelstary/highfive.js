@@ -78,13 +78,14 @@ var App = (function (require) {
         var intro = new require.Intro(stage, sceneStorage, this.gameLoop, this.resizeBus);
         var preGame = new require.PreGame(stage, sceneStorage, this.tapController,
             new require.FullScreenController(this.screen), messages, this.resizeBus);
-        var startingPosition = new require.StartingPosition(stage, sceneStorage);
+        var startingPosition = new require.StartingPosition(stage, sceneStorage, this.resizeBus);
         var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
-            messages, this.tapController, atlas);
-        var getReady = new require.GetReady(stage);
-        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, atlas);
-        var killScreen = new require.KillScreen(stage, sceneStorage);
-        var postGame = new require.PostGame(stage, sceneStorage, this.tapController);
+            messages, this.tapController, atlas, this.resizeBus);
+        var getReady = new require.GetReady(stage, this.resizeBus);
+        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, atlas,
+            this.resizeBus);
+        var killScreen = new require.KillScreen(stage, sceneStorage, this.resizeBus);
+        var postGame = new require.PostGame(stage, sceneStorage, this.tapController, this.resizeBus);
 
         var sceneManager = this.sceneManager = new require.SceneManager();
 
