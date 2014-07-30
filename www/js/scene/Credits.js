@@ -5,24 +5,27 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
         this.stage = stage;
         this.tapController = tapController;
         this.messages = messages;
-
-        this.resizeRepoDrawables = new Repository();
-        this.resizeRepoTouchables = new Repository();
-        this.resizeRepoPaths = new Repository();
     }
 
     Credits.prototype.resize = function (width, heigth) {
         this.screenWidth = width;
         this.screenHeight = heigth;
 
-        this.resizeRepoDrawables.call();
-        this.resizeRepoTouchables.call();
-        this.resizeRepoPaths.call();
+        if (this.resizeRepoDrawables)
+            this.resizeRepoDrawables.call();
+        if (this.resizeRepoTouchables)
+            this.resizeRepoTouchables.call();
+        if (this.resizeRepoPaths)
+            this.resizeRepoPaths.call();
     };
 
     Credits.prototype.show = function (nextScene, previousScenesDrawables, screenWidth, screenHeight) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+
+        this.resizeRepoDrawables = new Repository();
+        this.resizeRepoTouchables = new Repository();
+        this.resizeRepoPaths = new Repository();
 
         var self = this;
 
@@ -263,8 +266,8 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
             fadeIn(previousScenesDrawables, function () {
                 if (firstCallback) {
                     firstCallback = false;
-                    self.next(nextScene);
                     removeDrawables();
+                    self.next(nextScene);
                 }
             });
         }
@@ -272,6 +275,10 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
     };
 
     Credits.prototype.next = function (nextScene) {
+        delete this.resizeRepoDrawables;
+        delete this.resizeRepoTouchables;
+        delete this.resizeRepoPaths;
+
         nextScene();
     };
 
