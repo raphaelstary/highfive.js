@@ -39,6 +39,18 @@ var Credits = (function (Transition, window, calcScreenConst) {
         drawable.y = y;
     }
 
+    function changePath(path, x, y, endX, endY) {
+        var length = Math.abs(x - endX) + Math.abs(y - endY);
+        if (endY < y || endX < x) {
+            length = -length;
+        }
+        path.startX = x;
+        path.startY = y;
+        path.endX = endX;
+        path.endY = endY;
+        path.length = length;
+    }
+
     Credits.prototype.show = function (nextScene, previousScenesDrawables, screenWidth, screenHeight) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -49,7 +61,14 @@ var Credits = (function (Transition, window, calcScreenConst) {
             drawables.forEach(function (drawable) {
                 var path = self.stage.getPath(drawable.x, drawable.y, drawable.x - self.screenWidth, drawable.y, 60,
                     Transition.EASE_IN_OUT_QUAD);
-                self.stage.move(drawable, path, callback);
+                self.resizeRepoTouchables.add(drawable, function () {
+                    changePath(path, drawable.x, drawable.y, drawable.x - self.screenWidth, drawable.y);
+                });
+                self.stage.move(drawable, path, function () {
+                    self.resizeRepoTouchables.remove(drawable);
+                    if (callback)
+                        callback();
+                });
             });
         }
 
@@ -57,7 +76,14 @@ var Credits = (function (Transition, window, calcScreenConst) {
             drawables.forEach(function (drawable) {
                 var path = self.stage.getPath(drawable.x, drawable.y, drawable.x + self.screenWidth, drawable.y, 60,
                     Transition.EASE_IN_OUT_QUAD);
-                self.stage.move(drawable, path, callback);
+                self.resizeRepoTouchables.add(drawable, function () {
+                    changePath(path, drawable.x, drawable.y, drawable.x + self.screenWidth, drawable.y);
+                });
+                self.stage.move(drawable, path, function () {
+                    self.resizeRepoTouchables.remove(drawable);
+                    if (callback)
+                        callback();
+                });
             });
         }
 
