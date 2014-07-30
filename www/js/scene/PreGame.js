@@ -1,12 +1,13 @@
 var PreGame = (function (Transition, Credits, window, calcScreenConst) {
     "use strict";
 
-    function PreGame(stage, sceneStorage, tapController, fullScreen, messages) {
+    function PreGame(stage, sceneStorage, tapController, fullScreen, messages, resizeBus) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.tapController = tapController;
         this.fullScreen = fullScreen;
         this.messages = messages;
+        this.resizeBus = resizeBus;
     }
 
     PreGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -81,11 +82,12 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst) {
                     registerTapListener();
                     doTheShields = true;
                     shieldsAnimation();
+                    self.resizeBus.remove('credits_scene');
                 }
 
                 doTheShields = false;
                 self.stage.remove(shieldsDrawable);
-
+                self.resizeBus.add('credits_scene', creditsScreen.resize.bind(creditsScreen));
                 creditsScreen.show(continuePreGame,
                     [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
                         shipDrawable, fireDrawable], screenWidth, screenHeight);
