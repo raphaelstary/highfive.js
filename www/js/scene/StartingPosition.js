@@ -88,7 +88,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         });
 
         function energyX() {
-            calcScreenConst(self.screenWidth, 32, 7);
+            return calcScreenConst(self.screenWidth, 32, 7);
         }
 
         function energyStartX() {
