@@ -1,4 +1,4 @@
-var StartingPosition = (function (Transition, calcScreenConst, SpeedStripesHelper, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster, Repository, changeCoords, changePath) {
+var StartingPosition = (function (Transition, calcScreenConst, SpeedStripesHelper, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper) {
     "use strict";
 
     function StartingPosition(stage, sceneStorage, resizeBus) {
@@ -8,18 +8,7 @@ var StartingPosition = (function (Transition, calcScreenConst, SpeedStripesHelpe
     }
 
     StartingPosition.prototype.checkPreConditions = function (screenWidth, screenHeight) {
-        if (this.sceneStorage.speedStripes === undefined) {
-            this.sceneStorage.speedStripes = SpeedStripesHelper.draw(this.stage, 0, screenWidth, screenHeight);
-        }
-        if (!this.sceneStorage.ship) {
-            this.sceneStorage.ship = ShipHelper.draw(this.stage, screenWidth, screenHeight);
-        }
-        if (!this.sceneStorage.fire) {
-            this.sceneStorage.fire = FireHelper.draw(this.stage, screenWidth, screenHeight);
-        }
-        if (!this.sceneStorage.backGround) {
-            this.sceneStorage.backGround = BackGroundHelper.draw(this.stage, screenWidth, screenHeight);
-        }
+        GameStuffHelper.draw(this.stage, this.sceneStorage, screenWidth, screenHeight);
     };
 
     StartingPosition.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -197,13 +186,9 @@ var StartingPosition = (function (Transition, calcScreenConst, SpeedStripesHelpe
         this.screenWidth = width;
         this.screenHeight = height;
 
-        FireHelper.resize(this.sceneStorage.fire, width, height);
-        ShipHelper.resize(this.sceneStorage.ship, width, height);
-        BackGroundHelper.resize(this.sceneStorage.backGround, width, height);
-        SpeedStripesHelper.resize(this.sceneStorage.speedStripes, this.stage, width, height);
-
+        GameStuffHelper.resize(this.stage, this.sceneStorage, width, height);
         this.resizeRepo.call();
     };
 
     return StartingPosition;
-})(Transition, calcScreenConst, SpeedStripesHelper, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster, Repository, changeCoords, changePath);
+})(Transition, calcScreenConst, SpeedStripesHelper, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper);
