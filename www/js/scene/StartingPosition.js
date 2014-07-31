@@ -1,4 +1,4 @@
-var StartingPosition = (function (Transition, calcScreenConst, SpeedStripesHelper, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper) {
+var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper) {
     "use strict";
 
     function StartingPosition(stage, sceneStorage, resizeBus) {
@@ -191,4 +191,4 @@ var StartingPosition = (function (Transition, calcScreenConst, SpeedStripesHelpe
     };
 
     return StartingPosition;
-})(Transition, calcScreenConst, SpeedStripesHelper, ShipHelper, FireHelper, BackGroundHelper, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper);
+})(Transition, calcScreenConst, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper);
