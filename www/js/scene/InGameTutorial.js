@@ -39,7 +39,9 @@ var InGameTutorial = (function (require) {
         var shaker = new require.ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
             lifeDrawablesDict[2], lifeDrawablesDict[3], fireDrawable]);
         countDrawables.forEach(shaker.add.bind(shaker));
-        speedStripes.forEach(shaker.add.bind(shaker));
+        speedStripes.forEach(function (wrapper) {
+            shaker.add(wrapper.drawable);
+        });
 
         var self = this;
         var KEN_PIXEL = 'KenPixel';

@@ -41,7 +41,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst) {
         var responsiveTimeUnit = calcScreenConst(this.screenHeight, 480);
 
         var asteroid = this.stage.moveFresh(x, - asteroidHeightHalf, imgName, x, this.screenHeight + asteroidHeightHalf,
-            speed * responsiveTimeUnit, Transition.LINEAR);
+            speed * responsiveTimeUnit, Transition.LINEAR).drawable;
         this.trackedAsteroids[asteroid.id] = asteroid;
 
         return asteroid;

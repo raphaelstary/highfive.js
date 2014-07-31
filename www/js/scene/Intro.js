@@ -1,4 +1,4 @@
-var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, showSpeedStripes) {
+var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, SpeedStripesHelper) {
     "use strict";
 
     function Intro(stage, sceneStorage, gameLoop, resizeBus) {
@@ -216,7 +216,7 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, sh
 
                 }}, 90, function () {
                 var delay = 30;
-                speedStripes = showSpeedStripes(self.stage, delay, self.screenWidth, self.screenHeight);
+                speedStripes = SpeedStripesHelper.draw(self.stage, delay, self.screenWidth, self.screenHeight);
             });
         }
     };
@@ -254,4 +254,4 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, sh
     };
 
     return Intro;
-})(Transition, calcScreenConst, changeCoords, changePath, showSpeedStripes);
+})(Transition, calcScreenConst, changeCoords, changePath, SpeedStripesHelper);

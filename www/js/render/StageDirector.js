@@ -68,7 +68,10 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
 
         this.move(drawable, path, callback);
 
-        return drawable;
+        return {
+            drawable: drawable,
+            path: path
+        };
     };
 
     StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback) {
@@ -78,7 +81,10 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         var movedItem = {item: drawable, path: path, ready: callback};
         this.moveLater(movedItem, delay);
 
-        return drawable;
+        return {
+            drawable: drawable,
+            path: path
+        };
     };
 
     StageDirector.prototype.move = function (drawable, path, callback) {

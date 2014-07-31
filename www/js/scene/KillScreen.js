@@ -21,8 +21,8 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
 
         var self = this;
 
-        speedStripes.forEach(function (speedStripe) {
-            self.stage.remove(speedStripe);
+        speedStripes.forEach(function (speedStripeWrapper) {
+            self.stage.remove(speedStripeWrapper.drawable);
         });
 
         var heightHalf = calcScreenConst(screenHeight, 2);
