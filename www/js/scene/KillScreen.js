@@ -1,4 +1,4 @@
-var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePath, FireHelper, ShipHelper, BackGroundHelper, CountHelper, heightHalf) {
+var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePath, heightHalf, GameStuffHelper) {
     "use strict";
 
     function KillScreen(stage, sceneStorage, resizeBus) {
@@ -10,12 +10,9 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
     KillScreen.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var speedStripes = this.sceneStorage.speedStripes;
         delete this.sceneStorage.speedStripes;
-        var shipDrawable = this.shipDrawable = this.sceneStorage.ship;
-        delete this.sceneStorage.ship;
-        var fireDrawable = this.fireDrawable = this.sceneStorage.fire;
-        delete this.sceneStorage.fire;
-        var countDrawables = this.countDrawables = this.sceneStorage.counts;
-        delete this.sceneStorage.counts;
+        var shipDrawable = this.sceneStorage.ship;
+        var fireDrawable = this.sceneStorage.fire;
+        var countDrawables = this.sceneStorage.counts;
 
         this.resizeBus.add('kill_screen_scene', this.resize.bind(this));
 
@@ -48,9 +45,10 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
     };
 
     KillScreen.prototype.next = function (nextScene) {
-        delete this.shipDrawable;
-        delete this.fireDrawable;
-        delete this.countDrawables;
+        delete this.sceneStorage.ship;
+        delete this.sceneStorage.fire;
+        delete this.sceneStorage.counts;
+
         delete this.dockShipPath;
         delete this.shipDocked;
 
@@ -60,19 +58,17 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
     };
 
     KillScreen.prototype.resize = function (width, height) {
-        FireHelper.resize(this.fireDrawable, width, height);
-        ShipHelper.resize(this.shipDrawable, width, height);
-        BackGroundHelper.resize(this.sceneStorage.backGround, width, height);
-        CountHelper.resize(this.countDrawables, this.stage, width, height);
+        GameStuffHelper.resize(this.stage, this.sceneStorage, width, height);
 
         var half = heightHalf(height);
         if (this.shipDocked) {
-            this.fireDrawable.y = half;
-            this.shipDrawable.y = half;
+            this.sceneStorage.fire.y = half;
+            this.sceneStorage.ship.y = half;
         } else {
-            changePath(this.dockShipPath, this.shipDrawable.x, this.shipDrawable.y, this.shipDrawable.x, half);
+            changePath(this.dockShipPath, this.sceneStorage.ship.x, this.sceneStorage.ship.y, this.sceneStorage.ship.x,
+                half);
         }
     };
 
     return KillScreen;
-})(Transition, calcScreenConst, changeCoords, changePath, FireHelper, ShipHelper, BackGroundHelper, CountHelper, heightHalf);
+})(Transition, calcScreenConst, changeCoords, changePath, heightHalf, GameStuffHelper);

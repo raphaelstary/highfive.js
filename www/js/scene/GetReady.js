@@ -1,8 +1,9 @@
-var GetReady = (function (Transition, calcScreenConst, changeCoords, changePath) {
+var GetReady = (function (Transition, calcScreenConst, changeCoords, changePath, GameStuffHelper) {
     "use strict";
 
-    function GetReady(stage, resizeBus) {
+    function GetReady(stage, sceneStorage, resizeBus) {
         this.stage = stage;
+        this.sceneStorage = sceneStorage;
         this.resizeBus = resizeBus;
     }
 
@@ -35,7 +36,9 @@ var GetReady = (function (Transition, calcScreenConst, changeCoords, changePath)
             changeCoords(this.readyDrawable, - readyWidth, heightThird);
         if (this.readyPath)
             changePath(this.readyPath, - readyWidth, heightThird, width + readyWidth, heightThird);
+
+        GameStuffHelper.resize(this.stage, this.sceneStorage, width, height);
     };
 
     return GetReady;
-})(Transition, calcScreenConst, changeCoords, changePath);
+})(Transition, calcScreenConst, changeCoords, changePath, GameStuffHelper);

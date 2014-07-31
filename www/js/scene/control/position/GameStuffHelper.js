@@ -1,4 +1,4 @@
-var GameStuffHelper = (function (FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper) {
+var GameStuffHelper = (function (FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper, CountHelper) {
     "use strict";
 
     function drawSharedGameStuff(stage, sceneStorage, screenWidth, screenHeight) {
@@ -25,10 +25,12 @@ var GameStuffHelper = (function (FireHelper, ShipHelper, BackGroundHelper, Speed
             BackGroundHelper.resize(sceneStorage.backGround, width, height);
         if (sceneStorage.speedStripes)
             SpeedStripesHelper.resize(sceneStorage.speedStripes, stage, width, height);
+        if (sceneStorage.counts)
+            CountHelper.resize(sceneStorage.counts, stage, width, height);
     }
 
     return {
         resize: resizeSharedGameStuff,
         draw: drawSharedGameStuff
     };
-})(FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper);
+})(FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper, CountHelper);

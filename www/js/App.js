@@ -81,7 +81,7 @@ var App = (function (require) {
         var startingPosition = new require.StartingPosition(stage, sceneStorage, this.resizeBus);
         var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
             messages, this.tapController, atlas, this.resizeBus);
-        var getReady = new require.GetReady(stage, this.resizeBus);
+        var getReady = new require.GetReady(stage, sceneStorage, this.resizeBus);
         var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, atlas,
             this.resizeBus);
         var killScreen = new require.KillScreen(stage, sceneStorage, this.resizeBus);
