@@ -1,4 +1,4 @@
-var Credits = (function (Transition, window, calcScreenConst, changeCoords, changePath, Repository) {
+var Credits = (function (Transition, window, calcScreenConst, changeCoords, changePath, changeTouchable, Repository) {
     "use strict";
 
     function Credits(stage, tapController, messages) {
@@ -19,7 +19,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
             this.resizeRepoPaths.call();
     };
 
-    Credits.prototype.show = function (nextScene, previousScenesDrawables, screenWidth, screenHeight) {
+    Credits.prototype.show = function (nextScene, previousScenesDrawables, screenWidth, screenHeight, setFadeOffSet) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
@@ -64,12 +64,15 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
         function drawCreditsScreen() {
             back = self.stage.drawFresh(calcScreenConst(self.screenWidth, 10) + self.screenWidth, calcScreenConst(self.screenHeight, 25, 2), 'back');
             self.resizeRepoDrawables.add(back, function () {
-                if (self.drawablesAtNewPosition)
+                if (self.drawablesAtNewPosition) {
                     changeCoords(back, calcScreenConst(self.screenWidth, 10),
                         calcScreenConst(self.screenHeight, 25, 2));
-                else
+                    changeTouchable(backTouchable, back.getCornerX(), back.getCornerY(), back.getWidth(), back.getHeight());
+                } else {
                     changeCoords(back, calcScreenConst(self.screenWidth, 10) + self.screenWidth,
                         calcScreenConst(self.screenHeight, 25, 2));
+                    changeTouchable(backTouchable, back.getCornerX() - self.screenWidth, back.getCornerY(), back.getWidth(), back.getHeight());
+                }
             });
 
             var KEN_PIXEL_BLOCKS = 'KenPixelBlocks';
@@ -235,7 +238,9 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
             touchables.forEach(self.tapController.remove.bind(self.tapController));
         }
 
-        fadeOut(previousScenesDrawables);
+        fadeOut(previousScenesDrawables, function () {
+            setFadeOffSet();
+        });
         var creditsDrawables = drawCreditsScreen();
         var touchables = registerTapListener();
         self.drawablesAtNewPosition = false;
@@ -246,10 +251,10 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
 
         var backTouchable = {
             id: 'back_tap',
-            x: 0,
-            y: 0,
-            width: calcScreenConst(self.screenWidth, 4),
-            height: calcScreenConst(self.screenHeight, 4)
+            x: back.getCornerX(),
+            y: back.getCornerY(),
+            width: back.getWidth(),
+            height: back.getHeight()
         };
         self.tapController.add(backTouchable, endScene);
         touchables.push(backTouchable);
@@ -262,13 +267,12 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 creditsDrawables.forEach(self.stage.remove.bind(self.stage));
             }
 
-            var firstCallback = true;
+            var numberOfCallbacksLeft = previousScenesDrawables.length;
             fadeIn(previousScenesDrawables, function () {
-                if (firstCallback) {
-                    firstCallback = false;
-                    removeDrawables();
-                    self.next(nextScene);
-                }
+                if (--numberOfCallbacksLeft > 0)
+                    return;
+                removeDrawables();
+                self.next(nextScene);
             });
         }
 
@@ -283,4 +287,4 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
     };
 
     return Credits;
-})(Transition, window, calcScreenConst, changeCoords, changePath, Repository);
+})(Transition, window, calcScreenConst, changeCoords, changePath, changeTouchable, Repository);

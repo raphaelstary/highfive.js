@@ -18,10 +18,22 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         this.resizeRepo = new Repository();
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+        this.fadeOffSet = false;
 
         var self = this;
+
+        function getFadeOffSet() {
+            if (self.fadeOffSet)
+                return - self.screenWidth;
+            return 0;
+        }
+
+        function getWidthHalf() {
+            return calcScreenConst(self.screenWidth, 2) + getFadeOffSet();
+        }
+
         function getLogoX() {
-            return calcScreenConst(self.screenWidth, 2);
+            return getWidthHalf();
         }
         function getLogoY() {
             return calcScreenConst(self.screenHeight, 32, 7);
@@ -36,7 +48,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             return calcScreenConst(self.stage.getSubImage('ship').height, 2) + self.screenHeight;
         }
         function getShipX() {
-            return calcScreenConst(self.screenWidth, 2);
+            return getWidthHalf();
         }
         function getShipEndY() {
             return calcScreenConst(self.screenHeight, 2);
@@ -75,11 +87,14 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
 
         var shareFb, shareTw, credits, settings, lightFrame;
         var allTouchables = [
-            {touchable: playTouchable, fn: startPlaying}
+            {touchable: playTouchable, fn: startPlaying, anchor: pressPlay}
         ];
 
         function registerTapListener() {
             allTouchables.forEach(function (wrapper) {
+                changeTouchable(wrapper.touchable, wrapper.anchor.getCornerX(), wrapper.anchor.getCornerY(),
+                wrapper.anchor.getWidth(), wrapper.anchor.getHeight());
+
                 self.tapController.add(wrapper.touchable, wrapper.fn);
             });
         }
@@ -108,7 +123,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             var topRaster = getTopY();
 
             function getSettingsX() {
-                return calcScreenConst(self.stage.getSubImage('settings').width, 2);
+                return calcScreenConst(self.stage.getSubImage('settings').width, 2) + getFadeOffSet();
             }
 
             settings = self.stage.drawFresh(getSettingsX(), topRaster, 'settings');
@@ -121,7 +136,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
                 var imgHalf = calcScreenConst(self.stage.getSubImage('share-fb').width, 2);
                 var padding = calcScreenConst(self.stage.getSubImage('share-fb').width, 4, 5);
 
-                return self.screenWidth - fivePerCent - imgHalf - padding;
+                return self.screenWidth - fivePerCent - imgHalf - padding + getFadeOffSet();
             }
 
             shareFb = self.stage.drawFresh(getFbX(), topRaster, 'share-fb');
@@ -133,7 +148,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
                 var fivePerCent = calcScreenConst(self.screenWidth, 20);
                 var imgHalf = calcScreenConst(self.stage.getSubImage('share-fb').width, 2);
 
-                return self.screenWidth - fivePerCent - imgHalf;
+                return self.screenWidth - fivePerCent - imgHalf + getFadeOffSet();
             }
 
             shareTw = self.stage.drawFresh(getTwitterX(), topRaster, 'share-twitter');
@@ -148,7 +163,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             var bottomRaster = getBottomY();
 
             function getButtonX() {
-                return calcScreenConst(self.screenWidth, 4, 3);
+                return calcScreenConst(self.screenWidth, 4, 3) + getFadeOffSet();
             }
 
             var xButton = getButtonX();
@@ -167,7 +182,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
                     lightFrame.getWidth(), lightFrame.getHeight());
             });
 
-            allTouchables.push({touchable: creditsTouchable, fn: goToCreditsScreen});
+            allTouchables.push({touchable: creditsTouchable, fn: goToCreditsScreen, anchor: lightFrame});
 
             function goToCreditsScreen() {
                 credits.txt.alpha = 1;
@@ -179,10 +194,15 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
                 unRegisterTapListener();
 
                 function continuePreGame() {
+                    self.fadeOffSet = false;
                     registerTapListener();
                     doTheShields = true;
                     shieldsAnimation();
                     self.resizeBus.remove('credits_scene');
+                }
+
+                function setFadeOffSet() {
+                    self.fadeOffSet = true;
                 }
 
                 doTheShields = false;
@@ -190,7 +210,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
                 self.resizeBus.add('credits_scene', creditsScreen.resize.bind(creditsScreen));
                 creditsScreen.show(continuePreGame,
                     [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
-                        shipDrawable, fireDrawable], self.screenWidth, self.screenHeight);
+                        shipDrawable, fireDrawable], self.screenWidth, self.screenHeight, setFadeOffSet);
             }
 
             registerTapListener();
