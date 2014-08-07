@@ -23,21 +23,15 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
             return calcScreenConst(self.screenWidth, 2);
         }
 
-        var widthHalf = getWidthHalf();
-
         function getGameOverY() {
             return calcScreenConst(self.screenHeight, 5);
         }
-
-        var gameOverY = getGameOverY();
 
         function getGameOverStartY() {
             return getGameOverY() - self.screenHeight;
         }
 
-        var gameOverStartY = getGameOverStartY();
-
-        var gameOverWrapper = self.stage.moveFresh(widthHalf, gameOverStartY, 'gameover', widthHalf, gameOverY, 60, Transition.EASE_OUT_ELASTIC, false, function () {
+        var gameOverWrapper = self.stage.moveFresh(getWidthHalf(), getGameOverStartY(), 'gameover', getWidthHalf(), getGameOverY(), 60, Transition.EASE_OUT_ELASTIC, false, function () {
             self.resizeRepo.add(gameOverDrawable, realGameOverResizing);
 
             function realGameOverResizing() {
@@ -52,7 +46,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                 return getScoreY() - self.screenHeight;
             }
 
-            var scoreWrapper = self.stage.moveFresh(widthHalf, getScoreStartY(), 'score', widthHalf, getScoreY(), 60,
+            var scoreWrapper = self.stage.moveFresh(getWidthHalf(), getScoreStartY(), 'score', getWidthHalf(), getScoreY(), 60,
                 Transition.EASE_OUT_BOUNCE, false, function () {
                     self.resizeRepo.add(scoreDrawable, realScoreTxtResizing);
                 });
@@ -139,7 +133,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
 
             var bestStartY = getBestStartY();
 
-            var bestWrapper = self.stage.moveFreshLater(widthHalf, bestStartY, 'best', widthHalf, bestY, 60,
+            var bestWrapper = self.stage.moveFreshLater(getWidthHalf(), bestStartY, 'best', getWidthHalf(), bestY, 60,
                 Transition.EASE_OUT_BOUNCE, 10, false, function () {
                     self.resizeRepo.add(bestDrawable, realBestResizing);
                 });
@@ -217,7 +211,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
             }
 
             var playStartY = getPlayStartY();
-            var playWrapper = self.stage.moveFreshLater(widthHalf, playStartY, 'play', widthHalf, playY, 60, Transition.EASE_OUT_BOUNCE, 20, false, function () {
+            var playWrapper = self.stage.moveFreshLater(getWidthHalf(), playStartY, 'play', getWidthHalf(), playY, 60, Transition.EASE_OUT_BOUNCE, 20, false, function () {
 
                 var touchable = {id: 'play_again_tap', x: 0, y: 0, width: self.screenWidth, height: self.screenHeight};
 
