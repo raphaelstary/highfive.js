@@ -92,6 +92,7 @@ var InGameTutorial = (function (require) {
             skipTouchable = {id: 'skip_tap', x: widthHalf, y: y - heightSixteenth,
                 width: widthHalf, height: require.calcScreenConst(screenHeight, 8)};
             self.tapController.add(skipTouchable, function () {
+                self.tapController.remove(skipTouchable);
                 skipTxt.txt.alpha = 1;
                 require.window.setTimeout(function () {
                     removeEveryThing();
