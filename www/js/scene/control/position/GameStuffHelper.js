@@ -1,4 +1,4 @@
-var GameStuffHelper = (function (FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper, CountHelper) {
+var GameStuffHelper = (function (FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper, CountHelper, EnergyBarHelper, LifeHelper, ShieldsHelper) {
     "use strict";
 
     function drawSharedGameStuff(stage, sceneStorage, screenWidth, screenHeight) {
@@ -27,10 +27,16 @@ var GameStuffHelper = (function (FireHelper, ShipHelper, BackGroundHelper, Speed
             SpeedStripesHelper.resize(sceneStorage.speedStripes, stage, width, height);
         if (sceneStorage.counts)
             CountHelper.resize(sceneStorage.counts, stage, width, height);
+        if (sceneStorage.energyBar)
+            EnergyBarHelper.resize(sceneStorage.energyBar, width, height);
+        if (sceneStorage.lives)
+            LifeHelper.resize(sceneStorage.lives, stage, width, height);
+        if (sceneStorage.shields)
+            ShieldsHelper.resize(sceneStorage.shields, width, height);
     }
 
     return {
         resize: resizeSharedGameStuff,
         draw: drawSharedGameStuff
     };
-})(FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper, CountHelper);
+})(FireHelper, ShipHelper, BackGroundHelper, SpeedStripesHelper, CountHelper, EnergyBarHelper, LifeHelper, ShieldsHelper);

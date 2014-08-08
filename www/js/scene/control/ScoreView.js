@@ -11,16 +11,29 @@ var ScoreView = (function (calcScreenConst) {
         this.screenHeight = screenHeight;
     }
 
-    ScoreView.prototype.showScoredPoints = function (x, y) {
+    ScoreView.prototype._setDrawablePosition = function (x, y) {
         var yOffSet = calcScreenConst(this.screenHeight, 48, 5);
 
         this.scoredPointsDrawable.x = x;
         this.scoredPointsDrawable.y = y - yOffSet;
 
+        this.lastX = x;
+        this.lastY = y;
+    };
+
+    ScoreView.prototype.showScoredPoints = function (x, y) {
+        this._setDrawablePosition(x, y);
+
         var self = this;
         this.stage.animate(this.scoredPointsDrawable, this.scoredPointsSprite, function () {
             self.stage.remove(self.scoredPointsDrawable);
         });
+    };
+
+    ScoreView.prototype.resize = function (width, height) {
+        this.screenWidth = width;
+        this.screenHeight = height;
+        this._setDrawablePosition(this.lastX, this.lastY);
     };
 
     return ScoreView;

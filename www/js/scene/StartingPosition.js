@@ -1,4 +1,4 @@
-var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper) {
+var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper, EnergyBarHelper, LifeHelper) {
     "use strict";
 
     function StartingPosition(stage, sceneStorage, resizeBus) {
@@ -44,7 +44,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         var lifeOneWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), 'playerlife', lifeX(), yTop(), speed,
             spacing, 20, false, function () {
                 self.resizeRepo.add(lifeOneWrapper.drawable, function () {
-                    changeCoords(lifeOneWrapper.drawable, lifeX(), yTop());
+                    LifeHelper.resizeLifeOne(lifeOneWrapper.drawable, self.screenWidth, self.screenHeight);
                 });
                 goodToGo();
             });
@@ -62,7 +62,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         var lifeTwoWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), 'playerlife', lifeTwoEndX(), yTop(),
             speed, spacing, 15, false, function () {
                 self.resizeRepo.add(lifeTwoWrapper.drawable, function () {
-                    changeCoords(lifeTwoWrapper.drawable, lifeTwoEndX(), yTop());
+                    LifeHelper.resizeLifeTwo(lifeTwoWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
                 });
                 goodToGo();
             });
@@ -78,7 +78,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         var lifeThreeWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), 'playerlife', lifeThreeEndX(), yTop(),
             speed, spacing, 10, false, function () {
                 self.resizeRepo.add(lifeThreeWrapper.drawable, function () {
-                    changeCoords(lifeThreeWrapper.drawable, lifeThreeEndX(), yTop());
+                    LifeHelper.resizeLifeThree(lifeThreeWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
                 });
                 goodToGo();
             });
@@ -99,7 +99,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         var energyBarWrapper = self.stage.moveFresh(energyStartX(), yBottom(), 'energy_bar_full', energyX(), yBottom(),
             speed, spacing, false, function () {
                 self.resizeRepo.add(energyBarWrapper.drawable, function() {
-                    changeCoords(energyBarWrapper.drawable, energyX(), yBottom());
+                    EnergyBarHelper.resize(energyBarWrapper.drawable, self.screenWidth, self.screenHeight);
                 });
                 goodToGo();
             });
@@ -191,4 +191,4 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
     };
 
     return StartingPosition;
-})(Transition, calcScreenConst, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper);
+})(Transition, calcScreenConst, CountHelper, getTopRaster, Repository, changeCoords, changePath, GameStuffHelper, EnergyBarHelper, LifeHelper);
