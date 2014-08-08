@@ -113,7 +113,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         var firstDigitWrapper = self.stage.moveFreshLater(firstX + screenOffSet, yTop(), zero, firstX, yTop(), speed,
             spacing, 10, false, function () {
                 self.resizeRepo.add(firstDigitWrapper.drawable, function () {
-                    CountHelper.resize1st(firstDigitWrapper.drawable)
+                    CountHelper.resize1st(firstDigitWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
                 });
                 goodToGo();
             });
