@@ -1,4 +1,4 @@
-var ResourceLoader = (function () {
+var ResourceLoader = (function (Blob, BlobBuilder) {
     "use strict";
 
     var ResourceType = {
@@ -77,7 +77,18 @@ var ResourceLoader = (function () {
                 xhrFont.responseType = "arraybuffer";
 
                 xhrFont.onload = function () {
-                    elem.file.blob = new Blob([xhrFont.response], {type: "application/font-woff"});
+
+                    if (BlobBuilder) {
+                        var blobBuilder = new BlobBuilder();
+                        blobBuilder.append(xhrFont.response);
+                        elem.file.blob = blobBuilder.getBlob();
+
+                    } else if (Blob) {
+                        elem.file.blob = new Blob([xhrFont.response], {type: "application/font-woff"});
+
+                    } else {
+                        // todo error blobs are not supported
+                    }
 
                     self.onResourceLoad();
                 };
@@ -101,4 +112,4 @@ var ResourceLoader = (function () {
     };
 
     return ResourceLoader;
-})();
+})(Blob, window.WebKitBlobBuilder);

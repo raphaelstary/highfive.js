@@ -32,5 +32,39 @@
             "credits": "credits",
             "more_games": "more games"
         }
+    },
+    "de": {
+        "tutorial": {
+            "touch_and_hold": "touch & gedrueckt lassen, irgendwo",
+            "to_raise_shields": "um die Schilde hochzufahren",
+            "destroy_asteroids": "zerstoere Asteroiden mit deinem Schild",
+            "drain_energy": "shields consume energy",
+            "no_energy": "no energy, no shields",
+            "collect_stuff": "collect stars to score points",
+            "nice": "nice",
+            "good": "good job",
+            "well_done": "well done",
+            "awesome": "awesome",
+            "skip": "skip tutorial >"
+        },
+        "credits": {
+            "a": "a",
+            "game": "game",
+            "by": "by",
+            "raphael_stary": "Raphael Stary",
+            "raphael_twitter": "@raphaelstary",
+            "from": "from",
+            "letsplayIO_twitter": "@letsplayIO",
+            "letsplayIO_fb": "/letsplayIO",
+            "graphics": "graphics"
+        },
+        "game_over": {
+            "score": "score",
+            "best": "best"
+        },
+        "pre_game": {
+            "credits": "credits",
+            "more_games": "more games"
+        }
     }
 }

@@ -4,6 +4,8 @@ var UniversalTranslator = (function (defaultLanguage) {
     function UniversalTranslator(locales) {
         this.locales = locales;
         this.language = defaultLanguage.substring(0, 2);
+        if (!this.language)
+            this.language = 'en';
     }
 
     UniversalTranslator.prototype.setLanguage = function (languageCode) {
