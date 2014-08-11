@@ -3,9 +3,7 @@ var UniversalTranslator = (function (defaultLanguage) {
 
     function UniversalTranslator(locales) {
         this.locales = locales;
-        this.language = defaultLanguage.substring(0, 2);
-        if (!this.language)
-            this.language = 'en';
+        this.language = defaultLanguage ? defaultLanguage.substring(0, 2) : 'en';
     }
 
     UniversalTranslator.prototype.setLanguage = function (languageCode) {
@@ -17,4 +15,4 @@ var UniversalTranslator = (function (defaultLanguage) {
     };
 
     return UniversalTranslator;
-})(window.navigator.language);
+})(window.navigator.language || window.navigator.userLanguage);

@@ -9,14 +9,31 @@ window.onload = function () {
     }
 
     function installInputListeners(screen, screenInput, gameController) {
-        screen.addEventListener('touchstart', screenInput.touchStart.bind(screenInput));
-        screen.addEventListener('click', screenInput.click.bind(screenInput));
+        if ('ontouchstart' in window) {
+            screen.addEventListener('touchstart', screenInput.touchStart.bind(screenInput));
 
-        screen.addEventListener('touchstart', gameController.touchStart.bind(gameController));
-        screen.addEventListener('touchend', gameController.touchEnd.bind(gameController));
+            screen.addEventListener('touchstart', gameController.touchStart.bind(gameController));
+            screen.addEventListener('touchend', gameController.touchEnd.bind(gameController));
+        }
 
-        screen.addEventListener('mousedown', gameController.mouseDown.bind(gameController));
-        screen.addEventListener('mouseup', gameController.mouseUp.bind(gameController));
+        if(window.PointerEvent) {
+            screen.addEventListener('pointerdown', screenInput.click.bind(screenInput));
+
+            screen.addEventListener('pointerdown', gameController.mouseDown.bind(gameController));
+            screen.addEventListener('pointerup', gameController.mouseUp.bind(gameController));
+
+        } else if (window.MSPointerEvent) {
+            screen.addEventListener('MSPointerDown', screenInput.click.bind(screenInput));
+
+            screen.addEventListener('MSPointerDown', gameController.mouseDown.bind(gameController));
+            screen.addEventListener('MSPointerUp', gameController.mouseUp.bind(gameController));
+
+        } else {
+            screen.addEventListener('click', screenInput.click.bind(screenInput));
+
+            screen.addEventListener('mousedown', gameController.mouseDown.bind(gameController));
+            screen.addEventListener('mouseup', gameController.mouseUp.bind(gameController));
+        }
     }
 
     function startApp(resizeBus, screenInput, gameController, screen) {
