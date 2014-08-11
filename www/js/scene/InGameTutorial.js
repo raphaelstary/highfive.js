@@ -210,15 +210,18 @@ var InGameTutorial = (function (require) {
         }
 
         function get__4() {
-            return require.calcScreenConst(self.screenHeight, 100);
+            var value = require.calcScreenConst(self.screenHeight, 100);
+            return  value > 0 ? value : 1;
         }
 
         function get__2() {
-            return require.calcScreenConst(self.screenHeight, 200);
+            var value = require.calcScreenConst(self.screenHeight, 200);
+            return  value > 0 ? value : 1;
         }
 
         function get__1() {
-            return require.calcScreenConst(self.screenHeight, 400);
+            var value = require.calcScreenConst(self.screenHeight, 400);
+            return  value > 0 ? value : 1;
         }
 
         var __4 = get__4();

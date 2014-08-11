@@ -1,4 +1,4 @@
-var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords, changePath) {
+var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords, changePath, Math) {
     "use strict";
 
     function ObstaclesView(stage, trackedAsteroids, trackedStars, resizeRepo, screenWidth, screenHeight) {
@@ -22,11 +22,11 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
 
     ObstaclesView.prototype.drawStar = function (imgName, x, speed, relativePosition) {
         var starHeightHalf = calcScreenConst(this.stage.getSubImage('star1-anim/star1_0000').height, 2);
-        var responsiveTimeUnit = calcScreenConst(this.screenHeight, 480);
+        var responsiveTime = calcScreenConst(this.screenHeight, 480, speed);
 
         var star = this.stage.animateFresh(x, - starHeightHalf, imgName, 30);
         var path = this.stage.getPath(x, -starHeightHalf, x, this.screenHeight + starHeightHalf,
-            speed * responsiveTimeUnit, Transition.LINEAR);
+            responsiveTime, Transition.LINEAR);
 
         this.stage.move(star, path);
         this.trackedStars[star.id] = star;
@@ -38,7 +38,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
                 var newX = Math.floor((self._getStarEndRange(startRange) - startRange) / 100 * relativePosition + startRange);
                 changeCoords(star, newX,- starHeightHalf);
                 changePath(path, newX, -starHeightHalf, newX, self.screenHeight + starHeightHalf);
-                path.duration = speed * calcScreenConst(self.screenHeight, 480)
+                path.duration = calcScreenConst(self.screenHeight, 480, speed)
             });
         }
         return star;
@@ -71,10 +71,10 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
 
     ObstaclesView.prototype.drawAsteroid = function (imgName, x, speed, relativePosition) {
         var asteroidHeightHalf = calcScreenConst(this.stage.getSubImage(imgName).height, 2);
-        var responsiveTimeUnit = calcScreenConst(this.screenHeight, 480);
+        var responsiveTime = calcScreenConst(this.screenHeight, 480, speed);
 
         var asteroid = this.stage.moveFresh(x, - asteroidHeightHalf, imgName, x, this.screenHeight + asteroidHeightHalf,
-            speed * responsiveTimeUnit, Transition.LINEAR);
+             responsiveTime, Transition.LINEAR);
         this.trackedAsteroids[asteroid.drawable.id] = asteroid.drawable;
 
         if (relativePosition) {
@@ -84,7 +84,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
                 var newX = Math.floor((self._getAsteroidEndRange(startRange) - startRange) / 100 * relativePosition + startRange);
                 changeCoords(asteroid.drawable, newX, - asteroidHeightHalf);
                 changePath(asteroid.path, newX, - asteroidHeightHalf, newX, self.screenHeight + asteroidHeightHalf);
-                asteroid.path.duration = calcScreenConst(self.screenHeight, 480) * speed;
+                asteroid.path.duration = calcScreenConst(self.screenHeight, 480, speed);
             });
         }
 
@@ -114,4 +114,4 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
     };
 
     return ObstaclesView;
-})(Transition, range, calcScreenConst, changeCoords, changePath);
+})(Transition, range, calcScreenConst, changeCoords, changePath, Math);
