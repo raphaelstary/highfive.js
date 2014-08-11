@@ -1,20 +1,36 @@
 var PlayGame = (function (require) {
     "use strict";
 
-    function PlayGame(stage, sceneStorage, gameLoop, gameController, atlas) {
+    function PlayGame(stage, sceneStorage, gameLoop, gameController, atlas, resizeBus) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
         this.gameController = gameController;
         this.atlas = atlas;
+        this.resizeBus = resizeBus;
     }
 
+    PlayGame.prototype.resize = function (width, height) {
+        this.screenWidth = width;
+        this.screenHeight = height;
+        require.GameStuffHelper.resize(this.stage, this.sceneStorage, width, height);
+        this.resizeRepo.call();
+        this.resizeShaker();
+    };
+
     PlayGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
-        var __400 = require.calcScreenConst(screenHeight, 6, 5);
+        this.resizeBus.add('play_game_scene', this.resize.bind(this));
+        this.resizeRepo = new require.Repository();
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+
+        var self = this;
+
+        var __400 = require.calcScreenConst(self.screenHeight, 6, 5);
 
         var shipDrawable = this.sceneStorage.ship,
             shieldsDrawable = this.sceneStorage.shields ||
-                this.stage.getDrawable(require.calcScreenConst(screenWidth, 2), __400, 'shields'),
+                (this.sceneStorage.shields = this.stage.getDrawable(require.calcScreenConst(self.screenWidth, 2), __400, 'shields')),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
@@ -25,12 +41,6 @@ var PlayGame = (function (require) {
             shieldsDownSprite =
                 this.sceneStorage.shieldsDown || this.stage.getSprite('shields-down-anim/shields_down', 6, false);
 
-        delete this.sceneStorage.shields;
-        delete this.sceneStorage.energyBar;
-        delete this.sceneStorage.lives;
-        delete this.sceneStorage.shieldsUp;
-        delete this.sceneStorage.shieldsDown;
-
         var shaker = new require.ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
             lifeDrawablesDict[2], lifeDrawablesDict[3], fireDrawable]);
         countDrawables.forEach(shaker.add.bind(shaker));
@@ -38,17 +48,24 @@ var PlayGame = (function (require) {
             shaker.add(wrapper.drawable);
         });
 
-        var self = this;
+        this.resizeShaker = shaker.resize.bind(shaker);
 
         var trackedAsteroids = {};
         var trackedStars = {};
-
-        var level = new require.LevelGenerator(new require.ObstaclesView(this.stage, trackedAsteroids, trackedStars,
-            screenWidth, screenHeight));
+        var obstaclesResizeRepo = new require.Repository();
+        var obstaclesView = new require.ObstaclesView(this.stage, trackedAsteroids, trackedStars, obstaclesResizeRepo,
+            self.screenWidth, self.screenHeight);
+        self.resizeRepo.add({id: 'obstacle_view'}, function () {
+            obstaclesView.resize(self.screenWidth, self.screenHeight);
+        });
+        var level = new require.LevelGenerator(obstaclesView);
 
         var scoreDisplay = new require.Odometer(new require.OdometerView(this.stage, countDrawables));
         var collectAnimator = new require.CollectView(this.stage, shipDrawable, 3);
-        var scoreAnimator = new require.ScoreView(this.stage, screenWidth, screenHeight);
+        var scoreAnimator = new require.ScoreView(this.stage, self.screenWidth, self.screenHeight);
+        self.resizeRepo.add({id: 'score_view_game'}, function () {
+            scoreAnimator.resize(self.screenWidth, self.screenHeight);
+        });
         var shipCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('ship'),
             shipDrawable);
         var shieldsCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('shield3'),
@@ -56,7 +73,7 @@ var PlayGame = (function (require) {
 
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
-            endGame);
+            obstaclesResizeRepo.remove.bind(obstaclesResizeRepo), endGame);
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', world.checkCollisions.bind(world));
@@ -68,7 +85,10 @@ var PlayGame = (function (require) {
         var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
             shieldsDownSprite, energyBarDrawable);
 
-        var touchable = {id: 'shields_up', x: 0, y: 0, width: screenWidth, height: screenHeight};
+        var touchable = {id: 'shields_up', x: 0, y: 0, width: self.screenWidth, height: self.screenHeight};
+        self.resizeRepo.add(touchable, function () {
+            require.changeTouchable(touchable, 0, 0, self.screenWidth, self.screenHeight);
+        });
         this.gameController.add(touchable,
             energyStates.drainEnergy.bind(energyStates), energyStates.loadEnergy.bind(energyStates));
 
@@ -101,9 +121,15 @@ var PlayGame = (function (require) {
             self.gameLoop.remove('level');
 
             self.gameController.remove(touchable);
-            var outOffSet = require.calcScreenConst(screenWidth, 3);
+            var outOffSet = require.calcScreenConst(self.screenWidth, 3);
             var barOut = self.stage.getPath(energyBarDrawable.x, energyBarDrawable.y,
                 energyBarDrawable.x, energyBarDrawable.y + outOffSet, 60, require.Transition.EASE_OUT_EXPO);
+
+            self.resizeRepo.add(energyBarDrawable, function () {
+                var outOffSet = require.calcScreenConst(self.screenWidth, 3);
+                require.changePath(energyBarDrawable, energyBarDrawable.x, energyBarDrawable.y,
+                    energyBarDrawable.x, energyBarDrawable.y + outOffSet)
+            });
 
             self.stage.move(energyBarDrawable, barOut, function () {
                 self.stage.remove(energyBarDrawable);
@@ -114,6 +140,16 @@ var PlayGame = (function (require) {
     };
 
     PlayGame.prototype.next = function (nextScene, points) {
+        delete this.resizeRepo;
+        this.resizeBus.remove('play_game_scene');
+        delete this.resizeShaker;
+
+        delete this.sceneStorage.shields;
+        delete this.sceneStorage.energyBar;
+        delete this.sceneStorage.lives;
+        delete this.sceneStorage.shieldsUp;
+        delete this.sceneStorage.shieldsDown;
+
         this.sceneStorage.points = points;
 
         nextScene();
@@ -132,5 +168,10 @@ var PlayGame = (function (require) {
     CanvasCollisionDetector: CanvasCollisionDetector,
     GameWorld: GameWorld,
     EnergyStateMachine: EnergyStateMachine,
-    calcScreenConst: calcScreenConst
+    calcScreenConst: calcScreenConst,
+    GameStuffHelper: GameStuffHelper,
+    Repository: Repository,
+    changeTouchable: changeTouchable,
+    changeCoords: changeCoords,
+    changePath: changePath
 });

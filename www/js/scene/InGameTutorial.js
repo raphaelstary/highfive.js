@@ -53,7 +53,8 @@ var InGameTutorial = (function (require) {
         }
 
         var shipDrawable = this.sceneStorage.ship,
-            shieldsDrawable = this.sceneStorage.shields || this.stage.getDrawable(getWidthHalf(), get__400(), 'shields'),
+            shieldsDrawable = this.sceneStorage.shields ||
+                (this.sceneStorage.shields = this.stage.getDrawable(getWidthHalf(), get__400(), 'shields')),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
@@ -66,6 +67,7 @@ var InGameTutorial = (function (require) {
 
         var shaker = new require.ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
             lifeDrawablesDict[2], lifeDrawablesDict[3], fireDrawable]);
+        this.resizeShaker = shaker.resize.bind(shaker);
         countDrawables.forEach(shaker.add.bind(shaker));
         speedStripes.forEach(function (wrapper) {
             shaker.add(wrapper.drawable);
@@ -79,15 +81,19 @@ var InGameTutorial = (function (require) {
 
         var scoreDisplay = new require.Odometer(new require.OdometerView(this.stage, countDrawables));
         var collectAnimator = new require.CollectView(this.stage, shipDrawable, 3);
+
         var scoreAnimator = new require.ScoreView(this.stage, self.screenWidth, self.screenHeight);
+        self.resizeRepo.add({id: 'score_view_tutorial'}, function () {
+            scoreAnimator.resize(self.screenWidth, self.screenHeight);
+        });
+
         var shipCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('ship'),
             shipDrawable);
         var shieldsCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('shield3'),
             shieldsDrawable);
-
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
-            endGame);
+            function () {}, endGame);
 
         this.gameLoop.add('shake_tutorial', shaker.update.bind(shaker));
         this.gameLoop.add('collisions_tutorial', world.checkCollisions.bind(world));
@@ -408,6 +414,7 @@ var InGameTutorial = (function (require) {
         delete this.resizeRepo;
         delete this.screenWidth;
         delete this.screenHeight;
+        delete this.resizeShaker;
 
         nextScene();
     };
@@ -417,7 +424,8 @@ var InGameTutorial = (function (require) {
         this.screenHeight = height;
 
         require.GameStuffHelper.resize(this.stage, this.sceneStorage, width, height);
-        this.resizeRepo.call()
+        this.resizeRepo.call();
+        this.resizeShaker();
     };
 
     return InGameTutorial;

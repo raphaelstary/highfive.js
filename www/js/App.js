@@ -128,6 +128,6 @@ var App = (function (require) {
     SceneManager: SceneManager,
     FullScreenController: FullScreenController,
     addFontToDOM: addFontToDOM,
-    URL: window.URL,
+    URL: window.URL || window.webkitURL,
     UniversalTranslator: UniversalTranslator
 });

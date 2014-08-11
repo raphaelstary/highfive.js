@@ -1,4 +1,4 @@
-var ScreenShaker = (function () {
+var ScreenShaker = (function (Math) {
     "use strict";
 
     function ScreenShaker(initialDrawables) {
@@ -128,5 +128,13 @@ var ScreenShaker = (function () {
         this.shaker.push(drawable);
     };
 
+    ScreenShaker.prototype.resize = function () {
+        this.shaker.forEach(function (item) {
+            if (item._startValueX) {
+                item._startValueX = item.x;
+            }
+        });
+    };
+
     return ScreenShaker;
-})();
+})(Math);

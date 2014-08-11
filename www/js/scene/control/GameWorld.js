@@ -2,7 +2,8 @@ var GameWorld = (function () {
     "use strict";
 
     function GameWorld(stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator, scoreAnimator, shipCollision,
-                       shieldsCollision, shipDrawable, shieldsDrawable, screenShaker, lifeDrawablesDict, endGame) {
+                       shieldsCollision, shipDrawable, shieldsDrawable, screenShaker, lifeDrawablesDict, removeFromRepo,
+                       endGame) {
         this.stage = stage;
         this.trackedAsteroids = trackedAsteroids;
         this.trackedStars = trackedStars;
@@ -19,6 +20,7 @@ var GameWorld = (function () {
 
         this.shaker = screenShaker;
         this.lifeDrawablesDict = lifeDrawablesDict;
+        this.removeFromRepo = removeFromRepo;
         this.endGame = endGame;
 
         this.shieldsOn = false; //part of global game state
@@ -60,12 +62,14 @@ var GameWorld = (function () {
                 })(asteroid);
                 this.shaker.startSmallShake();
 
+                self.removeFromRepo(asteroid);
                 delete this.trackedAsteroids[key];
                 continue;
             }
 
             if (needPreciseCollisionDetection(this.shipDrawable, asteroid) && this.shipCollision.isHit(asteroid)) {
                 this.stage.remove(asteroid);
+                self.removeFromRepo(asteroid);
                 delete this.trackedAsteroids[key];
 
                 this._shipGotHit();
@@ -100,6 +104,7 @@ var GameWorld = (function () {
                     })
                 })(star);
 
+                self.removeFromRepo(star);
                 delete this.trackedStars[key];
                 continue;
             }
@@ -112,6 +117,7 @@ var GameWorld = (function () {
                 this.points += score;
 
                 this.stage.remove(star);
+                self.removeFromRepo(star);
                 delete this.trackedStars[key];
 //                    continue;
             }
