@@ -23,6 +23,7 @@ var App = (function (require) {
             atlas1 = resourceLoader.addImage('gfx/atlas1.png'),
             atlasInfo0 = resourceLoader.addJSON('data/atlas0.json'),
             atlasInfo1 = resourceLoader.addJSON('data/atlas1.json'),
+            audioInfo = resourceLoader.addJSON('data/audio.json'),
             fontBlock = resourceLoader.addFont('data/kenpixel_blocks.woff'),
             font = resourceLoader.addFont('data/kenpixel.woff'),
             locales = resourceLoader.addJSON('data/locales.json'),
@@ -38,15 +39,15 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var sceneStuff = self._initCommonSceneStuff(atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales);
-            self._initScenes(sceneStuff.stage, sceneStuff.messages);
+            var sceneStuff = self._initCommonSceneStuff(atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales, audioInfo);
+            self._initScenes(sceneStuff.stage, sceneStuff.messages, sceneStuff.sounds);
             self._doThePlay();
         };
 
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales) {
+    App.prototype._initCommonSceneStuff = function (atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales, audioInfo) {
         require.addFontToDOM([
             {name: 'KenPixel', url: require.URL.createObjectURL(font.blob)},
             {name: 'KenPixelBlocks', url: require.URL.createObjectURL(fontBlock.blob)}
@@ -66,9 +67,28 @@ var App = (function (require) {
 
         this._startGameLoop(stage);
 
+//        var soundManager = new require.SoundFilesManager();
+//        soundManager.load(
+//            [
+//                'asteroid-explosion',
+//                'click',
+//                'coin',
+//                'coin2',
+//                'shields-down',
+//                'shields-up',
+//                'ship-explosion',
+//                'star-explosion',
+//                'star-taken'
+//            ]
+//        );
+
+        var soundManager = new require.SoundSpriteManager();
+        soundManager.load(audioInfo);
+
         return {
             stage: stage,
-            messages: new require.UniversalTranslator(locales)
+            messages: new require.UniversalTranslator(locales),
+            sounds: soundManager
         };
     };
 
@@ -78,19 +98,20 @@ var App = (function (require) {
         this.gameLoop.run();
     };
 
-    App.prototype._initScenes = function (stage, messages) {
+    App.prototype._initScenes = function (stage, messages, sounds) {
         var sceneStorage = {};
 
         var intro = new require.Intro(stage, sceneStorage, this.gameLoop, this.resizeBus);
         var preGame = new require.PreGame(stage, sceneStorage, this.tapController,
-            new require.FullScreenController(this.screen), messages, this.resizeBus);
-        var startingPosition = new require.StartingPosition(stage, sceneStorage, this.resizeBus);
+            new require.FullScreenController(this.screen), messages, this.resizeBus, sounds);
+        var startingPosition = new require.StartingPosition(stage, sceneStorage, this.resizeBus, sounds);
         var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
-            messages, this.tapController, this.resizeBus);
+            messages, this.tapController, this.resizeBus, sounds);
         var getReady = new require.GetReady(stage, sceneStorage, this.resizeBus);
-        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, this.resizeBus);
-        var killScreen = new require.KillScreen(stage, sceneStorage, this.resizeBus);
-        var postGame = new require.PostGame(stage, sceneStorage, this.tapController, this.resizeBus);
+        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, this.resizeBus,
+            sounds);
+        var killScreen = new require.KillScreen(stage, sceneStorage, this.resizeBus, sounds);
+        var postGame = new require.PostGame(stage, sceneStorage, this.tapController, this.resizeBus, sounds);
 
         var sceneManager = this.sceneManager = new require.SceneManager();
 
@@ -134,5 +155,7 @@ var App = (function (require) {
     FullScreenController: FullScreenController,
     addFontToDOM: addFontToDOM,
     URL: window.URL || window.webkitURL,
-    UniversalTranslator: UniversalTranslator
+    UniversalTranslator: UniversalTranslator,
+    SoundFilesManager: SoundFilesManager,
+    SoundSpriteManager: SoundSpriteManager
 });

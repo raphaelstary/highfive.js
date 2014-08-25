@@ -1,13 +1,14 @@
 var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuffHelper, changeCoords, changePath, changeTouchable, Repository) {
     "use strict";
 
-    function PreGame(stage, sceneStorage, tapController, fullScreen, messages, resizeBus) {
+    function PreGame(stage, sceneStorage, tapController, fullScreen, messages, resizeBus, sounds) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.tapController = tapController;
         this.fullScreen = fullScreen;
         this.messages = messages;
         this.resizeBus = resizeBus;
+        this.sounds = sounds;
     }
 
     PreGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -222,6 +223,8 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         });
 
         function startPlaying() {
+            self.sounds.play('click');
+
             pressPlay.img = self.stage.getSubImage('play-active');
 
             window.setTimeout(function () {
