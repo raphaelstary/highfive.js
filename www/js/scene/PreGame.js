@@ -186,11 +186,12 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             allTouchables.push({touchable: creditsTouchable, fn: goToCreditsScreen, anchor: lightFrame});
 
             function goToCreditsScreen() {
+                self.sounds.play('click');
                 credits.txt.alpha = 1;
                 window.setTimeout(function () {
                     credits.txt.alpha = 0.5;
                 }, 1500);
-                var creditsScreen = new Credits(self.stage, self.tapController, self.messages);
+                var creditsScreen = new Credits(self.stage, self.tapController, self.messages, self.sounds);
 
                 unRegisterTapListener();
 

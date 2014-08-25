@@ -1,7 +1,7 @@
 var InGameTutorial = (function (require) {
     "use strict";
 
-    function InGameTutorial(stage, sceneStorage, gameLoop, gameController, messages, tapController, resizeBus) {
+    function InGameTutorial(stage, sceneStorage, gameLoop, gameController, messages, tapController, resizeBus, sounds) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
@@ -9,6 +9,7 @@ var InGameTutorial = (function (require) {
         this.messages = messages;
         this.tapController = tapController;
         this.resizeBus = resizeBus;
+        this.sounds = sounds;
     }
 
     InGameTutorial.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -90,7 +91,7 @@ var InGameTutorial = (function (require) {
         var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('shield3'), shieldsDrawable);
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
-            function () {}, endGame);
+            function () {}, endGame, this.sounds);
 
         this.gameLoop.add('shake_tutorial', shaker.update.bind(shaker));
         this.gameLoop.add('collisions_tutorial', world.checkCollisions.bind(world));
@@ -99,7 +100,7 @@ var InGameTutorial = (function (require) {
         shieldsDrawable.y = shipDrawable.y;
 
         var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
-            shieldsDownSprite, energyBarDrawable);
+            shieldsDownSprite, energyBarDrawable, this.sounds);
 
         var touchable = {id: 'shields_up_tutorial', x: 0, y: 0, width: self.screenWidth, height: self.screenHeight};
         self.resizeRepo.add(touchable, function () {
@@ -134,6 +135,7 @@ var InGameTutorial = (function (require) {
             skipTouchable = {id: 'skip_tap', x: getWidthHalf(), y: getY() - getHeightSixteenth(),
                 width: getWidthHalf(), height: getHeight()};
             self.tapController.add(skipTouchable, function () {
+                self.sounds.play('click');
                 self.tapController.remove(skipTouchable);
                 skipTxt.txt.alpha = 1;
                 require.window.setTimeout(function () {
@@ -295,6 +297,7 @@ var InGameTutorial = (function (require) {
                 });
 
                 self.tapController.add(okTouchable, function () {
+                    self.sounds.play('click');
                     self.tapController.remove(okTouchable);
                     okButton.img = self.stage.getSubImage('ok-active');
                     require.window.setTimeout(function () {

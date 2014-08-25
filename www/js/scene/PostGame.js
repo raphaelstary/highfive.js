@@ -1,11 +1,12 @@
 var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundHelper, Repository, changeCoords, changePath, changeTouchable) {
     "use strict";
 
-    function PostGame(stage, sceneStorage, tapController, resizeBus) {
+    function PostGame(stage, sceneStorage, tapController, resizeBus, sounds) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.tapController = tapController;
         this.resizeBus = resizeBus;
+        this.sounds = sounds;
     }
 
     PostGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -221,6 +222,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                 });
 
                 self.tapController.add(touchable, function () {
+                    self.sounds.play('click');
                     // end event
                     self.tapController.remove(touchable);
                     playDrawable.img = self.stage.getSubImage('play-active');

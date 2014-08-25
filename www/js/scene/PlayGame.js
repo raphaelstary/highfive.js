@@ -1,12 +1,13 @@
 var PlayGame = (function (require) {
     "use strict";
 
-    function PlayGame(stage, sceneStorage, gameLoop, gameController, resizeBus) {
+    function PlayGame(stage, sceneStorage, gameLoop, gameController, resizeBus, sounds) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
         this.gameController = gameController;
         this.resizeBus = resizeBus;
+        this.sounds = sounds;
     }
 
     PlayGame.prototype.resize = function (width, height) {
@@ -70,7 +71,7 @@ var PlayGame = (function (require) {
 
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
-            obstaclesResizeRepo.remove.bind(obstaclesResizeRepo), endGame);
+            obstaclesResizeRepo.remove.bind(obstaclesResizeRepo), endGame, this.sounds);
 
         this.gameLoop.add('shake', shaker.update.bind(shaker));
         this.gameLoop.add('collisions', world.checkCollisions.bind(world));
@@ -80,7 +81,7 @@ var PlayGame = (function (require) {
         shieldsDrawable.y = shipDrawable.y;
 
         var energyStates = new require.EnergyStateMachine(this.stage, world, shieldsDrawable, shieldsUpSprite,
-            shieldsDownSprite, energyBarDrawable);
+            shieldsDownSprite, energyBarDrawable, this.sounds);
 
         var touchable = {id: 'shields_up', x: 0, y: 0, width: self.screenWidth, height: self.screenHeight};
         self.resizeRepo.add(touchable, function () {

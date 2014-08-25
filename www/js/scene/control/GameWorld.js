@@ -3,7 +3,7 @@ var GameWorld = (function () {
 
     function GameWorld(stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator, scoreAnimator, shipCollision,
                        shieldsCollision, shipDrawable, shieldsDrawable, screenShaker, lifeDrawablesDict, removeFromRepo,
-                       endGame) {
+                       endGame, sounds) {
         this.stage = stage;
         this.trackedAsteroids = trackedAsteroids;
         this.trackedStars = trackedStars;
@@ -22,6 +22,8 @@ var GameWorld = (function () {
         this.lifeDrawablesDict = lifeDrawablesDict;
         this.removeFromRepo = removeFromRepo;
         this.endGame = endGame;
+
+        this.sounds = sounds;
 
         this.shieldsOn = false; //part of global game state
         this.lives = 3; //3; //part of global game state
@@ -61,7 +63,7 @@ var GameWorld = (function () {
                     })
                 })(asteroid);
                 this.shaker.startSmallShake();
-
+                this.sounds.play('asteroid-explosion');
                 self.removeFromRepo(asteroid);
                 delete this.trackedAsteroids[key];
                 continue;
@@ -103,13 +105,14 @@ var GameWorld = (function () {
                         self.stage.remove(star);
                     })
                 })(star);
-
+                self.sounds.play('star-explosion');
                 self.removeFromRepo(star);
                 delete this.trackedStars[key];
                 continue;
             }
 
             if (needPreciseCollisionDetection(this.shipDrawable, star) && this.shipCollision.isHit(star)) {
+                this.sounds.play('coin');
                 this.collectAnimator.collectStar(this.lives);
                 this.scoreAnimator.showScoredPoints(star.x, star.y);
                 var score = 10;
@@ -133,6 +136,7 @@ var GameWorld = (function () {
         });
 
         if (--this.lives > 0) {
+            self.sounds.play('asteroid-explosion');
             self.stage.animate(this.shipDrawable, this.shipHullHitSprite, function () {
                 if (self.lives == self.initialLives - 1) {
                     self.shipDrawable.img = self.stage.getSubImage('damaged-ship2');

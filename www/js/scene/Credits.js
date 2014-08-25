@@ -1,10 +1,11 @@
 var Credits = (function (Transition, window, calcScreenConst, changeCoords, changePath, changeTouchable, Repository) {
     "use strict";
 
-    function Credits(stage, tapController, messages) {
+    function Credits(stage, tapController, messages, sounds) {
         this.stage = stage;
         this.tapController = tapController;
         this.messages = messages;
+        this.sounds = sounds;
     }
 
     Credits.prototype.resize = function (width, heigth) {
@@ -187,6 +188,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 twitterTouchable.height = twitter.getHeight();
             });
             self.tapController.add(twitterTouchable, function () {
+                self.sounds.play('click');
                 window.open('https://twitter.com/letsplayIO', '_blank');
             });
 
@@ -208,6 +210,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 fbTouchable.height = fb.getHeight();
             });
             self.tapController.add(fbTouchable, function () {
+                self.sounds.play('click');
                 window.open('https://www.facebook.com/letsplayIO', '_blank');
             });
 
@@ -229,6 +232,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 letsplayIOSiteTouchable.height = letsplayIO.getHeight();
             });
             self.tapController.add(letsplayIOSiteTouchable, function () {
+                self.sounds.play('click');
                 window.open('http://letsplay.io/', '_blank');
             });
             return [twitterTouchable, fbTouchable, letsplayIOSiteTouchable];
@@ -260,6 +264,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
         touchables.push(backTouchable);
 
         function endScene() {
+            self.sounds.play('click');
             back.img = self.stage.getSubImage('back-active');
             unRegisterTapListener(touchables);
             fadeIn(creditsDrawables);

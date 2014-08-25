@@ -1,13 +1,14 @@
 var EnergyStateMachine = (function () {
     "use strict";
 
-    function EnergyStateMachine(stage, world, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, energyBarDrawable) {
+    function EnergyStateMachine(stage, world, shieldsDrawable, shieldsUpSprite, shieldsDownSprite, energyBarDrawable, sounds) {
         this.stage = stage;
         this.world = world;
         this.shieldsDrawable = shieldsDrawable;
         this.shieldsUpSprite = shieldsUpSprite;
         this.shieldsDownSprite = shieldsDownSprite;
         this.energyBarDrawable = energyBarDrawable;
+        this.sounds = sounds;
 
         this.energyDrainSprite = stage.getSprite('energy-drain-anim/energy_drain', 90, false);
         this.energyLoadSprite = stage.getSprite('energy-load-anim/energy_load', 90, false);
@@ -16,6 +17,7 @@ var EnergyStateMachine = (function () {
     EnergyStateMachine.prototype.drainEnergy = function () {
         var self = this;
         function turnShieldsOn() {
+            self.sounds.play('shields-up');
             self.world.shieldsOn = true;
             self.stage.animate(self.shieldsDrawable, self.shieldsUpSprite, function () {
                 self.shieldsDrawable.img = self.stage.getSubImage("shield3");
@@ -51,6 +53,7 @@ var EnergyStateMachine = (function () {
 
     EnergyStateMachine.prototype.turnShieldsOff = function () {
         var self = this;
+//        self.sounds.play('shields-down');
         this.world.shieldsOn = false;
         self.stage.animate(self.shieldsDrawable, self.shieldsDownSprite, function () {
             self.stage.remove(self.shieldsDrawable);

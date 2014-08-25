@@ -1,10 +1,11 @@
 var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePath, heightHalf, GameStuffHelper) {
     "use strict";
 
-    function KillScreen(stage, sceneStorage, resizeBus) {
+    function KillScreen(stage, sceneStorage, resizeBus, sounds) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.resizeBus = resizeBus;
+        this.sounds = sounds;
     }
 
     KillScreen.prototype.show = function (nextScene, screenWidth, screenHeight) {
@@ -30,6 +31,7 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
 
         self.stage.move(shipDrawable, dockShipToMiddlePosition, function () {
             self.shipDocked = true;
+            self.sounds.play('ship-explosion');
             self.stage.animate(shipDrawable, explosionSprite, function () {
                 self.stage.remove(shipDrawable);
                 self.stage.remove(fireDrawable);
