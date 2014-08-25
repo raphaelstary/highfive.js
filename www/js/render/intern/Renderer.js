@@ -1,11 +1,9 @@
 var Renderer = (function () {
     "use strict";
 
-    function Renderer(screen, ctx, atlas) {
+    function Renderer(screen, ctx) {
         this.screen = screen;
         this.ctx = ctx;
-
-        this.atlas = atlas;
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
@@ -53,7 +51,7 @@ var Renderer = (function () {
             for (var key in dict) {
                 var elem = dict[key];
 
-                self.ctx.drawImage(self.atlas, elem.img.x, elem.img.y,
+                self.ctx.drawImage(elem.img.atlas, elem.img.x, elem.img.y,
                     elem.img.width, elem.img.height,
                         elem.x + elem.img.offSetX,
                         elem.y + elem.img.offSetY,

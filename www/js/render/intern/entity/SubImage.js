@@ -1,5 +1,5 @@
 var SubImage = (function () {
-    function SubImage(x, y, width, height, offSetX, offSetY, trimmedTileWidth, trimmedTileHeight) {
+    function SubImage(x, y, width, height, offSetX, offSetY, trimmedTileWidth, trimmedTileHeight, atlas) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -8,6 +8,7 @@ var SubImage = (function () {
         this.offSetY = offSetY;
         this.trimmedTileWidth = trimmedTileWidth;
         this.trimmedTileHeight = trimmedTileHeight;
+        this.atlas = atlas;
     }
 
     return SubImage;

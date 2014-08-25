@@ -19,8 +19,10 @@ var App = (function (require) {
         // show loading screen, load binary resources
 
         var resourceLoader = new require.ResourceLoader(),
-            atlas = resourceLoader.addImage('gfx/atlas.png'),
-            atlasInfo = resourceLoader.addJSON('data/atlas.json'),
+            atlas0 = resourceLoader.addImage('gfx/atlas0.png'),
+            atlas1 = resourceLoader.addImage('gfx/atlas1.png'),
+            atlasInfo0 = resourceLoader.addJSON('data/atlas0.json'),
+            atlasInfo1 = resourceLoader.addJSON('data/atlas1.json'),
             fontBlock = resourceLoader.addFont('data/kenpixel_blocks.woff'),
             font = resourceLoader.addFont('data/kenpixel.woff'),
             locales = resourceLoader.addJSON('data/locales.json'),
@@ -36,25 +38,29 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var sceneStuff = self._initCommonSceneStuff(atlas, atlasInfo, font, fontBlock, locales);
-            self._initScenes(sceneStuff.stage, sceneStuff.messages, atlas);
+            var sceneStuff = self._initCommonSceneStuff(atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales);
+            self._initScenes(sceneStuff.stage, sceneStuff.messages);
             self._doThePlay();
         };
 
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas, atlasInfo, font, fontBlock, locales) {
+    App.prototype._initCommonSceneStuff = function (atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales) {
         require.addFontToDOM([
             {name: 'KenPixel', url: require.URL.createObjectURL(font.blob)},
             {name: 'KenPixelBlocks', url: require.URL.createObjectURL(fontBlock.blob)}
         ]);
 
         var atlasMapper = new require.AtlasMapper();
-        atlasMapper.init(atlasInfo);
+        atlasMapper.init([{atlas: atlas0, info: atlasInfo0}, {atlas: atlas1, info: atlasInfo1}]);
 
-        var stage = new require.StageDirector(atlasMapper, new require.MotionDirector(new require.MotionStudio()),
-            new require.AnimationDirector(new require.AnimationStudio()), new require.Renderer(this.screen, this.screenCtx, atlas));
+        var stage = new require.StageDirector(
+            atlasMapper,
+            new require.MotionDirector(new require.MotionStudio()),
+            new require.AnimationDirector(new require.AnimationStudio()),
+            new require.Renderer(this.screen, this.screenCtx)
+        );
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
 
@@ -72,7 +78,7 @@ var App = (function (require) {
         this.gameLoop.run();
     };
 
-    App.prototype._initScenes = function (stage, messages, atlas) {
+    App.prototype._initScenes = function (stage, messages) {
         var sceneStorage = {};
 
         var intro = new require.Intro(stage, sceneStorage, this.gameLoop, this.resizeBus);
@@ -80,10 +86,9 @@ var App = (function (require) {
             new require.FullScreenController(this.screen), messages, this.resizeBus);
         var startingPosition = new require.StartingPosition(stage, sceneStorage, this.resizeBus);
         var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
-            messages, this.tapController, atlas, this.resizeBus);
+            messages, this.tapController, this.resizeBus);
         var getReady = new require.GetReady(stage, sceneStorage, this.resizeBus);
-        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, atlas,
-            this.resizeBus);
+        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, this.resizeBus);
         var killScreen = new require.KillScreen(stage, sceneStorage, this.resizeBus);
         var postGame = new require.PostGame(stage, sceneStorage, this.tapController, this.resizeBus);
 

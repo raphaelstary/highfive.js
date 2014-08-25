@@ -1,12 +1,11 @@
 var PlayGame = (function (require) {
     "use strict";
 
-    function PlayGame(stage, sceneStorage, gameLoop, gameController, atlas, resizeBus) {
+    function PlayGame(stage, sceneStorage, gameLoop, gameController, resizeBus) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
         this.gameController = gameController;
-        this.atlas = atlas;
         this.resizeBus = resizeBus;
     }
 
@@ -66,10 +65,8 @@ var PlayGame = (function (require) {
         self.resizeRepo.add({id: 'score_view_game'}, function () {
             scoreAnimator.resize(self.screenWidth, self.screenHeight);
         });
-        var shipCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('ship'),
-            shipDrawable);
-        var shieldsCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('shield3'),
-            shieldsDrawable);
+        var shipCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('ship'), shipDrawable);
+        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('shield3'), shieldsDrawable);
 
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,

@@ -1,14 +1,13 @@
 var InGameTutorial = (function (require) {
     "use strict";
 
-    function InGameTutorial(stage, sceneStorage, gameLoop, gameController, messages, tapController, atlas, resizeBus) {
+    function InGameTutorial(stage, sceneStorage, gameLoop, gameController, messages, tapController, resizeBus) {
         this.stage = stage;
         this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
         this.gameController = gameController;
         this.messages = messages;
         this.tapController = tapController;
-        this.atlas = atlas;
         this.resizeBus = resizeBus;
     }
 
@@ -87,10 +86,8 @@ var InGameTutorial = (function (require) {
             scoreAnimator.resize(self.screenWidth, self.screenHeight);
         });
 
-        var shipCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('ship'),
-            shipDrawable);
-        var shieldsCollision = new require.CanvasCollisionDetector(this.atlas, this.stage.getSubImage('shield3'),
-            shieldsDrawable);
+        var shipCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('ship'), shipDrawable);
+        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('shield3'), shieldsDrawable);
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
             function () {}, endGame);
