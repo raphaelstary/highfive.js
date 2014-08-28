@@ -47,3 +47,5 @@ www/js/lib
 node_modules
 www/sandbox*
 www/gfx/test*
+atlas_*.png
+atlas_*.json
