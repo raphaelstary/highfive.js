@@ -1,13 +1,11 @@
 var App = (function (require) {
     "use strict";
-//    var DEBUG_START_IMMEDIATELY = false;
 
-    function App(screen, screenCtx, resizeBus, screenInput, gameController) {
+    function App(screen, screenCtx, resizeBus, screenInput) {
         this.screen = screen;
         this.screenCtx = screenCtx;
         this.resizeBus = resizeBus;
         this.tapController = screenInput;
-        this.gameController = gameController;
     }
 
     App.prototype.start = function (windowWidth, windowHeight) {
@@ -19,13 +17,20 @@ var App = (function (require) {
         // show loading screen, load binary resources
 
         var resourceLoader = new require.ResourceLoader(),
-            atlas0 = resourceLoader.addImage('gfx/atlas0.png'),
-            atlas1 = resourceLoader.addImage('gfx/atlas1.png'),
-            atlasInfo0 = resourceLoader.addJSON('data/atlas0.json'),
-            atlasInfo1 = resourceLoader.addJSON('data/atlas1.json'),
-            audioInfo = resourceLoader.addJSON('data/audio.json'),
-            fontBlock = resourceLoader.addFont('data/kenpixel_blocks.woff'),
-            font = resourceLoader.addFont('data/kenpixel.woff'),
+            baby = resourceLoader.addImage('gfx/baby.png'),
+            baby_inside = resourceLoader.addImage('gfx/baby_inside.png'),
+            cat = resourceLoader.addImage('gfx/cat.png'),
+            cat_inside = resourceLoader.addImage('gfx/cat_inside.png'),
+            firefighter = resourceLoader.addImage('gfx/firefighter.png'),
+            granny = resourceLoader.addImage('gfx/granny.png'),
+            granny_inside = resourceLoader.addImage('gfx/granny_inside.png'),
+            ipad = resourceLoader.addImage('gfx/ipad.png'),
+            ipad_inside = resourceLoader.addImage('gfx/ipad_inside.png'),
+            lenovo = resourceLoader.addImage('gfx/lenovo.png'),
+            lenovo_inside = resourceLoader.addImage('gfx/lenovo_inside.png'),
+            scene = resourceLoader.addImage('gfx/scene.png'),
+            sultan = resourceLoader.addImage('gfx/sultan.png'),
+            sultan_inside = resourceLoader.addImage('gfx/sultan_inside.png'),
             locales = resourceLoader.addJSON('data/locales.json'),
             initialScreen = new require.SimpleLoadingScreen(this.screenCtx);
 
@@ -39,7 +44,23 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var sceneStuff = self._initCommonSceneStuff(atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales, audioInfo);
+            var textureCache = new require.TextureCache();
+            textureCache.add('baby', baby);
+            textureCache.add('baby_inside', baby_inside);
+            textureCache.add('cat', cat);
+            textureCache.add('cat_inside', cat_inside);
+            textureCache.add('firefighter', firefighter);
+            textureCache.add('granny', granny);
+            textureCache.add('granny_inside', granny_inside);
+            textureCache.add('ipad', ipad);
+            textureCache.add('ipad_inside', ipad_inside);
+            textureCache.add('lenovo', lenovo);
+            textureCache.add('lenovo_inside', lenovo_inside);
+            textureCache.add('scene', scene);
+            textureCache.add('sultan', sultan);
+            textureCache.add('sultan_inside', sultan_inside);
+
+            var sceneStuff = self._initCommonSceneStuff(textureCache, locales);
             self._initScenes(sceneStuff.stage, sceneStuff.messages, sceneStuff.sounds);
             self._doThePlay();
         };
@@ -47,27 +68,22 @@ var App = (function (require) {
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales, audioInfo) {
-        require.addFontToDOM([
-            {name: 'KenPixel', url: require.URL.createObjectURL(font.blob)},
-            {name: 'KenPixelBlocks', url: require.URL.createObjectURL(fontBlock.blob)}
-        ]);
+    App.prototype._initCommonSceneStuff = function (textureCache, locales) {
 
-        var atlasMapper = new require.AtlasMapper();
-        atlasMapper.init([{atlas: atlas0, info: atlasInfo0}, {atlas: atlas1, info: atlasInfo1}]);
-
-        var stage = new require.StageDirector(
-            atlasMapper,
+        var stageDirector = new require.StageDirector(
+            textureCache,
             new require.MotionDirector(new require.MotionStudio()),
             new require.AnimationDirector(new require.AnimationStudio()),
-            new require.Renderer(this.screen, this.screenCtx)
+            new require.ImageRenderer(this.screen, this.screenCtx)
         );
+
+        var stage = new require.ResizableStageDirector(stageDirector, textureCache, new require.Repository())
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
 
         this._startGameLoop(stage);
 
-//        var soundManager = new require.SoundFilesManager();
+        var soundManager = new require.SoundFilesManager();
 //        soundManager.load(
 //            [
 //                'asteroid-explosion',
@@ -81,9 +97,6 @@ var App = (function (require) {
 //                'star-taken'
 //            ]
 //        );
-
-        var soundManager = new require.SoundSpriteManager();
-        soundManager.load(audioInfo);
 
         return {
             stage: stage,
@@ -101,28 +114,11 @@ var App = (function (require) {
     App.prototype._initScenes = function (stage, messages, sounds) {
         var sceneStorage = {};
 
-        var intro = new require.Intro(stage, sceneStorage, this.gameLoop, this.resizeBus);
-        var preGame = new require.PreGame(stage, sceneStorage, this.tapController,
-            new require.FullScreenController(this.screen), messages, this.resizeBus, sounds);
-        var startingPosition = new require.StartingPosition(stage, sceneStorage, this.resizeBus, sounds);
-        var inGameTutorial = new require.InGameTutorial(stage, sceneStorage, this.gameLoop, this.gameController,
-            messages, this.tapController, this.resizeBus, sounds);
-        var getReady = new require.GetReady(stage, sceneStorage, this.resizeBus);
-        var playGame = new require.PlayGame(stage, sceneStorage, this.gameLoop, this.gameController, this.resizeBus,
-            sounds);
-        var killScreen = new require.KillScreen(stage, sceneStorage, this.resizeBus, sounds);
-        var postGame = new require.PostGame(stage, sceneStorage, this.tapController, this.resizeBus, sounds);
+        var fireGame = new require.FireGame(stage, sceneStorage, this.gameLoop, this.tapController, messages, this.resizeBus, sounds);
 
         var sceneManager = this.sceneManager = new require.SceneManager();
 
-        sceneManager.add(intro.show.bind(intro), true);
-        sceneManager.add(preGame.show.bind(preGame), true);
-        sceneManager.add(startingPosition.show.bind(startingPosition));
-        sceneManager.add(inGameTutorial.show.bind(inGameTutorial), true);
-        sceneManager.add(getReady.show.bind(getReady));
-        sceneManager.add(playGame.show.bind(playGame));
-        sceneManager.add(killScreen.show.bind(killScreen));
-        sceneManager.add(postGame.show.bind(postGame));
+        sceneManager.add(fireGame.show.bind(fireGame));
     };
 
     App.prototype._doThePlay = function () {
@@ -134,7 +130,8 @@ var App = (function (require) {
 })({
     ResourceLoader: ResourceLoader,
     SimpleLoadingScreen: SimpleLoadingScreen,
-    Renderer: Renderer,
+    AtlasRenderer: AtlasRenderer,
+    ImageRenderer: ImageRenderer,
     GameLoop: GameLoop,
     AtlasMapper: AtlasMapper,
     AnimationStudio: AnimationStudio,
@@ -142,20 +139,15 @@ var App = (function (require) {
     MotionStudio: MotionStudio,
     MotionDirector: MotionDirector,
     StageDirector: StageDirector,
-    Intro: Intro,
-    PreGame: PreGame,
-    StartingPosition: StartingPosition,
-    Tutorial: Tutorial,
-    InGameTutorial: InGameTutorial,
-    GetReady: GetReady,
-    PlayGame: PlayGame,
-    KillScreen: KillScreen,
-    PostGame: PostGame,
     SceneManager: SceneManager,
     FullScreenController: FullScreenController,
     addFontToDOM: addFontToDOM,
     URL: window.URL || window.webkitURL,
     UniversalTranslator: UniversalTranslator,
     SoundFilesManager: SoundFilesManager,
-    SoundSpriteManager: SoundSpriteManager
+    SoundSpriteManager: SoundSpriteManager,
+    TextureCache: TextureCache,
+    FireGame: FireGame,
+    ResizableStageDirector: ResizableStageDirector,
+    Repository: Repository
 });

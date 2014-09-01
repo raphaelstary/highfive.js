@@ -8,47 +8,34 @@ window.onload = function () {
         window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
     }
 
-    function installInputListeners(screen, screenInput, gameController) {
+    function installInputListeners(screen, screenInput) {
         if ('ontouchstart' in window) {
             screen.addEventListener('touchstart', screenInput.touchStart.bind(screenInput));
-
-            screen.addEventListener('touchstart', gameController.touchStart.bind(gameController));
-            screen.addEventListener('touchend', gameController.touchEnd.bind(gameController));
         }
 
         if(window.PointerEvent) {
             screen.addEventListener('pointerdown', screenInput.click.bind(screenInput));
 
-            screen.addEventListener('pointerdown', gameController.mouseDown.bind(gameController));
-            screen.addEventListener('pointerup', gameController.mouseUp.bind(gameController));
-
         } else if (window.MSPointerEvent) {
             screen.addEventListener('MSPointerDown', screenInput.click.bind(screenInput));
 
-            screen.addEventListener('MSPointerDown', gameController.mouseDown.bind(gameController));
-            screen.addEventListener('MSPointerUp', gameController.mouseUp.bind(gameController));
-
         } else {
             screen.addEventListener('click', screenInput.click.bind(screenInput));
-
-            screen.addEventListener('mousedown', gameController.mouseDown.bind(gameController));
-            screen.addEventListener('mouseup', gameController.mouseUp.bind(gameController));
         }
     }
 
-    function startApp(resizeBus, screenInput, gameController, screen) {
+    function startApp(resizeBus, screenInput, screen) {
         var ctx = screen.getContext('2d'),
-            app = new App(screen, ctx, resizeBus, screenInput, gameController);
+            app = new App(screen, ctx, resizeBus, screenInput);
 
         app.start(window.innerWidth, window.innerHeight);
     }
 
     var resizeBus = new ResizeBus(),
         screenInput = new TapController(),
-        screen = document.getElementById('screen'),
-        gameController = new PushReleaseController();
+        screen = document.getElementById('screen');
 
     installResizeHandler(resizeBus);
-    installInputListeners(screen, screenInput, gameController);
-    startApp(resizeBus, screenInput, gameController, screen);
+    installInputListeners(screen, screenInput);
+    startApp(resizeBus, screenInput, screen);
 };

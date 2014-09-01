@@ -1,7 +1,7 @@
-var Renderer = (function () {
+var AtlasRenderer = (function (wrapText) {
     "use strict";
 
-    function Renderer(screen, ctx) {
+    function AtlasRenderer(screen, ctx) {
         this.screen = screen;
         this.ctx = ctx;
 
@@ -11,14 +11,14 @@ var Renderer = (function () {
         this.drawableTxtDict = {};
     }
 
-    Renderer.prototype.resize = function (width, height) {
+    AtlasRenderer.prototype.resize = function (width, height) {
         this.screen.width = width;
         this.screen.height = height;
         this.screenWidth = width;
         this.screenHeight = height;
     };
 
-    Renderer.prototype.add = function (drawable) {
+    AtlasRenderer.prototype.add = function (drawable) {
         if (drawable.txt) {
             this.drawableTxtDict[drawable.id] = drawable;
         } else {
@@ -26,7 +26,7 @@ var Renderer = (function () {
         }
     };
 
-    Renderer.prototype.remove = function (drawable) {
+    AtlasRenderer.prototype.remove = function (drawable) {
         if (drawable.txt) {
             delete this.drawableTxtDict[drawable.id];
         } else {
@@ -34,12 +34,12 @@ var Renderer = (function () {
         }
     };
 
-    Renderer.prototype.has = function (drawable) {
+    AtlasRenderer.prototype.has = function (drawable) {
         return this.drawableDict[drawable.zIndex][drawable.id] !== undefined ||
             this.drawableTxtDict[drawable.id];
     };
 
-    Renderer.prototype.draw = function () {
+    AtlasRenderer.prototype.draw = function () {
         var self = this;
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
@@ -90,26 +90,8 @@ var Renderer = (function () {
             this.ctx.restore();
         }
 
-        function wrapText(context, text, x, y, maxWidth, lineHeight) {
-            var words = text.split(' ');
-            var line = '';
 
-            for (var n = 0; n < words.length; n++) {
-                var testLine = line + words[n] + ' ';
-                var metrics = context.measureText(testLine);
-                var testWidth = metrics.width;
-                if (testWidth > maxWidth && n > 0) {
-                    context.fillText(line, x, y);
-                    line = words[n] + ' ';
-                    y += lineHeight;
-                }
-                else {
-                    line = testLine;
-                }
-            }
-            context.fillText(line, x, y);
-        }
     };
 
-    return Renderer;
-})();
+    return AtlasRenderer;
+})(wrapText);
