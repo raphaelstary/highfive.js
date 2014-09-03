@@ -5,8 +5,11 @@ var Repository = (function () {
         this.dict = {};
     }
 
-    Repository.prototype.add = function (item, fn) {
-        this.dict[item.id] = fn;
+    Repository.prototype.add = function (item, fn, resizeIsDependentOnThisDrawable) {
+        this.dict[item.id] = {
+            fn: fn,
+            dependency: resizeIsDependentOnThisDrawable
+        };
     };
 
     Repository.prototype.remove = function (item) {
@@ -14,8 +17,23 @@ var Repository = (function () {
     };
 
     Repository.prototype.call = function () {
-        for (var key in this.dict)
-            this.dict[key]();
+        var self = this;
+        var alreadyCalledMap = {};
+
+        for (var key in this.dict) {
+            var wrapper = this.dict[key];
+            resizeItem(key, wrapper.fn, wrapper.dependency);
+        }
+
+        function resizeItem(id, fn, dependency) {
+            alreadyCalledMap[id] = true;
+            var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
+            if (dependencyNotAlreadyCalled) {
+                var wrapper = self.dict[dependency.id];
+                resizeItem(dependency.id, wrapper.fn, wrapper.dependency);
+            }
+            fn();
+        }
     };
 
     return Repository;

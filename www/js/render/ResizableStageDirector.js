@@ -7,21 +7,21 @@ var ResizableStageDirector = (function (changeCoords) {
         this.resizer = resizer;
     }
 
-    ResizableStageDirector.prototype.drawFresh = function (xFn, yFn, imgName, zIndex) {
+    ResizableStageDirector.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeIsDependentOnThisDrawable) {
         var drawable = this.stage.drawFresh(xFn(), yFn(), imgName, zIndex);
         this.resizer.add(drawable, function () {
             changeCoords(drawable, xFn(), yFn());
-        });
+        }, resizeIsDependentOnThisDrawable);
 
         return drawable;
     };
 
-    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex) {
+    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawable) {
         var drawable = this.stage.getDrawableText(xFn(), yFn(), zIndex, text, size, font, color);
         this.stage.draw(drawable);
         this.resizer.add(drawable, function () {
             changeCoords(drawable, xFn(), yFn());
-        });
+        }, resizeIsDependentOnThisDrawable);
 
         return drawable;
     };

@@ -39,18 +39,18 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
             return backGroundDrawable.getCornerX() + calcScreenConst(backGroundDrawable.getWidth(), 3);
         }
         var timeLeftDrawable = this.stage.drawText(getTimeX, function () {return getTopRaster(self.screenHeight);},
-            "2:00:00", 45, FONT_FACE, FONT_COLOR);
+            "2:00:00", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
 
 
         function getPeopleLeftX() {
             return backGroundDrawable.getCornerX() + calcScreenConst(backGroundDrawable.getWidth(), 3, 2);
         }
         var peopleLeftDrawable = this.stage.drawText(getPeopleLeftX, function () {return getTopRaster(self.screenHeight);},
-            "10 left", 45, FONT_FACE, FONT_COLOR);
+            "10 left", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
 
 
         var fireFighterDrawable = this.stage.drawFresh(function () {return widthHalf(self.screenWidth);},
-            function () {return calcScreenConst(self.screenHeight, 20, 19)}, 'firefighter', 3);
+            function () {return calcScreenConst(self.screenHeight, 20, 19)}, 'firefighter', 3, backGroundDrawable);
 
 
         return {
@@ -101,8 +101,6 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
     FireGame.prototype.resize = function (width, height) {
         this.screenWidth = width;
         this.screenHeight = height;
-
-        changeCoords(this.backGroundDrawable, widthHalf(this.screenWidth), heightHalf(this.screenHeight));
 
         this.stage.resize(width, height);
     };
