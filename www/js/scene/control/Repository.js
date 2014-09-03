@@ -16,7 +16,7 @@ var Repository = (function () {
         delete this.dict[item.id];
     };
 
-    Repository.prototype.call = function () {
+    Repository.prototype.call = function (width, height) {
         var self = this;
         var alreadyCalledMap = {};
 
@@ -32,7 +32,7 @@ var Repository = (function () {
                 var wrapper = self.dict[dependency.id];
                 resizeItem(dependency.id, wrapper.fn, wrapper.dependency);
             }
-            fn();
+            fn(width, height);
         }
     };
 

@@ -1,30 +1,14 @@
 var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouchable, heightHalf, widthHalf, getTopRaster, WindowView, FireFighterView, Level, PeopleView, TimeView, PropertyManagement) {
     "use strict";
 
-    function FireGame(stage, sceneStorage, gameLoop, tapController, messages, resizeBus, sounds) {
+    function FireGame(stage, gameLoop, tapController, messages, sounds, resizeBus) {
         this.stage = stage;
-        this.sceneStorage = sceneStorage;
         this.gameLoop = gameLoop;
         this.tapController = tapController;
         this.messages = messages;
-        this.resizeBus = resizeBus;
         this.sounds = sounds;
+        this.resizeBus = resizeBus;
     }
-
-    FireGame.prototype.__init = function (width, height) {
-        this.screenWidth = width;
-        this.screenHeight = height;
-
-        this.resizeBus.add('fire_game', this.resize.bind(this));
-    };
-
-    FireGame.prototype.__unload = function () {
-        delete this.screenWidth;
-        delete this.screenHeight;
-        delete this.backGroundDrawable;
-
-        this.resizeBus.remove('fire_game');
-    };
 
     var FONT_FACE = 'Arial';
     var FONT_COLOR = '#c4c4c4';
@@ -32,25 +16,21 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
     FireGame.prototype.__setupDrawables = function () {
         var self = this;
 
-        var backGroundDrawable = this.backGroundDrawable = this.stage.drawFresh(function () {return widthHalf(self.screenWidth);},
-            function () {return heightHalf(self.screenHeight);}, 'scene', 0);
+        var backGroundDrawable = this.stage.drawFresh(widthHalf, heightHalf, 'scene', 0);
 
         function getTimeX() {
             return backGroundDrawable.getCornerX() + calcScreenConst(backGroundDrawable.getWidth(), 3);
         }
-        var timeLeftDrawable = this.stage.drawText(getTimeX, function () {return getTopRaster(self.screenHeight);},
-            "2:00:00", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
+        var timeLeftDrawable = this.stage.drawText(getTimeX, getTopRaster, "2:00:00", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
 
 
         function getPeopleLeftX() {
             return backGroundDrawable.getCornerX() + calcScreenConst(backGroundDrawable.getWidth(), 3, 2);
         }
-        var peopleLeftDrawable = this.stage.drawText(getPeopleLeftX, function () {return getTopRaster(self.screenHeight);},
-            "10 left", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
+        var peopleLeftDrawable = this.stage.drawText(getPeopleLeftX, getTopRaster, "10 left", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
 
 
-        var fireFighterDrawable = this.stage.drawFresh(function () {return widthHalf(self.screenWidth);},
-            function () {return calcScreenConst(self.screenHeight, 20, 19)}, 'firefighter', 3, backGroundDrawable);
+        var fireFighterDrawable = this.stage.drawFresh(widthHalf, function (height) {return calcScreenConst(height, 20, 19)}, 'firefighter', 3, backGroundDrawable);
 
 
         return {
@@ -61,9 +41,7 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
         }
     };
 
-    FireGame.prototype.show = function (nextScene, width, height) {
-        this.__init(width, height);
-
+    FireGame.prototype.show = function (nextScene) {
         var drawables = this.__setupDrawables();
 
         var firstLevelData = {
@@ -73,7 +51,7 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
 
 
         var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft), new PeopleView(drawables.peopleLeft),
-            new FireFighterView(drawables.fireFighter, drawables.backGround, this.screenWidth),
+            new FireFighterView(drawables.fireFighter, drawables.backGround, this.resizeBus.getWidth()),
             new PropertyManagement(new WindowView(this.stage, drawables.backGround)));
 
         this.resizeBus.add('level', firstLevel.resize.bind(firstLevel));
@@ -93,16 +71,8 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
     };
 
     FireGame.prototype.next = function (nextScene) {
-        this.__unload();
 
         nextScene();
-    };
-
-    FireGame.prototype.resize = function (width, height) {
-        this.screenWidth = width;
-        this.screenHeight = height;
-
-        this.stage.resize(width, height);
     };
 
     return FireGame;

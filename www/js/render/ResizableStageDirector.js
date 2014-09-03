@@ -1,35 +1,41 @@
 var ResizableStageDirector = (function (changeCoords) {
     "use strict";
 
-    function ResizableStageDirector(stage, textures, resizer) {
+    function ResizableStageDirector(stage, textures, resizer, width, height) {
         this.stage = stage;
         this.textures = textures;
         this.resizer = resizer;
+
+        this.width = width;
+        this.height = height;
     }
 
     ResizableStageDirector.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeIsDependentOnThisDrawable) {
-        var drawable = this.stage.drawFresh(xFn(), yFn(), imgName, zIndex);
-        this.resizer.add(drawable, function () {
-            changeCoords(drawable, xFn(), yFn());
+        var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex);
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width), yFn(height));
         }, resizeIsDependentOnThisDrawable);
 
         return drawable;
     };
 
     ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawable) {
-        var drawable = this.stage.getDrawableText(xFn(), yFn(), zIndex, text, size, font, color);
+        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text, size, font, color);
         this.stage.draw(drawable);
-        this.resizer.add(drawable, function () {
-            changeCoords(drawable, xFn(), yFn());
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width), yFn(height));
         }, resizeIsDependentOnThisDrawable);
 
         return drawable;
     };
 
     ResizableStageDirector.prototype.resize = function (width, height) {
+        this.width = width;
+        this.height = height;
+
         this.stage.resize(width, height);
         this.textures.resize(width, height);
-        this.resizer.call();
+        this.resizer.call(width, height);
     };
 
     ResizableStageDirector.prototype.getDrawable = function (x, y, imgPathName, zIndex) {

@@ -8,9 +8,9 @@ var App = (function (require) {
         this.tapController = screenInput;
     }
 
-    App.prototype.start = function (windowWidth, windowHeight) {
+    App.prototype.start = function () {
         // idea to create list of all scenes and just use nextScene() to advance
-        this._loadingScene(windowWidth, windowHeight);
+        this._loadingScene(this.resizeBus.getWidth(), this.resizeBus.getHeight());
     };
 
     App.prototype._loadingScene = function (windowWidth, windowHeight) {
@@ -61,8 +61,8 @@ var App = (function (require) {
             textureCache.add('sultan_inside', sultan_inside);
 
             var sceneStuff = self._initCommonSceneStuff(textureCache, locales);
-            self._initScenes(sceneStuff.stage, sceneStuff.messages, sceneStuff.sounds);
-            self._doThePlay();
+            var sceneManager = self._initScenes(sceneStuff.stage, sceneStuff.messages, sceneStuff.sounds);
+            self._doThePlay(sceneManager);
         };
 
         resourceLoader.load();
@@ -77,7 +77,8 @@ var App = (function (require) {
             new require.ImageRenderer(this.screen, this.screenCtx)
         );
 
-        var stage = new require.ResizableStageDirector(stageDirector, textureCache, new require.Repository())
+        var stage = new require.ResizableStageDirector(stageDirector, textureCache, new require.Repository(),
+            this.resizeBus.getWidth(), this.resizeBus.getHeight());
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
 
@@ -112,17 +113,18 @@ var App = (function (require) {
     };
 
     App.prototype._initScenes = function (stage, messages, sounds) {
-        var sceneStorage = {};
 
-        var fireGame = new require.FireGame(stage, sceneStorage, this.gameLoop, this.tapController, messages, this.resizeBus, sounds);
+        var fireGame = new require.FireGame(stage, this.gameLoop, this.tapController, messages, sounds, this.resizeBus);
 
-        var sceneManager = this.sceneManager = new require.SceneManager();
+        var sceneManager = new require.SceneManager();
 
         sceneManager.add(fireGame.show.bind(fireGame));
+
+        return sceneManager;
     };
 
-    App.prototype._doThePlay = function () {
-        this.sceneManager.next();
+    App.prototype._doThePlay = function (sceneManager) {
+        sceneManager.next();
     };
 
     return App;

@@ -2,8 +2,7 @@ window.onload = function () {
     "use strict";
 
     function installResizeHandler(resizeBus) {
-        var screenSizer = new ScreenSizer(resizeBus, window.innerWidth, window.innerHeight),
-            resizeHandler = new ResizeHandler(screenSizer);
+        var resizeHandler = new ResizeHandler(resizeBus);
 
         window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
     }
@@ -28,10 +27,10 @@ window.onload = function () {
         var ctx = screen.getContext('2d'),
             app = new App(screen, ctx, resizeBus, screenInput);
 
-        app.start(window.innerWidth, window.innerHeight);
+        app.start();
     }
 
-    var resizeBus = new ResizeBus(),
+    var resizeBus = new ResizeBus(window.innerWidth, window.innerHeight),
         screenInput = new TapController(),
         screen = document.getElementById('screen');
 

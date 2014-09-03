@@ -1,8 +1,8 @@
 var ResizeHandler = (function (requestAnimationFrame) {
     "use strict";
 
-    function ResizeHandler(screenSizer) {
-        this.screenSizer = screenSizer;
+    function ResizeHandler(resizeBus) {
+        this.resizeBus = resizeBus;
 
         this.resizeFired = false;
         this.drawing = false;
@@ -23,7 +23,7 @@ var ResizeHandler = (function (requestAnimationFrame) {
             this.drawing = true;
 
             // actually do the resize
-            this.screenSizer.resize(width, height);
+            this.resizeBus.resize(width, height);
 
             requestAnimationFrame(this._initiateResize.bind(this, width, height));
         } else {

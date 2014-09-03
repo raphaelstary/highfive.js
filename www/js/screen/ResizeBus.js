@@ -1,8 +1,11 @@
 var ResizeBus = (function () {
     "use strict";
 
-    function ResizeBus() {
+    function ResizeBus(width, height) {
         this.resizeDict = {};
+
+        this.width = width;
+        this.height = height;
     }
 
     ResizeBus.prototype.add = function (id, callback) {
@@ -13,12 +16,23 @@ var ResizeBus = (function () {
         delete  this.resizeDict[id];
     };
 
-    ResizeBus.prototype.callResize = function (width, height, factorWidth, factorHeight) {
+    ResizeBus.prototype.resize = function (width, height) {
+        this.width = width;
+        this.height = height;
+
         for (var key in this.resizeDict) {
             if (this.resizeDict.hasOwnProperty(key)) {
-                this.resizeDict[key](width, height, factorWidth, factorHeight);
+                this.resizeDict[key](width, height);
             }
         }
+    };
+
+    ResizeBus.prototype.getWidth = function () {
+        return this.width;
+    };
+
+    ResizeBus.prototype.getHeight = function () {
+        return this.height;
     };
 
     return ResizeBus;
