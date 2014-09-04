@@ -21,16 +21,16 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
         function getTimeX() {
             return backGroundDrawable.getCornerX() + calcScreenConst(backGroundDrawable.getWidth(), 3);
         }
-        var timeLeftDrawable = this.stage.drawText(getTimeX, getTopRaster, "2:00:00", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
+        var timeLeftDrawable = this.stage.drawText(getTimeX, getTopRaster, "2:00:00", 45, FONT_FACE, FONT_COLOR, 3, [backGroundDrawable]);
 
 
         function getPeopleLeftX() {
             return backGroundDrawable.getCornerX() + calcScreenConst(backGroundDrawable.getWidth(), 3, 2);
         }
-        var peopleLeftDrawable = this.stage.drawText(getPeopleLeftX, getTopRaster, "10 left", 45, FONT_FACE, FONT_COLOR, 3, backGroundDrawable);
+        var peopleLeftDrawable = this.stage.drawText(getPeopleLeftX, getTopRaster, "10 left", 45, FONT_FACE, FONT_COLOR, 3, [backGroundDrawable]);
 
 
-        var fireFighterDrawable = this.stage.drawFresh(widthHalf, function (height) {return calcScreenConst(height, 20, 19)}, 'firefighter', 3, backGroundDrawable);
+        var fireFighterDrawable = this.stage.drawFresh(widthHalf, function (height) {return calcScreenConst(height, 20, 19)}, 'firefighter', 3, [backGroundDrawable]);
 
 
         return {

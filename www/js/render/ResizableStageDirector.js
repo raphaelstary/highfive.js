@@ -10,21 +10,21 @@ var ResizableStageDirector = (function (changeCoords) {
         this.height = height;
     }
 
-    ResizableStageDirector.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeIsDependentOnThisDrawable) {
+    ResizableStageDirector.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeIsDependentOnThisDrawables) {
         var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex);
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
-        }, resizeIsDependentOnThisDrawable);
+        }, resizeIsDependentOnThisDrawables);
 
         return drawable;
     };
 
-    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawable) {
+    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawables) {
         var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text, size, font, color);
         this.stage.draw(drawable);
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
-        }, resizeIsDependentOnThisDrawable);
+        }, resizeIsDependentOnThisDrawables);
 
         return drawable;
     };

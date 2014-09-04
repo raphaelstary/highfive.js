@@ -5,10 +5,10 @@ var Repository = (function () {
         this.dict = {};
     }
 
-    Repository.prototype.add = function (item, fn, resizeIsDependentOnThisDrawable) {
+    Repository.prototype.add = function (item, fn, resizeIsDependentOnThisDrawables) {
         this.dict[item.id] = {
             fn: fn,
-            dependency: resizeIsDependentOnThisDrawable
+            dependencies: resizeIsDependentOnThisDrawables
         };
     };
 
@@ -22,16 +22,21 @@ var Repository = (function () {
 
         for (var key in this.dict) {
             var wrapper = this.dict[key];
-            resizeItem(key, wrapper.fn, wrapper.dependency);
+            resizeItem(key, wrapper.fn, wrapper.dependencies);
         }
 
-        function resizeItem(id, fn, dependency) {
+        function resizeItem(id, fn, dependencies) {
             alreadyCalledMap[id] = true;
-            var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
-            if (dependencyNotAlreadyCalled) {
-                var wrapper = self.dict[dependency.id];
-                resizeItem(dependency.id, wrapper.fn, wrapper.dependency);
+            if (dependencies) {
+                dependencies.forEach(function (dependency) {
+                    var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
+                    if (dependencyNotAlreadyCalled) {
+                        var wrapper = self.dict[dependency.id];
+                        resizeItem(dependency.id, wrapper.fn, wrapper.dependencies);
+                    }
+                });
             }
+
             fn(width, height);
         }
     };
