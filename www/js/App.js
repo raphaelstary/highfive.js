@@ -78,6 +78,7 @@ var App = (function (require) {
         );
 
         var stage = new require.ResizableStageDirector(stageDirector, textureCache, new require.Repository(),
+            require.Touchables.get, require.fetchDrawableIntoTouchable,
             this.resizeBus.getWidth(), this.resizeBus.getHeight());
 
         this.resizeBus.add('stage', stage.resize.bind(stage));
@@ -151,5 +152,7 @@ var App = (function (require) {
     TextureCache: TextureCache,
     FireGame: FireGame,
     ResizableStageDirector: ResizableStageDirector,
-    Repository: Repository
+    Repository: Repository,
+    fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,
+    Touchables: Touchables
 });
