@@ -1,10 +1,12 @@
 var ResizableStageDirector = (function (changeCoords) {
     "use strict";
 
-    function ResizableStageDirector(stage, textures, resizer, width, height) {
+    function ResizableStageDirector(stage, textures, resizer, createInput, changeInput, width, height) {
         this.stage = stage;
         this.textures = textures;
         this.resizer = resizer;
+        this.createInput = createInput;
+        this.changeInput = changeInput;
 
         this.width = width;
         this.height = height;
@@ -19,6 +21,21 @@ var ResizableStageDirector = (function (changeCoords) {
         return drawable;
     };
 
+    ResizableStageDirector.prototype.drawFreshWithInput = function (xFn, yFn, imgName, zIndex, resizeIsDependentOnThisDrawables) {
+        var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex);
+        var self = this;
+        var input = self.createInput(drawable);
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width), yFn(height));
+            self.changeInput(input, drawable);
+        }, resizeIsDependentOnThisDrawables);
+
+        return {
+            drawable: drawable,
+            input: input
+        };
+    };
+
     ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawables) {
         var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text, size, font, color);
         this.stage.draw(drawable);
@@ -27,6 +44,22 @@ var ResizableStageDirector = (function (changeCoords) {
         }, resizeIsDependentOnThisDrawables);
 
         return drawable;
+    };
+
+    ResizableStageDirector.prototype.drawTextWithInput = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawables) {
+        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text, size, font, color);
+        this.stage.draw(drawable);
+        var input = this.createInput(drawable);
+        var self = this;
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width), yFn(height));
+            self.changeInput(input, drawable);
+        }, resizeIsDependentOnThisDrawables);
+
+        return {
+            drawable: drawable,
+            input: input
+        };
     };
 
     ResizableStageDirector.prototype.resize = function (width, height) {
