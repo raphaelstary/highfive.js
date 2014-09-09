@@ -46,7 +46,7 @@ var FireGame = (function (WindowPusher, calcScreenConst, changeCoords, changePat
 
         var firstLevelData = {
             time: 60*3,
-            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat']
+            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat', 'baby']
         };
 
 

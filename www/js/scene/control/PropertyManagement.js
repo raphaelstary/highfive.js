@@ -38,6 +38,7 @@ var PropertyManagement = (function (range) {
         var self = this;
         this.input.add(drawableWrapper.input, function () {
             self.windowView.remove(drawableWrapper.drawable);
+            self.input.remove(drawableWrapper.input);
             self.pushDown(drawableWrapper.xFn, drawableWrapper.yFn, selectedTenant, function () {
                 if (self.people.length > 0)
                     self.populateSingle(flatKey);
