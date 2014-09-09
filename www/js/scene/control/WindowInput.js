@@ -4,7 +4,6 @@ var WindowInput = (function () {
     function WindowInput() {
     }
 
-    WindowInput.prototype.createTouchable
 
     return WindowInput;
 })();

@@ -4,7 +4,7 @@ var Touchables = (function (Touchable) {
     var TOUCHABLE = "_touch";
 
     function createNew(drawable) {
-        return new Touchable(drawable + TOUCHABLE, drawable.getCornerX(), drawable.getCornerY(),
+        return new Touchable(drawable.id + TOUCHABLE, drawable.getCornerX(), drawable.getCornerY(),
             drawable.getWidth(), drawable.getHeight());
     }
 

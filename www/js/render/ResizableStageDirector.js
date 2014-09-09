@@ -124,6 +124,7 @@ var ResizableStageDirector = (function (changeCoords) {
     };
 
     ResizableStageDirector.prototype.remove = function (drawable) {
+        this.resizer.remove(drawable);
         this.stage.remove(drawable);
     };
 

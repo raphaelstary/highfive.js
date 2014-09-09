@@ -1,4 +1,4 @@
-var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouchable, heightHalf, widthHalf, getTopRaster, WindowView, FireFighterView, Level, PeopleView, TimeView, PropertyManagement) {
+var FireGame = (function (WindowPusher, calcScreenConst, changeCoords, changePath, changeTouchable, heightHalf, widthHalf, getTopRaster, WindowView, FireFighterView, Level, PeopleView, TimeView, PropertyManagement) {
     "use strict";
 
     function FireGame(stage, gameLoop, tapController, messages, sounds, resizeBus) {
@@ -50,24 +50,17 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
         };
 
 
-        var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft), new PeopleView(drawables.peopleLeft),
-            new FireFighterView(drawables.fireFighter, drawables.backGround, this.resizeBus.getWidth()),
-            new PropertyManagement(new WindowView(this.stage, drawables.backGround)));
+        var windowPusher = new WindowPusher(this.stage);
+        var fireFighterView = new FireFighterView(drawables.fireFighter, drawables.backGround, this.resizeBus.getWidth());
+        var propertyManagement = new PropertyManagement(new WindowView(this.stage, drawables.backGround), this.tapController, windowPusher.pushDown.bind(windowPusher));
+
+        var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft),
+            new PeopleView(drawables.peopleLeft), fireFighterView, propertyManagement);
 
         this.resizeBus.add('level', firstLevel.resize.bind(firstLevel));
         this.gameLoop.add('level', firstLevel.tick.bind(firstLevel));
 
         firstLevel.start();
-
-//        wView.createDrawableAtSpot1('baby_inside');
-//        wView.createDrawableAtSpot2('cat_inside');
-//        wView.createDrawableAtSpot3('cat_inside');
-//        wView.createDrawableAtSpot4('cat_inside');
-//        wView.createDrawableAtSpot5('cat_inside');
-//        wView.createDrawableAtSpot6('cat_inside');
-//        wView.createDrawableAtSpot7('cat_inside');
-//        wView.createDrawableAtSpot8('cat_inside');
-//        wView.createDrawableAtSpot9('cat_inside');
     };
 
     FireGame.prototype.next = function (nextScene) {
@@ -76,4 +69,4 @@ var FireGame = (function (calcScreenConst, changeCoords, changePath, changeTouch
     };
 
     return FireGame;
-})(calcScreenConst, changeCoords, changePath, changeTouchable, heightHalf, widthHalf, getTopRaster, WindowView, FireFighterView, Level, PeopleView, TimeView, PropertyManagement);
+})(WindowPusher, calcScreenConst, changeCoords, changePath, changeTouchable, heightHalf, widthHalf, getTopRaster, WindowView, FireFighterView, Level, PeopleView, TimeView, PropertyManagement);

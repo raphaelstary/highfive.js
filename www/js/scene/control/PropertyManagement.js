@@ -1,7 +1,7 @@
 var PropertyManagement = (function (range) {
     "use strict";
 
-    function PropertyManagement(windowView) {
+    function PropertyManagement(windowView, input, pushDown) {
         this.flats = {
             1: null,
             2: null,
@@ -15,18 +15,34 @@ var PropertyManagement = (function (range) {
         };
 
         this.windowView = windowView;
+        this.input = input;
+        this.pushDown = pushDown;
     }
 
-    PropertyManagement.prototype.populate = function (people) {
+    PropertyManagement.prototype.populateAll = function (people) {
         this.people = people;
 
         for (var key in this.flats) {
-            var nrOfTenants = this.people.length;
-            var randomTenantIndex = range(0, nrOfTenants - 1);
-            var selectedTenant = this.people.splice(randomTenantIndex, 1)[0];
-
-            this.flats[key] = this.windowView['createDrawableAtSpot' + key](selectedTenant + '_inside');
+            this.populateSingle(key);
         }
+    };
+
+    PropertyManagement.prototype.populateSingle = function (flatKey) {
+        var nrOfTenants = this.people.length;
+        var randomTenantIndex = range(0, nrOfTenants - 1);
+        var selectedTenant = this.people.splice(randomTenantIndex, 1)[0];
+
+        var drawableWrapper = this.windowView['createDrawableAtSpot' + flatKey](selectedTenant + '_inside');
+        this.flats[flatKey] = drawableWrapper;
+
+        var self = this;
+        this.input.add(drawableWrapper.input, function () {
+            self.windowView.remove(drawableWrapper.drawable);
+            self.pushDown(drawableWrapper.xFn, drawableWrapper.yFn, selectedTenant, function () {
+                if (self.people.length > 0)
+                    self.populateSingle(flatKey);
+            });
+        });
     };
 
     return PropertyManagement;

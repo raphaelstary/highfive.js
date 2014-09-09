@@ -16,7 +16,7 @@ var Level = (function () {
         this.timeView.set(data.time);
         this.peopleView.set(data.people.length);
 
-        this.propertyMngmt.populate(data.people);
+        this.propertyMngmt.populateAll(data.people);
     };
 
     Level.prototype.start = function () {
