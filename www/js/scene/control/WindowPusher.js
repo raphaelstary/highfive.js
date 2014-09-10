@@ -1,4 +1,4 @@
-var WindowPusher = (function (Transition) {
+var WindowPusher = (function (Transition, calcScreenConst) {
     "use strict";
 
     function WindowPusher(stage) {
@@ -10,17 +10,16 @@ var WindowPusher = (function (Transition) {
             return height;
         };
         var speedFn = function (width, height) {
-            // todo mit height abstimmen
-            return 90;
+            return calcScreenConst(height - yFn(height), 15);
         };
         var killAnimation = function () {
             // todo
             // - kill animation
         };
-        this.stage.moveFresh(xFn, yFn, itemKey, xFn, groundFn, speedFn, Transition.EASE_IN_EXPO, false, killAnimation);
+        this.stage.moveFresh(xFn, yFn, itemKey, xFn, groundFn, speedFn, Transition.EASE_IN_QUAD, false, killAnimation);
 
         callBack();
     };
 
     return WindowPusher;
-})(Transition);
+})(Transition, calcScreenConst);

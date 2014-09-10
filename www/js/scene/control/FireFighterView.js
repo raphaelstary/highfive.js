@@ -1,11 +1,12 @@
-var FireFighterView = (function () {
+var FireFighterView = (function (calcScreenConst) {
     "use strict";
 
     function FireFighterView(fireFighterDrawable, bg, screenWidth) {
         this.fireFighterDrawable = fireFighterDrawable;
         this.bg = bg;
         this.screenWidth = screenWidth;
-        this.speed = 10;
+        this.speedFactor = 200;
+        this.speed = calcScreenConst(screenWidth, this.speedFactor);
         this.__moveRight = true;
         this.__running = false;
     }
@@ -35,7 +36,8 @@ var FireFighterView = (function () {
 
     FireFighterView.prototype.resize = function (width) {
         this.screenWidth = width;
+        this.speed = calcScreenConst(width, this.speedFactor);
     };
 
     return FireFighterView;
-})();
+})(calcScreenConst);
