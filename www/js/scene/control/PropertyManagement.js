@@ -23,7 +23,8 @@ var PropertyManagement = (function (range) {
         this.people = people;
 
         for (var key in this.flats) {
-            this.populateSingle(key);
+            if (people.length > 0)
+                this.populateSingle(key);
         }
     };
 

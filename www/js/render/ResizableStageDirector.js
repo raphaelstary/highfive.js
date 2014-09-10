@@ -1,4 +1,4 @@
-var ResizableStageDirector = (function (changeCoords) {
+var ResizableStageDirector = (function (changeCoords, changePath) {
     "use strict";
 
     function ResizableStageDirector(stage, textures, resizer, createInput, changeInput, width, height) {
@@ -6,7 +6,7 @@ var ResizableStageDirector = (function (changeCoords) {
         this.textures = textures;
         this.resizer = resizer;
         this.createInput = createInput;
-        this.changeInput = changeInput;
+        this.changeInput = changeInput; //maybe push to global class dependency injection (see line 1)
 
         this.width = width;
         this.height = height;
@@ -103,8 +103,33 @@ var ResizableStageDirector = (function (changeCoords) {
         //todo implement
     };
 
-    ResizableStageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, callback) {
-        //todo implement
+    ResizableStageDirector.prototype.moveFresh = function (xFn, yFn, imgName, endXFn, endYFn, speedFn, spacing, loop, callback, resizeIsDependentOnThisDrawables) {
+        var self = this;
+        var registerResizeAfterMove = function () {
+            self.resizer.add(wrapper.drawable, function (width, height) {
+                changeCoords(wrapper.drawable, endXFn(width), endYFn(height));
+            }, resizeIsDependentOnThisDrawables);
+        };
+
+        var enhancedCallBack;
+        if (callback) {
+            enhancedCallBack = function () {
+                callback();
+                registerResizeAfterMove();
+            }
+        } else {
+            enhancedCallBack = registerResizeAfterMove;
+        }
+
+        var wrapper = this.stage.moveFresh(xFn(this.width), yFn(this.height), imgName, endXFn(this.width), endYFn(this.height),
+            speedFn(this.width, this.height), spacing, loop, enhancedCallBack);
+
+        this.resizer.add(wrapper.drawable, function (width, height) {
+            changeCoords(wrapper.drawable, xFn(width), yFn(height));
+            changePath(wrapper.path, xFn(width), yFn(height), endXFn(width), endYFn(height), speedFn(width, height));
+        }, resizeIsDependentOnThisDrawables);
+
+        return wrapper;
     };
 
     ResizableStageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback) {
@@ -137,4 +162,4 @@ var ResizableStageDirector = (function (changeCoords) {
     };
 
     return ResizableStageDirector;
-})(changeCoords);
+})(changeCoords, changePath);
