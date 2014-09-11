@@ -1,4 +1,4 @@
-var Drawable = (function (Math) {
+var Drawable = (function (Math, measureText) {
     "use strict";
 
     function Drawable(id, x, y, img, txt, zIndex) {
@@ -35,16 +35,22 @@ var Drawable = (function (Math) {
     };
 
     Drawable.prototype.__getHeight = function () {
+        if (this.txt) {
+            return measureText(this.txt).height;
+        }
         if (this.img.scale)
             return Math.floor(this.img.height * this.img.scale);
         return this.img.height;
     };
 
     Drawable.prototype.__getWidth = function () {
+        if (this.txt) {
+            return measureText(this.txt).width;
+        }
         if (this.img.scale)
             return Math.floor(this.img.width * this.img.scale);
         return this.img.width;
     };
 
     return Drawable;
-})(Math);
+})(Math, measureText);

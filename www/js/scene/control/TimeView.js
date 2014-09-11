@@ -6,6 +6,8 @@ var TimeView = (function () {
     }
 
     TimeView.prototype.set = function (timeInSeconds) {
+        this.time = timeInSeconds;
+
         var min = Math.floor(timeInSeconds / 60);
         var sec = timeInSeconds % 60;
         var msg = "";
@@ -21,6 +23,10 @@ var TimeView = (function () {
         }
 
         this.timeDrawable.txt.msg = msg;
+    };
+
+    TimeView.prototype.decrease = function () {
+        this.set(--this.time);
     };
 
     return TimeView;

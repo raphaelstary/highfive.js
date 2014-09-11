@@ -10,9 +10,6 @@ var GameLoop = (function (requestAnimationFrame) {
         requestAnimationFrame(this.run.bind(this));
 
         for (var key in this.tickBus) {
-            if (!this.tickBus.hasOwnProperty(key)) {
-                continue;
-            }
             this.tickBus[key]();
         }
     };

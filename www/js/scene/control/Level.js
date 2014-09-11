@@ -1,15 +1,15 @@
 var Level = (function () {
     "use strict";
 
-    function Level(initialData, timeView, peopleView, fireFighterView, propertyMngmt) {
+    function Level(initialData, timeView, peopleView, propertyMngmt) {
         this.timeView = timeView;
         this.peopleView = peopleView;
-        this.fireFighterView = fireFighterView;
         this.propertyMngmt = propertyMngmt;
 
         this.init(initialData);
 
         this.__runing = false;
+        this.__tickCounter = 0;
     }
 
     Level.prototype.init = function (data) {
@@ -21,19 +21,16 @@ var Level = (function () {
 
     Level.prototype.start = function () {
         this.__runing = true;
-
-        this.fireFighterView.start();
     };
 
     Level.prototype.tick = function () {
         if (!this.__runing)
             return;
 
-        this.fireFighterView.tick();
-    };
-
-    Level.prototype.resize = function (width, height) {
-        this.fireFighterView.resize(width);
+        if (++this.__tickCounter >= 60) {
+            this.__tickCounter = 0;
+            this.timeView.decrease();
+        }
     };
 
     return Level;

@@ -36,23 +36,27 @@ var ResizableStageDirector = (function (changeCoords, changePath) {
         };
     };
 
-    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawables) {
-        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text, size, font, color);
+    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex, resizeIsDependentOnThisDrawables) {
+        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text,
+            sizeFn(this.width, this.height), font, color);
         this.stage.draw(drawable);
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
+            drawable.txt.size = sizeFn(width, height);
         }, resizeIsDependentOnThisDrawables);
 
         return drawable;
     };
 
-    ResizableStageDirector.prototype.drawTextWithInput = function (xFn, yFn, text, size, font, color, zIndex, resizeIsDependentOnThisDrawables) {
-        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text, size, font, color);
+    ResizableStageDirector.prototype.drawTextWithInput = function (xFn, yFn, text, sizeFn, font, color, zIndex, resizeIsDependentOnThisDrawables) {
+        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text,
+            sizeFn(this.width, this.height), font, color);
         this.stage.draw(drawable);
         var input = this.createInput(drawable);
         var self = this;
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
+            drawable.txt.size = sizeFn(width, height);
             self.changeInput(input, drawable);
         }, resizeIsDependentOnThisDrawables);
 
