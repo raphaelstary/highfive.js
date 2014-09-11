@@ -1,7 +1,7 @@
 var PropertyManagement = (function (range) {
     "use strict";
 
-    function PropertyManagement(windowView, input, pushDown, decreasePeopleCounter) {
+    function PropertyManagement(windowView, input, pushDown) {
         this.flats = {
             1: null,
             2: null,
@@ -17,11 +17,11 @@ var PropertyManagement = (function (range) {
         this.windowView = windowView;
         this.input = input;
         this.pushDown = pushDown;
-        this.decreasePeopleCounter = decreasePeopleCounter;
     }
 
-    PropertyManagement.prototype.populateAll = function (people) {
+    PropertyManagement.prototype.populateAll = function (people, decreasePeopleCounter) {
         this.people = people;
+        this.decreasePeopleCounter = decreasePeopleCounter;
 
         for (var key in this.flats) {
             if (people.length > 0)

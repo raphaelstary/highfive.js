@@ -13,10 +13,12 @@ var Level = (function () {
     }
 
     Level.prototype.init = function (data) {
+        this.timeLeft = data.time;
         this.timeView.set(data.time);
+        this.peopleLeft = data.people.length;
         this.peopleView.set(data.people.length);
 
-        this.propertyMngmt.populateAll(data.people);
+        this.propertyMngmt.populateAll(data.people, this.decreasePeopleCounter.bind(this));
     };
 
     Level.prototype.start = function () {
@@ -29,8 +31,16 @@ var Level = (function () {
 
         if (++this.__tickCounter >= 60) {
             this.__tickCounter = 0;
-            this.timeView.decrease();
+            this.decreaseTime();
         }
+    };
+
+    Level.prototype.decreaseTime = function () {
+        this.timeView.set(--this.timeLeft);
+    };
+
+    Level.prototype.decreasePeopleCounter = function () {
+        this.peopleView.set(--this.peopleLeft);
     };
 
     return Level;

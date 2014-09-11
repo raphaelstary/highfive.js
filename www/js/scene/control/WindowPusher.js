@@ -1,4 +1,4 @@
-var WindowPusher = (function (Transition, calcScreenConst) {
+var WindowPusher = (function (Transition, calcScreenConst, window) {
     "use strict";
 
     function WindowPusher(stage) {
@@ -12,14 +12,15 @@ var WindowPusher = (function (Transition, calcScreenConst) {
         var speedFn = function (width, height) {
             return calcScreenConst(height - yFn(height), 15);
         };
+        var self = this;
         var killAnimation = function () {
-            // todo
-            // - kill animation
+            self.stage.remove(wrapper.drawable);
         };
-        this.stage.moveFresh(xFn, yFn, itemKey, xFn, groundFn, speedFn, Transition.EASE_IN_QUAD, false, killAnimation);
+        var wrapper = this.stage.moveFresh(xFn, yFn, itemKey, xFn, groundFn, speedFn, Transition.EASE_IN_QUAD, false,
+            killAnimation);
 
-        callBack();
+        window.setTimeout(callBack, 1000);
     };
 
     return WindowPusher;
-})(Transition, calcScreenConst);
+})(Transition, calcScreenConst, window);
