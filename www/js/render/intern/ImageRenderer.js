@@ -53,10 +53,10 @@ var ImageRenderer = (function (wrapText, Math) {
 
                 self.ctx.drawImage(
                     elem.img.img,
-                    elem.x + Math.floor(elem.img.offSetX * elem.img.scale),
-                    elem.y + Math.floor(elem.img.offSetY * elem.img.scale),
-                    Math.floor(elem.img.width * elem.img.scale),
-                    Math.floor(elem.img.height * elem.img.scale)
+                    elem.getCornerX(),
+                    elem.getCornerY(),
+                    elem.getWidth(),
+                    elem.getHeight()
                 );
             }
         }

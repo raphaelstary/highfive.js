@@ -19,13 +19,16 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
         };
 
         var peopleView = new PeopleView(drawables.peopleLeft);
-        var windowPusher = new WindowPusher(this.stage, peopleView);
+        var objectsToCatch = {};
+        var objectsToAvoid = {};
+        var windowPusher = new WindowPusher(this.stage, objectsToCatch, objectsToAvoid);
         var windowView = new WindowView(this.stage, drawables.backGround);
         var propertyManagement = new PropertyManagement(windowView, this.tapController,
             windowPusher.pushDown.bind(windowPusher));
+        var collisionDetector = new CanvasImageCollisionDetector(drawables.fireFighter.drawable);
 
-        var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft),
-            peopleView, propertyManagement);
+        var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft), peopleView, propertyManagement,
+            collisionDetector, drawables.fireFighter.drawable, objectsToCatch, objectsToAvoid);
 
         this.gameLoop.add('level', firstLevel.tick.bind(firstLevel));
 

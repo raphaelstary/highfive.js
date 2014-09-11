@@ -8,7 +8,7 @@ var SubImage = (function () {
         this.offSetY = offSetY;
         this.trimmedTileWidth = trimmedTileWidth;
         this.trimmedTileHeight = trimmedTileHeight;
-        this.atlas = atlas;
+        this.img = atlas;
     }
 
     return SubImage;

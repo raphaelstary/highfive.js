@@ -51,10 +51,10 @@ var AtlasRenderer = (function (wrapText) {
             for (var key in dict) {
                 var elem = dict[key];
 
-                self.ctx.drawImage(elem.img.atlas, elem.img.x, elem.img.y,
+                self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y,
                     elem.img.width, elem.img.height,
-                        elem.x + elem.img.offSetX,
-                        elem.y + elem.img.offSetY,
+                    elem.x + elem.img.offSetX,
+                    elem.y + elem.img.offSetY,
                     elem.img.trimmedTileWidth,
                     elem.img.trimmedTileHeight);
             }

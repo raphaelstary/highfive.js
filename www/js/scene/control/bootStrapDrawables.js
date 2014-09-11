@@ -44,29 +44,32 @@ var bootStrapDrawables = (function (widthHalf, heightHalf, calcScreenConst, getT
             var distance = fireFighterB_X(width) - fireFighterA_X(width);
             return calcScreenConst(distance, 3);
         }
-        function fromAtoB() {
-            stage.remove(fireFighterWrapper.drawable);
-            initFireFighter();
-        }
-        function fromBtoA() {
-            stage.remove(fireFighterWrapper.drawable);
-            var newWrapper = stage.moveFresh(fireFighterB_X, fireFighter_Y, 'firefighter', fireFighterA_X,
-                fireFighter_Y, fireFighterSpeed, Transition.EASE_IN_OUT_SIN, false, fromAtoB, [backGroundDrawable]);
+//        function fromAtoB() {
+//            stage.remove(fireFighterWrapper.drawable);
+//            initFireFighter();
+//        }
+//        function fromBtoA() {
+//            stage.remove(fireFighterWrapper.drawable);
+//            var newWrapper = stage.moveFresh(fireFighterB_X, fireFighter_Y, 'firefighter', fireFighterA_X,
+//                fireFighter_Y, fireFighterSpeed, Transition.EASE_IN_OUT_SIN, false, fromAtoB, [backGroundDrawable]);
+//
+//            fireFighterWrapper.drawable = newWrapper.drawable;
+//            fireFighterWrapper.path = newWrapper.path;
+//        }
+//        function initFireFighter() {
+//            var newWrapper = stage.moveFresh(fireFighterA_X, fireFighter_Y, 'firefighter', fireFighterB_X,
+//                fireFighter_Y, fireFighterSpeed, Transition.EASE_IN_OUT_SIN, false, fromBtoA, [backGroundDrawable]);
+//
+//            fireFighterWrapper.drawable = newWrapper.drawable;
+//            fireFighterWrapper.path = newWrapper.path;
+//        }
 
-            fireFighterWrapper.drawable = newWrapper.drawable;
-            fireFighterWrapper.path = newWrapper.path;
-        }
-        function initFireFighter() {
-            var newWrapper = stage.moveFresh(fireFighterA_X, fireFighter_Y, 'firefighter', fireFighterB_X,
-                fireFighter_Y, fireFighterSpeed, Transition.EASE_IN_OUT_SIN, false, fromBtoA, [backGroundDrawable]);
-
-            fireFighterWrapper.drawable = newWrapper.drawable;
-            fireFighterWrapper.path = newWrapper.path;
-        }
-
-        var fireFighterWrapper = {};
-        initFireFighter();
-        return fireFighterWrapper;
+//        var fireFighterWrapper = {};
+//        initFireFighter();
+//        return fireFighterWrapper;
+        var a = stage.moveFreshRoundTrip(fireFighterA_X, fireFighter_Y, 'firefighter', fireFighterB_X,
+            fireFighter_Y, fireFighterSpeed, Transition.EASE_IN_OUT_SIN, true, undefined, undefined, [backGroundDrawable]);
+        return a;
     }
 
     function bootStrapDrawables(stage) {
@@ -81,4 +84,4 @@ var bootStrapDrawables = (function (widthHalf, heightHalf, calcScreenConst, getT
     }
 
     return bootStrapDrawables;
-})();
+})(widthHalf, heightHalf, calcScreenConst, getTopRaster);

@@ -1,10 +1,16 @@
 var Level = (function () {
     "use strict";
 
-    function Level(initialData, timeView, peopleView, propertyMngmt) {
+    function Level(initialData, timeView, peopleView, propertyMngmt, collisionDetector, fireFighterDrawable,
+                   objectsToCatch, objectsToAvoid) {
+
         this.timeView = timeView;
         this.peopleView = peopleView;
         this.propertyMngmt = propertyMngmt;
+        this.collisionDetector = collisionDetector;
+        this.fireFighterDrawable = fireFighterDrawable;
+        this.objectsToCatch = objectsToCatch;
+        this.objectsToAvoid = objectsToAvoid;
 
         this.init(initialData);
 
@@ -33,6 +39,22 @@ var Level = (function () {
             this.__tickCounter = 0;
             this.decreaseTime();
         }
+
+        var fireFighterCornerY = this.fireFighterDrawable.getCornerY();
+        var self = this;
+        for (var key in this.objectsToCatch) {
+            var goodStuff = this.objectsToCatch[key];
+            if (goodStuff.getEndY() >= fireFighterCornerY && self.collisionDetector.isHit(goodStuff)) {
+                // do smth;
+                console.log('HIT good');
+            }
+        }
+//        this.objectsToAvoid.forEach(function (badStuff) {
+//            if (badStuff.getEndY() >= fireFighterCornerY && self.collisionDetector.isHit(badStuff)) {
+//                do smth;
+//                console.log('HIT bad');
+//            }
+//        });
     };
 
     Level.prototype.decreaseTime = function () {

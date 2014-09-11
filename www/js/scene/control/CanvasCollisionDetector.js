@@ -16,7 +16,8 @@ var CanvasCollisionDetector = (function (document) {
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        this.ctx.drawImage(this.img.atlas, this.img.x, this.img.y, this.img.width, this.img.height, 0, 0, this.img.width, this.img.height);
+        this.ctx.drawImage(this.img.img, this.img.x, this.img.y, this.img.width, this.img.height, 0, 0, this.img.width,
+            this.img.height);
 
         this.ctx.save();
         this.ctx.globalCompositeOperation = 'source-in';
@@ -25,7 +26,8 @@ var CanvasCollisionDetector = (function (document) {
         var y = element.getCornerY() - this._getReferenceCornerY();
 
         var elemImg = element.img;
-        this.ctx.drawImage(elemImg.atlas, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width, elemImg.height);
+        this.ctx.drawImage(elemImg.img, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width,
+            elemImg.height);
 
         this.ctx.restore();
 

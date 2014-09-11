@@ -6,8 +6,6 @@ var Texture = (function (Math) {
         this.width = width;
         this.height = height;
         this.scale = scale;
-        this.offSetX = - Math.floor(width / 2);
-        this.offSetY = - Math.floor(height / 2);
     }
 
     return Texture;

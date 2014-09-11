@@ -12,6 +12,10 @@ var Repository = (function () {
         };
     };
 
+    Repository.prototype.has = function (item) {
+        return this.dict[item.id] !== undefined;
+    };
+
     Repository.prototype.remove = function (item) {
         delete this.dict[item.id];
     };
