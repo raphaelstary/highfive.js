@@ -1,4 +1,4 @@
-var Level = (function () {
+var Level = (function (FireFighterHelper) {
     "use strict";
 
     function Level(initialData, timeView, peopleView, propertyMngmt, pusher,
@@ -41,7 +41,8 @@ var Level = (function () {
 
         this.pusher.setKillCallback(this.killPerson.bind(this));
 
-        this.propertyMngmt.populateAll(data.people, this.decreasePeopleCounter.bind(this));
+        this.propertyMngmt.populateAll(data.people || [], this.decreasePeopleCounter.bind(this), data.bulkyWaste || [],
+                data.percentageForPeople || 100);
     };
 
     Level.prototype.start = function () {
@@ -84,8 +85,7 @@ var Level = (function () {
                 var badStuff = self.objectsToAvoid[key];
                 if (badStuff.getEndY() >= fireFighterCornerY && fireFighter.collisionDetector.isHit(badStuff)) {
 
-                    self.killFireFighter(fireFighter.drawable);
-                    console.log('HIT bad');
+                    self.killFireFighter(fireFighter.drawable, badStuff);
                 }
             }
         });
@@ -103,8 +103,21 @@ var Level = (function () {
         this.peopleView.set(--this.peopleLeftInHouse);
     };
 
-    Level.prototype.killFireFighter = function () {
-        this.failure();
+    Level.prototype.killFireFighter = function (fireFighterDrawable, stuffDrawable) {
+        this.stage.remove(fireFighterDrawable);
+
+        var fireFighterIndex;
+        this.fireFighters.forEach(function (ff, index) {
+            if (ff.id == fireFighterDrawable.id) {
+                fireFighterIndex = index;
+            }
+        });
+        this.fireFighters.splice(fireFighterIndex, 1);
+
+        this.stage.remove(stuffDrawable);
+        delete this.objectsToAvoid[stuffDrawable.id];
+
+        this.end(this.failure);
     };
 
     Level.prototype.personSaved = function (drawable) {
@@ -154,4 +167,4 @@ var Level = (function () {
     };
 
     return Level;
-})();
+})(FireFighterHelper);

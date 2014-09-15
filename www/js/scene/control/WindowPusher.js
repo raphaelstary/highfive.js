@@ -11,7 +11,15 @@ var WindowPusher = (function (Transition, calcScreenConst, window) {
         this.killCallback = callback;
     };
 
-    WindowPusher.prototype.pushDown = function (xFn, yFn, itemKey, callBack) {
+    WindowPusher.prototype.pushDown = function (xFn, yFn, itemKey, callback) {
+        this.__downWithIt(xFn, yFn, itemKey, callback, this.objectsToCatch, this.killCallback);
+    };
+
+    WindowPusher.prototype.throwDown = function (xFn, yFn, itemKey, callback) {
+        this.__downWithIt(xFn, yFn, itemKey, callback, this.objectsToAvoid, function() {});
+    };
+
+    WindowPusher.prototype.__downWithIt = function (xFn, yFn, itemKey, callback, objectsDict, killCallback) {
         var groundFn = function (height) {
             return height;
         };
@@ -20,15 +28,15 @@ var WindowPusher = (function (Transition, calcScreenConst, window) {
         };
         var self = this;
         var killAnimation = function () {
-            self.killCallback();
+            killCallback();
             self.stage.remove(wrapper.drawable);
-            delete self.objectsToCatch[wrapper.drawable.id];
+            delete objectsDict[wrapper.drawable.id];
         };
         var wrapper = this.stage.moveFresh(xFn, yFn, itemKey, xFn, groundFn, speedFn, Transition.EASE_IN_QUAD, false,
             killAnimation);
-        this.objectsToCatch[wrapper.drawable.id] = wrapper.drawable;
+        objectsDict[wrapper.drawable.id] = wrapper.drawable;
 
-        window.setTimeout(callBack, 1000);
+        window.setTimeout(callback, 1000);
     };
 
     return WindowPusher;

@@ -16,8 +16,9 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
         var firstLevelData = {
             time: 60*3,
             people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat', 'baby'],
-            bulkyWaste: [],
-            fireFighters: [{speed: 3}]
+            bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
+            fireFighters: [{speed: 3}],
+            percentageForPeople: 50
         };
 
         var peopleView = new PeopleView(drawables.peopleLeft);
@@ -25,8 +26,8 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
         var objectsToAvoid = {};
         var windowPusher = new WindowPusher(this.stage, objectsToCatch, objectsToAvoid);
         var windowView = new WindowView(this.stage, drawables.backGround);
-        var propertyManagement = new PropertyManagement(windowView, this.tapController,
-            windowPusher.pushDown.bind(windowPusher));
+        var propertyManagement = new LevelGenerator(windowView, this.tapController,
+            windowPusher);
 
         var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft), peopleView, propertyManagement,
             windowPusher, objectsToCatch, objectsToAvoid, this.stage, drawables);
@@ -51,4 +52,4 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
     };
 
     return FireGame;
-})(bootStrapDrawables, WindowPusher, WindowView, Level, PeopleView, TimeView, PropertyManagement);
+})(bootStrapDrawables, WindowPusher, WindowView, Level, PeopleView, TimeView, LevelGenerator);
