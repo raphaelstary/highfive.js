@@ -2,11 +2,11 @@ var LevelGenerator = (function () {
     "use strict";
 
     function LevelGenerator() {
-        this.currentLevel = 6;
+        this.currentLevel = 0;
 
         var Level = {};
 
-        Level[7] = {
+        Level[1] = {
             time: 60,
             people: ['baby', 'granny', 'cat'],
             fireFighters: [{speed: 3}]
@@ -54,7 +54,7 @@ var LevelGenerator = (function () {
             percentageForPeople: 33
         };
 
-        Level[6] = {
+        Level[7] = {
             time: 90,
             people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat',
                 'baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat',
