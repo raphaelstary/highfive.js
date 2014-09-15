@@ -1,4 +1,4 @@
-var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, PeopleView, TimeView, PropertyManagement) {
+var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, PeopleView, TimeView, LevelModel, LevelGenerator, NextFire, YouWon) {
     "use strict";
 
     function FireGame(stage, gameLoop, tapController, messages, sounds, resizeBus) {
@@ -11,48 +11,54 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
     }
 
     FireGame.prototype.show = function (nextScene) {
-        var drawables = bootStrapDrawables(this.stage);
+        var levelGenerator = new LevelGenerator();
 
-        var firstLevelData = {
-            time: 30,
-            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat', 'baby'],
-            bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
-            fireFighters: [{speed: 3}],
-            percentageForPeople: 50
-        };
+        this.__nextLevel(levelGenerator.next(), bootStrapDrawables(this.stage), nextScene,
+            levelGenerator.next.bind(levelGenerator))
+    };
 
-        var peopleView = new PeopleView(drawables.peopleLeft);
+    FireGame.prototype.__nextLevel = function (levelData, baseDrawables, nextScene, nextLevel) {
+        var peopleView = new PeopleView(baseDrawables.peopleLeft);
         var objectsToCatch = {};
         var objectsToAvoid = {};
         var windowPusher = new WindowPusher(this.stage, objectsToCatch, objectsToAvoid);
-        var windowView = new WindowView(this.stage, drawables.backGround);
-        var propertyManagement = new LevelGenerator(windowView, this.tapController,
+        var windowView = new WindowView(this.stage, baseDrawables.backGround);
+        var propertyManagement = new LevelModel(windowView, this.tapController,
             windowPusher);
 
-        var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft), peopleView, propertyManagement,
-            windowPusher, objectsToCatch, objectsToAvoid, this.stage, drawables);
+        var level = new Level(levelData, new TimeView(baseDrawables.timeLeft), peopleView, propertyManagement,
+            windowPusher, objectsToCatch, objectsToAvoid, this.stage, baseDrawables);
 
-        this.gameLoop.add('level', firstLevel.tick.bind(firstLevel));
+        this.gameLoop.add('level', level.tick.bind(level));
 
         var self = this;
-        firstLevel.success = function () {
-            firstLevel.success = undefined;
-            firstLevel.failure = undefined;
+        level.success = function () {
+            level.success = undefined;
+            level.failure = undefined;
+            self.gameLoop.remove('level');
+
+            var nxtLvl = nextLevel();
+            if (nxtLvl === false) {
+                new YouWon(self.stage).show();
+            } else {
+                new NextFire(self.stage).show(self.__nextLevel.bind(self, nxtLvl, baseDrawables, nextScene, nextLevel));
+            }
         };
 
-        firstLevel.failure = function () {
-            firstLevel.success = undefined;
-            firstLevel.failure = undefined;
+        level.failure = function () {
+            level.success = undefined;
+            level.failure = undefined;
+            self.gameLoop.remove('level');
 
-            for (var key in drawables) {
-                var drawable = drawables[key];
+            for (var key in baseDrawables) {
+                var drawable = baseDrawables[key];
                 self.stage.remove(drawable);
             }
             nextScene();
         };
 
-        firstLevel.start();
+        level.start();
     };
 
     return FireGame;
-})(bootStrapDrawables, WindowPusher, WindowView, Level, PeopleView, TimeView, LevelGenerator);
+})(bootStrapDrawables, WindowPusher, WindowView, Level, PeopleView, TimeView, LevelModel, LevelGenerator, NextFire, YouWon);

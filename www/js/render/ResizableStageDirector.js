@@ -49,9 +49,11 @@ var ResizableStageDirector = (function (changeCoords, changePath, PxCollisionDet
         };
     };
 
-    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex, resizeIsDependentOnThisDrawables) {
+    ResizableStageDirector.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex,
+                                                          resizeIsDependentOnThisDrawables, rotation, alpha,
+                                                          maxLineLength, lineHeight) {
         var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text,
-            sizeFn(this.width, this.height), font, color);
+            sizeFn(this.width, this.height), font, color, rotation, alpha, maxLineLength, lineHeight);
         this.stage.draw(drawable);
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));

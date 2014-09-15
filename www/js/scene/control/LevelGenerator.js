@@ -1,77 +1,93 @@
-var LevelGenerator = (function (range) {
+var LevelGenerator = (function () {
     "use strict";
 
-    function LevelGenerator(windowView, input, pusher) {
-        this.flats = {
-            1: null,
-            2: null,
-            3: null,
-            4: null,
-            5: null,
-            6: null,
-            7: null,
-            8: null,
-            9: null
+    function LevelGenerator() {
+        this.currentLevel = 6;
+
+        var Level = {};
+
+        Level[7] = {
+            time: 60,
+            people: ['baby', 'granny', 'cat'],
+            fireFighters: [{speed: 3}]
         };
 
-        this.windowView = windowView;
-        this.input = input;
-        this.pusher = pusher;
-        this.__runing = true;
+        Level[2] = {
+            time: 60,
+            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat'],
+            fireFighters: [{speed: 3}]
+        };
+
+        Level[3] = {
+            time: 30,
+            people: ['cat', 'cat', 'cat'],
+            bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
+            fireFighters: [{speed: 3}],
+            percentageForPeople: 33
+        };
+
+        Level[4] = {
+            time: 90,
+            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat',
+                'baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat',
+                'baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat'],
+            bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
+            fireFighters: [{speed: 3}],
+            percentageForPeople: 50
+        };
+
+        Level[5] = {
+            time: 60,
+            people: ['cat', 'cat', 'cat', 'cat', 'cat', 'cat', 'cat', 'cat', 'cat'],
+            fireFighters: [{speed: 5}]
+        };
+
+        Level[6] = {
+            time: 60,
+            people: ['baby', 'baby', 'baby'],
+            bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
+            fireFighters: [{speed: 2}, {speed: 5}, {speed: 7}],
+            percentageForPeople: 33
+        };
+
+        Level[6] = {
+            time: 90,
+            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat',
+                'baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat',
+                'baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat'],
+            bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan',
+                'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
+            fireFighters: [{speed: 2}, {speed: 5}, {speed: 7}],
+            percentageForPeople: 50
+        };
+
+        this.Level = Level;
     }
 
-    LevelGenerator.prototype.populateAll = function (people, decreasePeopleCounter, bulkyWaste,
-                                                     percentageForPeopleOverWaste) {
-        this.people = people;
-        this.waste = bulkyWaste;
-        this.percentageForPeople = percentageForPeopleOverWaste;
-        this.decreasePeopleCounter = decreasePeopleCounter;
-
-        for (var key in this.flats) {
-            if (people.length > 0 || bulkyWaste.length > 0)
-                this.populateSingle(key);
-        }
+    var People = {
+        BABY: 'baby',
+        GRANNY: 'granny',
+        CAT: 'cat'
     };
 
-    LevelGenerator.prototype.populateSingle = function (flatKey) {
-        if (range(1, 100) <= this.percentageForPeople && this.people.length > 0 || this.waste.length < 1) {
-            this.__populateFlat(this.people, this.decreasePeopleCounter, this.pusher.pushDown.bind(this.pusher),
-                flatKey);
-        } else if (this.waste.length > 0) {
-            this.__populateFlat(this.waste, function () {}, this.pusher.throwDown.bind(this.pusher), flatKey);
-        }
+    var Waste = {
+        LENOVO: 'lenovo',
+        IPAD: 'ipad',
+        SULTAN: 'sultan'
     };
 
-    LevelGenerator.prototype.__populateFlat = function (stuff, callback, pushFn, flatKey) {
-        var self = this;
-        var nrOfTenants = stuff.length;
-        var randomTenantIndex = range(0, nrOfTenants - 1);
-        var selectedTenant = stuff.splice(randomTenantIndex, 1)[0];
+    LevelGenerator.prototype.next = function () {
+        if (++this.currentLevel > 7)
+            return false;
 
-        var drawableWrapper = self.windowView['createDrawableAtSpot' + flatKey](selectedTenant + '_inside');
-        self.flats[flatKey] = drawableWrapper;
-
-        self.input.add(drawableWrapper.input, function () {
-            callback();
-            self.windowView.remove(drawableWrapper.drawable);
-            self.input.remove(drawableWrapper.input);
-            pushFn(drawableWrapper.xFn, drawableWrapper.yFn, selectedTenant, function () {
-                if (self.__runing && (self.waste.length > 0 || self.people.length > 0))
-                    self.populateSingle(flatKey);
-            });
-        });
-    };
-
-    LevelGenerator.prototype.clearAll = function () {
-        for (var key in this.flats) {
-            var tenant = this.flats[key];
-            if (tenant == null) {
-                continue;
-            }
-            this.input.remove(tenant.input);
-            this.windowView.remove(tenant.drawable);
-        }
+        return this.Level[this.currentLevel];
     };
 
     return LevelGenerator;
-})(range);
+})();
