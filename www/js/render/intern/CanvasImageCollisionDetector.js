@@ -26,7 +26,12 @@ var CanvasImageCollisionDetector = (function (document) {
 
         this.ctx.restore();
 
-        var rawPixelData = this.ctx.getImageData(0, 0, x + drawable.getWidth(), y + drawable.getHeight()).data;
+        var sourceWidth = x + drawable.getWidth();
+        var sourceHeight = y + drawable.getHeight();
+        if (sourceWidth < 1 || sourceHeight < 1)
+            return false;
+
+        var rawPixelData = this.ctx.getImageData(0, 0, sourceWidth, sourceHeight).data;
 
         for (var i = 0; i < rawPixelData.length; i += 4) {
             var alphaValue = rawPixelData[i + 3];

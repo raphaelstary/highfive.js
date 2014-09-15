@@ -17,6 +17,7 @@ var Level = (function (FireFighterHelper) {
 
         this.__runing = false;
         this.__tickCounter = 0;
+        this.__destroyed = false;
     }
 
     Level.prototype.init = function (data) {
@@ -46,11 +47,17 @@ var Level = (function (FireFighterHelper) {
     };
 
     Level.prototype.start = function () {
+        if (this.__runing)
+            return;
+
         this.__runing = true;
         this.propertyMngmt.__runing = true;
     };
 
     Level.prototype.stop = function () {
+        if (!this.__runing)
+            return;
+
         this.__runing = false;
         this.propertyMngmt.__runing = false;
 
@@ -85,7 +92,7 @@ var Level = (function (FireFighterHelper) {
                 var badStuff = self.objectsToAvoid[key];
                 if (badStuff.getEndY() >= fireFighterCornerY && fireFighter.collisionDetector.isHit(badStuff)) {
 
-                    self.killFireFighter(fireFighter.drawable, badStuff);
+                    self.killFireFighter(fireFighter, badStuff);
                 }
             }
         });
@@ -103,12 +110,13 @@ var Level = (function (FireFighterHelper) {
         this.peopleView.set(--this.peopleLeftInHouse);
     };
 
-    Level.prototype.killFireFighter = function (fireFighterDrawable, stuffDrawable) {
-        this.stage.remove(fireFighterDrawable);
+    Level.prototype.killFireFighter = function (fireFighterWrapper, stuffDrawable) {
+        this.stage.remove(fireFighterWrapper.drawable);
+        this.stage.detachCollisionDetector(fireFighterWrapper.collisionDetector);
 
         var fireFighterIndex;
         this.fireFighters.forEach(function (ff, index) {
-            if (ff.id == fireFighterDrawable.id) {
+            if (ff.id == fireFighterWrapper.drawable.id) {
                 fireFighterIndex = index;
             }
         });
@@ -145,10 +153,15 @@ var Level = (function (FireFighterHelper) {
     Level.prototype.end = function (callback) {
         this.stop();
         this.preDestroy();
-        callback();
+        if (callback)
+            callback();
     };
 
     Level.prototype.preDestroy = function () {
+        if (this.__destroyed)
+            return;
+        this.__destroyed = true;
+
         this.propertyMngmt.clearAll();
 
         var self = this;
@@ -156,12 +169,15 @@ var Level = (function (FireFighterHelper) {
             self.stage.detachCollisionDetector(fireFighter.collisionDetector);
             self.stage.remove(fireFighter.drawable);
         });
+        this.fireFighters.splice(0, this.fireFighters.length);
 
         var key;
         for (key in this.objectsToCatch) {
+            this.stage.remove(this.objectsToCatch[key]);
             delete this.objectsToCatch[key];
         }
         for (key in this.objectsToAvoid) {
+            this.stage.remove(this.objectsToAvoid[key]);
             delete this.objectsToAvoid[key];
         }
     };

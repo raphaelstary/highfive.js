@@ -14,7 +14,7 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
         var drawables = bootStrapDrawables(this.stage);
 
         var firstLevelData = {
-            time: 60*3,
+            time: 30,
             people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat', 'baby'],
             bulkyWaste: ['lenovo', 'ipad', 'sultan', 'lenovo', 'ipad', 'sultan'],
             fireFighters: [{speed: 3}],
@@ -36,11 +36,14 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
 
         var self = this;
         firstLevel.success = function () {
-            console.log('nice job!');
-            console.log('next level?');
+            firstLevel.success = undefined;
+            firstLevel.failure = undefined;
         };
 
         firstLevel.failure = function () {
+            firstLevel.success = undefined;
+            firstLevel.failure = undefined;
+
             for (var key in drawables) {
                 var drawable = drawables[key];
                 self.stage.remove(drawable);

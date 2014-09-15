@@ -56,7 +56,7 @@ var LevelGenerator = (function (range) {
             self.windowView.remove(drawableWrapper.drawable);
             self.input.remove(drawableWrapper.input);
             pushFn(drawableWrapper.xFn, drawableWrapper.yFn, selectedTenant, function () {
-                if (self.__runing && stuff.length > 0)
+                if (self.__runing && (self.waste.length > 0 || self.people.length > 0))
                     self.populateSingle(flatKey);
             });
         });
