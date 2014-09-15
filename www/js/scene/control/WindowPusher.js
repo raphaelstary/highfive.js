@@ -7,6 +7,10 @@ var WindowPusher = (function (Transition, calcScreenConst, window) {
         this.objectsToAvoid = objectsToAvoid;
     }
 
+    WindowPusher.prototype.setKillCallback = function (callback) {
+        this.killCallback = callback;
+    };
+
     WindowPusher.prototype.pushDown = function (xFn, yFn, itemKey, callBack) {
         var groundFn = function (height) {
             return height;
@@ -16,6 +20,7 @@ var WindowPusher = (function (Transition, calcScreenConst, window) {
         };
         var self = this;
         var killAnimation = function () {
+            self.killCallback();
             self.stage.remove(wrapper.drawable);
             delete self.objectsToCatch[wrapper.drawable.id];
         };

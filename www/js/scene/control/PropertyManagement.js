@@ -17,6 +17,7 @@ var PropertyManagement = (function (range) {
         this.windowView = windowView;
         this.input = input;
         this.pushDown = pushDown;
+        this.__runing = true;
     }
 
     PropertyManagement.prototype.populateAll = function (people, decreasePeopleCounter) {
@@ -43,10 +44,21 @@ var PropertyManagement = (function (range) {
             self.windowView.remove(drawableWrapper.drawable);
             self.input.remove(drawableWrapper.input);
             self.pushDown(drawableWrapper.xFn, drawableWrapper.yFn, selectedTenant, function () {
-                if (self.people.length > 0)
+                if (self.__runing && self.people.length > 0)
                     self.populateSingle(flatKey);
             });
         });
+    };
+
+    PropertyManagement.prototype.clearAll = function () {
+        for (var key in this.flats) {
+            var tenant = this.flats[key];
+            if (tenant == null) {
+                continue;
+            }
+            this.input.remove(tenant.input);
+            this.windowView.remove(tenant.drawable);
+        }
     };
 
     return PropertyManagement;

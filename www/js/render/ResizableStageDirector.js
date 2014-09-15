@@ -11,14 +11,18 @@ var ResizableStageDirector = (function (changeCoords, changePath, PxCollisionDet
         this.width = width;
         this.height = height;
 
-        this.collisions = [];
+        this.collisions = {};
     }
 
     ResizableStageDirector.prototype.getCollisionDetector = function (drawable) {
         var collisions = new PxCollisionDetector(drawable);
-        this.collisions.push(collisions);
+        this.collisions[drawable.id] = collisions;
 
         return collisions;
+    };
+
+    ResizableStageDirector.prototype.detachCollisionDetector = function (collisionDetector) {
+        delete this.collisions[collisionDetector.drawable.id];
     };
 
     ResizableStageDirector.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeIsDependentOnThisDrawables) {
@@ -82,9 +86,10 @@ var ResizableStageDirector = (function (changeCoords, changePath, PxCollisionDet
         this.stage.resize(width, height);
         this.textures.resize(width, height);
         this.resizer.call(width, height);
-        this.collisions.forEach(function (collision) {
-            collision.resize();
-        });
+
+        for (var key in this.collisions) {
+            this.collisions[key].resize();
+        }
     };
 
     ResizableStageDirector.prototype.getDrawable = function (x, y, imgPathName, zIndex) {
@@ -240,6 +245,14 @@ var ResizableStageDirector = (function (changeCoords, changePath, PxCollisionDet
 
     ResizableStageDirector.prototype.tick = function () {
         this.stage.tick();
+    };
+
+    ResizableStageDirector.prototype.pause = function (drawable) {
+        this.stage.pause(drawable);
+    };
+
+    ResizableStageDirector.prototype.play = function (drawable) {
+        this.stage.play(drawable);
     };
 
     return ResizableStageDirector;

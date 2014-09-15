@@ -15,7 +15,9 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
 
         var firstLevelData = {
             time: 60*3,
-            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat', 'baby']
+            people: ['baby', 'baby', 'baby', 'granny', 'granny', 'granny', 'cat', 'cat', 'cat', 'baby'],
+            bulkyWaste: [],
+            fireFighters: [{speed: 3}]
         };
 
         var peopleView = new PeopleView(drawables.peopleLeft);
@@ -25,18 +27,27 @@ var FireGame = (function (bootStrapDrawables, WindowPusher, WindowView, Level, P
         var windowView = new WindowView(this.stage, drawables.backGround);
         var propertyManagement = new PropertyManagement(windowView, this.tapController,
             windowPusher.pushDown.bind(windowPusher));
-        var collisionDetector = new CanvasImageCollisionDetector(drawables.fireFighter.drawable);
 
         var firstLevel = new Level(firstLevelData, new TimeView(drawables.timeLeft), peopleView, propertyManagement,
-            collisionDetector, drawables.fireFighter.drawable, objectsToCatch, objectsToAvoid);
+            windowPusher, objectsToCatch, objectsToAvoid, this.stage, drawables);
 
         this.gameLoop.add('level', firstLevel.tick.bind(firstLevel));
 
-        firstLevel.start();
-    };
+        var self = this;
+        firstLevel.success = function () {
+            console.log('nice job!');
+            console.log('next level?');
+        };
 
-    FireGame.prototype.next = function (nextScene) {
-        nextScene();
+        firstLevel.failure = function () {
+            for (var key in drawables) {
+                var drawable = drawables[key];
+                self.stage.remove(drawable);
+            }
+            nextScene();
+        };
+
+        firstLevel.start();
     };
 
     return FireGame;

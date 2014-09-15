@@ -42,6 +42,14 @@ var MotionDirector = (function () {
         });
     };
 
+    MotionDirector.prototype.pause = function (drawable) {
+        this.motionStudio.pause(drawable);
+    };
+
+    MotionDirector.prototype.play = function (drawable) {
+        this.motionStudio.play(drawable);
+    };
+
     MotionDirector.prototype.remove = function (drawable) {
         this.motionStudio.remove(drawable);
     };

@@ -206,5 +206,13 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         this.renderer.resize(width, height);
     };
 
+    StageDirector.prototype.pause = function (drawable) {
+        this.motions.pause(drawable);
+    };
+
+    StageDirector.prototype.play = function (drawable) {
+        this.motions.play(drawable);
+    };
+
     return StageDirector;
 })(Sprites, Drawables, Paths);

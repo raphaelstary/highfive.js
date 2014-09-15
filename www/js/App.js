@@ -115,11 +115,15 @@ var App = (function (require) {
 
     App.prototype._initScenes = function (stage, messages, sounds) {
 
+        var ready = new require.Ready(stage, this.tapController);
         var fireGame = new require.FireGame(stage, this.gameLoop, this.tapController, messages, sounds, this.resizeBus);
+        var gameOver = new require.GameOver(stage, this.tapController);
 
         var sceneManager = new require.SceneManager();
 
+        sceneManager.add(ready.show.bind(ready), true);
         sceneManager.add(fireGame.show.bind(fireGame));
+        sceneManager.add(gameOver.show.bind(gameOver));
 
         return sceneManager;
     };
@@ -154,5 +158,7 @@ var App = (function (require) {
     ResizableStageDirector: ResizableStageDirector,
     Repository: Repository,
     fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,
-    Touchables: Touchables
+    Touchables: Touchables,
+    Ready: Ready,
+    GameOver: GameOver
 });

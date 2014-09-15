@@ -20,10 +20,10 @@ var measureText = (function () {
 //            ctx.translate(-elem.x, -elem.y);
 //        }
 
-        var width = ctx.measureText(canvasText.msg);
+        var textMetrics = ctx.measureText(canvasText.msg);
 
         return {
-            width: width,
+            width: textMetrics.width,
             height: canvasText.size
         };
     }

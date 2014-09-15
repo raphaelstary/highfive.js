@@ -16,7 +16,8 @@ var MotionStudio = (function () {
             path: path,
             ready: callback,
             time: 0,
-            axis: axis
+            axis: axis,
+            moving: true
         };
     };
 
@@ -27,6 +28,10 @@ var MotionStudio = (function () {
             }
 
             var motion = this.motionsDict[key];
+
+            if (!motion.moving) {
+                continue;
+            }
 
             var path = motion.path;
             if (path.duration > motion.time) {
@@ -54,6 +59,14 @@ var MotionStudio = (function () {
                 }
             }
         }
+    };
+
+    MotionStudio.prototype.pause = function (drawable) {
+        this.motionsDict[drawable.id].moving = false;
+    };
+
+    MotionStudio.prototype.play = function (drawable) {
+        this.motionsDict[drawable.id].moving = true;
     };
 
     MotionStudio.prototype.remove = function (drawable) {
