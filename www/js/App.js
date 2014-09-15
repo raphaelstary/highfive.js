@@ -115,7 +115,7 @@ var App = (function (require) {
 
     App.prototype._initScenes = function (stage, messages, sounds) {
 
-        var ready = new require.Ready(stage, this.tapController);
+        var ready = new require.Ready(stage, this.tapController, new require.FullScreenController(this.screen));
         var fireGame = new require.FireGame(stage, this.gameLoop, this.tapController, messages, sounds, this.resizeBus);
         var gameOver = new require.GameOver(stage, this.tapController);
 
