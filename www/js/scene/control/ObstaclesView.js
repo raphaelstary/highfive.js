@@ -45,7 +45,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
     };
 
     ObstaclesView.prototype._getStarStartRange = function () {
-        var singleStarWidth = this.stage.getSubImage('star1-anim/star1_0000').width;
+        var singleStarWidth = this.stage.getSubImage('star_1/star_1_0000').width;
         var shipWidth = this.stage.getSubImage('ship').width;
 
         return calcScreenConst(this.screenWidth + shipWidth, 2) - singleStarWidth;
