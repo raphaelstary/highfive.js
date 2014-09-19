@@ -10,8 +10,8 @@ var EnergyStateMachine = (function () {
         this.energyBarDrawable = energyBarDrawable;
         this.sounds = sounds;
 
-        this.energyDrainSprite = stage.getSprite('energy-drain-anim/energy_drain', 90, false);
-        this.energyLoadSprite = stage.getSprite('energy-load-anim/energy_load', 90, false);
+        this.energyDrainSprite = stage.getSprite('energy_drain/energy_drain', 45, false);
+        this.energyLoadSprite = stage.getSprite('energy_load/energy_load', 45, false);
     }
 
     EnergyStateMachine.prototype.drainEnergy = function () {

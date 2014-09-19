@@ -2,7 +2,7 @@ var FireHelper = (function (changeCoords, widthHalf, __400) {
     "use strict";
 
     function drawFire(stage, screenWidth, screenHeight) {
-        return stage.animateFresh(widthHalf(screenWidth), __400(screenHeight), 'fire-anim/fire', 8);
+        return stage.animateFresh(widthHalf(screenWidth), __400(screenHeight), 'fire/fire', 10);
     }
 
     function resizeFire(fire, screenWidth, screenHeight) {

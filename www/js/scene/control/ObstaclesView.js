@@ -21,7 +21,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
     };
 
     ObstaclesView.prototype.drawStar = function (imgName, x, speed, relativePosition) {
-        var starHeightHalf = calcScreenConst(this.stage.getSubImage('star1-anim/star1_0000').height, 2);
+        var starHeightHalf = calcScreenConst(this.stage.getSubImage('star_1/star_1_0000').height, 2);
         var responsiveTime = calcScreenConst(this.screenHeight, 480, speed);
 
         var star = this.stage.animateFresh(x, - starHeightHalf, imgName, 30);
@@ -57,7 +57,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
 
     ObstaclesView.prototype.drawRandomStar = function (speed) {
         var starNum = range(1, 4);
-        var starPath = 'star' + starNum + '-anim/star' + starNum;
+        var starPath = 'star_' + starNum + '/star_' + starNum;
 
         var startRange = this._getStarStartRange();
         var endRange = this._getStarEndRange(startRange);
@@ -92,7 +92,7 @@ var ObstaclesView = (function (Transition, range, calcScreenConst, changeCoords,
     };
 
     ObstaclesView.prototype.drawRandomAsteroid = function (speed) {
-        var asteroidPath = 'asteroid' + range(1, 4);
+        var asteroidPath = 'asteroid_' + range(1, 4);
 
         var startRange = this._getAsteroidStartRange(asteroidPath);
         var endRange = this._getAsteroidEndRange(startRange);

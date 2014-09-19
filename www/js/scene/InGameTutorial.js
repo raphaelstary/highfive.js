@@ -61,9 +61,9 @@ var InGameTutorial = (function (require) {
             fireDrawable = this.sceneStorage.fire,
             speedStripes = this.sceneStorage.speedStripes,
             shieldsUpSprite =
-                this.sceneStorage.shieldsUp || this.stage.getSprite('shields-up-anim/shields_up', 6, false),
+                this.sceneStorage.shieldsUp || this.stage.getSprite('shields_up/shields_up', 6, false),
             shieldsDownSprite =
-                this.sceneStorage.shieldsDown || this.stage.getSprite('shields-down-anim/shields_down', 6, false);
+                this.sceneStorage.shieldsDown || this.stage.getSprite('shields_down/shields_down', 6, false);
 
         var shaker = new require.ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
             lifeDrawablesDict[2], lifeDrawablesDict[3], fireDrawable]);

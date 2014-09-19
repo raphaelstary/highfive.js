@@ -112,7 +112,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 }
             });
 
-            letsplayIO = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 2), 'credits-logo');
+            letsplayIO = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 2), 'letsplayIO_logo_small');
             self.resizeRepoDrawables.add(letsplayIO, function () {
                 if (self.drawablesAtNewPosition) {
                     changeCoords(letsplayIO, calcScreenConst(self.screenWidth, 2), calcScreenConst(self.screenHeight, 2));
@@ -121,26 +121,26 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 }
             });
 
-            fb = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('credits-facebook').width, 5, 4) + self.screenWidth,
-                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), 'credits-facebook');
+            fb = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
+                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), 'facebook');
             self.resizeRepoDrawables.add(fb, function () {
                 if (self.drawablesAtNewPosition) {
-                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('credits-facebook').width, 5, 4),
+                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4),
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3));
                 } else {
-                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('credits-facebook').width, 5, 4) + self.screenWidth,
+                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3))
                 }
             });
 
-            twitter = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('credits-facebook').width, 5, 4) + self.screenWidth,
-                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), 'credits-twitter');
+            twitter = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
+                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), 'twitter');
             self.resizeRepoDrawables.add(twitter, function () {
                 if (self.drawablesAtNewPosition) {
-                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('credits-facebook').width, 5, 4),
+                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4),
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3));
                 } else {
-                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('credits-facebook').width, 5, 4) + self.screenWidth,
+                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3))
                 }
             });

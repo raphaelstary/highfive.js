@@ -11,11 +11,33 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         this.sounds = sounds;
     }
 
+    var SHIP = 'ship';
+    var FIRE = 'fire/fire';
+    var SHIELDS = 'shields';
+    var SHIELDS_DOWN = 'shields_down/shields_down';
+    var SHIELDS_UP = 'shields_up/shields_up';
+    var BUTTON_SEC = 'button_secondary';
+    var BUTTON_SEC_ACTIVE = 'button_secondary_active';
+    var BUTTON_PRIM = 'button_primary';
+    var BUTTON_PRIM_ACTIVE = 'button_primary_active';
+
+    var CLICK = 'click';
+
+    var PRE_GAME_SCENE = 'pre_game_scene';
+    var CREDITS_SCENE = 'credits_scene';
+
+    var PRE_GAME_MSG_KEY = 'pre_game';
+    var CREDITS_MSG = 'credits';
+    var PLAY_MSG = 'play';
+
+    var FONT = 'KenPixel';
+    var FONT_COLOR = '#fff';
+
     PreGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var logoDrawable = this.sceneStorage.logo;
         delete this.sceneStorage.logo;
 
-        this.resizeBus.add('pre_game_scene', this.resize.bind(this));
+        this.resizeBus.add(PRE_GAME_SCENE, this.resize.bind(this));
         this.resizeRepo = new Repository();
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -46,7 +68,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
 
 
         function getShipStartY() {
-            return calcScreenConst(self.stage.getSubImage('ship').height, 2) + self.screenHeight;
+            return calcScreenConst(self.stage.getSubImage(SHIP).height, 2) + self.screenHeight;
         }
         function getShipX() {
             return getWidthHalf();
@@ -58,11 +80,11 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         var shipStartY = getShipStartY();
         var shipEndY = getShipEndY();
         var shipX_widthHalf = getShipX();
-        var shipDrawable = self.stage.drawFresh(shipX_widthHalf, shipStartY, 'ship');
+        var shipDrawable = self.stage.drawFresh(shipX_widthHalf, shipStartY, SHIP);
         var shipInPath = self.stage.getPath(shipX_widthHalf, shipStartY, shipX_widthHalf, shipEndY, 60,
             Transition.EASE_IN_QUAD);
 
-        var fireDrawable = self.stage.animateFresh(shipX_widthHalf, shipStartY, 'fire-anim/fire', 8);
+        var fireDrawable = self.stage.animateFresh(shipX_widthHalf, shipStartY, FIRE, 10);
 
         self.resizeRepo.add(shipDrawable, function () {
             var shipX = getShipX();
@@ -76,17 +98,21 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             return calcScreenConst(self.screenHeight, 4, 3);
         }
 
-        var pressPlay = self.stage.getDrawable(shipX_widthHalf, getPlayY(), 'play');
+        var pressPlay = self.stage.getDrawable(shipX_widthHalf, getPlayY(), BUTTON_PRIM);
+
+        var pressPlayTxt = self.stage.getDrawableText(shipX_widthHalf, getPlayY(), 3, self.messages.get(PRE_GAME_MSG_KEY, PLAY_MSG), 15,
+            FONT, FONT_COLOR);
         var playTouchable = {id: 'ready_tap', x: pressPlay.getCornerX(), y: pressPlay.getCornerY(),
             width: pressPlay.getWidth(), height: pressPlay.getHeight()};
         self.resizeRepo.add(pressPlay, function () {
             changeCoords(pressPlay, getShipX(), getPlayY());
+            changeCoords(pressPlayTxt, getShipX(), getPlayY());
             changeTouchable(playTouchable, pressPlay.getCornerX(), pressPlay.getCornerY(), pressPlay.getWidth(),
                 pressPlay.getHeight());
         });
 
 
-        var shareFb, shareTw, credits, settings, lightFrame;
+        var credits, lightFrame;
         var allTouchables = [
             {touchable: playTouchable, fn: startPlaying, anchor: pressPlay}
         ];
@@ -116,46 +142,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
 
             shieldsAnimation();
             self.stage.draw(pressPlay);
-
-            function getTopY() {
-                return calcScreenConst(self.screenHeight, 25, 2);
-            }
-
-            var topRaster = getTopY();
-
-            function getSettingsX() {
-                return calcScreenConst(self.stage.getSubImage('settings').width, 2) + getFadeOffSet();
-            }
-
-            settings = self.stage.drawFresh(getSettingsX(), topRaster, 'settings');
-            self.resizeRepo.add(settings, function () {
-                changeCoords(settings, getSettingsX(), getTopY());
-            });
-
-            function getFbX() {
-                var fivePerCent = calcScreenConst(self.screenWidth, 20);
-                var imgHalf = calcScreenConst(self.stage.getSubImage('share-fb').width, 2);
-                var padding = calcScreenConst(self.stage.getSubImage('share-fb').width, 4, 5);
-
-                return self.screenWidth - fivePerCent - imgHalf - padding + getFadeOffSet();
-            }
-
-            shareFb = self.stage.drawFresh(getFbX(), topRaster, 'share-fb');
-            self.resizeRepo.add(shareFb, function () {
-                changeCoords(shareFb, getFbX(), getTopY());
-            });
-
-            function getTwitterX() {
-                var fivePerCent = calcScreenConst(self.screenWidth, 20);
-                var imgHalf = calcScreenConst(self.stage.getSubImage('share-fb').width, 2);
-
-                return self.screenWidth - fivePerCent - imgHalf + getFadeOffSet();
-            }
-
-            shareTw = self.stage.drawFresh(getTwitterX(), topRaster, 'share-twitter');
-            self.resizeRepo.add(shareTw, function () {
-                changeCoords(shareTw, getTwitterX(), getTopY());
-            });
+            self.stage.draw(pressPlayTxt);
 
             function getBottomY() {
                 return calcScreenConst(self.screenHeight, 50, 47);
@@ -168,9 +155,11 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             }
 
             var xButton = getButtonX();
-            lightFrame = self.stage.drawFresh(xButton, bottomRaster, 'light-button-frame');
-            credits = self.stage.getDrawableText(xButton, bottomRaster, 3, self.messages.get('pre_game', 'credits'), 15,
-                'KenPixel', '#fff', 0, 0.5);
+
+            lightFrame = self.stage.drawFresh(xButton, bottomRaster, BUTTON_SEC);
+
+            credits = self.stage.getDrawableText(xButton, bottomRaster, 3, self.messages.get(PRE_GAME_MSG_KEY, CREDITS_MSG), 15,
+                FONT, FONT_COLOR, 0, 0.5);
             self.stage.draw(credits);
 
             var creditsTouchable = {id: 'credits_tap', x: lightFrame.getCornerX(), y: lightFrame.getCornerY(),
@@ -186,10 +175,12 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             allTouchables.push({touchable: creditsTouchable, fn: goToCreditsScreen, anchor: lightFrame});
 
             function goToCreditsScreen() {
-                self.sounds.play('click');
+                self.sounds.play(CLICK);
                 credits.txt.alpha = 1;
+                lightFrame.img = self.stage.getSubImage(BUTTON_SEC_ACTIVE);
                 window.setTimeout(function () {
                     credits.txt.alpha = 0.5;
+                    lightFrame.img = self.stage.getSubImage(BUTTON_SEC);
                 }, 1500);
                 var creditsScreen = new Credits(self.stage, self.tapController, self.messages, self.sounds);
 
@@ -200,7 +191,8 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
                     registerTapListener();
                     doTheShields = true;
                     shieldsAnimation();
-                    self.resizeBus.remove('credits_scene');
+
+                    self.resizeBus.remove(CREDITS_SCENE);
                 }
 
                 function setFadeOffSet() {
@@ -209,9 +201,9 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
 
                 doTheShields = false;
                 self.stage.remove(shieldsDrawable);
-                self.resizeBus.add('credits_scene', creditsScreen.resize.bind(creditsScreen));
+                self.resizeBus.add(CREDITS_SCENE, creditsScreen.resize.bind(creditsScreen));
                 creditsScreen.show(continuePreGame,
-                    [shareFb, shareTw, credits, settings, lightFrame, pressPlay, logoDrawable,
+                    [credits, lightFrame, pressPlay, pressPlayTxt, logoDrawable,
                         shipDrawable, fireDrawable], self.screenWidth, self.screenHeight, setFadeOffSet);
             }
 
@@ -224,19 +216,19 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         });
 
         function startPlaying() {
-            self.sounds.play('click');
+            self.sounds.play(CLICK);
 
-            pressPlay.img = self.stage.getSubImage('play-active');
-
+            pressPlay.img = self.stage.getSubImage(BUTTON_PRIM_ACTIVE);
+            pressPlayTxt.txt.color = '#000';
             window.setTimeout(function () {
                 self.fullScreen.request();
                 endOfScreen();
             }, 300);
         }
 
-        var shieldsDownSprite = self.stage.getSprite('shields-down-anim/shields_down', 6, false);
-        var shieldsUpSprite = self.stage.getSprite('shields-up-anim/shields_up', 6, false);
-        var shieldsDrawable = self.stage.getDrawable(shipX_widthHalf, shipEndY, 'shields');
+        var shieldsDownSprite = self.stage.getSprite(SHIELDS_DOWN, 6, false);
+        var shieldsUpSprite = self.stage.getSprite(SHIELDS_UP, 6, false);
+        var shieldsDrawable = self.stage.getDrawable(shipX_widthHalf, shipEndY, SHIELDS);
         self.resizeRepo.add(shieldsDrawable, function () {
             changeCoords(shieldsDrawable, getShipX(), getShipEndY());
         });
@@ -247,7 +239,8 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         function shieldsAnimation() {
 
             self.stage.animateLater({item: shieldsDrawable, sprite: shieldsUpSprite, ready: function () {
-                shieldsDrawable.img = self.stage.getSubImage('shield3');
+
+                shieldsDrawable.img = self.stage.getSubImage(SHIELDS);
                 self.stage.animateLater({item: shieldsDrawable, sprite: shieldsDownSprite, ready: function () {
                     self.stage.remove(shieldsDrawable);
                     startTimer = 20;
@@ -267,7 +260,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         // end of screen
 
         function endOfScreen() {
-            [shareFb, shareTw, credits, settings, lightFrame, pressPlay].forEach(self.stage.remove.bind(self.stage));
+            [credits, lightFrame, pressPlay, pressPlayTxt].forEach(self.stage.remove.bind(self.stage));
             // end event
             unRegisterTapListener();
 
@@ -324,7 +317,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
         delete this.resizeRepo;
         delete this.screenWidth;
         delete this.screenHeight;
-        this.resizeBus.remove('pre_game_scene');
+        this.resizeBus.remove(PRE_GAME_SCENE);
 
         nextScene();
     };

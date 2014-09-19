@@ -40,7 +40,7 @@ window.onload = function () {
         var ctx = screen.getContext('2d'),
             app = new App(screen, ctx, resizeBus, screenInput, gameController);
 
-        app.start(window.innerWidth, window.innerHeight);
+        app.start(window.innerWidth, window.innerHeight, window.screen.availWidth, window.screen.availHeight);
     }
 
     var resizeBus = new ResizeBus(),

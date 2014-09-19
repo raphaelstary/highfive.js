@@ -8,6 +8,12 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, Sp
         this.resizeBus = resizeBus;
     }
 
+    var SPEED = 'speed';
+    var BACKGROUND = 'background';
+    var LOGO = 'letsplayIO_logo';
+    var PRESENTS = 'presents';
+    var GAME_LOGO = 'shields_up_logo/shields_up_logo';
+
     Intro.prototype._createDrawables = function (screenWidth, screenHeight) {
         var drawableStorage = {};
 
@@ -15,23 +21,24 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, Sp
         var screenHeightHalf = calcScreenConst(screenHeight, 2);
 
         drawableStorage.firstBg = this.stage.drawFresh(screenWidthHalf, screenHeightHalf,
-            'background', 0);
+            BACKGROUND, 0);
 
         drawableStorage.scrollingBackGround = this.stage.getDrawable(screenWidthHalf,
-                screenHeightHalf + screenHeight, 'background', 0);
+                screenHeightHalf + screenHeight, BACKGROUND, 0);
 
         var speedY = 0; // 600
-        drawableStorage.speedDrawableOne = this.stage.getDrawable(calcScreenConst(screenWidth, 4), speedY, 'speed', 1);
+
+        drawableStorage.speedDrawableOne = this.stage.getDrawable(calcScreenConst(screenWidth, 4), speedY, SPEED, 1);
         drawableStorage.speedDrawableTwo = this.stage.getDrawable(calcScreenConst(screenWidth, 8, 7),
-                speedY - calcScreenConst(screenHeight, 5), 'speed', 1);
+                speedY - calcScreenConst(screenHeight, 5), SPEED, 1);
         drawableStorage.speedDrawableThree = this.stage.getDrawable(calcScreenConst(screenWidth, 16),
-                speedY - calcScreenConst(screenHeight, 5, 2), 'speed', 1);
+                speedY - calcScreenConst(screenHeight, 5, 2), SPEED, 1);
         drawableStorage.speedDrawableFour = this.stage.getDrawable(calcScreenConst(screenWidth, 16, 7),
-                speedY - calcScreenConst(screenHeight, 5, 3), 'speed', 1);
+                speedY - calcScreenConst(screenHeight, 5, 3), SPEED, 1);
         drawableStorage.speedDrawableFive = this.stage.getDrawable(calcScreenConst(screenWidth, 16),
-                speedY - calcScreenConst(screenHeight, 5, 4), 'speed', 1);
+                speedY - calcScreenConst(screenHeight, 5, 4), SPEED, 1);
         drawableStorage.speedDrawableSix = this.stage.getDrawable(calcScreenConst(screenWidth, 3, 2),
-                speedY - calcScreenConst(screenHeight, 16, 5), 'speed', 1);
+                speedY - calcScreenConst(screenHeight, 16, 5), SPEED, 1);
 
         var irgendwas = calcScreenConst(screenHeight, 12);
         var x = screenWidthHalf,
@@ -39,11 +46,12 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, Sp
 
         var irgendwasLogo = calcScreenConst(screenHeight, 48, 5);
 
-        drawableStorage.letsplayIO = this.stage.getDrawable(x, y + irgendwasLogo, 'letsplayIO', 2);
 
-        drawableStorage.presentsDrawable = this.stage.getDrawable(x, y, 'presents', 2);
+        drawableStorage.letsplayIO = this.stage.getDrawable(x, y + irgendwasLogo, LOGO, 2);
 
-        drawableStorage.logoDrawable = this.stage.animateFresh(x, y, 'logo-anim/logo', 44);
+        drawableStorage.presentsDrawable = this.stage.getDrawable(x, y, PRESENTS, 2);
+
+        drawableStorage.logoDrawable = this.stage.animateFresh(x, y, GAME_LOGO, 60);
 
         return drawableStorage;
     };

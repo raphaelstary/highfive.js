@@ -27,7 +27,7 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
         var dockShipToMiddlePosition = this.dockShipPath = self.stage.getPath(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, heightHalf, 120, Transition.EASE_OUT_EXPO);
 
-        var explosionSprite = self.stage.getSprite('explosion-anim/explosion', 25, false);
+        var explosionSprite = self.stage.getSprite('final_explosion/final_explosion', 22, false);
 
         self.stage.move(shipDrawable, dockShipToMiddlePosition, function () {
             self.shipDocked = true;

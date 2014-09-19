@@ -4,8 +4,8 @@ var ScoreView = (function (calcScreenConst) {
     function ScoreView(stage, screenWidth, screenHeight) {
         this.stage = stage;
 
-        this.scoredPointsSprite = this.stage.getSprite('score-10-anim/score_10', 20, false);
-        this.scoredPointsDrawable = this.stage.getDrawable(0, 0, 'score-10-anim/score_10_0000', 3);
+        this.scoredPointsSprite = this.stage.getSprite('score_10/score_10', 20, false);
+        this.scoredPointsDrawable = this.stage.getDrawable(0, 0, 'score_10/score_10_0000', 3);
 
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;

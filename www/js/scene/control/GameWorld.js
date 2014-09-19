@@ -30,11 +30,11 @@ var GameWorld = (function () {
         this.initialLives = this.lives;
         this.points = 0; //part of global game state
 
-        this.shieldsGetHitSprite = stage.getSprite('shields-get-hit-anim/shields_get_hit', 10, false);
-        this.elemHitsShieldsSprite = stage.getSprite('object-destroyed-anim/object_destroyed', 12, false);
+        this.shieldsGetHitSprite = stage.getSprite('shields_hit/shields_hit', 15, false);
+        this.elemHitsShieldsSprite = stage.getSprite('object_destroyed/object_destroyed', 6, false);
 
-        this.shipHullHitSprite = stage.getSprite('ship-hit-anim/ship_hit', 30, false);
-        this.dumpLifeSprite = stage.getSprite('lost-life-anim/lost_life', 20, false);
+        this.shipHullHitSprite = stage.getSprite('hull_hit/hull_hit', 24, false);
+        this.dumpLifeSprite = stage.getSprite('lost_life/lost_life', 20, false);
     }
 
     GameWorld.prototype.checkCollisions = function () {
@@ -139,9 +139,9 @@ var GameWorld = (function () {
             self.sounds.play('asteroid-explosion');
             self.stage.animate(this.shipDrawable, this.shipHullHitSprite, function () {
                 if (self.lives == self.initialLives - 1) {
-                    self.shipDrawable.img = self.stage.getSubImage('damaged-ship2');
+                    self.shipDrawable.img = self.stage.getSubImage('damaged_ship_2');
                 } else if (self.lives == self.initialLives - 2) {
-                    self.shipDrawable.img = self.stage.getSubImage('damaged-ship3');
+                    self.shipDrawable.img = self.stage.getSubImage('damaged_ship_3');
                 } else {
                     self.shipDrawable.img = self.stage.getSubImage('ship');
                 }

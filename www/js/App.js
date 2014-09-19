@@ -10,24 +10,28 @@ var App = (function (require) {
         this.gameController = gameController;
     }
 
-    App.prototype.start = function (windowWidth, windowHeight) {
+    App.prototype.start = function (windowWidth, windowHeight, screenWidth, screenHeight) {
         // idea to create list of all scenes and just use nextScene() to advance
-        this._loadingScene(windowWidth, windowHeight);
+        this._loadingScene(windowWidth, windowHeight, screenWidth, screenHeight);
     };
 
-    App.prototype._loadingScene = function (windowWidth, windowHeight) {
+    App.prototype._loadingScene = function (windowWidth, windowHeight, screenWidth, screenHeight) {
         // show loading screen, load binary resources
 
         var resourceLoader = new require.ResourceLoader(),
-            atlas0 = resourceLoader.addImage('gfx/atlas0.png'),
-            atlas1 = resourceLoader.addImage('gfx/atlas1.png'),
-            atlasInfo0 = resourceLoader.addJSON('data/atlas0.json'),
-            atlasInfo1 = resourceLoader.addJSON('data/atlas1.json'),
             audioInfo = resourceLoader.addJSON('data/audio.json'),
             fontBlock = resourceLoader.addFont('data/kenpixel_blocks.woff'),
             font = resourceLoader.addFont('data/kenpixel.woff'),
             locales = resourceLoader.addJSON('data/locales.json'),
             initialScreen = new require.SimpleLoadingScreen(this.screenCtx);
+
+        var atlases = [];
+        require.resolveAtlasPaths(screenWidth, screenHeight).forEach(function (groupedAtlasInfo) {
+            atlases.push({
+                atlas: resourceLoader.addImage(groupedAtlasInfo.gfx),
+                info: resourceLoader.addJSON(groupedAtlasInfo.data)
+            });
+        });
 
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
         this.resizeBus.add('initial_screen', initialScreen.resize.bind(initialScreen));
@@ -39,7 +43,7 @@ var App = (function (require) {
 
             self.resizeBus.remove('initial_screen');
 
-            var sceneStuff = self._initCommonSceneStuff(atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales, audioInfo);
+            var sceneStuff = self._initCommonSceneStuff(atlases, font, fontBlock, locales, audioInfo);
             self._initScenes(sceneStuff.stage, sceneStuff.messages, sceneStuff.sounds);
             self._doThePlay();
         };
@@ -47,14 +51,14 @@ var App = (function (require) {
         resourceLoader.load();
     };
 
-    App.prototype._initCommonSceneStuff = function (atlas0, atlasInfo0, atlas1, atlasInfo1, font, fontBlock, locales, audioInfo) {
+    App.prototype._initCommonSceneStuff = function (atlases, font, fontBlock, locales, audioInfo) {
         require.addFontToDOM([
             {name: 'KenPixel', url: require.URL.createObjectURL(font.blob)},
             {name: 'KenPixelBlocks', url: require.URL.createObjectURL(fontBlock.blob)}
         ]);
 
         var atlasMapper = new require.AtlasMapper();
-        atlasMapper.init([{atlas: atlas0, info: atlasInfo0}, {atlas: atlas1, info: atlasInfo1}]);
+        atlasMapper.init(atlases);
 
         var stage = new require.StageDirector(
             atlasMapper,
@@ -145,7 +149,6 @@ var App = (function (require) {
     Intro: Intro,
     PreGame: PreGame,
     StartingPosition: StartingPosition,
-    Tutorial: Tutorial,
     InGameTutorial: InGameTutorial,
     GetReady: GetReady,
     PlayGame: PlayGame,
@@ -157,5 +160,6 @@ var App = (function (require) {
     URL: window.URL || window.webkitURL,
     UniversalTranslator: UniversalTranslator,
     SoundFilesManager: SoundFilesManager,
-    SoundSpriteManager: SoundSpriteManager
+    SoundSpriteManager: SoundSpriteManager,
+    resolveAtlasPaths: resolveAtlasPaths
 });
