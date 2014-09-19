@@ -12,8 +12,42 @@ var InGameTutorial = (function (require) {
         this.sounds = sounds;
     }
 
+    var SHIELDS_UP = 'shields_up/shields_up';
+    var SHIELDS_DOWN = 'shields_down/shields_down';
+    var SHIELDS = 'shields';
+    var SHIP = 'ship';
+    var ASTEROID = 'asteroid_1';
+
+    var FONT = 'KenPixel';
+    var WHITE = '#fff';
+    var BLACK = '#000';
+
+    var IN_GAME_TUTORIAL_SCENE = 'in_game_tutorial';
+    var SHAKE_TUTORIAL = 'shake_tutorial';
+    var COLLISION_TUTORIAL = 'collisions_tutorial';
+
+    var TUTORIAL_MSG_KEY = 'tutorial';
+    var SKIP_MSG = 'skip';
+    var COLLECT_STUFF_MSG = 'collect_stuff';
+    var TO_RAISE_SHIELDS_MSG = 'to_raise_shields';
+    var TOUCH_AND_HOLD_MSG = 'touch_and_hold';
+
+    var CLICK = 'click';
+
+    var STAR_MOVEMENT = 'star_movement';
+    var ASTEROID_MOVEMENT = 'asteroid_movement';
+    var BACKGROUND = 'background';
+    var DRAIN_ENERGY_MSG = 'drain_energy';
+    var STAR_1 = 'star_1/star_1_0000';
+    var STAR = 'star_';
+    var SHIELDS_UP_TUTORIAL = 'shields_up_tutorial/shields_up_tutorial';
+    var BUTTON_PRIM_ACTIVE = 'button_primary_active';
+    var OK_MSG = 'ok';
+    var BUTTON_PRIM = 'button_primary';
+    var NO_ENERGY_MSG = 'no_energy';
+
     InGameTutorial.prototype.show = function (nextScene, screenWidth, screenHeight) {
-        this.resizeBus.add('in_game_tutorial', this.resize.bind(this));
+        this.resizeBus.add(IN_GAME_TUTORIAL_SCENE, this.resize.bind(this));
         this.resizeRepo = new require.Repository();
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -54,16 +88,16 @@ var InGameTutorial = (function (require) {
 
         var shipDrawable = this.sceneStorage.ship,
             shieldsDrawable = this.sceneStorage.shields ||
-                (this.sceneStorage.shields = this.stage.getDrawable(getWidthHalf(), get__400(), 'shields')),
+                (this.sceneStorage.shields = this.stage.getDrawable(getWidthHalf(), get__400(), SHIELDS)),
             energyBarDrawable = this.sceneStorage.energyBar,
             lifeDrawablesDict = this.sceneStorage.lives,
             countDrawables = this.sceneStorage.counts,
             fireDrawable = this.sceneStorage.fire,
             speedStripes = this.sceneStorage.speedStripes,
             shieldsUpSprite =
-                this.sceneStorage.shieldsUp || this.stage.getSprite('shields_up/shields_up', 6, false),
+                this.sceneStorage.shieldsUp || this.stage.getSprite(SHIELDS_UP, 6, false),
             shieldsDownSprite =
-                this.sceneStorage.shieldsDown || this.stage.getSprite('shields_down/shields_down', 6, false);
+                this.sceneStorage.shieldsDown || this.stage.getSprite(SHIELDS_DOWN, 6, false);
 
         var shaker = new require.ScreenShaker([shipDrawable, shieldsDrawable, energyBarDrawable, lifeDrawablesDict[1],
             lifeDrawablesDict[2], lifeDrawablesDict[3], fireDrawable]);
@@ -72,9 +106,6 @@ var InGameTutorial = (function (require) {
         speedStripes.forEach(function (wrapper) {
             shaker.add(wrapper.drawable);
         });
-
-        var KEN_PIXEL = 'KenPixel';
-        var white = '#fff';
 
         var trackedAsteroids = {};
         var trackedStars = {};
@@ -87,14 +118,14 @@ var InGameTutorial = (function (require) {
             scoreAnimator.resize(self.screenWidth, self.screenHeight);
         });
 
-        var shipCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('ship'), shipDrawable);
-        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('shield3'), shieldsDrawable);
+        var shipCollision = new require.CanvasCollisionDetector(this.stage.getSubImage(SHIP), shipDrawable);
+        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage(SHIELDS), shieldsDrawable);
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
             function () {}, endGame, this.sounds);
 
-        this.gameLoop.add('shake_tutorial', shaker.update.bind(shaker));
-        this.gameLoop.add('collisions_tutorial', world.checkCollisions.bind(world));
+        this.gameLoop.add(SHAKE_TUTORIAL, shaker.update.bind(shaker));
+        this.gameLoop.add(COLLISION_TUTORIAL, world.checkCollisions.bind(world));
 
         shieldsDrawable.x = shipDrawable.x;
         shieldsDrawable.y = shipDrawable.y;
@@ -135,7 +166,7 @@ var InGameTutorial = (function (require) {
             skipTouchable = {id: 'skip_tap', x: getWidthHalf(), y: getY() - getHeightSixteenth(),
                 width: getWidthHalf(), height: getHeight()};
             self.tapController.add(skipTouchable, function () {
-                self.sounds.play('click');
+                self.sounds.play(CLICK);
                 self.tapController.remove(skipTouchable);
                 skipTxt.txt.alpha = 1;
                 require.window.setTimeout(function () {
@@ -143,8 +174,9 @@ var InGameTutorial = (function (require) {
                     endGame();
                 }, 1000);
             });
+
             skipTxt = self.stage.getDrawableText(getX(), getY(), 3,
-                self.messages.get('tutorial', 'skip'), 15, 'KenPixel', '#fff', 0, 0.5);
+                self.messages.get(TUTORIAL_MSG_KEY, SKIP_MSG), 15, FONT, WHITE, 0, 0.5);
             self.stage.draw(skipTxt);
 
             self.resizeRepo.add(skipTxt, function () {
@@ -161,17 +193,15 @@ var InGameTutorial = (function (require) {
         createSkipStuff();
 
         function createFirstAsteroid() {
-            var asteroidName = 'asteroid1';
-
             function getAsteroidHeightHalf() {
-                return require.calcScreenConst(self.stage.getSubImage(asteroidName).height, 2);
+                return require.calcScreenConst(self.stage.getSubImage(ASTEROID).height, 2);
             }
 
             function getAsteroidWidthHalf() {
-                return require.calcScreenConst(self.stage.getSubImage(asteroidName).width, 2);
+                return require.calcScreenConst(self.stage.getSubImage(ASTEROID).width, 2);
             }
 
-            var asteroid = self.stage.getDrawable(getWidthHalf() - getAsteroidWidthHalf(), - getAsteroidHeightHalf(), asteroidName);
+            var asteroid = self.stage.getDrawable(getWidthHalf() - getAsteroidWidthHalf(), - getAsteroidHeightHalf(), ASTEROID);
             trackedAsteroids[asteroid.id] = asteroid;
             self.stage.draw(asteroid);
 
@@ -184,7 +214,7 @@ var InGameTutorial = (function (require) {
         function createTouchNHoldTxt() {
 
             var touch_txt = self.stage.getDrawableText(getWidthThreeQuarter(), getHeightThird(), 3,
-                self.messages.get('tutorial', 'touch_and_hold'), 20, KEN_PIXEL, white, Math.PI / 16, 1, getWidthThird() * 2,
+                self.messages.get(TUTORIAL_MSG_KEY, TOUCH_AND_HOLD_MSG), 20, FONT, WHITE, Math.PI / 16, 1, getWidthThird() * 2,
                 25);
             self.stage.draw(touch_txt);
 
@@ -197,7 +227,7 @@ var InGameTutorial = (function (require) {
             }
 
             var raise_txt = self.stage.getDrawableText(getX(), getHeightHalf(), 3,
-                self.messages.get('tutorial', 'to_raise_shields'), 17, KEN_PIXEL, white, - Math.PI / 16, 1, getWidthThird(),
+                self.messages.get(TUTORIAL_MSG_KEY, TO_RAISE_SHIELDS_MSG), 17, FONT, WHITE, - Math.PI / 16, 1, getWidthThird(),
                 22);
             self.stage.draw(raise_txt);
 
@@ -249,57 +279,65 @@ var InGameTutorial = (function (require) {
 
         var touchTxts = createTouchNHoldTxt();
         var asteroid = createFirstAsteroid();
-        self.gameLoop.add('asteroid_movement', moveMyFirstAsteroids);
+
+        self.gameLoop.add(ASTEROID_MOVEMENT, moveMyFirstAsteroids);
 
         function removeTouchNHoldStuff() {
             if (touchTxts)
                 touchTxts.forEach(self.stage.remove.bind(self.stage));
-            self.gameLoop.remove('asteroid_movement');
+            self.gameLoop.remove(ASTEROID_MOVEMENT);
             if (asteroid)
                 self.stage.remove(asteroid); //double remove just in case
         }
 
-        var drainTxt, shieldsEnergyDrawable, energyTxt, okButton, okTouchable, dialogBack;
+        var drainTxt, shieldsEnergyDrawable, energyTxt, okButton, okButtonTxt, okTouchable, dialogBack;
         function showEnergyTxtSubScene() {
             function createEnergyTxt() {
-                dialogBack = self.stage.drawFresh(getWidthHalf(), getHeightHalf(), 'background', 3);
+
+                dialogBack = self.stage.drawFresh(getWidthHalf(), getHeightHalf(), BACKGROUND, 3);
                 self.resizeRepo.add(dialogBack, function () {
                     require.changeCoords(dialogBack, getWidthHalf(), getHeightHalf());
                 });
 
                 drainTxt = self.stage.getDrawableText(getWidthHalf(), getHeightThird(), 3,
-                    self.messages.get('tutorial', 'drain_energy'), 15, KEN_PIXEL, white);
+                    self.messages.get(TUTORIAL_MSG_KEY, DRAIN_ENERGY_MSG), 15, FONT, WHITE);
                 self.stage.draw(drainTxt);
                 self.resizeRepo.add(drainTxt, function () {
                     require.changeCoords(drainTxt, getWidthHalf(), getHeightThird());
                 });
 
                 shieldsEnergyDrawable = self.stage.animateFresh(getWidthHalf(), getHeightHalf(),
-                    'shields_energy-anim/shields_energy', 60);
+                    SHIELDS_UP_TUTORIAL, 90);
                 self.resizeRepo.add(shieldsEnergyDrawable, function () {
                     require.changeCoords(shieldsEnergyDrawable, getWidthHalf(), getHeightHalf());
                 });
 
                 energyTxt = self.stage.getDrawableText(getWidthHalf(), getHeightThird() * 2, 3,
-                    self.messages.get('tutorial', 'no_energy'), 15, KEN_PIXEL, white);
+                    self.messages.get(TUTORIAL_MSG_KEY, NO_ENERGY_MSG), 15, FONT, WHITE);
                 self.stage.draw(energyTxt);
                 self.resizeRepo.add(energyTxt, function () {
                     require.changeCoords(getWidthHalf(), getHeightThird() * 2);
                 });
 
-                okButton = self.stage.drawFresh(getWidthHalf(), getHeightSixteenth() * 13, 'ok');
+                okButtonTxt = self.stage.getDrawableText(getWidthHalf(), getHeightSixteenth() * 13, 3,
+                    self.messages.get(TUTORIAL_MSG_KEY, OK_MSG), 15, FONT, WHITE);
+                self.stage.draw(okButtonTxt);
+                okButton = self.stage.drawFresh(getWidthHalf(), getHeightSixteenth() * 13, BUTTON_PRIM);
                 okTouchable = {id: 'ok_tap', x: okButton.getCornerX(), y: okButton.getCornerY(),
                     width: okButton.getWidth(), height: okButton.getHeight()};
                 self.resizeRepo.add(okButton, function () {
                     require.changeCoords(okButton, getWidthHalf(), getHeightSixteenth() * 13);
+                    require.changeCoords(okButtonTxt, getWidthHalf(), getHeightSixteenth() * 13);
                     require.changeTouchable(okTouchable, okButton.getCornerX(), okButton.getCornerY(),
                         okButton.getWidth(), okButton.getHeight());
                 });
 
                 self.tapController.add(okTouchable, function () {
-                    self.sounds.play('click');
+                    self.sounds.play(CLICK);
                     self.tapController.remove(okTouchable);
-                    okButton.img = self.stage.getSubImage('ok-active');
+
+                    okButton.img = self.stage.getSubImage(BUTTON_PRIM_ACTIVE);
+                    okButtonTxt.txt.color = BLACK;
                     require.window.setTimeout(function () {
                         removeEnergyStuff();
                         registerGameController();
@@ -320,6 +358,8 @@ var InGameTutorial = (function (require) {
                 self.stage.remove(energyTxt);
             if (okButton)
                 self.stage.remove(okButton);
+            if (okButtonTxt)
+                self.stage.remove(okButtonTxt);
             if (okTouchable)
                 self.tapController.remove(okTouchable);
             if (dialogBack)
@@ -330,14 +370,14 @@ var InGameTutorial = (function (require) {
         function collectStarsSubScene() {
             function createFirstStar() {
                 var starNum = require.range(1, 4);
-                var starPath = 'star' + starNum + '-anim/star' + starNum;
+                var starPath = STAR + starNum + '/' + STAR + starNum;
 
                 function getStarHeightHalf() {
-                    return require.calcScreenConst(self.stage.getSubImage('star1-anim/star1_0000').height, 2);
+                    return require.calcScreenConst(self.stage.getSubImage(STAR_1).height, 2);
                 }
 
                 function getStarWidthHalf() {
-                    return require.calcScreenConst(self.stage.getSubImage('star1-anim/star1_0000').height, 2);
+                    return require.calcScreenConst(self.stage.getSubImage(STAR_1).height, 2);
                 }
 
                 var star = self.stage.animateFresh(getWidthHalf() - getStarWidthHalf(), - getStarHeightHalf(), starPath, 30);
@@ -352,7 +392,7 @@ var InGameTutorial = (function (require) {
             }
             function createCollectTxt() {
                 var collectTxt = self.stage.getDrawableText(getWidthThreeQuarter(), getHeightThird(), 3,
-                    self.messages.get('tutorial', 'collect_stuff'), 20, KEN_PIXEL, white, Math.PI / 16, 1, getWidthHalf(),
+                    self.messages.get(TUTORIAL_MSG_KEY, COLLECT_STUFF_MSG), 20, FONT, WHITE, Math.PI / 16, 1, getWidthHalf(),
                     25);
                 self.stage.draw(collectTxt);
                 self.resizeRepo.add(collectTxt, function () {
@@ -381,13 +421,14 @@ var InGameTutorial = (function (require) {
 
             starTxts = createCollectTxt();
             star = createFirstStar();
-            self.gameLoop.add('star_movement', moveMyFirstStar);
+
+            self.gameLoop.add(STAR_MOVEMENT, moveMyFirstStar);
         }
 
         function removeStarStuff() {
             if (starTxts)
                 starTxts.forEach(self.stage.remove.bind(self.stage));
-            self.gameLoop.remove('star_movement');
+            self.gameLoop.remove(STAR_MOVEMENT);
             if (star)
                 self.stage.remove(star);
         }
@@ -403,8 +444,8 @@ var InGameTutorial = (function (require) {
         }
 
         function removeCommonGameLoopStuff() {
-            self.gameLoop.remove('shake_tutorial');
-            self.gameLoop.remove('collisions_tutorial');
+            self.gameLoop.remove(SHAKE_TUTORIAL);
+            self.gameLoop.remove(COLLISION_TUTORIAL);
         }
 
         function endGame() {
@@ -413,7 +454,7 @@ var InGameTutorial = (function (require) {
     };
 
     InGameTutorial.prototype.next = function (nextScene) {
-        this.resizeBus.remove('in_game_tutorial');
+        this.resizeBus.remove(IN_GAME_TUTORIAL_SCENE);
         delete this.resizeRepo;
         delete this.screenWidth;
         delete this.screenHeight;

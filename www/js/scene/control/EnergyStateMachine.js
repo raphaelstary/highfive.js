@@ -14,20 +14,22 @@ var EnergyStateMachine = (function () {
         this.energyLoadSprite = stage.getSprite('energy_load/energy_load', 45, false);
     }
 
+    var LAST_FRAME_NR = 44;
+
     EnergyStateMachine.prototype.drainEnergy = function () {
         var self = this;
         function turnShieldsOn() {
             self.sounds.play('shields-up');
             self.world.shieldsOn = true;
             self.stage.animate(self.shieldsDrawable, self.shieldsUpSprite, function () {
-                self.shieldsDrawable.img = self.stage.getSubImage("shield3");
+                self.shieldsDrawable.img = self.stage.getSubImage('shields');
             });
         }
 
         function startDraining() {
             var position = 0;
             if (self.stage.animations.has(self.energyBarDrawable)) {
-                position = 89 - self.stage.animations.animationStudio.animationsDict[self.energyBarDrawable.id].time;
+                position = LAST_FRAME_NR - self.stage.animations.animationStudio.animationsDict[self.energyBarDrawable.id].time;
             }
 
             self.stage.animate(self.energyBarDrawable, self.energyDrainSprite, self.energyEmpty.bind(self));
@@ -44,7 +46,7 @@ var EnergyStateMachine = (function () {
     EnergyStateMachine.prototype.energyEmpty = function () {
         var self = this;
         function setEnergyBarEmpty() {
-            self.energyBarDrawable.img = self.stage.getSubImage('energy_bar_empty');
+            self.energyBarDrawable.img = self.stage.getSubImage('energy_empty');
         }
 
         this.turnShieldsOff();
@@ -65,7 +67,7 @@ var EnergyStateMachine = (function () {
         function startLoading() {
             var position = 0;
             if (self.stage.animations.has(self.energyBarDrawable)) {
-                position = 89 - self.stage.animations.animationStudio.animationsDict[self.energyBarDrawable.id].time;
+                position = LAST_FRAME_NR - self.stage.animations.animationStudio.animationsDict[self.energyBarDrawable.id].time;
             }
             self.stage.animate(self.energyBarDrawable, self.energyLoadSprite, self.energyFull.bind(self));
 
@@ -83,7 +85,7 @@ var EnergyStateMachine = (function () {
     EnergyStateMachine.prototype.energyFull = function () {
         var self = this;
         function setEnergyBarFull() {
-            self.energyBarDrawable.img = self.stage.getSubImage('energy_bar_full');
+            self.energyBarDrawable.img = self.stage.getSubImage('energy_full');
         }
 
         setEnergyBarFull();

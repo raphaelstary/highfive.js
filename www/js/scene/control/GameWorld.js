@@ -51,7 +51,7 @@ var GameWorld = (function () {
 
                 this.stage.animate(this.shieldsDrawable, this.shieldsGetHitSprite, function () {
                     if (self.shieldsOn) {
-                        self.shieldsDrawable.img = self.stage.getSubImage('shield3');
+                        self.shieldsDrawable.img = self.stage.getSubImage('shields');
                     } else {
                         self.stage.remove(self.shieldsDrawable);
                     }
@@ -94,7 +94,7 @@ var GameWorld = (function () {
                 this.shieldsCollision.isHit(star)) {
                 self.stage.animate(this.shieldsDrawable, this.shieldsGetHitSprite, function () {
                     if (self.shieldsOn) {
-                        self.shieldsDrawable.img = self.stage.getSubImage('shield3');
+                        self.shieldsDrawable.img = self.stage.getSubImage('shields');
                     } else {
                         self.stage.remove(self.shieldsDrawable);
                     }

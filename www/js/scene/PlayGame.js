@@ -67,7 +67,7 @@ var PlayGame = (function (require) {
             scoreAnimator.resize(self.screenWidth, self.screenHeight);
         });
         var shipCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('ship'), shipDrawable);
-        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('shield3'), shieldsDrawable);
+        var shieldsCollision = new require.CanvasCollisionDetector(this.stage.getSubImage('shields'), shieldsDrawable);
 
         var world = new require.GameWorld(this.stage, trackedAsteroids, trackedStars, scoreDisplay, collectAnimator,
             scoreAnimator, shipCollision, shieldsCollision, shipDrawable, shieldsDrawable, shaker, lifeDrawablesDict,
