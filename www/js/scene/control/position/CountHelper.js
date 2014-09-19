@@ -1,12 +1,13 @@
 var CountHelper = (function (calcScreenConst, getTopRaster, changeCoords, changePath) {
     "use strict";
 
+    var ZERO = 'numeral_0';
     function digitWidthHalf(stage) {
-        return calcScreenConst(stage.getSubImage('num/numeral0').width, 2);
+        return calcScreenConst(stage.getSubImage(ZERO).width, 2);
     }
 
     function digitOffSet(stage) {
-        return calcScreenConst(stage.getSubImage('num/numeral0').width, 3, 4);
+        return calcScreenConst(stage.getSubImage(ZERO).width, 3, 4);
     }
 
     function baseDigitX(stage, screenWidth) {

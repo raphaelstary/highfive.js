@@ -1,12 +1,14 @@
 var LifeHelper = (function (calcScreenConst, changeCoords, getTopRaster) {
     "use strict";
 
+    var PLAYER_LIFE = 'player_life';
+
     function lifeX(screenWidth) {
         return calcScreenConst(screenWidth, 10);
     }
 
     function getLifeOffSet(stage) {
-        return stage.getSubImage('playerlife').width;
+        return stage.getSubImage(PLAYER_LIFE).width;
     }
 
     function lifeTwoX(stage, screenWidth) {

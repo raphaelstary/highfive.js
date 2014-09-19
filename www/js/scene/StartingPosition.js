@@ -7,18 +7,24 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         this.resizeBus = resizeBus;
     }
 
+    var PLAYER_LIFE = 'player_life';
+    var ZERO = 'numeral_0';
+    var ENERGY_FULL = 'energy_full';
+    var STARTING_POSITION_SCENE = 'starting_position_scene';
+
     StartingPosition.prototype.checkPreConditions = function (screenWidth, screenHeight) {
         GameStuffHelper.draw(this.stage, this.sceneStorage, screenWidth, screenHeight);
     };
 
     StartingPosition.prototype.show = function (nextScene, screenWidth, screenHeight) {
-        this.resizeBus.add('starting_position_scene', this.resize.bind(this));
+
+        this.resizeBus.add(STARTING_POSITION_SCENE, this.resize.bind(this));
 
         this.checkPreConditions(screenWidth, screenHeight);
 
         var self = this;
         self.resizeRepo = new Repository();
-        var zero = 'num/numeral0';
+
         var spacing = Transition.EASE_IN_OUT_ELASTIC;
         var speed = 60;
 
@@ -41,7 +47,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
             return yTop() * 19;
         }
 
-        var lifeOneWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), 'playerlife', lifeX(), yTop(), speed,
+        var lifeOneWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), PLAYER_LIFE, lifeX(), yTop(), speed,
             spacing, 20, false, function () {
                 self.resizeRepo.add(lifeOneWrapper.drawable, function () {
                     LifeHelper.resizeLifeOne(lifeOneWrapper.drawable, self.screenWidth, self.screenHeight);
@@ -53,13 +59,13 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
             changePath(lifeOneWrapper.path, lifeStartX(), yTop(), lifeX(), yTop());
         });
 
-        var lifeOffSet = self.stage.getSubImage('playerlife').width;
+        var lifeOffSet = self.stage.getSubImage(PLAYER_LIFE).width;
 
         function lifeTwoEndX() {
             return lifeX() + lifeOffSet;
         }
 
-        var lifeTwoWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), 'playerlife', lifeTwoEndX(), yTop(),
+        var lifeTwoWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), PLAYER_LIFE, lifeTwoEndX(), yTop(),
             speed, spacing, 15, false, function () {
                 self.resizeRepo.add(lifeTwoWrapper.drawable, function () {
                     LifeHelper.resizeLifeTwo(lifeTwoWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
@@ -75,7 +81,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
             return lifeX() + lifeOffSet * 2;
         }
 
-        var lifeThreeWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), 'playerlife', lifeThreeEndX(), yTop(),
+        var lifeThreeWrapper = self.stage.moveFreshLater(lifeStartX(), yTop(), PLAYER_LIFE, lifeThreeEndX(), yTop(),
             speed, spacing, 10, false, function () {
                 self.resizeRepo.add(lifeThreeWrapper.drawable, function () {
                     LifeHelper.resizeLifeThree(lifeThreeWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
@@ -96,7 +102,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
             return x - x * 2;
         }
 
-        var energyBarWrapper = self.stage.moveFresh(energyStartX(), yBottom(), 'energy_bar_full', energyX(), yBottom(),
+        var energyBarWrapper = self.stage.moveFresh(energyStartX(), yBottom(), ENERGY_FULL, energyX(), yBottom(),
             speed, spacing, false, function () {
                 self.resizeRepo.add(energyBarWrapper.drawable, function() {
                     EnergyBarHelper.resize(energyBarWrapper.drawable, self.screenWidth, self.screenHeight);
@@ -110,7 +116,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
 
         var screenOffSet = calcScreenConst(screenWidth, 5);
         var firstX = CountHelper.get1stX(self.stage, screenWidth);
-        var firstDigitWrapper = self.stage.moveFreshLater(firstX + screenOffSet, yTop(), zero, firstX, yTop(), speed,
+        var firstDigitWrapper = self.stage.moveFreshLater(firstX + screenOffSet, yTop(), ZERO, firstX, yTop(), speed,
             spacing, 10, false, function () {
                 self.resizeRepo.add(firstDigitWrapper.drawable, function () {
                     CountHelper.resize1st(firstDigitWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
@@ -122,7 +128,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         });
 
         var secondX = CountHelper.get2ndX(self.stage, screenWidth);
-        var secondDigitWrapper = self.stage.moveFreshLater(secondX + screenOffSet, yTop(), zero, secondX, yTop(), speed,
+        var secondDigitWrapper = self.stage.moveFreshLater(secondX + screenOffSet, yTop(), ZERO, secondX, yTop(), speed,
             spacing, 13, false, function () {
                 self.resizeRepo.add(secondDigitWrapper.drawable, function () {
                     CountHelper.resize2nd(secondDigitWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
@@ -134,7 +140,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         });
 
         var thirdX = CountHelper.get3rdX(self.stage, screenWidth);
-        var thirdDigitWrapper = self.stage.moveFreshLater(thirdX + screenOffSet, yTop(), zero, thirdX, yTop(), speed,
+        var thirdDigitWrapper = self.stage.moveFreshLater(thirdX + screenOffSet, yTop(), ZERO, thirdX, yTop(), speed,
             spacing, 17, false, function () {
                 self.resizeRepo.add(thirdDigitWrapper.drawable, function () {
                     CountHelper.resize3rd(thirdDigitWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
@@ -146,7 +152,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         });
 
         var fourthX = CountHelper.get4thX(self.stage, screenWidth);
-        var fourthDigitWrapper = self.stage.moveFreshLater(fourthX + screenOffSet, yTop(), zero, fourthX, yTop(), speed,
+        var fourthDigitWrapper = self.stage.moveFreshLater(fourthX + screenOffSet, yTop(), ZERO, fourthX, yTop(), speed,
             spacing, 12, false, function () {
                 self.resizeRepo.add(fourthDigitWrapper.drawable, function () {
                     CountHelper.resize4th(fourthDigitWrapper.drawable, self.stage, self.screenWidth, self.screenHeight);
@@ -176,7 +182,7 @@ var StartingPosition = (function (Transition, calcScreenConst, CountHelper, getT
         this.sceneStorage.lives = lifeDrawablesDict;
         this.sceneStorage.counts = countDrawables;
 
-        this.resizeBus.remove('starting_position_scene');
+        this.resizeBus.remove(STARTING_POSITION_SCENE);
         delete this.resizeRepo;
 
         nextScene();
