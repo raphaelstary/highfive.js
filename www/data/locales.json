@@ -24,7 +24,8 @@
         },
         "game_over": {
             "score": "score",
-            "best": "best"
+            "best": "best",
+            "play_again": "play again"
         },
         "pre_game": {
             "settings": "settings",

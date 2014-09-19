@@ -32,6 +32,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
 
     var FONT = 'KenPixel';
     var FONT_COLOR = '#fff';
+    var BLACK = '#000';
 
     PreGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var logoDrawable = this.sceneStorage.logo;
@@ -219,7 +220,7 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
             self.sounds.play(CLICK);
 
             pressPlay.img = self.stage.getSubImage(BUTTON_PRIM_ACTIVE);
-            pressPlayTxt.txt.color = '#000';
+            pressPlayTxt.txt.color = BLACK;
             window.setTimeout(function () {
                 self.fullScreen.request();
                 endOfScreen();

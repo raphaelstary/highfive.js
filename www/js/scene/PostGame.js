@@ -9,11 +9,27 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
         this.sounds = sounds;
     }
 
+    var POST_GAME_SCENE = 'post_game_scene';
+    var GAME_OVER = 'game_over';
+    var SCORE = 'score';
+    var ZERO = 'numeral_0';
+    var NUMERAL = 'numeral_';
+    var BEST = 'best';
+    var ALL_TIME_HIGH_SCORE = 'allTimeHighScore';
+    var CLICK = 'click';
+    var BUTTON_PRIM_ACTIVE = 'button_primary_active';
+    var BUTTON_PRIM = 'button_primary';
+    var FONT = 'KenPixel';
+    var FONT_COLOR = '#fff';
+    var POST_GAME_MSG_KEY = 'game_over';
+    var PLAY_AGAIN_MSG = 'play_again';
+    var BLACK = '#000';
+
     PostGame.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var points = this.sceneStorage.points || 0;
         delete this.sceneStorage.points;
 
-        this.resizeBus.add('post_game_scene', this.resize.bind(this));
+        this.resizeBus.add(POST_GAME_SCENE, this.resize.bind(this));
         this.resizeRepo = new Repository();
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -32,7 +48,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
             return getGameOverY() - self.screenHeight;
         }
 
-        var gameOverWrapper = self.stage.moveFresh(getWidthHalf(), getGameOverStartY(), 'gameover', getWidthHalf(), getGameOverY(), 60, Transition.EASE_OUT_ELASTIC, false, function () {
+        var gameOverWrapper = self.stage.moveFresh(getWidthHalf(), getGameOverStartY(), GAME_OVER, getWidthHalf(), getGameOverY(), 60, Transition.EASE_OUT_ELASTIC, false, function () {
             self.resizeRepo.add(gameOverDrawable, realGameOverResizing);
 
             function realGameOverResizing() {
@@ -47,7 +63,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                 return getScoreY() - self.screenHeight;
             }
 
-            var scoreWrapper = self.stage.moveFresh(getWidthHalf(), getScoreStartY(), 'score', getWidthHalf(), getScoreY(), 60,
+            var scoreWrapper = self.stage.moveFresh(getWidthHalf(), getScoreStartY(), SCORE, getWidthHalf(), getScoreY(), 60,
                 Transition.EASE_OUT_BOUNCE, false, function () {
                     self.resizeRepo.add(scoreDrawable, realScoreTxtResizing);
                 });
@@ -62,7 +78,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                 changePath(scoreWrapper.path, getWidthHalf(), getScoreStartY(), getWidthHalf(), getScoreY());
             });
 
-            var digitLabelOffset = self.stage.getSubImage('num/numeral0').height * 2;
+            var digitLabelOffset = self.stage.getSubImage(ZERO).height * 2;
 
             function getNewScoreY() {
                 return getScoreY() + digitLabelOffset;
@@ -72,10 +88,9 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                 return getNewScoreY() - self.screenHeight;
             }
 
-            var digitOffset = self.stage.getSubImage('num/numeral0').width;
+            var digitOffset = self.stage.getSubImage(ZERO).width;
 
-            var commonKeyPartForNumbers = 'num/numeral',
-                i, x;
+            var i, x;
 
             var pointsInString = points.toString();
 
@@ -91,7 +106,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
             for (i = 0; i < pointsInString.length; i++) {
                 x = getScoreDynamicX(i);
                 var scoreDigitDrawable = self.stage.moveFreshLater(x, getNewScoreStartY(),
-                        commonKeyPartForNumbers + pointsInString[i], x, getNewScoreY(), 60, Transition.EASE_OUT_BOUNCE,
+                        NUMERAL + pointsInString[i], x, getNewScoreY(), 60, Transition.EASE_OUT_BOUNCE,
                     5, false, resizeScore);
                 newScoreDigits.push(scoreDigitDrawable);
             }
@@ -134,7 +149,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
 
             var bestStartY = getBestStartY();
 
-            var bestWrapper = self.stage.moveFreshLater(getWidthHalf(), bestStartY, 'best', getWidthHalf(), bestY, 60,
+            var bestWrapper = self.stage.moveFreshLater(getWidthHalf(), bestStartY, BEST, getWidthHalf(), bestY, 60,
                 Transition.EASE_OUT_BOUNCE, 10, false, function () {
                     self.resizeRepo.add(bestDrawable, realBestResizing);
                 });
@@ -147,7 +162,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                 changePath(bestWrapper.path, getWidthHalf(), getBestStartY(), getWidthHalf(), getBestY());
             });
 
-            var allTimeHighScore = localStorage.getItem('allTimeHighScore');
+            var allTimeHighScore = localStorage.getItem(ALL_TIME_HIGH_SCORE);
             if (allTimeHighScore == null) {
                 allTimeHighScore = "0";
             }
@@ -172,7 +187,7 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
             for (i = 0; i < allTimeHighScore.length; i++) {
                 x = getHighScore1stDigitX() + i * digitOffset;
                 highScoreDigits.push(self.stage.moveFreshLater(x, highScoreStartY,
-                    commonKeyPartForNumbers + allTimeHighScore[i], x, highScoreY, 60, Transition.EASE_OUT_BOUNCE, 15,
+                    NUMERAL + allTimeHighScore[i], x, highScoreY, 60, Transition.EASE_OUT_BOUNCE, 15,
                     false, resizeHighScore));
             }
 
@@ -212,28 +227,35 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
             }
 
             var playStartY = getPlayStartY();
-            var playWrapper = self.stage.moveFreshLater(getWidthHalf(), playStartY, 'play', getWidthHalf(), playY, 60, Transition.EASE_OUT_BOUNCE, 20, false, function () {
+            var playTxt = self.stage.getDrawableText(getWidthHalf(), playStartY, 3, self.messages.get(POST_GAME_MSG_KEY, PLAY_AGAIN_MSG), 15,
+                FONT, FONT_COLOR);
+            self.stage.draw(playTxt);
+            var playWrapper = self.stage.moveFreshLater(getWidthHalf(), playStartY, BUTTON_PRIM, getWidthHalf(), playY, 60, Transition.EASE_OUT_BOUNCE, 20, false, function () {
 
                 var touchable = {id: 'play_again_tap', x: 0, y: 0, width: self.screenWidth, height: self.screenHeight};
 
                 self.resizeRepo.add(playDrawable, function () {
                     changeCoords(playDrawable, getWidthHalf(), getPlayY());
+                    changeCoords(playTxt, getWidthHalf(), getPlayY());
                     changeTouchable(touchable, 0, 0, self.screenWidth, self.screenHeight);
                 });
 
                 self.tapController.add(touchable, function () {
-                    self.sounds.play('click');
+                    self.sounds.play(CLICK);
                     // end event
                     self.tapController.remove(touchable);
-                    playDrawable.img = self.stage.getSubImage('play-active');
+                    playDrawable.img = self.stage.getSubImage(BUTTON_PRIM_ACTIVE);
+                    playTxt.txt.color = BLACK;
 
                     var playPathOut = self.stage.getPath(playDrawable.x, playDrawable.y, playDrawable.x,
                             playDrawable.y + self.screenHeight, 30, Transition.EASE_IN_EXPO);
                     self.stage.move(playDrawable, playPathOut, function () {
                         self.stage.remove(playDrawable);
+                        self.stage.remove(playTxt);
                     });
                     self.resizeRepo.add(playDrawable, function () {
                         changeCoords(playDrawable, getWidthHalf(), getPlayY());
+                        changeCoords(playTxt, getWidthHalf(), getPlayY());
                         changePath(playPathOut, getWidthHalf(), getPlayY() + self.screenHeight);
                     });
 
@@ -295,19 +317,22 @@ var PostGame = (function (localStorage, Transition, calcScreenConst, BackGroundH
                     self.stage.moveLater({item: gameOverDrawable, path: gameOverPathOut, ready: function () {
                         self.stage.remove(gameOverDrawable);
 
-                        self.resizeBus.remove('post_game_scene');
+                        self.resizeBus.remove(POST_GAME_SCENE);
                         delete self.resizeRepo;
                         nextScene();
                     }}, 25, function () {
                         if (points > parseInt(allTimeHighScore, 10)) {
-                            localStorage.setItem('allTimeHighScore', points);
+                            localStorage.setItem(ALL_TIME_HIGH_SCORE, points);
                         }
                     });
                 });
+            }, function () {
+                self.stage.move(playTxt, playWrapper.path);
             });
             var playDrawable = playWrapper.drawable;
             self.resizeRepo.add(playDrawable, function () {
                 changeCoords(playDrawable, getWidthHalf(), getPlayStartY());
+                changeCoords(playTxt, getWidthHalf(), getPlayStartY());
                 changePath(playWrapper.path, getWidthHalf(), getPlayStartY(), getWidthHalf(), getPlayY());
             });
         });

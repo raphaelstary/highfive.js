@@ -74,12 +74,13 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         };
     };
 
-    StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback) {
+    StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback,
+                                                       startedMovingCallback) {
         var drawable = this.getDrawable(x, y, imgName);
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
         var movedItem = {item: drawable, path: path, ready: callback};
-        this.moveLater(movedItem, delay);
+        this.moveLater(movedItem, delay, startedMovingCallback);
 
         return {
             drawable: drawable,

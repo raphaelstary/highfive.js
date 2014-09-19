@@ -8,6 +8,10 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
         this.sounds = sounds;
     }
 
+    var KILL_SCREEN_SCENE = 'kill_screen_scene';
+    var FINAL_EXPLOSION = 'final_explosion/final_explosion';
+    var SHIP_EXPLOSION = 'ship-explosion';
+
     KillScreen.prototype.show = function (nextScene, screenWidth, screenHeight) {
         var speedStripes = this.sceneStorage.speedStripes;
         delete this.sceneStorage.speedStripes;
@@ -15,7 +19,7 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
         var fireDrawable = this.sceneStorage.fire;
         var countDrawables = this.sceneStorage.counts;
 
-        this.resizeBus.add('kill_screen_scene', this.resize.bind(this));
+        this.resizeBus.add(KILL_SCREEN_SCENE, this.resize.bind(this));
 
         var self = this;
 
@@ -27,11 +31,12 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
         var dockShipToMiddlePosition = this.dockShipPath = self.stage.getPath(shipDrawable.x, shipDrawable.y,
             shipDrawable.x, heightHalf, 120, Transition.EASE_OUT_EXPO);
 
-        var explosionSprite = self.stage.getSprite('final_explosion/final_explosion', 22, false);
+        var explosionSprite = self.stage.getSprite(FINAL_EXPLOSION, 22, false);
 
         self.stage.move(shipDrawable, dockShipToMiddlePosition, function () {
             self.shipDocked = true;
-            self.sounds.play('ship-explosion');
+
+            self.sounds.play(SHIP_EXPLOSION);
             self.stage.animate(shipDrawable, explosionSprite, function () {
                 self.stage.remove(shipDrawable);
                 self.stage.remove(fireDrawable);
@@ -54,7 +59,7 @@ var KillScreen = (function (Transition, calcScreenConst, changeCoords, changePat
         delete this.dockShipPath;
         delete this.shipDocked;
 
-        this.resizeBus.remove('kill_screen_scene');
+        this.resizeBus.remove(KILL_SCREEN_SCENE);
 
         nextScene();
     };
