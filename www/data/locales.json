@@ -19,7 +19,8 @@
             "by": "by",
             "from": "from",
             "graphics": "graphics",
-            "back": "back"
+            "back": "back",
+            "kenney": "Kenney"
         },
         "game_over": {
             "score": "score",

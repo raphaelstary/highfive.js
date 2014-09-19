@@ -8,6 +8,32 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
         this.sounds = sounds;
     }
 
+    var CLICK = 'click';
+    var BUTTON_SEC_ACTIVE = 'button_secondary_active';
+    var BUTTON_SEC = 'button_secondary';
+
+    var CREDITS_MSG_KEY = 'credits';
+    var GAME_MSG = 'game';
+    var A_MSG = 'a';
+    var BACK_MSG = 'back';
+    var BY_MSG = 'by';
+    var LOGO_SMALL = 'letsplayIO_logo_small';
+    var FACEBOOK = 'facebook';
+    var TWITTER = 'twitter';
+    var GRAPHICS_MSG = 'graphics';
+    var KENNEY_MSG = 'kenney';
+
+    var FONT_SPECIAL = 'KenPixelBlocks';
+    var LIGHT_GREY = '#c4c4c4';
+    var FONT = 'KenPixel';
+    var FONT_COLOR = '#fff';
+
+    var TWITTER_URL = 'https://twitter.com/RaphaelStary';
+    var FACEBOOK_URL = 'https://facebook.com/RaphaelStary';
+    var SITE_URL = 'http://raphaelstary.com';
+
+    var _BLANK = '_blank';
+
     Credits.prototype.resize = function (width, heigth) {
         this.screenWidth = width;
         this.screenHeight = heigth;
@@ -60,27 +86,31 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
             });
         }
 
-        var back, fb, twitter, letsplayIO;
+        var back, backTxt, fb, twitter, letsplayIO;
 
         function drawCreditsScreen() {
-            back = self.stage.drawFresh(calcScreenConst(self.screenWidth, 10) + self.screenWidth, calcScreenConst(self.screenHeight, 25, 2), 'back');
+            back = self.stage.drawFresh(calcScreenConst(self.screenWidth, 10) + self.screenWidth, calcScreenConst(self.screenHeight, 25, 2), BUTTON_SEC);
+            backTxt = self.stage.getDrawableText(calcScreenConst(self.screenWidth, 10) + self.screenWidth, calcScreenConst(self.screenHeight, 25, 2),
+                3, self.messages.get(CREDITS_MSG_KEY, BACK_MSG), 15, FONT, FONT_COLOR, 0, 0.5);
+            self.stage.draw(backTxt);
             self.resizeRepoDrawables.add(back, function () {
                 if (self.drawablesAtNewPosition) {
                     changeCoords(back, calcScreenConst(self.screenWidth, 10),
+                        calcScreenConst(self.screenHeight, 25, 2));
+                    changeCoords(backTxt, calcScreenConst(self.screenWidth, 10),
                         calcScreenConst(self.screenHeight, 25, 2));
                     changeTouchable(backTouchable, back.getCornerX(), back.getCornerY(), back.getWidth(), back.getHeight());
                 } else {
                     changeCoords(back, calcScreenConst(self.screenWidth, 10) + self.screenWidth,
                         calcScreenConst(self.screenHeight, 25, 2));
+                    changeCoords(backTxt, calcScreenConst(self.screenWidth, 10) + self.screenWidth,
+                        calcScreenConst(self.screenHeight, 25, 2));
                     changeTouchable(backTouchable, back.getCornerX() - self.screenWidth, back.getCornerY(), back.getWidth(), back.getHeight());
                 }
             });
 
-            var KEN_PIXEL_BLOCKS = 'KenPixelBlocks';
-            var LIGHT_GREY = '#c4c4c4';
-
             var game_txt = self.stage.getDrawableText(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 4), 3,
-                self.messages.get('credits', 'game'), 45, KEN_PIXEL_BLOCKS, LIGHT_GREY);
+                self.messages.get(CREDITS_MSG_KEY, GAME_MSG), 45, FONT_SPECIAL, LIGHT_GREY);
             self.stage.draw(game_txt);
             self.resizeRepoDrawables.add(game_txt, function () {
                 if (self.drawablesAtNewPosition) {
@@ -91,7 +121,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
             });
 
             var a_txt = self.stage.getDrawableText(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 4) - game_txt.txt.size, 3,
-                self.messages.get('credits', 'a'), 25, KEN_PIXEL_BLOCKS, LIGHT_GREY);
+                self.messages.get(CREDITS_MSG_KEY, A_MSG), 25, FONT_SPECIAL, LIGHT_GREY);
             self.stage.draw(a_txt);
             self.resizeRepoDrawables.add(a_txt, function () {
                 if (self.drawablesAtNewPosition) {
@@ -102,7 +132,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
             });
 
             var by_txt = self.stage.getDrawableText(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 4) + game_txt.txt.size,
-                3, self.messages.get('credits', 'by'), 25, KEN_PIXEL_BLOCKS, LIGHT_GREY);
+                3, self.messages.get(CREDITS_MSG_KEY, BY_MSG), 25, FONT_SPECIAL, LIGHT_GREY);
             self.stage.draw(by_txt);
             self.resizeRepoDrawables.add(by_txt, function () {
                 if (self.drawablesAtNewPosition) {
@@ -112,7 +142,8 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 }
             });
 
-            letsplayIO = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 2), 'letsplayIO_logo_small');
+
+            letsplayIO = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 2), LOGO_SMALL);
             self.resizeRepoDrawables.add(letsplayIO, function () {
                 if (self.drawablesAtNewPosition) {
                     changeCoords(letsplayIO, calcScreenConst(self.screenWidth, 2), calcScreenConst(self.screenHeight, 2));
@@ -121,32 +152,33 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 }
             });
 
-            fb = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
-                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), 'facebook');
+            fb = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage(FACEBOOK).width, 5, 4) + self.screenWidth,
+                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), FACEBOOK);
             self.resizeRepoDrawables.add(fb, function () {
                 if (self.drawablesAtNewPosition) {
-                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4),
+                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage(FACEBOOK).width, 5, 4),
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3));
                 } else {
-                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
+                    changeCoords(fb, calcScreenConst(self.screenWidth, 2) - calcScreenConst(self.stage.getSubImage(FACEBOOK).width, 5, 4) + self.screenWidth,
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3))
                 }
             });
 
-            twitter = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
-                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), 'twitter');
+
+            twitter = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage(FACEBOOK).width, 5, 4) + self.screenWidth,
+                    calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3), TWITTER);
             self.resizeRepoDrawables.add(twitter, function () {
                 if (self.drawablesAtNewPosition) {
-                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4),
+                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage(FACEBOOK).width, 5, 4),
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3));
                 } else {
-                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage('facebook').width, 5, 4) + self.screenWidth,
+                    changeCoords(twitter, calcScreenConst(self.screenWidth, 2) + calcScreenConst(self.stage.getSubImage(FACEBOOK).width, 5, 4) + self.screenWidth,
                             calcScreenConst(self.screenHeight, 2) + calcScreenConst(letsplayIO.img.height, 2, 3))
                 }
             });
 
             var graphics_txt = self.stage.getDrawableText(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 4) * 3, 3,
-                self.messages.get('credits', 'graphics'), 20, KEN_PIXEL_BLOCKS, LIGHT_GREY);
+                self.messages.get(CREDITS_MSG_KEY, GRAPHICS_MSG), 20, FONT_SPECIAL, LIGHT_GREY);
             self.stage.draw(graphics_txt);
             self.resizeRepoDrawables.add(graphics_txt, function () {
                 if (self.drawablesAtNewPosition) {
@@ -156,17 +188,18 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 }
             });
 
-            var kenney = self.stage.drawFresh(calcScreenConst(self.screenWidth, 2) + self.screenWidth, graphics_txt.y + calcScreenConst(self.stage.getSubImage('kenney').height, 6, 5),
-                'kenney');
+            var kenney = self.stage.getDrawableText(calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 6) * 5, 3,
+                self.messages.get(CREDITS_MSG_KEY, KENNEY_MSG), 20, FONT_SPECIAL, LIGHT_GREY);
+            self.stage.draw(kenney);
             self.resizeRepoDrawables.add(kenney, function () {
                 if (self.drawablesAtNewPosition) {
-                    changeCoords(kenney, calcScreenConst(self.screenWidth, 2), graphics_txt.y + calcScreenConst(self.stage.getSubImage('kenney').height));
+                    changeCoords(graphics_txt, calcScreenConst(self.screenWidth, 2), calcScreenConst(self.screenHeight, 6) * 5);
                 } else {
-                    changeCoords(kenney, calcScreenConst(self.screenWidth, 2) + self.screenWidth, graphics_txt.y + calcScreenConst(self.stage.getSubImage('kenney').height));
+                    changeCoords(graphics_txt, calcScreenConst(self.screenWidth, 2) + self.screenWidth, calcScreenConst(self.screenHeight, 6) * 5);
                 }
             });
 
-            return [back, a_txt, game_txt, by_txt, letsplayIO, fb, twitter, graphics_txt, kenney];
+            return [back, backTxt, a_txt, game_txt, by_txt, letsplayIO, fb, twitter, graphics_txt, kenney];
         }
 
         function registerTapListener() {
@@ -188,8 +221,8 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 twitterTouchable.height = twitter.getHeight();
             });
             self.tapController.add(twitterTouchable, function () {
-                self.sounds.play('click');
-                window.open('https://twitter.com/letsplayIO', '_blank');
+                self.sounds.play(CLICK);
+                window.open(TWITTER_URL, _BLANK);
             });
 
             var fbTouchable = {
@@ -210,8 +243,8 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 fbTouchable.height = fb.getHeight();
             });
             self.tapController.add(fbTouchable, function () {
-                self.sounds.play('click');
-                window.open('https://www.facebook.com/letsplayIO', '_blank');
+                self.sounds.play(CLICK);
+                window.open(FACEBOOK_URL, _BLANK);
             });
 
             var letsplayIOSiteTouchable = {
@@ -232,8 +265,8 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
                 letsplayIOSiteTouchable.height = letsplayIO.getHeight();
             });
             self.tapController.add(letsplayIOSiteTouchable, function () {
-                self.sounds.play('click');
-                window.open('http://letsplay.io/', '_blank');
+                self.sounds.play(CLICK);
+                window.open(SITE_URL, _BLANK);
             });
             return [twitterTouchable, fbTouchable, letsplayIOSiteTouchable];
         }
@@ -264,8 +297,9 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
         touchables.push(backTouchable);
 
         function endScene() {
-            self.sounds.play('click');
-            back.img = self.stage.getSubImage('back-active');
+            self.sounds.play(CLICK);
+            back.img = self.stage.getSubImage(BUTTON_SEC_ACTIVE);
+            backTxt.txt.alpha = 1;
             unRegisterTapListener(touchables);
             fadeIn(creditsDrawables);
             function removeDrawables() {
