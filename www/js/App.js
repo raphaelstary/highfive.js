@@ -63,7 +63,7 @@ var App = (function (require) {
         var stage = new require.StageDirector(
             atlasMapper,
             new require.MotionDirector(new require.MotionStudio()),
-            new require.AnimationDirector(new require.AnimationStudio()),
+            new require.SpriteAnimationDirector(new require.SpriteAnimationStudio()),
             new require.Renderer(this.screen, this.screenCtx)
         );
 
@@ -141,8 +141,8 @@ var App = (function (require) {
     Renderer: Renderer,
     GameLoop: GameLoop,
     AtlasMapper: AtlasMapper,
-    AnimationStudio: AnimationStudio,
-    AnimationDirector: AnimationDirector,
+    SpriteAnimationStudio: SpriteAnimationStudio,
+    SpriteAnimationDirector: SpriteAnimationDirector,
     MotionStudio: MotionStudio,
     MotionDirector: MotionDirector,
     StageDirector: StageDirector,
