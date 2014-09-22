@@ -168,7 +168,7 @@ var InGameTutorial = (function (require) {
             self.tapController.add(skipTouchable, function () {
                 self.sounds.play(CLICK);
                 self.tapController.remove(skipTouchable);
-                skipTxt.txt.alpha = 1;
+                skipTxt.alpha = 1;
                 require.window.setTimeout(function () {
                     removeEveryThing();
                     endGame();

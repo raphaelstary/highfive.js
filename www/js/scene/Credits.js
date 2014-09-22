@@ -299,7 +299,7 @@ var Credits = (function (Transition, window, calcScreenConst, changeCoords, chan
         function endScene() {
             self.sounds.play(CLICK);
             back.img = self.stage.getSubImage(BUTTON_SEC_ACTIVE);
-            backTxt.txt.alpha = 1;
+            backTxt.alpha = 1;
             unRegisterTapListener(touchables);
             fadeIn(creditsDrawables);
             function removeDrawables() {

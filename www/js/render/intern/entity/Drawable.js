@@ -1,13 +1,15 @@
 var Drawable = (function () {
     "use strict";
 
-    function Drawable(id, x, y, img, txt, zIndex) {
+    function Drawable(id, x, y, img, txt, zIndex, alpha, rotation) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.img = img;
         this.txt = txt;
         this.zIndex = zIndex === undefined ? 3 : zIndex;
+        this.rotation = rotation;
+        this.alpha = alpha;
     }
 
     Drawable.prototype.getCornerX = function () {

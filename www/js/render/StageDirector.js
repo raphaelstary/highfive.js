@@ -1,9 +1,10 @@
 var StageDirector = (function (Sprites, Drawables, Paths) {
     "use strict";
 
-    function StageDirector(atlasMapper, motions, animations, renderer) {
+    function StageDirector(atlasMapper, motions, spriteAnimations, animations, renderer) {
         this.atlasMapper = atlasMapper;
         this.motions = motions;
+        this.spriteAnimations = spriteAnimations;
         this.animations = animations;
         this.renderer = renderer;
 
@@ -40,7 +41,7 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
     };
 
     StageDirector.prototype.animate = function (drawable, sprite, callback) {
-        this.animations.animate(drawable, sprite, callback);
+        this.spriteAnimations.animate(drawable, sprite, callback);
         if (!this.renderer.has(drawable)) {
             this.renderer.add(drawable);
         }
@@ -59,7 +60,7 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
                 }
             }
         }
-        this.animations.animateLater(drawableToAdd, duration, extendedCallback);
+        this.spriteAnimations.animateLater(drawableToAdd, duration, extendedCallback);
     };
 
     StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, callback) {
@@ -122,7 +123,12 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         this.renderer.add(drawable);
     };
 
+    StageDirector.prototype.
+
     StageDirector.prototype.remove = function (drawable) {
+        if (this.spriteAnimations.has(drawable)) {
+            this.spriteAnimations.remove(drawable);
+        }
         if (this.animations.has(drawable)) {
             this.animations.remove(drawable);
         }
@@ -135,12 +141,14 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
     };
 
     StageDirector.prototype.has = function (drawable) {
-        return this.renderer.has(drawable) || this.motions.has(drawable) || this.animations.has(drawable);
+        return this.renderer.has(drawable) || this.motions.has(drawable) || this.spriteAnimations.has(drawable) ||
+            this.animations.has(drawable);
     };
 
     StageDirector.prototype.tick = function () {
         this.renderer.draw();
         this.motions.update();
+        this.spriteAnimations.update();
         this.animations.update();
     };
 

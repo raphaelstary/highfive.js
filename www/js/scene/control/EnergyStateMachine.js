@@ -28,15 +28,15 @@ var EnergyStateMachine = (function () {
 
         function startDraining() {
             var position = 0;
-            if (self.stage.animations.has(self.energyBarDrawable)) {
-                position = LAST_FRAME_NR - self.stage.animations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time;
+            if (self.stage.spriteAnimations.has(self.energyBarDrawable)) {
+                position = LAST_FRAME_NR - self.stage.spriteAnimations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time;
             }
 
             self.stage.animate(self.energyBarDrawable, self.energyDrainSprite, self.energyEmpty.bind(self));
 
-            self.stage.animations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time = position;
+            self.stage.spriteAnimations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time = position;
             self.energyBarDrawable.img =
-                self.stage.animations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].sprite.frames[position];
+                self.stage.spriteAnimations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].sprite.frames[position];
         }
 
         turnShieldsOn();
@@ -66,14 +66,14 @@ var EnergyStateMachine = (function () {
         var self = this;
         function startLoading() {
             var position = 0;
-            if (self.stage.animations.has(self.energyBarDrawable)) {
-                position = LAST_FRAME_NR - self.stage.animations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time;
+            if (self.stage.spriteAnimations.has(self.energyBarDrawable)) {
+                position = LAST_FRAME_NR - self.stage.spriteAnimations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time;
             }
             self.stage.animate(self.energyBarDrawable, self.energyLoadSprite, self.energyFull.bind(self));
 
-            self.stage.animations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time = position;
+            self.stage.spriteAnimations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].time = position;
             self.energyBarDrawable.img =
-                self.stage.animations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].sprite.frames[position];
+                self.stage.spriteAnimations.spriteAnimationStudio.animationsDict[self.energyBarDrawable.id].sprite.frames[position];
         }
 
         if (this.world.shieldsOn) {

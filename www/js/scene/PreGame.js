@@ -177,10 +177,10 @@ var PreGame = (function (Transition, Credits, window, calcScreenConst, GameStuff
 
             function goToCreditsScreen() {
                 self.sounds.play(CLICK);
-                credits.txt.alpha = 1;
+                credits.alpha = 1;
                 lightFrame.img = self.stage.getSubImage(BUTTON_SEC_ACTIVE);
                 window.setTimeout(function () {
-                    credits.txt.alpha = 0.5;
+                    credits.alpha = 0.5;
                     lightFrame.img = self.stage.getSubImage(BUTTON_SEC);
                 }, 1500);
                 var creditsScreen = new Credits(self.stage, self.tapController, self.messages, self.sounds);
