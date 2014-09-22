@@ -1,4 +1,4 @@
-var calcScreenConst = (function () {
+var calcScreenConst = (function (Math) {
     "use strict";
 
     function calcScreenConst(domain, numerator, denominator) {
@@ -6,4 +6,4 @@ var calcScreenConst = (function () {
     }
 
     return calcScreenConst;
-})();
+})(Math);

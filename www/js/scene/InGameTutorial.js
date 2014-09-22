@@ -214,8 +214,8 @@ var InGameTutorial = (function (require) {
         function createTouchNHoldTxt() {
 
             var touch_txt = self.stage.getDrawableText(getWidthThreeQuarter(), getHeightThird(), 3,
-                self.messages.get(TUTORIAL_MSG_KEY, TOUCH_AND_HOLD_MSG), 20, FONT, WHITE, Math.PI / 16, 1, getWidthThird() * 2,
-                25);
+                self.messages.get(TUTORIAL_MSG_KEY, TOUCH_AND_HOLD_MSG), 20, FONT, WHITE, require.Math.PI / 16, 1,
+                    getWidthThird() * 2, 25);
             self.stage.draw(touch_txt);
 
             self.resizeRepo.add(touch_txt, function () {
@@ -227,7 +227,7 @@ var InGameTutorial = (function (require) {
             }
 
             var raise_txt = self.stage.getDrawableText(getX(), getHeightHalf(), 3,
-                self.messages.get(TUTORIAL_MSG_KEY, TO_RAISE_SHIELDS_MSG), 17, FONT, WHITE, - Math.PI / 16, 1, getWidthThird(),
+                self.messages.get(TUTORIAL_MSG_KEY, TO_RAISE_SHIELDS_MSG), 17, FONT, WHITE, - require.Math.PI / 16, 1, getWidthThird(),
                 22);
             self.stage.draw(raise_txt);
 
@@ -392,7 +392,7 @@ var InGameTutorial = (function (require) {
             }
             function createCollectTxt() {
                 var collectTxt = self.stage.getDrawableText(getWidthThreeQuarter(), getHeightThird(), 3,
-                    self.messages.get(TUTORIAL_MSG_KEY, COLLECT_STUFF_MSG), 20, FONT, WHITE, Math.PI / 16, 1, getWidthHalf(),
+                    self.messages.get(TUTORIAL_MSG_KEY, COLLECT_STUFF_MSG), 20, FONT, WHITE, require.Math.PI / 16, 1, getWidthHalf(),
                     25);
                 self.stage.draw(collectTxt);
                 self.resizeRepo.add(collectTxt, function () {
@@ -474,6 +474,7 @@ var InGameTutorial = (function (require) {
 
     return InGameTutorial;
 })({
+    Math: Math,
     ScreenShaker: ScreenShaker,
     Odometer: Odometer,
     CollectView: CollectView,

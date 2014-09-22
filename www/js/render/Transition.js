@@ -1,4 +1,4 @@
-var Transition = (function () {
+var Transition = (function (Math) {
     "use strict";
 
     function linearTweening(currentTime, startValue, changeInValue, duration) {
@@ -133,4 +133,4 @@ var Transition = (function () {
         EASE_OUT_SIN: sinusoidalEasingOut,
         EASE_OUT_IN_SIN: sinusoidalEasingOutAndIn
     }
-})();
+})(Math);

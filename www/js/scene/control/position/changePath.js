@@ -1,4 +1,4 @@
-var changePath = (function () {
+var changePath = (function (Math) {
     "use strict";
 
     function changePath(path, x, y, endX, endY) {
@@ -14,4 +14,4 @@ var changePath = (function () {
     }
 
     return changePath;
-})();
+})(Math);

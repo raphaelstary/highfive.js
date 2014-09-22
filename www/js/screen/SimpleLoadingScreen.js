@@ -1,4 +1,4 @@
-var SimpleLoadingScreen = (function () {
+var SimpleLoadingScreen = (function (Math) {
     "use strict";
 
     function SimpleLoadingScreen(screenCtx) {
@@ -62,4 +62,4 @@ var SimpleLoadingScreen = (function () {
     };
 
     return SimpleLoadingScreen;
-})();
+})(Math);

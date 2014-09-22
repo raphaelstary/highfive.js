@@ -1,4 +1,4 @@
-var AtlasMapper = (function (SubImage) {
+var AtlasMapper = (function (SubImage, Math) {
     "use strict";
 
     function AtlasMapper() {
@@ -39,4 +39,4 @@ var AtlasMapper = (function (SubImage) {
     };
 
     return AtlasMapper;
-})(SubImage);
+})(SubImage, Math);

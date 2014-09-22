@@ -1,4 +1,4 @@
-var Odometer = (function () {
+var Odometer = (function (Math) {
     "use strict";
 
     function Odometer(view) {
@@ -48,4 +48,4 @@ var Odometer = (function () {
     };
 
     return Odometer;
-})();
+})(Math);
