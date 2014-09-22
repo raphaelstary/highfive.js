@@ -1,4 +1,4 @@
-var StageDirector = (function (Sprites, Drawables, Paths) {
+var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     "use strict";
 
     function StageDirector(atlasMapper, motions, spriteAnimations, animations, renderer) {
@@ -123,7 +123,37 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         this.renderer.add(drawable);
     };
 
-    StageDirector.prototype.
+    StageDirector.prototype.animateAlpha = function (drawable, value, duration, easing, loop, callback) {
+        this.animations.animateAlpha(drawable, value, duration, easing, loop, callback);
+    };
+
+    StageDirector.prototype.animateAlphaPattern = function (drawable, valuePairs, loop) {
+        this.animations.animateAlphaPattern(drawable, valuePairs, loop);
+    };
+
+    StageDirector.prototype.animateRotation = function (drawable, value, duration, easing, loop, callback) {
+        this.animations.animateRotation(drawable, value, duration, easing, loop, callback);
+    };
+
+    StageDirector.prototype.animateRotationPattern = function (drawable, valuePairs, loop) {
+        this.animations.animateRotationPattern(drawable, valuePairs, loop);
+    };
+
+    StageDirector.prototype.basicAnimation = function (drawable, setter, animation, callback) {
+        this.animations.animate(drawable, setter, animation, callback);
+    };
+
+    StageDirector.prototype.basicAnimationLater = function (drawableToAdd, duration, callback) {
+        this.animations.animateLater(drawableToAdd, duration, callback);
+    };
+
+    StageDirector.prototype.basicAnimationPattern = function (drawableWrapperList, loop) {
+        this.animations.animateWithKeyFrames(drawableWrapperList, loop);
+    };
+
+    StageDirector.prototype.getAnimation = function (startValue, endValue, speed, spacingFn, loop) {
+        return Animations.get(startValue, endValue, speed, spacingFn, loop);
+    };
 
     StageDirector.prototype.remove = function (drawable) {
         if (this.spriteAnimations.has(drawable)) {
@@ -157,4 +187,4 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
     };
 
     return StageDirector;
-})(Sprites, Drawables, Paths);
+})(Sprites, Drawables, Paths, Animations);

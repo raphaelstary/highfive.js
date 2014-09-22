@@ -64,6 +64,7 @@ var App = (function (require) {
             atlasMapper,
             new require.MotionDirector(new require.MotionStudio()),
             new require.SpriteAnimationDirector(new require.SpriteAnimationStudio()),
+            new require.AnimationAssistant(new require.AnimationDirector(new require.AnimationStudio())),
             new require.Renderer(this.screen, this.screenCtx)
         );
 
@@ -145,6 +146,9 @@ var App = (function (require) {
     SpriteAnimationDirector: SpriteAnimationDirector,
     MotionStudio: MotionStudio,
     MotionDirector: MotionDirector,
+    AnimationStudio: AnimationStudio,
+    AnimationDirector: AnimationDirector,
+    AnimationAssistant: AnimationAssistant,
     StageDirector: StageDirector,
     Intro: Intro,
     PreGame: PreGame,
