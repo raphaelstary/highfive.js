@@ -39,6 +39,8 @@ var AnimationDirector = (function () {
         }
         var self = this;
 
+        keyFrame(drawableWrapperList.shift(), drawableWrapperList);
+
         function keyFrame(wrapper, nextKeyFrameSlices) {
             var callback;
             if (nextKeyFrameSlices.length > 0) {

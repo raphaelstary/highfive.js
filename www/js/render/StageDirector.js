@@ -11,8 +11,8 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         this._id = 0;
     }
 
-    StageDirector.prototype.getDrawable = function (x, y, imgPathName, zIndex) {
-        return Drawables.get(this.atlasMapper, ++this._id, x, y, imgPathName, zIndex);
+    StageDirector.prototype.getDrawable = function (x, y, imgPathName, zIndex, alpha, rotation, scale) {
+        return Drawables.get(this.atlasMapper, ++this._id, x, y, imgPathName, zIndex, alpha, rotation, scale);
     };
 
     StageDirector.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength, lineHeight) {
@@ -171,8 +171,8 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         this.motions.moveLater(drawableToAdd, duration, extendedCallback);
     };
 
-    StageDirector.prototype.drawFresh = function (x, y, imgName, zIndex) {
-        var drawable = this.getDrawable(x, y, imgName, zIndex);
+    StageDirector.prototype.drawFresh = function (x, y, imgName, zIndex, alpha, rotation, scale) {
+        var drawable = this.getDrawable(x, y, imgName, zIndex, alpha, rotation, scale);
         this.draw(drawable);
 
         return drawable;

@@ -49,3 +49,6 @@ www/sandbox*
 www/gfx/test*
 atlas_*.png
 atlas_*.json
+audio.json
+audio.mp3
+audio.ogg
