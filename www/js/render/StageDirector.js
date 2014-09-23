@@ -1,9 +1,10 @@
-var StageDirector = (function (Sprites, Drawables, Paths) {
+var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     "use strict";
 
-    function StageDirector(atlasMapper, motions, animations, renderer) {
+    function StageDirector(atlasMapper, motions, spriteAnimations, animations, renderer) {
         this.atlasMapper = atlasMapper;
         this.motions = motions;
+        this.spriteAnimations = spriteAnimations;
         this.animations = animations;
         this.renderer = renderer;
 
@@ -40,7 +41,7 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
     };
 
     StageDirector.prototype.animate = function (drawable, sprite, callback) {
-        this.animations.animate(drawable, sprite, callback);
+        this.spriteAnimations.animate(drawable, sprite, callback);
         if (!this.renderer.has(drawable)) {
             this.renderer.add(drawable);
         }
@@ -59,7 +60,7 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
                 }
             }
         }
-        this.animations.animateLater(drawableToAdd, duration, extendedCallback);
+        this.spriteAnimations.animateLater(drawableToAdd, duration, extendedCallback);
     };
 
     StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, callback) {
@@ -89,12 +90,13 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         }
     };
 
-    StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback) {
+    StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback,
+                                                       startedMovingCallback) {
         var drawable = this.getDrawable(x, y, imgName);
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
         var movedItem = {item: drawable, path: path, ready: callback};
-        this.moveLater(movedItem, delay);
+        this.moveLater(movedItem, delay, startedMovingCallback);
 
         return {
             drawable: drawable,
@@ -180,7 +182,42 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
         this.renderer.add(drawable);
     };
 
+    StageDirector.prototype.animateAlpha = function (drawable, value, duration, easing, loop, callback) {
+        this.animations.animateAlpha(drawable, value, duration, easing, loop, callback);
+    };
+
+    StageDirector.prototype.animateAlphaPattern = function (drawable, valuePairs, loop) {
+        this.animations.animateAlphaPattern(drawable, valuePairs, loop);
+    };
+
+    StageDirector.prototype.animateRotation = function (drawable, value, duration, easing, loop, callback) {
+        this.animations.animateRotation(drawable, value, duration, easing, loop, callback);
+    };
+
+    StageDirector.prototype.animateRotationPattern = function (drawable, valuePairs, loop) {
+        this.animations.animateRotationPattern(drawable, valuePairs, loop);
+    };
+
+    StageDirector.prototype.basicAnimation = function (drawable, setter, animation, callback) {
+        this.animations.animate(drawable, setter, animation, callback);
+    };
+
+    StageDirector.prototype.basicAnimationLater = function (drawableToAdd, duration, callback) {
+        this.animations.animateLater(drawableToAdd, duration, callback);
+    };
+
+    StageDirector.prototype.basicAnimationPattern = function (drawableWrapperList, loop) {
+        this.animations.animateWithKeyFrames(drawableWrapperList, loop);
+    };
+
+    StageDirector.prototype.getAnimation = function (startValue, endValue, speed, spacingFn, loop) {
+        return Animations.get(startValue, endValue, speed, spacingFn, loop);
+    };
+
     StageDirector.prototype.remove = function (drawable) {
+        if (this.spriteAnimations.has(drawable)) {
+            this.spriteAnimations.remove(drawable);
+        }
         if (this.animations.has(drawable)) {
             this.animations.remove(drawable);
         }
@@ -193,12 +230,14 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
     };
 
     StageDirector.prototype.has = function (drawable) {
-        return this.renderer.has(drawable) || this.motions.has(drawable) || this.animations.has(drawable);
+        return this.renderer.has(drawable) || this.motions.has(drawable) || this.spriteAnimations.has(drawable) ||
+            this.animations.has(drawable);
     };
 
     StageDirector.prototype.tick = function () {
         this.renderer.draw();
         this.motions.update();
+        this.spriteAnimations.update();
         this.animations.update();
     };
 
@@ -215,4 +254,4 @@ var StageDirector = (function (Sprites, Drawables, Paths) {
     };
 
     return StageDirector;
-})(Sprites, Drawables, Paths);
+})(Sprites, Drawables, Paths, Animations);

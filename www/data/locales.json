@@ -11,24 +11,26 @@
             "good": "good job",
             "well_done": "well done",
             "awesome": "awesome",
-            "skip": "skip tutorial >"
+            "skip": "skip tutorial >",
+            "ok": "ok"
         },
         "credits": {
             "a": "a",
             "game": "game",
             "by": "by",
-            "raphael_stary": "Raphael Stary",
-            "raphael_twitter": "@raphaelstary",
             "from": "from",
-            "letsplayIO_twitter": "@letsplayIO",
-            "letsplayIO_fb": "/letsplayIO",
-            "graphics": "graphics"
+            "graphics": "graphics",
+            "back": "back",
+            "kenney": "Kenney"
         },
         "game_over": {
             "score": "score",
-            "best": "best"
+            "best": "best",
+            "play_again": "play again"
         },
         "pre_game": {
+            "settings": "settings",
+            "play": "play",
             "credits": "credits",
             "more_games": "more games"
         }

@@ -1,4 +1,4 @@
-var MotionStudio = (function () {
+var MotionStudio = (function (Math) {
     "use strict";
 
     // handles low level moving of draw-ables
@@ -78,4 +78,4 @@ var MotionStudio = (function () {
     };
 
     return MotionStudio;
-})();
+})(Math);

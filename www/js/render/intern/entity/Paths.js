@@ -1,4 +1,4 @@
-var Paths = (function (Path) {
+var Paths = (function (Path, Math) {
     "use strict";
 
     function createNew(x, y, endX, endY, speed, spacingFn, loop) {
@@ -12,4 +12,4 @@ var Paths = (function (Path) {
     return {
         get: createNew
     };
-})(Path);
+})(Path, Math);

@@ -51,12 +51,26 @@ var AtlasRenderer = (function (wrapText) {
             for (var key in dict) {
                 var elem = dict[key];
 
+                self.ctx.save();
+
+                if (elem.alpha || elem.alpha === 0) {
+                    self.ctx.globalAlpha = elem.alpha;
+                }
+
+                if (elem.rotation) {
+                    self.ctx.translate(elem.x, elem.y);
+                    self.ctx.rotate(elem.rotation);
+                    self.ctx.translate(-elem.x, -elem.y);
+                }
+
                 self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y,
                     elem.img.width, elem.img.height,
                     elem.x + elem.img.offSetX,
                     elem.y + elem.img.offSetY,
                     elem.img.trimmedTileWidth,
                     elem.img.trimmedTileHeight);
+
+                self.ctx.restore();
             }
         }
 
@@ -65,17 +79,17 @@ var AtlasRenderer = (function (wrapText) {
 
             this.ctx.save();
 
-            if (elem.txt.alpha || elem.txt.alpha === 0) {
-                this.ctx.globalAlpha = elem.txt.alpha;
+            if (elem.alpha || elem.alpha === 0) {
+                this.ctx.globalAlpha = elem.alpha;
             }
             this.ctx.textBaseline = 'middle';
             this.ctx.textAlign = 'center';
             this.ctx.fillStyle = elem.txt.color;
             this.ctx.font = elem.txt.size + 'px ' + elem.txt.fontFamily;
 
-            if (elem.txt.rotation) {
+            if (elem.rotation) {
                 this.ctx.translate(elem.x, elem.y);
-                this.ctx.rotate(elem.txt.rotation);
+                this.ctx.rotate(elem.rotation);
                 this.ctx.translate(-elem.x, -elem.y);
             }
 

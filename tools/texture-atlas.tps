@@ -13,7 +13,7 @@
                 <key>scale</key>
                 <double>1</double>
                 <key>extension</key>
-                <string></string>
+                <string>3840</string>
                 <key>spriteFilter</key>
                 <string></string>
                 <key>acceptFractionalValues</key>
@@ -89,9 +89,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2048</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2560</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -106,9 +106,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -123,9 +123,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -140,9 +140,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -157,9 +157,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -174,9 +174,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -191,9 +191,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -208,9 +208,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -225,9 +225,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -242,9 +242,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -259,9 +259,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -276,9 +276,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -293,9 +293,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -310,9 +310,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -327,9 +327,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -344,9 +344,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -361,9 +361,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -378,9 +378,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -395,9 +395,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -412,9 +412,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -429,9 +429,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
             <struct type="AutoSDSettings">
@@ -446,9 +446,9 @@
                 <key>maxTextureSize</key>
                 <QSize>
                     <key>width</key>
-                    <int>-1</int>
+                    <int>2560</int>
                     <key>height</key>
-                    <int>-1</int>
+                    <int>2048</int>
                 </QSize>
             </struct>
         </array>
@@ -497,9 +497,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2560</int>
+            <int>16384</int>
             <key>height</key>
-            <int>2048</int>
+            <int>16384</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>

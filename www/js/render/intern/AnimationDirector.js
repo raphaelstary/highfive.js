@@ -1,22 +1,22 @@
 var AnimationDirector = (function () {
     "use strict";
 
+    // high level animation methods
     function AnimationDirector(animationStudio) {
         this.animationStudio = animationStudio;
         this.todos = [];
-        this.ticker = 0;
     }
 
     AnimationDirector.prototype.update = function () {
+
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
 
             if (toAdd.duration < toAdd.time) {
+                this.animate(toAdd.addable.drawable, toAdd.addable.setter, toAdd.addable.animation, toAdd.addable.callback);
 
-                this.animationStudio.animate(toAdd.addable.item, toAdd.addable.sprite, toAdd.addable.ready);
-
-                if (toAdd.ready) {
-                    toAdd.ready();
+                if (toAdd.callback) {
+                    toAdd.callback();
                 }
 
                 this.todos.splice(i, 1);
@@ -26,11 +26,39 @@ var AnimationDirector = (function () {
             }
         }
 
-        if (this.ticker % 2 === 0) {
-            this.animationStudio.nextFrame();
-            this.ticker = 0;
+        this.animationStudio.update();
+    };
+
+    AnimationDirector.prototype.animate = function (drawable, setter, animation, callback) {
+        this.animationStudio.animate(drawable, setter, animation, callback);
+    };
+
+    AnimationDirector.prototype.animateWithKeyFrames = function (drawableWrapperList, loop) {
+        if (loop) {
+            var copy = drawableWrapperList.slice();
         }
-        this.ticker++;
+        var self = this;
+
+        function keyFrame(wrapper, nextKeyFrameSlices) {
+            var callback;
+            if (nextKeyFrameSlices.length > 0) {
+                if (wrapper.callback) {
+                    callback = function () {
+                        wrapper.callback();
+                        keyFrame(nextKeyFrameSlices.shift(), nextKeyFrameSlices);
+                    };
+                } else {
+                    callback = function () {
+                        keyFrame(nextKeyFrameSlices.shift(), nextKeyFrameSlices);
+                    };
+                }
+            } else if (loop) {
+                callback = function () {
+                    self.animateWithKeyFrames(copy, loop);
+                };
+            }
+            self.animationStudio.animate(wrapper.drawable, wrapper.setter, wrapper.animation, callback);
+        }
     };
 
     AnimationDirector.prototype.animateLater = function (drawableToAdd, duration, callback) {
@@ -38,12 +66,8 @@ var AnimationDirector = (function () {
             addable: drawableToAdd,
             duration: duration,
             time: 0,
-            ready: callback
+            callback: callback
         });
-    };
-
-    AnimationDirector.prototype.animate = function (drawable, sprite, callback) {
-        this.animationStudio.animate(drawable, sprite, callback);
     };
 
     AnimationDirector.prototype.remove = function (drawable) {
