@@ -10,7 +10,8 @@ var Intro = (function (Transition, calcScreenConst, changeCoords, changePath, Sp
 
     var SPEED = 'speed';
     var BACKGROUND = 'background';
-    var LOGO = 'letsplayIO_logo';
+    var BACKGROUND_STAR = 'background_star';
+    var LOGO = 'undefined';
     var PRESENTS = 'presents';
     var GAME_LOGO = 'shields_up_logo/shields_up_logo';
 

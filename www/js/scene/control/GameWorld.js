@@ -31,7 +31,7 @@ var GameWorld = (function () {
         this.points = 0; //part of global game state
 
         this.shieldsGetHitSprite = stage.getSprite('shields_hit/shields_hit', 15, false);
-        this.elemHitsShieldsSprite = stage.getSprite('object_destroyed/object_destroyed', 6, false);
+        this.elemHitsShieldsSprite = stage.getSprite('object_destroyed/object_destroyed', 3, false);
 
         this.shipHullHitSprite = stage.getSprite('hull_hit/hull_hit', 24, false);
         this.dumpLifeSprite = stage.getSprite('lost_life/lost_life', 20, false);
