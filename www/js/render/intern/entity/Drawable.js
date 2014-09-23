@@ -1,4 +1,4 @@
-var Drawable = (function () {
+var Drawable = (function (Math, measureText) {
     "use strict";
 
     function Drawable(id, x, y, img, txt, zIndex, alpha, rotation) {
@@ -13,28 +13,46 @@ var Drawable = (function () {
     }
 
     Drawable.prototype.getCornerX = function () {
-        return this.x - this.img.width / 2;
+        return this.x - this.__getWidth() / 2;
     };
 
     Drawable.prototype.getCornerY = function () {
-        return this.y - this.img.height / 2;
+        return this.y - this.__getHeight() / 2;
     };
 
     Drawable.prototype.getEndX = function () {
-        return this.x + this.img.width / 2;
+        return this.x + this.__getWidth() / 2;
     };
 
     Drawable.prototype.getEndY = function () {
-        return this.y + this.img.height / 2;
+        return this.y + this.__getHeight() / 2;
     };
 
     Drawable.prototype.getWidth = function () {
-        return this.img.width;
+        return this.__getWidth();
     };
 
     Drawable.prototype.getHeight = function () {
+        return this.__getHeight();
+    };
+
+    Drawable.prototype.__getHeight = function () {
+        if (this.txt) {
+            return measureText(this.txt).height;
+        }
+        if (this.img.scale)
+            return Math.floor(this.img.height * this.img.scale);
         return this.img.height;
     };
 
+    Drawable.prototype.__getWidth = function () {
+        if (this.txt) {
+            return measureText(this.txt).width;
+        }
+        if (this.img.scale)
+            return Math.floor(this.img.width * this.img.scale);
+        return this.img.width;
+    };
+
     return Drawable;
-})();
+})(Math, measureText);

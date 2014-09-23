@@ -75,6 +75,21 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         };
     };
 
+    StageDirector.prototype.moveFreshRoundTrip = function (x, y, imgName, endX, endY, speed, spacing, loopTheTrip,
+                                                           callbackTo, callbackReturn) {
+        var drawable = this.getDrawable(x, y, imgName);
+        var pathTo = this.getPath(x, y, endX, endY, speed, spacing);
+        var pathReturn = this.getPath(endX, endY, x, y, speed, spacing);
+
+        this.moveRoundTrip(drawable, pathTo, pathReturn, loopTheTrip, callbackTo, callbackReturn);
+
+        return {
+            drawable: drawable,
+            pathTo: pathTo,
+            pathReturn: pathReturn
+        }
+    };
+
     StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback,
                                                        startedMovingCallback) {
         var drawable = this.getDrawable(x, y, imgName);
@@ -94,6 +109,50 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         if (!this.renderer.has(drawable)) {
             this.renderer.add(drawable);
         }
+    };
+
+    StageDirector.prototype.moveRoundTrip = function (drawable, pathTo, pathReturn, loopTheTrip, callbackTo,
+                                                      callbackReturn) {
+        var self = this;
+
+        function startRoundTrip() {
+            if (callbackTo) {
+                self.move(drawable, pathTo, function () {
+                    callbackTo();
+                    fromBtoA();
+                });
+            } else {
+                self.move(drawable, pathTo, fromBtoA);
+            }
+        }
+
+        function fromAtoB() {
+            if (self.has(drawable)) {
+                startRoundTrip();
+            }
+        }
+        function fromBtoA() {
+            if (self.has(drawable)) {
+                if (loopTheTrip) {
+                    if (callbackReturn) {
+                        self.move(drawable, pathReturn, function () {
+                            callbackReturn();
+                            fromAtoB();
+                        });
+                    } else {
+                        self.move(drawable, pathReturn, fromAtoB);
+                    }
+                } else {
+                    if (callbackReturn) {
+                        self.move(drawable, pathReturn, callbackReturn);
+                    } else {
+                        self.move(drawable, pathReturn);
+                    }
+                }
+            }
+        }
+
+        startRoundTrip();
     };
 
     StageDirector.prototype.moveLater = function (drawableToAdd, duration, callback) {
@@ -184,6 +243,14 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
 
     StageDirector.prototype.resize = function (width, height) {
         this.renderer.resize(width, height);
+    };
+
+    StageDirector.prototype.pause = function (drawable) {
+        this.motions.pause(drawable);
+    };
+
+    StageDirector.prototype.play = function (drawable) {
+        this.motions.play(drawable);
     };
 
     return StageDirector;

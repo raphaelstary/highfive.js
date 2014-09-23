@@ -99,6 +99,11 @@ var Transition = (function (Math) {
         return changeInValue * Math.sin(currentTime / duration * (Math.PI / 2)) + startValue;
     }
 
+    // sinusoidal easing in/out - accelerating until halfway, then decelerating
+    function sinusoidalEasingInAndOut(currentTime, startValue, changeInValue, duration) {
+        return - changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
+    }
+
     function bouncingEasingOut(currentTime, startValue, changeInValue, duration) {
         if ((currentTime /= duration) < (1 / 2.75)) {
             return changeInValue * (7.5625 * currentTime * currentTime) + startValue;
@@ -131,6 +136,7 @@ var Transition = (function (Math) {
 
         EASE_IN_SIN: sinusoidalEasingIn,
         EASE_OUT_SIN: sinusoidalEasingOut,
-        EASE_OUT_IN_SIN: sinusoidalEasingOutAndIn
-    }
+        EASE_OUT_IN_SIN: sinusoidalEasingOutAndIn,
+        EASE_IN_OUT_SIN: sinusoidalEasingInAndOut
+    };
 })(Math);
