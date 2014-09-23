@@ -198,6 +198,14 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         this.animations.animateRotationPattern(drawable, valuePairs, loop);
     };
 
+    StageDirector.prototype.animateScale = function (drawable, value, duration, easing, loop, callback) {
+        this.animations.animateScale(drawable, value, duration, easing, loop, callback);
+    };
+
+    StageDirector.prototype.animateScalePattern = function (drawable, valuePairs, loop) {
+        this.animations.animateScalePattern(drawable, valuePairs, loop);
+    };
+
     StageDirector.prototype.basicAnimation = function (drawable, setter, animation, callback) {
         this.animations.animate(drawable, setter, animation, callback);
     };
