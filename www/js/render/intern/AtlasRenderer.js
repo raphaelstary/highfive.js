@@ -1,4 +1,4 @@
-var AtlasRenderer = (function (wrapText, Math) {
+var AtlasRenderer = (function (wrapText) {
     "use strict";
 
     function AtlasRenderer(screen, ctx) {
@@ -63,19 +63,12 @@ var AtlasRenderer = (function (wrapText, Math) {
                     self.ctx.translate(-elem.x, -elem.y);
                 }
 
-                if (elem.scale != 1) {
-                    self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y, elem.img.width, elem.img.height,
-                        elem.getCornerX(), elem.getCornerY(), elem.getWidth(), elem.getHeight());
-                } else {
-                    self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y,
-                        elem.img.width, elem.img.height,
-                        elem.x + elem.img.offSetX,
-                        elem.y + elem.img.offSetY,
-                        elem.img.trimmedTileWidth,
-                        elem.img.trimmedTileHeight);
-                }
-
-
+                self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y,
+                    elem.img.width, elem.img.height,
+                    elem.x + elem.img.offSetX,
+                    elem.y + elem.img.offSetY,
+                    elem.img.trimmedTileWidth,
+                    elem.img.trimmedTileHeight);
 
                 self.ctx.restore();
             }
@@ -92,7 +85,7 @@ var AtlasRenderer = (function (wrapText, Math) {
             this.ctx.textBaseline = 'middle';
             this.ctx.textAlign = 'center';
             this.ctx.fillStyle = elem.txt.color;
-            this.ctx.font = Math.floor(elem.txt.size * elem.scale) + 'px ' + elem.txt.fontFamily;
+            this.ctx.font = elem.txt.size + 'px ' + elem.txt.fontFamily;
 
             if (elem.rotation) {
                 this.ctx.translate(elem.x, elem.y);
@@ -115,4 +108,4 @@ var AtlasRenderer = (function (wrapText, Math) {
     };
 
     return AtlasRenderer;
-})(wrapText, Math);
+})(wrapText);
