@@ -13,12 +13,11 @@ var SimpleLoadingScreen = (function (Math) {
         this.txt = "LOADING";
     }
 
-    SimpleLoadingScreen.prototype.showNew = function (parts, width, height) {
+    SimpleLoadingScreen.prototype.showNew = function (parts) {
         this.progressCounter = 1;
         this.parts = parts;
 
-        this._resizeScreen(width, height);
-        this._calcScreenPositions(width, height);
+        this._calcScreenPositions(this.screenCtx.canvas.width, this.screenCtx.canvas.height);
         this._initialRendering();
     };
 

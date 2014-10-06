@@ -5,9 +5,9 @@ var bootstrapResponsiveWithPushRelease = (function (installCanvas, installResize
         var screen = installCanvas();
         var resize = installResize();
         var tap = installTap(screen);
-        var dragNDrop = installPushRelease(screen);
+        var pushRelease = installPushRelease(screen);
 
-        return new App(screen, resize, tap, dragNDrop);
+        return new App(screen, resize, tap, pushRelease);
     }
 
     return bootstrapResponsiveWithPushRelease;

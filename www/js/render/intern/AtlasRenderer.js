@@ -1,9 +1,9 @@
 var AtlasRenderer = (function (wrapText, Math) {
     "use strict";
 
-    function AtlasRenderer(screen, ctx) {
+    function AtlasRenderer(screen) {
         this.screen = screen;
-        this.ctx = ctx;
+        this.ctx = screen.getContext('2d');
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
