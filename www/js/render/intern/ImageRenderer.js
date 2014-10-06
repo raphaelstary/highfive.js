@@ -1,9 +1,9 @@
 var ImageRenderer = (function (wrapText, Math) {
     "use strict";
 
-    function ImageRenderer(screen, ctx) {
+    function ImageRenderer(screen) {
         this.screen = screen;
-        this.ctx = ctx;
+        this.ctx = screen.getContext('2d');
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;

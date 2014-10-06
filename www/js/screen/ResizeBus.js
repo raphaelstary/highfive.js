@@ -21,9 +21,7 @@ var ResizeBus = (function () {
         this.height = height;
 
         for (var key in this.resizeDict) {
-            if (this.resizeDict.hasOwnProperty(key)) {
-                this.resizeDict[key](width, height);
-            }
+            this.resizeDict[key](width, height);
         }
     };
 
