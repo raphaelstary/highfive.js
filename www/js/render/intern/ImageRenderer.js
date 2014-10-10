@@ -1,4 +1,4 @@
-var ImageRenderer = (function (wrapText, Math) {
+var ImageRenderer = (function (wrapText) {
     "use strict";
 
     function ImageRenderer(screen) {
@@ -95,4 +95,4 @@ var ImageRenderer = (function (wrapText, Math) {
     };
 
     return ImageRenderer;
-})(wrapText, Math);
+})(wrapText);
