@@ -7,7 +7,13 @@ var bootstrapResponsiveWithDragAndDrop = (function (installCanvas, installResize
         var tap = installTap(screen);
         var dragNDrop = installDragNDrop(screen);
 
-        return new App(screen, resize, tap, dragNDrop);
+        var gameServices = {
+            screen: screen,
+            resize: resize,
+            tap: tap,
+            dragNDrop: dragNDrop
+        };
+        return new App(gameServices);
     }
 
     return bootstrapResponsiveWithDragAndDrop;

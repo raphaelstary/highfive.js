@@ -7,7 +7,14 @@ var bootstrapResponsiveWithPushRelease = (function (installCanvas, installResize
         var tap = installTap(screen);
         var pushRelease = installPushRelease(screen);
 
-        return new App(screen, resize, tap, pushRelease);
+        var gameServices = {
+            screen: screen,
+            resize: resize,
+            tap: tap,
+            pushRelease: pushRelease
+        };
+
+        return new App(gameServices);
     }
 
     return bootstrapResponsiveWithPushRelease;
