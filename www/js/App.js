@@ -8,6 +8,7 @@ var App = (function (require) {
         this.gameController = gameServices.pushRelease;
         this.gamePad = gameServices.gamePad;
         this.keyBoard = gameServices.keyBoard;
+        this.keyPushRelease = gameServices.keyPushRelease;
     }
 
     App.prototype.start = function () {
@@ -77,7 +78,9 @@ var App = (function (require) {
             pushRelease: self.pushRelease,
             dragNDrop: self.dragNDrop,
             keyBoard: self.keyBoard,
-            gamePad: self.gamePad
+            gamePad: self.gamePad,
+            keyPushRelease: self.keyPushRelease,
+            loop: self.gameLoop
         };
         require.installScenes(sceneServices, sceneManager);
 
