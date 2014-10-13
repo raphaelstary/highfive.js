@@ -11,7 +11,17 @@ var Drawable = (function (Math, measureText) {
         this.rotation = rotation;
         this.alpha = alpha;
         this.scale = scale || 1;
+        this.anchorOffsetX = 0;
+        this.anchorOffsetY = 0;
     }
+
+    Drawable.prototype.getAnchorX = function () {
+        return this.x + this.anchorOffsetX;
+    };
+
+    Drawable.prototype.getAnchorY = function () {
+        return this.y + this.anchorOffsetY;
+    };
 
     Drawable.prototype.getCornerX = function () {
         return this.x - Math.floor(this.__getWidth() / 2 * this.scale);
