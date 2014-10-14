@@ -182,6 +182,13 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         this.renderer.add(drawable);
     };
 
+    StageDirector.prototype.drawText = function (x, y, text, size, font, color, zIndex, rotation, alpha, maxLineLength, lineHeight) {
+        var drawable = this.getDrawableText(x, y, zIndex, text, size, font, color, rotation, alpha, maxLineLength, lineHeight);
+        this.draw(drawable);
+
+        return drawable;
+    };
+
     StageDirector.prototype.animateAlpha = function (drawable, value, duration, easing, loop, callback) {
         this.animations.animateAlpha(drawable, value, duration, easing, loop, callback);
     };

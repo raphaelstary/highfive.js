@@ -1,4 +1,4 @@
-var ImageRenderer = (function (wrapText, Math) {
+var ImageRenderer = (function (wrapText) {
     "use strict";
 
     function ImageRenderer(screen) {
@@ -51,6 +51,17 @@ var ImageRenderer = (function (wrapText, Math) {
             for (var key in dict) {
                 var elem = dict[key];
 
+                self.ctx.save();
+                if (elem.alpha || elem.alpha === 0) {
+                    self.ctx.globalAlpha = elem.alpha;
+                }
+
+                if (elem.rotation) {
+                    self.ctx.translate(elem.getAnchorX(), elem.getAnchorY());
+                    self.ctx.rotate(elem.rotation);
+                    self.ctx.translate(-elem.getAnchorX(), -elem.getAnchorY());
+                }
+
                 self.ctx.drawImage(
                     elem.img.img,
                     elem.getCornerX(),
@@ -58,6 +69,8 @@ var ImageRenderer = (function (wrapText, Math) {
                     elem.getWidth(),
                     elem.getHeight()
                 );
+
+                self.ctx.restore();
             }
         }
 
@@ -95,4 +108,4 @@ var ImageRenderer = (function (wrapText, Math) {
     };
 
     return ImageRenderer;
-})(wrapText, Math);
+})(wrapText);

@@ -7,8 +7,16 @@ var MotionStudio = (function (Math) {
     }
 
     MotionStudio.prototype.move = function (drawable, path, callback) {
+        var axis;
         if (path) {
-            var axis = path.startX === path.endX ? 'y' : 'x';
+            if (path.startX === path.endX) {
+                axis = 'y';
+            } else if (path.startY === path.endY) {
+                axis = 'x';
+//            axis = path.startX === path.endX ? 'y' : 'x';
+            } else {
+                axis = 'line'
+            }
         }
 
         this.motionsDict[drawable.id] = {
@@ -41,6 +49,12 @@ var MotionStudio = (function (Math) {
 
                 } else if (motion.axis === 'y') {
                     motion.item.y = Math.floor(path.timingFn(motion.time, path.startY, path.length, path.duration));
+
+                } else if (motion.axis == 'line') {
+                    var magnitude = Math.floor(path.timingFn(motion.time, 0, path.length, path.duration));
+                    // todo implement movement on every (diagonal) line
+                    // x + length * unitVector.x, y + length * unitVector.y -> end point
+                    // see https://github.com/raphaelstary/highfive/blob/master/www/js/render/Renderer.js
                 }
 
                 motion.time++;
