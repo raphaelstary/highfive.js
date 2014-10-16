@@ -1,41 +1,19 @@
-var MyGameResources = (function (addFontToDOM, UniversalTranslator, SoundSpriteManager, AtlasResourceHelper, URL) {
+var MyGameResources = (function () {
     "use strict";
 
-    var audioInfo,
-        specialGameFont,
-        gameFont,
-        logoFont,
-        locales,
-        atlases = [],
-        images = {};
+    // your files
 
     function registerFiles(resourceLoader) {
-        audioInfo = resourceLoader.addJSON('data/audio.json');
-        specialGameFont = resourceLoader.addFont('data/kenpixel_blocks.woff');
-        gameFont = resourceLoader.addFont('data/kenpixel.woff');
-        logoFont = resourceLoader.addFont('data/dooodleista.woff');
-        locales = resourceLoader.addJSON('data/locales.json');
+        // add your files to the resource loader for downloading
 
-        AtlasResourceHelper.register(resourceLoader, atlases);
-
-        return 5 + atlases.length;
+        return 0; // number of registered files
     }
 
     function processFiles() {
-
-        addFontToDOM([
-            {name: 'SpecialGameFont', url: URL.createObjectURL(specialGameFont.blob)},
-            {name: 'GameFont', url: URL.createObjectURL(gameFont.blob)},
-            {name: 'LogoFont', url: URL.createObjectURL(logoFont.blob)}
-        ]);
-
-        var sounds = new SoundSpriteManager();
-        sounds.load(audioInfo);
+        // process your downloaded files
 
         return {
-            message: new UniversalTranslator(locales),
-            sounds: sounds,
-            gfxCache: AtlasResourceHelper.process(atlases)
+            // services created with downloaded files
         };
     }
 
@@ -43,4 +21,4 @@ var MyGameResources = (function (addFontToDOM, UniversalTranslator, SoundSpriteM
         create: registerFiles,
         process: processFiles
     };
-})(addFontToDOM, UniversalTranslator, SoundSpriteManager, AtlasResourceHelper, window.URL || window.webkitURL);
+})();

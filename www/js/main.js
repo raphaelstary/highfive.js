@@ -1,6 +1,6 @@
 window.onload = function () {
     "use strict";
 
-    var app = Bootstrapper.atlas().tap().pushRelease().build(MyGameResources);
+    var app = null; // create an app with the bootstrapper and add your game resources
     app.start();
 };

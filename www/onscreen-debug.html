@@ -2,86 +2,100 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Crappy Space Miner</title>
+    <title>My Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<canvas id="screen" width="100" height="100"></canvas>
 
 <script src="console-log-viewer.js"></script>
 
+<script src="js/lib/howler.js"></script>
+<script src="js/render/intern/measureText.js"></script>
+<script src="js/net/resolveAtlasPaths.js"></script>
+<script src="js/audio/SoundFilesManager.js"></script>
+<script src="js/audio/SoundSpriteManager.js"></script>
 <script src="js/resizeutils/Repository.js"></script>
 <script src="js/resizeutils/changePath.js"></script>
 <script src="js/resizeutils/changeCoords.js"></script>
 <script src="js/resizeutils/changeTouchable.js"></script>
+<script src="js/resizeutils/fetchDrawableIntoTouchable.js"></script>
 <script src="js/scene/control/position/calcScreenConst.js"></script>
 <script src="js/scene/control/position/widthHalf.js"></script>
 <script src="js/scene/control/position/heightHalf.js"></script>
 <script src="js/scene/control/position/__400.js"></script>
 <script src="js/scene/control/position/getTopRaster.js"></script>
-<script src="js/scene/control/position/ShieldsHelper.js"></script>
-<script src="js/scene/control/position/EnergyBarHelper.js"></script>
-<script src="js/scene/control/position/LifeHelper.js"></script>
-<script src="js/scene/control/position/CountHelper.js"></script>
-<script src="js/scene/control/position/ShipHelper.js"></script>
-<script src="js/scene/control/position/FireHelper.js"></script>
-<script src="js/scene/control/position/CountHelper.js"></script>
-<script src="js/scene/control/position/BackGroundHelper.js"></script>
-<script src="js/scene/control/position/SpeedStripesHelper.js"></script>
-<script src="js/scene/control/position/GameStuffHelper.js"></script>
-<script src="js/scene/control/EnergyStateMachine.js"></script>
-<script src="js/scene/control/GameWorld.js"></script>
+<script src="js/scene/control/position/fontSize_15.js"></script>
+<script src="js/scene/control/position/fontSize_10.js"></script>
+<script src="js/scene/control/position/fontSize_30.js"></script>
 <script src="js/scene/control/CanvasCollisionDetector.js"></script>
-<script src="js/scene/control/ScoreView.js"></script>
-<script src="js/scene/control/CollectView.js"></script>
-<script src="js/scene/control/OdometerView.js"></script>
-<script src="js/scene/control/Odometer.js"></script>
+<script src="js/render/intern/CanvasImageCollisionDetector.js"></script>
 <script src="js/scene/control/ScreenShaker.js"></script>
 <script src="js/platform/UniversalTranslator.js"></script>
 <script src="js/platform/addFontToDOM.js"></script>
 <script src="js/platform/requestAnimationFrame.js"></script>
 <script src="js/platform/BrowserOracle.js"></script>
 <script src="js/platform/FullScreenController.js"></script>
+<script src="js/input/entity/Touchable.js"></script>
+<script src="js/input/entity/Touchables.js"></script>
+<script src="js/input/isHit.js"></script>
+<script src="js/input/entity/GamePad.js"></script>
+<script src="js/input/entity/Key.js"></script>
+<script src="js/input/DragHandler.js"></script>
 <script src="js/input/PushReleaseHandler.js"></script>
 <script src="js/input/TapHandler.js"></script>
+<script src="js/input/KeyPushReleaseHandler.js"></script>
+<script src="js/input/KeyHandler.js"></script>
+<script src="js/input/GamePadHandler.js"></script>
 <script src="js/render/intern/entity/CanvasText.js"></script>
 <script src="js/render/intern/entity/Drawable.js"></script>
 <script src="js/render/intern/entity/Drawables.js"></script>
 <script src="js/render/intern/entity/Path.js"></script>
 <script src="js/render/intern/entity/Paths.js"></script>
+<script src="js/render/intern/entity/Animation.js"></script>
+<script src="js/render/intern/entity/Animations.js"></script>
+<script src="js/render/intern/AnimationStudio.js"></script>
+<script src="js/render/intern/AnimationDirector.js"></script>
+<script src="js/render/intern/AnimationAssistant.js"></script>
 <script src="js/render/intern/SpriteAnimationStudio.js"></script>
 <script src="js/render/intern/SpriteAnimationDirector.js"></script>
 <script src="js/render/intern/entity/Sprite.js"></script>
 <script src="js/render/intern/entity/Sprites.js"></script>
 <script src="js/render/StageDirector.js"></script>
+<script src="js/render/ResizableStageDirector.js"></script>
 <script src="js/render/intern/MotionDirector.js"></script>
 <script src="js/render/intern/MotionStudio.js"></script>
 <script src="js/render/Transition.js"></script>
-<script src="js/scene/Credits.js"></script>
 <script src="js/scene/control/range.js"></script>
-<script src="js/scene/control/ObstaclesView.js"></script>
-<script src="js/scene/control/LevelModel.js"></script>
-<script src="js/scene/GetReady.js"></script>
-<script src="js/scene/Intro.js"></script>
-<script src="js/scene/KillScreen.js"></script>
-<script src="js/scene/InGameTutorial.js"></script>
-<script src="js/scene/PlayGame.js"></script>
-<script src="js/scene/PostGame.js"></script>
-<script src="js/scene/PreGame.js"></script>
-<script src="js/scene/StartingPosition.js"></script>
-<script src="js/scene/Tutorial.js"></script>
 <script src="js/scene/SceneManager.js"></script>
-<script src="js/screen/ResizeHandler.js"></script>
-<script src="js/screen/ScreenSizer.js"></script>
-<script src="js/screen/ResizeBus.js"></script>
+<script src="js/bootstrap/installMyScenes.js"></script>
+<script src="js/app/GameLoop.js"></script>
+<script src="js/bootstrap/app/installLoop.js"></script>
 <script src="js/render/intern/entity/SubImage.js"></script>
+<script src="js/render/intern/entity/Texture.js"></script>
+<script src="js/render/TextureCache.js"></script>
 <script src="js/render/AtlasMapper.js"></script>
+<script src="js/render/intern/wrapText.js"></script>
+<script src="js/render/intern/ImageRenderer.js"></script>
 <script src="js/render/intern/AtlasRenderer.js"></script>
+<script src="js/bootstrap/app/StageFactory.js"></script>
+<script src="js/bootstrap/app/AtlasResourceHelper.js"></script>
+<script src="js/bootstrap/app/ImageResourceHelper.js"></script>
+<script src="js/bootstrap/MyGameResources.js"></script>
+<script src="js/screen/ResizeHandler.js"></script>
+<script src="js/screen/ResizeBus.js"></script>
 <script src="js/screen/SimpleLoadingScreen.js"></script>
 <script src="js/net/ResourceLoader.js"></script>
-<script src="js/app/GameLoop.js"></script>
+<script src="js/bootstrap/global/installCanvas.js"></script>
+<script src="js/bootstrap/global/installPushRelease.js"></script>
+<script src="js/bootstrap/global/installResize.js"></script>
+<script src="js/bootstrap/global/installTap.js"></script>
+<script src="js/bootstrap/global/installKeyBoard.js"></script>
+<script src="js/bootstrap/global/installGamePad.js"></script>
+<script src="js/bootstrap/global/installKeyPushRelease.js"></script>
+<script src="js/bootstrap/global/installDragNDrop.js"></script>
 <script src="js/app/App.js"></script>
+<script src="js/bootstrap/Bootstrapper.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
