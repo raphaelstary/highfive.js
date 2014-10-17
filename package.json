@@ -5,7 +5,7 @@
     "amd": {},
     "repository": {
         "type": "git",
-        "url": "git://raphaelstary@bitbucket.org/letsplayIO/crappy-space-shooter.git"
+        "url": "https://github.com/raphaelstary/highfive.js.git"
     },
     "devDependencies": {
         "uglify-js": "~2.4.15",
