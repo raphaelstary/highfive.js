@@ -1,8 +1,8 @@
 var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     "use strict";
 
-    function StageDirector(atlasMapper, motions, spriteAnimations, animations, renderer) {
-        this.atlasMapper = atlasMapper;
+    function StageDirector(gfxCache, motions, spriteAnimations, animations, renderer) {
+        this.gfxCache = gfxCache;
         this.motions = motions;
         this.spriteAnimations = spriteAnimations;
         this.animations = animations;
@@ -12,7 +12,7 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     }
 
     StageDirector.prototype.getDrawable = function (x, y, imgPathName, zIndex, alpha, rotation, scale) {
-        return Drawables.get(this.atlasMapper, ++this._id, x, y, imgPathName, zIndex, alpha, rotation, scale);
+        return Drawables.get(this.gfxCache, ++this._id, x, y, imgPathName, zIndex, alpha, rotation, scale);
     };
 
     StageDirector.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength, lineHeight) {
@@ -20,7 +20,7 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     StageDirector.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
-        return Sprites.get(this.atlasMapper, imgPathName, numberOfFrames, loop);
+        return Sprites.get(this.gfxCache, imgPathName, numberOfFrames, loop);
     };
 
     StageDirector.prototype.getPath = function (x, y, endX, endY, speed, spacingFn, loop) {
@@ -28,7 +28,7 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     StageDirector.prototype.getSubImage = function (imgPathName) {
-        return this.atlasMapper.get(imgPathName);
+        return this.gfxCache.get(imgPathName);
     };
 
     StageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames) {
