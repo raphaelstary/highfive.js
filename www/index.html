@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>My Game</title>
+    <title>Crappy Space Miner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/app.css">
 </head>
@@ -18,16 +18,32 @@
 <script src="js/resizeutils/changeCoords.js"></script>
 <script src="js/resizeutils/changeTouchable.js"></script>
 <script src="js/resizeutils/fetchDrawableIntoTouchable.js"></script>
-<script src="js/scene/control/position/calcScreenConst.js"></script>
-<script src="js/scene/control/position/widthHalf.js"></script>
-<script src="js/scene/control/position/heightHalf.js"></script>
-<script src="js/scene/control/position/__400.js"></script>
-<script src="js/scene/control/position/getTopRaster.js"></script>
-<script src="js/scene/control/position/fontSize_15.js"></script>
-<script src="js/scene/control/position/fontSize_10.js"></script>
-<script src="js/scene/control/position/fontSize_30.js"></script>
+<script src="js/scene/position/calcScreenConst.js"></script>
+<script src="js/scene/position/widthHalf.js"></script>
+<script src="js/scene/position/heightHalf.js"></script>
+<script src="js/scene/position/__400.js"></script>
+<script src="js/scene/position/getTopRaster.js"></script>
+<script src="js/scene/position/fontSize_15.js"></script>
+<script src="js/scene/position/fontSize_10.js"></script>
+<script src="js/scene/position/fontSize_30.js"></script>
+<script src="js/scene/viewhelper/ShieldsHelper.js"></script>
+<script src="js/scene/viewhelper/EnergyBarHelper.js"></script>
+<script src="js/scene/viewhelper/LifeHelper.js"></script>
+<script src="js/scene/viewhelper/CountHelper.js"></script>
+<script src="js/scene/viewhelper/ShipHelper.js"></script>
+<script src="js/scene/viewhelper/FireHelper.js"></script>
+<script src="js/scene/viewhelper/CountHelper.js"></script>
+<script src="js/scene/viewhelper/BackGroundHelper.js"></script>
+<script src="js/scene/viewhelper/SpeedStripesHelper.js"></script>
+<script src="js/scene/viewhelper/GameStuffHelper.js"></script>
+<script src="js/scene/component/EnergyStateMachine.js"></script>
+<script src="js/scene/component/GameWorld.js"></script>
 <script src="js/scene/control/CanvasCollisionDetector.js"></script>
 <script src="js/render/intern/CanvasImageCollisionDetector.js"></script>
+<script src="js/scene/component/ScoreView.js"></script>
+<script src="js/scene/component/CollectView.js"></script>
+<script src="js/scene/component/OdometerView.js"></script>
+<script src="js/scene/component/Odometer.js"></script>
 <script src="js/scene/control/ScreenShaker.js"></script>
 <script src="js/platform/UniversalTranslator.js"></script>
 <script src="js/platform/addFontToDOM.js"></script>
@@ -64,7 +80,18 @@
 <script src="js/render/intern/MotionDirector.js"></script>
 <script src="js/render/intern/MotionStudio.js"></script>
 <script src="js/render/Transition.js"></script>
+<script src="js/scene/myscenes/Credits.js"></script>
 <script src="js/scene/control/range.js"></script>
+<script src="js/scene/component/ObstaclesView.js"></script>
+<script src="js/scene/component/LevelGenerator.js"></script>
+<script src="js/scene/myscenes/GetReady.js"></script>
+<script src="js/scene/myscenes/Intro.js"></script>
+<script src="js/scene/myscenes/KillScreen.js"></script>
+<script src="js/scene/myscenes/InGameTutorial.js"></script>
+<script src="js/scene/myscenes/PlayGame.js"></script>
+<script src="js/scene/myscenes/PostGame.js"></script>
+<script src="js/scene/myscenes/PreGame.js"></script>
+<script src="js/scene/myscenes/StartingPosition.js"></script>
 <script src="js/scene/SceneManager.js"></script>
 <script src="js/bootstrap/installMyScenes.js"></script>
 <script src="js/app/GameLoop.js"></script>
