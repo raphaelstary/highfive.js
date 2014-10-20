@@ -63,8 +63,23 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         this.spriteAnimations.animateLater(drawableToAdd, duration, extendedCallback);
     };
 
-    StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, callback) {
-        var drawable = this.getDrawable(x, y, imgName);
+    StageDirector.prototype.moveFresh = function (x, y, imgName, endX, endY, speed, spacing, loop, callback, zIndex,
+        alpha, rotation, scale) {
+        var drawable = this.getDrawable(x, y, imgName, zIndex, alpha, rotation, scale);
+        var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
+
+        this.move(drawable, path, callback);
+
+        return {
+            drawable: drawable,
+            path: path
+        };
+    };
+
+    StageDirector.prototype.moveFreshText = function (x, y, msg, size, fontFamily, color, endX, endY, speed, spacing,
+        loop, callback, zIndex, alpha, rotation, maxLineLength, lineHeight) {
+        var drawable = this.getDrawableText(x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength,
+            lineHeight);
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
         this.move(drawable, path, callback);
@@ -76,8 +91,8 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     StageDirector.prototype.moveFreshRoundTrip = function (x, y, imgName, endX, endY, speed, spacing, loopTheTrip,
-                                                           callbackTo, callbackReturn) {
-        var drawable = this.getDrawable(x, y, imgName);
+        callbackTo, callbackReturn, zIndex, alpha, rotation, scale) {
+        var drawable = this.getDrawable(x, y, imgName, zIndex, alpha, rotation, scale);
         var pathTo = this.getPath(x, y, endX, endY, speed, spacing);
         var pathReturn = this.getPath(endX, endY, x, y, speed, spacing);
 
@@ -91,8 +106,8 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     StageDirector.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback,
-                                                       startedMovingCallback) {
-        var drawable = this.getDrawable(x, y, imgName);
+        startedMovingCallback, zIndex, alpha, rotation, scale) {
+        var drawable = this.getDrawable(x, y, imgName, zIndex, alpha, rotation, scale);
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
         var movedItem = {item: drawable, path: path, ready: callback};
