@@ -31,13 +31,17 @@ var StageDirector = (function (Sprites, Drawables, Paths, Animations) {
         return this.gfxCache.get(imgPathName);
     };
 
-    StageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames) {
-        var sprite = this.getSprite(imgPathName, numberOfFrames);
-        var drawable = this.getDrawable(x, y, imgPathName);
+    StageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames, loop, zIndex, alpha, rotation,
+        scale) {
+        var sprite = this.getSprite(imgPathName, numberOfFrames, loop);
+        var drawable = this.getDrawable(x, y, imgPathName, zIndex, alpha, rotation, scale);
 
         this.animate(drawable, sprite);
 
-        return drawable;
+        return {
+            drawable: drawable,
+            sprite: sprite
+        };
     };
 
     StageDirector.prototype.animate = function (drawable, sprite, callback) {

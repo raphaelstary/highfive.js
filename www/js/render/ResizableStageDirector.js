@@ -103,16 +103,25 @@ var ResizableStageDirector = (function (changeCoords, changePath, PxCollisionDet
         return this.textures.get(imgPathName);
     };
 
-    ResizableStageDirector.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames) {
-        //todo implement
+    ResizableStageDirector.prototype.animateFresh = function (xFn, yFn, imgPathName, numberOfFrames, loop,
+        resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, scale) {
+
+        var wrapper = this.stage.animateFresh(xFn(this.width), yFn(this.height), imgPathName, numberOfFrames, loop,
+            zIndex, alpha, rotation, scale);
+
+        this.resizer.add(wrapper.drawable, function (width, height) {
+            changeCoords(wrapper.drawable, xFn(width), yFn(height));
+        }, resizeIsDependentOnThisDrawables);
+
+        return wrapper;
     };
 
     ResizableStageDirector.prototype.animate = function (drawable, sprite, callback) {
-        //todo implement
+        this.stage.animate(drawable, sprite, callback);
     };
 
     ResizableStageDirector.prototype.animateLater = function (drawableToAdd, duration, callback) {
-        //todo implement
+        this.stage.animateLater(drawableToAdd, duration, callback);
     };
 
     ResizableStageDirector.prototype.animateAlpha = function (drawable, value, duration, easing, loop, callback) {
@@ -166,12 +175,17 @@ var ResizableStageDirector = (function (changeCoords, changePath, PxCollisionDet
 
         var enhancedCallBack;
         if (callback) {
-            enhancedCallBack = function () {
-                callback();
-                registerResizeAfterMove();
+            if (loop)
+                enhancedCallBack = callback; else {
+                enhancedCallBack = function () {
+                    callback();
+                    registerResizeAfterMove();
+                }
             }
         } else {
-            enhancedCallBack = registerResizeAfterMove;
+            if (loop)
+                enhancedCallBack = undefined; else
+                enhancedCallBack = registerResizeAfterMove;
         }
 
         var wrapper = this.stage.moveFresh(xFn(this.width), yFn(this.height), imgName, endXFn(this.width), endYFn(this.height),
