@@ -23,10 +23,8 @@ var Transition = (function (Math) {
         if ((currentTime /= duration) == 1)
             return startValue + changeInValue;
 
-        var period = duration * .3,
-            s = changeInValue < Math.abs(changeInValue) ?
-                period / 4 :
-                period / (2 * Math.PI) * Math.asin(changeInValue / changeInValue);
+        var period = duration * .3, s = changeInValue < Math.abs(changeInValue) ? period / 4 :
+        period / (2 * Math.PI) * Math.asin(changeInValue / changeInValue);
 
         return changeInValue * Math.pow(2, -10 * currentTime) *
             Math.sin((currentTime * duration - s) * (2 * Math.PI) / period) + changeInValue + startValue;
@@ -46,7 +44,8 @@ var Transition = (function (Math) {
         } else {
             s = period / (2 * Math.PI) * Math.asin(changeInValue / changeInValue);
         }
-        return changeInValue * Math.pow(2, -10 * currentTime) * Math.sin((currentTime * duration - s) * (2 * Math.PI) / period) + changeInValue + startValue;
+        return changeInValue * Math.pow(2, -10 * currentTime) *
+            Math.sin((currentTime * duration - s) * (2 * Math.PI) / period) + changeInValue + startValue;
     }
 
     function quadraticEasingInAndOut(currentTime, startValue, changeInValue, duration) {
@@ -80,14 +79,16 @@ var Transition = (function (Math) {
         return -changeInValue * (currentTime /= duration) * (currentTime - 2) + startValue;
     }
 
-//    not working :( ... don't copy random shit from the fucking internet
+    //    not working :( ... don't copy random shit from the fucking internet
     function quinticEasingOutAndIn(currentTime, startValue, changeInValue, duration) {
         currentTime /= duration / 2;
-        return changeInValue / 2 * (--currentTime * currentTime * currentTime * currentTime * currentTime + 1) + startValue;
+        return changeInValue / 2 * (--currentTime * currentTime * currentTime * currentTime * currentTime + 1) +
+            startValue;
     }
 
     function sinusoidalEasingOutAndIn(currentTime, startValue, changeInValue, duration) {
-        if ((currentTime /= duration / 2) < 1) return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2) ) + startValue;
+        if ((currentTime /= duration / 2) < 1) return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2) ) +
+            startValue;
         return -changeInValue / 2 * (Math.cos(Math.PI * --currentTime / 2) - 2) + startValue;
     }
 
@@ -101,7 +102,7 @@ var Transition = (function (Math) {
 
     // sinusoidal easing in/out - accelerating until halfway, then decelerating
     function sinusoidalEasingInAndOut(currentTime, startValue, changeInValue, duration) {
-        return - changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
+        return -changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
     }
 
     function bouncingEasingOut(currentTime, startValue, changeInValue, duration) {

@@ -1,4 +1,4 @@
-var AtlasResourceHelper = (function (AtlasMapper, resolveAtlasPaths, screenWidth, screenHeight) {
+var AtlasResourceHelper = (function (AtlasCache, resolveAtlasPaths, screenWidth, screenHeight) {
     "use strict";
 
     function registerAtlases(resourceLoader, atlases) {
@@ -11,7 +11,7 @@ var AtlasResourceHelper = (function (AtlasMapper, resolveAtlasPaths, screenWidth
     }
 
     function processAtlases(atlases) {
-        var gfxCache = new AtlasMapper();
+        var gfxCache = new AtlasCache();
         gfxCache.init(atlases);
 
         return gfxCache;
@@ -21,4 +21,4 @@ var AtlasResourceHelper = (function (AtlasMapper, resolveAtlasPaths, screenWidth
         register: registerAtlases,
         process: processAtlases
     };
-})(AtlasMapper, resolveAtlasPaths, window.screen.availWidth, window.screen.availHeight);
+})(AtlasCache, resolveAtlasPaths, window.screen.availWidth, window.screen.availHeight);

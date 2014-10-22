@@ -1,14 +1,15 @@
-var Drawables = (function (Drawable, CanvasText) {
+var Drawables = (function (Drawable, TextWrapper) {
     "use strict";
 
-    function createNew(atlasMapper, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
-        var subImage = atlasMapper.get(imgPathName);
+    function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
+        var gfx = gfxCache.get(imgPathName);
 
-        return new Drawable(imgPathName + seed, x, y, subImage, null, zIndex, alpha, rotation, scale);
+        return new Drawable(imgPathName + seed, x, y, gfx, null, zIndex, alpha, rotation, scale);
     }
 
-    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength, lineHeight, scale) {
-        var txt = new CanvasText(msg, size, fontFamily, color, maxLineLength, lineHeight);
+    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength, lineHeight,
+        scale) {
+        var txt = new TextWrapper(msg, size, fontFamily, color, maxLineLength, lineHeight);
 
         return new Drawable(generateHash(msg) + seed, x, y, null, txt, zIndex, alpha, rotation, scale);
     }
@@ -21,7 +22,7 @@ var Drawables = (function (Drawable, CanvasText) {
     }
 
     return {
-        get: createNew,
+        getGraphic: createNewGfx,
         getTxt: createNewText
     };
-})(Drawable, CanvasText);
+})(Drawable, TextWrapper);

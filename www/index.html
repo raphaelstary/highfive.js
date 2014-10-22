@@ -9,10 +9,12 @@
 <body>
 
 <script src="js/lib/howler.js"></script>
-<script src="js/render/intern/measureText.js"></script>
+
 <script src="js/net/resolveAtlasPaths.js"></script>
+
 <script src="js/audio/SoundFilesManager.js"></script>
 <script src="js/audio/SoundSpriteManager.js"></script>
+
 <script src="js/resizeutils/Repository.js"></script>
 <script src="js/resizeutils/changePath.js"></script>
 <script src="js/resizeutils/changeCoords.js"></script>
@@ -61,20 +63,24 @@
 <script src="js/scene/viewhelper/BackGroundHelper.js"></script>
 <script src="js/scene/viewhelper/drawSpeedStripes.js"></script>
 <script src="js/scene/viewhelper/GameStuffHelper.js"></script>
+
 <script src="js/scene/component/EnergyStateMachine.js"></script>
 <script src="js/scene/component/GameWorld.js"></script>
+
 <script src="js/scene/control/CanvasCollisionDetector.js"></script>
-<script src="js/render/intern/CanvasImageCollisionDetector.js"></script>
 <script src="js/scene/component/ScoreView.js"></script>
 <script src="js/scene/component/CollectView.js"></script>
 <script src="js/scene/component/OdometerView.js"></script>
 <script src="js/scene/component/Odometer.js"></script>
+
 <script src="js/scene/control/ScreenShaker.js"></script>
+
 <script src="js/platform/UniversalTranslator.js"></script>
 <script src="js/platform/addFontToDOM.js"></script>
 <script src="js/platform/requestAnimationFrame.js"></script>
 <script src="js/platform/BrowserOracle.js"></script>
 <script src="js/platform/FullScreenController.js"></script>
+
 <script src="js/input/entity/Touchable.js"></script>
 <script src="js/input/entity/Touchables.js"></script>
 <script src="js/input/isHit.js"></script>
@@ -86,25 +92,42 @@
 <script src="js/input/KeyPushReleaseHandler.js"></script>
 <script src="js/input/KeyHandler.js"></script>
 <script src="js/input/GamePadHandler.js"></script>
-<script src="js/render/intern/entity/CanvasText.js"></script>
+
+<script src="js/render/intern/measureText.js"></script>
+<script src="js/render/intern/entity/SubImage.js"></script>
+<script src="js/render/intern/entity/ImageWrapper.js"></script>
+<script src="js/render/intern/entity/TextWrapper.js"></script>
 <script src="js/render/intern/entity/Drawable.js"></script>
 <script src="js/render/intern/entity/Drawables.js"></script>
 <script src="js/render/intern/entity/Path.js"></script>
 <script src="js/render/intern/entity/Paths.js"></script>
 <script src="js/render/intern/entity/Animation.js"></script>
 <script src="js/render/intern/entity/Animations.js"></script>
-<script src="js/render/intern/AnimationStudio.js"></script>
-<script src="js/render/intern/AnimationDirector.js"></script>
-<script src="js/render/intern/AnimationAssistant.js"></script>
-<script src="js/render/intern/SpriteAnimationStudio.js"></script>
-<script src="js/render/intern/SpriteAnimationDirector.js"></script>
 <script src="js/render/intern/entity/Sprite.js"></script>
 <script src="js/render/intern/entity/Sprites.js"></script>
-<script src="js/render/StageDirector.js"></script>
-<script src="js/render/ResizableStageDirector.js"></script>
-<script src="js/render/intern/MotionDirector.js"></script>
-<script src="js/render/intern/MotionStudio.js"></script>
+
+<script src="js/render/intern/CanvasImageCollisionDetector.js"></script>
+<script src="js/render/intern/BasicAnimations.js"></script>
+<script src="js/render/intern/BasicAnimationHelper.js"></script>
+<script src="js/render/intern/BasicAnimationTimer.js"></script>
+<script src="js/render/intern/PropertyAnimations.js"></script>
+<script src="js/render/intern/SpriteAnimations.js"></script>
+<script src="js/render/intern/SpriteAnimationTimer.js"></script>
+<script src="js/render/intern/inheritMethods.js"></script>
+<script src="js/render/intern/MotionHelper.js"></script>
+<script src="js/render/intern/MotionTimer.js"></script>
+<script src="js/render/intern/Motions.js"></script>
+<script src="js/render/intern/wrapText.js"></script>
+<script src="js/render/intern/ImageRenderer.js"></script>
+<script src="js/render/intern/AtlasRenderer.js"></script>
+<script src="js/render/intern/CallbackTimer.js"></script>
+
+<script src="js/render/Stage.js"></script>
+<script src="js/render/ResizableStage.js"></script>
 <script src="js/render/Transition.js"></script>
+<script src="js/render/ImageCache.js"></script>
+<script src="js/render/AtlasCache.js"></script>
+
 <script src="js/scene/myscenes/Credits.js"></script>
 <script src="js/scene/control/range.js"></script>
 <script src="js/scene/component/ObstaclesView.js"></script>
@@ -121,14 +144,6 @@
 <script src="js/bootstrap/installMyScenes.js"></script>
 <script src="js/app/GameLoop.js"></script>
 <script src="js/bootstrap/app/installLoop.js"></script>
-<script src="js/render/intern/entity/SubImage.js"></script>
-<script src="js/render/intern/entity/Texture.js"></script>
-<script src="js/render/TextureCache.js"></script>
-<script src="js/render/AtlasMapper.js"></script>
-<script src="js/render/intern/wrapText.js"></script>
-<script src="js/render/intern/ImageRenderer.js"></script>
-<script src="js/render/intern/AtlasRenderer.js"></script>
-<script src="js/render/intern/CallbackTimer.js"></script>
 <script src="js/bootstrap/app/StageFactory.js"></script>
 <script src="js/bootstrap/app/AtlasResourceHelper.js"></script>
 <script src="js/bootstrap/app/ImageResourceHelper.js"></script>

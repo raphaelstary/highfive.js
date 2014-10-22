@@ -4,7 +4,7 @@ var installLoop = (function (GameLoop) {
     function installLoop(stage) {
 
         var gameLoop = new GameLoop();
-        gameLoop.add('stage', stage.tick.bind(stage));
+        gameLoop.add('stage', stage.update.bind(stage));
         gameLoop.run();
 
         return gameLoop;

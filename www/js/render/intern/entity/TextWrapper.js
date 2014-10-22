@@ -1,7 +1,7 @@
-var CanvasText = (function () {
+var TextWrapper = (function () {
     "use strict";
 
-    function CanvasText(msg, size, fontFamily, color, maxLineLength, lineHeight) {
+    function TextWrapper(msg, size, fontFamily, color, maxLineLength, lineHeight) {
         this.msg = msg;
         this.size = size;
         this.fontFamily = fontFamily;
@@ -10,5 +10,5 @@ var CanvasText = (function () {
         this.lineHeight = lineHeight;
     }
 
-    return CanvasText;
+    return TextWrapper;
 })();

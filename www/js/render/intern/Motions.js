@@ -1,12 +1,12 @@
-var MotionStudio = (function (Math) {
+var Motions = (function (Math) {
     "use strict";
 
     // handles low level moving of draw-ables
-    function MotionStudio() {
+    function Motions() {
         this.motionsDict = {};
     }
 
-    MotionStudio.prototype.move = function (drawable, path, callback) {
+    Motions.prototype.move = function (drawable, path, callback) {
         var axis;
         if (path) {
             if (path.startX === path.endX) {
@@ -29,7 +29,7 @@ var MotionStudio = (function (Math) {
         };
     };
 
-    MotionStudio.prototype.update = function () {
+    Motions.prototype.update = function () {
         for (var key in this.motionsDict) {
             if (!this.motionsDict.hasOwnProperty(key)) {
                 continue;
@@ -75,21 +75,21 @@ var MotionStudio = (function (Math) {
         }
     };
 
-    MotionStudio.prototype.pause = function (drawable) {
+    Motions.prototype.pause = function (drawable) {
         this.motionsDict[drawable.id].moving = false;
     };
 
-    MotionStudio.prototype.play = function (drawable) {
+    Motions.prototype.play = function (drawable) {
         this.motionsDict[drawable.id].moving = true;
     };
 
-    MotionStudio.prototype.remove = function (drawable) {
+    Motions.prototype.remove = function (drawable) {
         delete this.motionsDict[drawable.id];
     };
 
-    MotionStudio.prototype.has = function (drawable) {
+    Motions.prototype.has = function (drawable) {
         return this.motionsDict[drawable.id] !== undefined;
     };
 
-    return MotionStudio;
+    return Motions;
 })(Math);

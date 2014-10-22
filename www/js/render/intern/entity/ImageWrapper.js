@@ -1,12 +1,12 @@
-var Texture = (function (Math) {
+var ImageWrapper = (function () {
     "use strict";
 
-    function Texture(img, width, height, scale) {
+    function ImageWrapper(img, width, height, scale) {
         this.img = img;
         this.width = width;
         this.height = height;
         this.scale = scale;
     }
 
-    return Texture;
-})(Math);
+    return ImageWrapper;
+})();

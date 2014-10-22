@@ -1,4 +1,4 @@
-var ImageResourceHelper = (function (TextureCache) {
+var ImageResourceHelper = (function (ImageCache) {
     "use strict";
 
     var GFX_FOLDER = 'gfx/';
@@ -26,7 +26,7 @@ var ImageResourceHelper = (function (TextureCache) {
     }
 
     function processImages(images) {
-        var gfxCache = new TextureCache();
+        var gfxCache = new ImageCache();
         for (var key in images) {
             if (images.hasOwnProperty(key)) {
                 gfxCache.add(key, images[key])
@@ -40,4 +40,4 @@ var ImageResourceHelper = (function (TextureCache) {
         register: registerImages,
         process: processImages
     };
-})(TextureCache);
+})(ImageCache);

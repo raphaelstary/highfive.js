@@ -1,4 +1,4 @@
-var ResourceLoader = (function (Blob, BlobBuilder) {
+var ResourceLoader = (function (Blob, BlobBuilder, Image) {
     "use strict";
 
     var ResourceType = {
@@ -112,4 +112,4 @@ var ResourceLoader = (function (Blob, BlobBuilder) {
     };
 
     return ResourceLoader;
-})(Blob, window.WebKitBlobBuilder);
+})(Blob, window.WebKitBlobBuilder, Image);

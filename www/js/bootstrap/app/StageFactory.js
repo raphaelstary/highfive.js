@@ -11,30 +11,24 @@ var StageFactory = (function ($) {
 
     function create(gfxCache, renderer) {
 
-        return new $.StageDirector(
-            gfxCache,
-            new $.MotionDirector(new $.MotionStudio()),
-            new $.SpriteAnimationDirector(new $.SpriteAnimationStudio()),
-            new $.AnimationAssistant(new $.AnimationDirector(new $.AnimationStudio())),
-            renderer
-        );
+        var motions = new $.Motions();
+        var spriteAnimations = new $.SpriteAnimations();
+        var animations = new $.BasicAnimations();
+        var animationHelper = new $.BasicAnimationHelper(animations);
+
+        return new $.Stage(gfxCache, motions, new $.MotionTimer(motions), new $.MotionHelper(motions), spriteAnimations,
+            new $.SpriteAnimationTimer(spriteAnimations), animations, animationHelper,
+            new $.BasicAnimationTimer(animations), new $.PropertyAnimations(animations, animationHelper), renderer);
     }
 
     function createResponsive(gfxCache, renderer, resize) {
-        var stage = new $.ResizableStageDirector(
-            create(gfxCache, renderer),
-            gfxCache,
-            new $.Repository(),
-            $.Touchables.get,
-            $.fetchDrawableIntoTouchable,
-            resize.getWidth(), resize.getHeight(), new $.CallbackTimer());
+        var stage = new $.ResizableStage(create(gfxCache, renderer), gfxCache, new $.Repository(), $.Touchables.get,
+            $.fetchDrawableIntoTouchable, resize.getWidth(), resize.getHeight(), new $.CallbackTimer());
 
         resize.add('stage', stage.resize.bind(stage));
 
         return stage;
     }
-
-
 
     return {
         getResponsiveAtlasStage: function (screen, gfxCache, resize) {
@@ -53,15 +47,17 @@ var StageFactory = (function ($) {
 })({
     AtlasRenderer: AtlasRenderer,
     ImageRenderer: ImageRenderer,
-    StageDirector: StageDirector,
-    MotionDirector: MotionDirector,
-    MotionStudio: MotionStudio,
-    SpriteAnimationDirector: SpriteAnimationDirector,
-    SpriteAnimationStudio: SpriteAnimationStudio,
-    AnimationAssistant: AnimationAssistant,
-    AnimationDirector: AnimationDirector,
-    AnimationStudio: AnimationStudio,
-    ResizableStageDirector: ResizableStageDirector,
+    Stage: Stage,
+    MotionHelper: MotionHelper,
+    MotionTimer: MotionTimer,
+    Motions: Motions,
+    SpriteAnimationTimer: SpriteAnimationTimer,
+    SpriteAnimations: SpriteAnimations,
+    PropertyAnimations: PropertyAnimations,
+    BasicAnimationHelper: BasicAnimationHelper,
+    BasicAnimationTimer: BasicAnimationTimer,
+    BasicAnimations: BasicAnimations,
+    ResizableStage: ResizableStage,
     Repository: Repository,
     Touchables: Touchables,
     fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,

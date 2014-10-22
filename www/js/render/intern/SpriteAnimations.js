@@ -1,11 +1,12 @@
-var SpriteAnimationStudio = (function () {
+var SpriteAnimations = (function () {
     "use strict";
 
-    function SpriteAnimationStudio() {
+    function SpriteAnimations() {
         this.animationsDict = {};
+        this.ticker = 0;
     }
 
-    SpriteAnimationStudio.prototype.animate = function (drawable, sprite, callback) {
+    SpriteAnimations.prototype.animate = function (drawable, sprite, callback) {
         drawable.img = sprite.frames[0];
 
         this.animationsDict[drawable.id] = {
@@ -16,15 +17,15 @@ var SpriteAnimationStudio = (function () {
         };
     };
 
-    SpriteAnimationStudio.prototype.remove = function (drawable) {
+    SpriteAnimations.prototype.remove = function (drawable) {
         delete this.animationsDict[drawable.id];
     };
 
-    SpriteAnimationStudio.prototype.has = function (drawable) {
+    SpriteAnimations.prototype.has = function (drawable) {
         return this.animationsDict[drawable.id] !== undefined;
     };
 
-    SpriteAnimationStudio.prototype.nextFrame = function () {
+    SpriteAnimations.prototype.nextFrame = function () {
         for (var key in this.animationsDict) {
             if (this.animationsDict.hasOwnProperty(key)) {
                 var animation = this.animationsDict[key];
@@ -47,5 +48,13 @@ var SpriteAnimationStudio = (function () {
         }
     };
 
-    return SpriteAnimationStudio;
+    SpriteAnimations.prototype.update = function () {
+        if (this.ticker % 2 === 0) {
+            this.nextFrame();
+            this.ticker = 0;
+        }
+        this.ticker++;
+    };
+
+    return SpriteAnimations;
 })();

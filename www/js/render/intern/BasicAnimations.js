@@ -1,11 +1,11 @@
-var AnimationStudio = (function () {
+var BasicAnimations = (function () {
     "use strict";
 
-    function AnimationStudio() {
+    function BasicAnimations() {
         this.dict = {};
     }
 
-    AnimationStudio.prototype.animate = function (drawable, setter, animation, callback) {
+    BasicAnimations.prototype.animate = function (drawable, setter, animation, callback) {
         this.dict[drawable.id] = {
             drawable: drawable,
             setter: setter,
@@ -15,7 +15,7 @@ var AnimationStudio = (function () {
         };
     };
 
-    AnimationStudio.prototype.update = function () {
+    BasicAnimations.prototype.update = function () {
         for (var key in this.dict) {
             if (!this.dict.hasOwnProperty(key)) {
                 continue;
@@ -45,13 +45,13 @@ var AnimationStudio = (function () {
         }
     };
 
-    AnimationStudio.prototype.remove = function (drawable) {
+    BasicAnimations.prototype.remove = function (drawable) {
         delete this.dict[drawable.id];
     };
 
-    AnimationStudio.prototype.has = function (drawable) {
+    BasicAnimations.prototype.has = function (drawable) {
         return this.dict[drawable.id] !== undefined;
     };
 
-    return AnimationStudio;
+    return BasicAnimations;
 })();
