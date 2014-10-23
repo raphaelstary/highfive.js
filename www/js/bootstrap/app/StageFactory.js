@@ -2,7 +2,7 @@ var StageFactory = (function ($) {
     "use strict";
 
     function createAtlasRenderer(screen) {
-        return new $.AtlasRenderer(screen);
+        return new $.Renderer(screen);
     }
 
     function createImageRenderer(screen) {
@@ -45,7 +45,7 @@ var StageFactory = (function ($) {
         }
     };
 })({
-    AtlasRenderer: AtlasRenderer,
+    Renderer: Renderer,
     ImageRenderer: ImageRenderer,
     Stage: Stage,
     MotionHelper: MotionHelper,

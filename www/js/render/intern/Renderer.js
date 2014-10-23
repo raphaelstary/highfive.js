@@ -1,45 +1,35 @@
-var AtlasRenderer = (function (wrapText, Math) {
+var Renderer = (function (wrapText, Math) {
     "use strict";
 
-    function AtlasRenderer(screen) {
+    function Renderer(screen) {
         this.screen = screen;
         this.ctx = screen.getContext('2d');
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
         this.drawableDict = {'0': {}, '1': {}, '2': {}, '3': {}};
-        this.drawableTxtDict = {};
     }
 
-    AtlasRenderer.prototype.resize = function (width, height) {
+    Renderer.prototype.resize = function (width, height) {
         this.screen.width = width;
         this.screen.height = height;
         this.screenWidth = width;
         this.screenHeight = height;
     };
 
-    AtlasRenderer.prototype.add = function (drawable) {
-        if (drawable.txt) {
-            this.drawableTxtDict[drawable.id] = drawable;
-        } else {
-            this.drawableDict[drawable.zIndex][drawable.id] = drawable;
-        }
+    Renderer.prototype.add = function (drawable) {
+        this.drawableDict[drawable.zIndex][drawable.id] = drawable;
     };
 
-    AtlasRenderer.prototype.remove = function (drawable) {
-        if (drawable.txt) {
-            delete this.drawableTxtDict[drawable.id];
-        } else {
-            delete this.drawableDict[drawable.zIndex][drawable.id];
-        }
+    Renderer.prototype.remove = function (drawable) {
+        delete this.drawableDict[drawable.zIndex][drawable.id];
     };
 
-    AtlasRenderer.prototype.has = function (drawable) {
-        return this.drawableDict[drawable.zIndex][drawable.id] !== undefined ||
-            this.drawableTxtDict[drawable.id];
+    Renderer.prototype.has = function (drawable) {
+        return this.drawableDict[drawable.zIndex][drawable.id] !== undefined;
     };
 
-    AtlasRenderer.prototype.draw = function () {
+    Renderer.prototype.draw = function () {
         var self = this;
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
@@ -114,5 +104,5 @@ var AtlasRenderer = (function (wrapText, Math) {
 
     };
 
-    return AtlasRenderer;
+    return Renderer;
 })(wrapText, Math);
