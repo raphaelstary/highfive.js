@@ -260,16 +260,27 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var self = this;
         var registerResizeAfterMove = function () {
             self.resizer.remove(pathId);
-            self.resizer.add(drawable, function (width, height) {
-                changeCoords(drawable, endXFn(width), endYFn(height));
-            }, resizeIsDependentOnThisDrawables);
+
+            if (drawable.txt) {
+                var afterFontSize_id = {id: drawable.id + '_2'};
+                self.resizer.add(afterFontSize_id, function (width, height) {
+                    changeCoords(drawable, endXFn(width), endYFn(height));
+                }, resizeIsDependentOnThisDrawables);
+            } else {
+                resizeIsDependentOnThisDrawables = resizeIsDependentOnThisDrawables.filter(function (element) {
+                    return element.id != drawable.id;
+                });
+                self.resizer.add(drawable, function (width, height) {
+                    changeCoords(drawable, endXFn(width), endYFn(height));
+                }, resizeIsDependentOnThisDrawables);
+            }
         };
 
         var enhancedCallBack;
         if (callback) {
             enhancedCallBack = function () {
-                callback();
                 registerResizeAfterMove();
+                callback();
             }
         } else {
             enhancedCallBack = registerResizeAfterMove;
@@ -310,6 +321,14 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     ResizableStage.prototype.remove = function (drawable) {
         this.resizer.remove(drawable);
+        var idOfPossiblePath = {
+            id: drawable.id + '_1'
+        };
+        this.resizer.remove(idOfPossiblePath);
+        var idOfPossibleTxtSizeAfterPath = {
+            id: drawable.id + '_2'
+        };
+        this.resizer.remove(idOfPossibleTxtSizeAfterPath);
         this.stage.remove(drawable);
     };
 
