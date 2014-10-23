@@ -254,6 +254,19 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         }, delay);
     };
 
+    ResizableStage.prototype.moveFreshTextLater = function (xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed,
+        spacing, delay, loop, callback, startedMovingCallback, resizeIsDependentOnThisDrawables, zIndex, alpha,
+        rotation, maxLineLength, lineHeight) {
+        var self = this;
+        this.timer.doLater(function () {
+            if (startedMovingCallback) {
+                startedMovingCallback();
+            }
+            self.moveFreshText(xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed, spacing, loop, callback,
+                resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, maxLineLength, lineHeight);
+        }, delay);
+    };
+
     ResizableStage.prototype.move = function (drawable, endXFn, endYFn, speed, spacing, loop, callback,
         resizeIsDependentOnThisDrawables) {
         var pathId = {id: drawable.id + '_1'};
