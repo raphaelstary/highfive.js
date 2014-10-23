@@ -243,28 +243,43 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     ResizableStage.prototype.moveFreshLater = function (xFn, yFn, imgName, endXFn, endYFn, speed, spacing, delay, loop,
         callback, startedMovingCallback, resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, scale) {
+        var returnObject = {};
         var self = this;
         this.timer.doLater(function () {
             if (startedMovingCallback) {
                 startedMovingCallback();
             }
-            self.moveFresh(xFn, yFn, imgName, endXFn, endYFn, speed, spacing, loop, callback,
+            var wrapper = self.moveFresh(xFn, yFn, imgName, endXFn, endYFn, speed, spacing, loop, callback,
                 resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, scale);
 
+            for (var key in wrapper) {
+                if (wrapper.hasOwnProperty(key)) {
+                    returnObject[key] = wrapper[key];
+                }
+            }
         }, delay);
+        return returnObject;
     };
 
     ResizableStage.prototype.moveFreshTextLater = function (xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed,
         spacing, delay, loop, callback, startedMovingCallback, resizeIsDependentOnThisDrawables, zIndex, alpha,
         rotation, maxLineLength, lineHeight) {
+        var returnObject = {};
         var self = this;
         this.timer.doLater(function () {
             if (startedMovingCallback) {
                 startedMovingCallback();
             }
-            self.moveFreshText(xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed, spacing, loop, callback,
-                resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, maxLineLength, lineHeight);
+            var wrapper = self.moveFreshText(xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed, spacing, loop,
+                callback, resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, maxLineLength, lineHeight);
+
+            for (var key in wrapper) {
+                if (wrapper.hasOwnProperty(key)) {
+                    returnObject[key] = wrapper[key];
+                }
+            }
         }, delay);
+        return returnObject;
     };
 
     ResizableStage.prototype.move = function (drawable, endXFn, endYFn, speed, spacing, loop, callback,
