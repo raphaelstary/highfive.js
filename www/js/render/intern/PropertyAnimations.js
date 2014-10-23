@@ -45,7 +45,7 @@ var PropertyAnimations = (function (Animations) {
             drawable[propertyKey] = value;
         };
 
-        var start = drawable[propertyKey];
+        var start = drawable[propertyKey] || 0;
         for (var i = 0; i < valuePairs.length; i++) {
             var current = valuePairs[i];
 

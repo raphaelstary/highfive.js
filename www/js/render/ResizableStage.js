@@ -267,9 +267,6 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var returnObject = {};
         var self = this;
         this.timer.doLater(function () {
-            if (startedMovingCallback) {
-                startedMovingCallback();
-            }
             var wrapper = self.moveFreshText(xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed, spacing, loop,
                 callback, resizeIsDependentOnThisDrawables, zIndex, alpha, rotation, maxLineLength, lineHeight);
 
@@ -277,6 +274,9 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
                 if (wrapper.hasOwnProperty(key)) {
                     returnObject[key] = wrapper[key];
                 }
+            }
+            if (startedMovingCallback) {
+                startedMovingCallback();
             }
         }, delay);
         return returnObject;
