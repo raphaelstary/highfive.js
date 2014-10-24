@@ -1,4 +1,4 @@
-var Renderer = (function (wrapText, Math) {
+var Renderer = (function () {
     "use strict";
 
     function Renderer(screen) {
@@ -70,39 +70,7 @@ var Renderer = (function (wrapText, Math) {
                 self.ctx.restore();
             }
         }
-
-        for (key in this.drawableTxtDict) {
-            var elem = this.drawableTxtDict[key];
-
-            this.ctx.save();
-
-            if (elem.alpha || elem.alpha === 0) {
-                this.ctx.globalAlpha = elem.alpha;
-            }
-            this.ctx.textBaseline = 'middle';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillStyle = elem.txt.color;
-            this.ctx.font = Math.floor(elem.txt.size * elem.scale) + 'px ' + elem.txt.fontFamily;
-
-            if (elem.rotation) {
-                this.ctx.translate(elem.x, elem.y);
-                this.ctx.rotate(elem.rotation);
-                this.ctx.translate(-elem.x, -elem.y);
-            }
-
-            var txtIsToLong =
-                elem.txt.maxLineLength && this.ctx.measureText(elem.txt.msg).width > elem.txt.maxLineLength;
-            if (txtIsToLong) {
-                wrapText(this.ctx, elem.txt.msg, elem.x, elem.y, elem.txt.maxLineLength, elem.txt.lineHeight);
-            } else {
-                this.ctx.fillText(elem.txt.msg, elem.x, elem.y);
-            }
-
-            this.ctx.restore();
-        }
-
-
     };
 
     return Renderer;
-})(wrapText, Math);
+})();

@@ -1,13 +1,13 @@
-var BasicAnimationTimer = (function () {
+var AnimationTimer = (function () {
     "use strict";
 
     // high level animation methods
-    function BasicAnimationTimer(animations) {
+    function AnimationTimer(animations) {
         this.animations = animations;
         this.todos = [];
     }
 
-    BasicAnimationTimer.prototype.update = function () {
+    AnimationTimer.prototype.update = function () {
 
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
@@ -28,7 +28,7 @@ var BasicAnimationTimer = (function () {
         }
     };
 
-    BasicAnimationTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
+    AnimationTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
         this.todos.push({
             addable: drawableToAdd,
             duration: duration,
@@ -37,5 +37,5 @@ var BasicAnimationTimer = (function () {
         });
     };
 
-    return BasicAnimationTimer;
+    return AnimationTimer;
 })();

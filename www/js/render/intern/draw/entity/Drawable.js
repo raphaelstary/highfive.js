@@ -1,12 +1,11 @@
 var Drawable = (function (Math, measureText) {
     "use strict";
 
-    function Drawable(id, x, y, img, txt, zIndex, alpha, rotation, scale) {
+    function Drawable(id, x, y, data, zIndex, alpha, rotation, scale) {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.img = img;
-        this.txt = txt;
+        this.data = data;
         this.zIndex = zIndex === undefined ? 3 : zIndex;
         this.rotation = rotation;
         this.alpha = alpha;

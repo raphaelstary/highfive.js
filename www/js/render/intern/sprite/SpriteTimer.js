@@ -1,12 +1,12 @@
-var SpriteAnimationTimer = (function () {
+var SpriteTimer = (function () {
     "use strict";
 
-    function SpriteAnimationTimer(spriteAnimations) {
+    function SpriteTimer(spriteAnimations) {
         this.spriteAnimations = spriteAnimations;
         this.todos = [];
     }
 
-    SpriteAnimationTimer.prototype.update = function () {
+    SpriteTimer.prototype.update = function () {
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
 
@@ -26,7 +26,7 @@ var SpriteAnimationTimer = (function () {
         }
     };
 
-    SpriteAnimationTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
+    SpriteTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
         this.todos.push({
             addable: drawableToAdd,
             duration: duration,
@@ -35,5 +35,5 @@ var SpriteAnimationTimer = (function () {
         });
     };
 
-    return SpriteAnimationTimer;
+    return SpriteTimer;
 })();

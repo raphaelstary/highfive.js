@@ -1,12 +1,12 @@
-var BasicAnimationHelper = (function () {
+var AnimationHelper = (function () {
     "use strict";
 
     // high level animation methods
-    function BasicAnimationHelper(animations) {
+    function AnimationHelper(animations) {
         this.animations = animations;
     }
 
-    BasicAnimationHelper.prototype.animateWithKeyFrames = function (drawableWrapperList, loop) {
+    AnimationHelper.prototype.animateWithKeyFrames = function (drawableWrapperList, loop) {
         if (loop) {
             var copy = drawableWrapperList.slice();
         }
@@ -36,5 +36,5 @@ var BasicAnimationHelper = (function () {
         }
     };
 
-    return BasicAnimationHelper;
+    return AnimationHelper;
 })();
