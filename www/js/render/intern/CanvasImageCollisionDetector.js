@@ -14,7 +14,7 @@ var CanvasImageCollisionDetector = (function (document) {
     CanvasImageCollisionDetector.prototype.isHit = function (drawable) {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        this.ctx.drawImage(this.drawable.img.img, 0, 0, this.drawable.getWidth(), this.drawable.getHeight());
+        this.ctx.drawImage(this.drawable.data.img, 0, 0, this.drawable.getWidth(), this.drawable.getHeight());
 
         this.ctx.save();
         this.ctx.globalCompositeOperation = 'source-in';
@@ -22,7 +22,7 @@ var CanvasImageCollisionDetector = (function (document) {
         var x = drawable.getCornerX() - this.drawable.getCornerX();
         var y = drawable.getCornerY() - this.drawable.getCornerY();
 
-        this.ctx.drawImage(drawable.img.img, x, y, drawable.getWidth(), drawable.getHeight());
+        this.ctx.drawImage(drawable.data.img, x, y, drawable.getWidth(), drawable.getHeight());
 
         this.ctx.restore();
 

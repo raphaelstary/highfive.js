@@ -2,11 +2,17 @@ var StageFactory = (function ($) {
     "use strict";
 
     function createAtlasRenderer(screen) {
-        return new $.Renderer(screen);
+        var renderer = new $.Renderer(screen);
+        renderer.registerRenderer($.SubImage.prototype, $.renderAtlas);
+        renderer.registerRenderer($.TextWrapper.prototype, $.renderText);
+        return renderer;
     }
 
     function createImageRenderer(screen) {
-        return new $.ImageRenderer(screen);
+        var renderer = new $.Renderer(screen);
+        renderer.registerRenderer($.ImageWrapper.prototype, $.renderImage);
+        renderer.registerRenderer($.TextWrapper.prototype, $.renderText);
+        return renderer;
     }
 
     function create(gfxCache, renderer) {
@@ -46,7 +52,12 @@ var StageFactory = (function ($) {
     };
 })({
     Renderer: Renderer,
-    ImageRenderer: ImageRenderer,
+    renderImage: renderImage,
+    renderText: renderText,
+    renderAtlas: renderAtlas,
+    SubImage: SubImage,
+    TextWrapper: TextWrapper,
+    ImageWrapper: ImageWrapper,
     Stage: Stage,
     MotionHelper: MotionHelper,
     MotionTimer: MotionTimer,

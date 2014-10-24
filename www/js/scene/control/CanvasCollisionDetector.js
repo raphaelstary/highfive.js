@@ -2,7 +2,7 @@ var CanvasCollisionDetector = (function (document) {
     "use strict";
 
     function CanvasCollisionDetector(referenceImg, referenceDrawable) {
-        this.img = referenceImg;
+        this.data = referenceImg;
         this.drawable = referenceDrawable;
 
         var canvas = document.createElement('canvas');
@@ -16,8 +16,8 @@ var CanvasCollisionDetector = (function (document) {
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        this.ctx.drawImage(this.img.img, this.img.x, this.img.y, this.img.width, this.img.height, 0, 0, this.img.width,
-            this.img.height);
+        this.ctx.drawImage(this.data.img, this.data.x, this.data.y, this.data.width, this.data.height, 0, 0,
+            this.data.width, this.data.height);
 
         this.ctx.save();
         this.ctx.globalCompositeOperation = 'source-in';
@@ -25,7 +25,7 @@ var CanvasCollisionDetector = (function (document) {
         var x = element.getCornerX() - this._getReferenceCornerX();
         var y = element.getCornerY() - this._getReferenceCornerY();
 
-        var elemImg = element.img;
+        var elemImg = element.data;
         this.ctx.drawImage(elemImg.img, elemImg.x, elemImg.y, elemImg.width, elemImg.height, x, y, elemImg.width,
             elemImg.height);
 
@@ -49,11 +49,11 @@ var CanvasCollisionDetector = (function (document) {
     };
 
     CanvasCollisionDetector.prototype._getReferenceCornerX = function () {
-        return this.drawable.x - this.img.width / 2;
+        return this.drawable.x - this.data.width / 2;
     };
 
     CanvasCollisionDetector.prototype._getReferenceCornerY = function () {
-        return this.drawable.y - this.img.height / 2;
+        return this.drawable.y - this.data.height / 2;
     };
 
     return CanvasCollisionDetector;

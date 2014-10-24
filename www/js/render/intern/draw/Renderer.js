@@ -8,6 +8,7 @@ var Renderer = (function () {
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
         this.drawableDict = {'0': {}, '1': {}, '2': {}, '3': {}};
+        this.renderServices = {};
     }
 
     Renderer.prototype.resize = function (width, height) {
@@ -48,28 +49,20 @@ var Renderer = (function () {
                 }
 
                 if (elem.rotation) {
-                    self.ctx.translate(elem.x, elem.y);
+                    self.ctx.translate(elem.getAnchorX(), elem.getAnchorY());
                     self.ctx.rotate(elem.rotation);
-                    self.ctx.translate(-elem.x, -elem.y);
+                    self.ctx.translate(-elem.getAnchorX(), -elem.getAnchorY());
                 }
 
-                if (elem.scale != 1) {
-                    self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y, elem.img.width, elem.img.height,
-                        elem.getCornerX(), elem.getCornerY(), elem.getWidth(), elem.getHeight());
-                } else {
-                    self.ctx.drawImage(elem.img.img, elem.img.x, elem.img.y,
-                        elem.img.width, elem.img.height,
-                        elem.x + elem.img.offSetX,
-                        elem.y + elem.img.offSetY,
-                        elem.img.trimmedTileWidth,
-                        elem.img.trimmedTileHeight);
-                }
-
-
+                self.renderServices[Object.getPrototypeOf(elem)](self.ctx, elem);
 
                 self.ctx.restore();
             }
         }
+    };
+
+    Renderer.prototype.registerRenderer = function (prototype, fn) {
+        this.renderServices[prototype] = fn;
     };
 
     return Renderer;

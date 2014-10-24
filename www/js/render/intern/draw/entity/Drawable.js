@@ -1,4 +1,4 @@
-var Drawable = (function (Math, measureText) {
+var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper) {
     "use strict";
 
     function Drawable(id, x, y, data, zIndex, alpha, rotation, scale) {
@@ -47,28 +47,28 @@ var Drawable = (function (Math, measureText) {
     };
 
     Drawable.prototype.__getHeight = function () {
-        if (this.txt) {
-            return measureText(this.txt).height;
+        if (this.data instanceof TextWrapper) {
+            return measureText(this.data).height;
         }
-        if (this.img.trimmedTileHeight) {
-            return this.img.trimmedTileHeight;
+        if (this.data instanceof SubImage) {
+            return this.data.trimmedTileHeight;
         }
-        if (this.img.scale)
-            return this.img.height * this.img.scale;
-        return this.img.height;
+        if (this.data instanceof ImageWrapper)
+            return this.data.height * this.data.scale;
+        return this.data.height;
     };
 
     Drawable.prototype.__getWidth = function () {
-        if (this.txt) {
-            return measureText(this.txt).width;
+        if (this.data instanceof  TextWrapper) {
+            return measureText(this.data).width;
         }
-        if (this.img.trimmedTileWidth) {
-            return this.img.trimmedTileWidth;
+        if (this.data instanceof SubImage) {
+            return this.data.trimmedTileWidth;
         }
-        if (this.img.scale)
-            return this.img.width * this.img.scale;
-        return this.img.width;
+        if (this.data instanceof ImageWrapper)
+            return this.data.width * this.data.scale;
+        return this.data.width;
     };
 
     return Drawable;
-})(Math, measureText);
+})(Math, measureText, TextWrapper, SubImage, ImageWrapper);
