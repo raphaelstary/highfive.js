@@ -162,8 +162,8 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var enhancedCallBack;
         if (callback) {
             enhancedCallBack = function () {
-                callback();
                 registerResizeAfterMove();
+                callback();
             }
         } else {
             enhancedCallBack = registerResizeAfterMove;
