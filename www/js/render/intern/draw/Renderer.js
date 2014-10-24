@@ -40,21 +40,21 @@ var Renderer = (function () {
 
         function iterate(dict) {
             for (var key in dict) {
-                var elem = dict[key];
+                var drawable = dict[key];
 
                 self.ctx.save();
 
-                if (elem.alpha || elem.alpha === 0) {
-                    self.ctx.globalAlpha = elem.alpha;
+                if (drawable.alpha || drawable.alpha === 0) {
+                    self.ctx.globalAlpha = drawable.alpha;
                 }
 
-                if (elem.rotation) {
-                    self.ctx.translate(elem.getAnchorX(), elem.getAnchorY());
-                    self.ctx.rotate(elem.rotation);
-                    self.ctx.translate(-elem.getAnchorX(), -elem.getAnchorY());
+                if (drawable.rotation) {
+                    self.ctx.translate(drawable.getAnchorX(), drawable.getAnchorY());
+                    self.ctx.rotate(drawable.rotation);
+                    self.ctx.translate(-drawable.getAnchorX(), -drawable.getAnchorY());
                 }
 
-                self.renderServices[Object.getPrototypeOf(elem)](self.ctx, elem);
+                self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
 
                 self.ctx.restore();
             }
@@ -62,7 +62,7 @@ var Renderer = (function () {
     };
 
     Renderer.prototype.registerRenderer = function (prototype, fn) {
-        this.renderServices[prototype] = fn;
+        this.renderServices[prototype.constructor.name] = fn;
     };
 
     return Renderer;
