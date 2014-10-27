@@ -1,4 +1,4 @@
-var KeyHandler = (function () {
+var KeyHandler = (function (Object) {
     "use strict";
 
     function KeyHandler() {
@@ -14,12 +14,11 @@ var KeyHandler = (function () {
     };
 
     KeyHandler.prototype.keyDown = function (event) {
-        for (var key in this.keys) {
-            if (event.keyCode == key) {
+        Object.keys(this.keys).forEach(function (key) {
+            if (event.keyCode == key)
                 this.keys[key]();
-            }
-        }
+        }, this);
     };
 
     return KeyHandler;
-})();
+})(Object);

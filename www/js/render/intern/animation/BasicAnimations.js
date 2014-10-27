@@ -1,4 +1,4 @@
-var BasicAnimations = (function () {
+var BasicAnimations = (function (Object) {
     "use strict";
 
     function BasicAnimations() {
@@ -16,11 +16,7 @@ var BasicAnimations = (function () {
     };
 
     BasicAnimations.prototype.update = function () {
-        for (var key in this.dict) {
-            if (!this.dict.hasOwnProperty(key)) {
-                continue;
-            }
-
+        Object.keys(this.dict).forEach(function (key) {
             var wrapper = this.dict[key];
 
             var animation = wrapper.animation;
@@ -42,7 +38,7 @@ var BasicAnimations = (function () {
                     wrapper.ready();
                 }
             }
-        }
+        }, this);
     };
 
     BasicAnimations.prototype.remove = function (drawable) {
@@ -54,4 +50,4 @@ var BasicAnimations = (function () {
     };
 
     return BasicAnimations;
-})();
+})(Object);

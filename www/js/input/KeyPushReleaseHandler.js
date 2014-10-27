@@ -1,4 +1,4 @@
-var KeyPushReleaseHandler = (function () {
+var KeyPushReleaseHandler = (function (Object) {
     "use strict";
 
     function KeyPushReleaseHandler() {
@@ -15,22 +15,22 @@ var KeyPushReleaseHandler = (function () {
     };
 
     KeyPushReleaseHandler.prototype.keyDown = function (event) {
-        for (var key in this.keys) {
+        Object.keys(this.keys).forEach(function (key) {
             if (event.keyCode == key && !this.activeKeys[key]) {
                 this.activeKeys[key] = true;
                 this.keys[key].push();
             }
-        }
+        }, this);
     };
 
     KeyPushReleaseHandler.prototype.keyUp = function (event) {
-        for (var key in this.keys) {
+        Object.keys(this.keys).forEach(function (key) {
             if (event.keyCode == key) {
                 delete this.activeKeys[key];
                 this.keys[key].release();
             }
-        }
+        }, this);
     };
 
     return KeyPushReleaseHandler;
-})();
+})(Object);

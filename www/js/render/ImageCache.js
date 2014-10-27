@@ -1,4 +1,4 @@
-var ImageCache = (function (ImageWrapper, screen) {
+var ImageCache = (function (ImageWrapper, screen, iterateEntries) {
     "use strict";
 
     function ImageCache(baseScale) {
@@ -17,11 +17,10 @@ var ImageCache = (function (ImageWrapper, screen) {
 
     ImageCache.prototype.resize = function () {
         var newScaleFactor = screen.availHeight / this.baseScale;
-        for (var key in this.imgDict) {
-            var texture = this.imgDict[key];
-            texture.scale = newScaleFactor;
-        }
+        iterateEntries(this.imgDict, function (img) {
+            img.scale = newScaleFactor;
+        });
     };
 
     return ImageCache;
-})(ImageWrapper, window.screen);
+})(ImageWrapper, window.screen, iterateEntries);

@@ -1,4 +1,4 @@
-var Renderer = (function () {
+var Renderer = (function (Object) {
     "use strict";
 
     function Renderer(screen) {
@@ -34,13 +34,13 @@ var Renderer = (function () {
         var self = this;
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
-        for (var key in this.drawableDict) {
-            iterate(this.drawableDict[key]);
-        }
+        Object.keys(self.drawableDict).forEach(function (key) {
+            iterate(self.drawableDict[key]);
+        });
 
-        function iterate(dict) {
-            for (var key in dict) {
-                var drawable = dict[key];
+        function iterate(layer) {
+            Object.keys(layer).forEach(function (key) {
+                var drawable = layer[key];
 
                 self.ctx.save();
 
@@ -57,7 +57,7 @@ var Renderer = (function () {
                 self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
 
                 self.ctx.restore();
-            }
+            });
         }
     };
 
@@ -66,4 +66,4 @@ var Renderer = (function () {
     };
 
     return Renderer;
-})();
+})(Object);

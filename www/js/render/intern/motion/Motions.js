@@ -1,4 +1,4 @@
-var Motions = (function (Math) {
+var Motions = (function (Math, Object) {
     "use strict";
 
     // handles low level moving of draw-ables
@@ -30,15 +30,11 @@ var Motions = (function (Math) {
     };
 
     Motions.prototype.update = function () {
-        for (var key in this.motionsDict) {
-            if (!this.motionsDict.hasOwnProperty(key)) {
-                continue;
-            }
-
+        Object.keys(this.motionsDict).forEach(function (key) {
             var motion = this.motionsDict[key];
 
             if (!motion.moving) {
-                continue;
+                return;
             }
 
             var path = motion.path;
@@ -51,7 +47,7 @@ var Motions = (function (Math) {
                     motion.item.y = Math.floor(path.timingFn(motion.time, path.startY, path.length, path.duration));
 
                 } else if (motion.axis == 'line') {
-                    var magnitude = Math.floor(path.timingFn(motion.time, 0, path.length, path.duration));
+                    //var magnitude = Math.floor(path.timingFn(motion.time, 0, path.length, path.duration));
                     // todo implement movement on every (diagonal) line
                     // x + length * unitVector.x, y + length * unitVector.y -> end point
                     // see https://github.com/raphaelstary/highfive/blob/master/www/js/render/Renderer.js
@@ -72,7 +68,7 @@ var Motions = (function (Math) {
                     motion.ready();
                 }
             }
-        }
+        }, this);
     };
 
     Motions.prototype.pause = function (drawable) {
@@ -92,4 +88,4 @@ var Motions = (function (Math) {
     };
 
     return Motions;
-})(Math);
+})(Math, Object);

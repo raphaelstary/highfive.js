@@ -1,4 +1,4 @@
-var TapHandler = (function (isHit) {
+var TapHandler = (function (isHit, iterateSomeEntries) {
     "use strict";
 
     function TapHandler() {
@@ -8,32 +8,29 @@ var TapHandler = (function (isHit) {
     TapHandler.prototype.touchStart = function (event) {
         event.preventDefault();
 
-        for (var key in this.elements) {
-            var elem = this.elements[key];
-
-            for (var i = 0; i < event.changedTouches.length; i++) {
-                var touch = event.changedTouches[i];
-
-                if (isHit(touch, elem.touchable)) {
-
-                    elem.callback();
-                    return;
-                }
-            }
+        var self = this;
+        for (var i = 0; i < event.changedTouches.length; i++) {
+            var touch = event.changedTouches[i];
+            (function (touch) {
+                iterateSomeEntries(self.elements, function (element) {
+                    if (isHit(touch, element.touchable)) {
+                        element.callback();
+                        return true;
+                    }
+                    return false;
+                });
+            })(touch);
         }
     };
 
     TapHandler.prototype.click = function (event) {
-
-        for (var key in this.elements) {
-            var elem = this.elements[key];
-
+        iterateSomeEntries(this.elements, function (elem) {
             if (isHit(event, elem.touchable)) {
-
                 elem.callback();
-                return;
+                return true;
             }
-        }
+            return false;
+        });
     };
 
     TapHandler.prototype.add = function (touchable, callback) {
@@ -45,4 +42,4 @@ var TapHandler = (function (isHit) {
     };
 
     return TapHandler;
-})(isHit);
+})(isHit, iterateSomeEntries);

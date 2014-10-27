@@ -1,4 +1,4 @@
-var PushReleaseHandler = (function (isHit) {
+var PushReleaseHandler = (function (isHit, iterateEntries, iterateSomeEntries) {
     "use strict";
 
     function PushReleaseHandler() {
@@ -9,18 +9,18 @@ var PushReleaseHandler = (function (isHit) {
 
     PushReleaseHandler.prototype.touchStart = function (event) {
         event.preventDefault();
+        var self = this;
+        for (var i = 0; i < event.changedTouches.length; i++) {
+            iterate(event.changedTouches[i]);
+        }
 
-        for (var key in this.elements) {
-            var elem = this.elements[key];
-            var touches = event.changedTouches;
-            for (var i = 0; i < touches.length; i++) {
-                var touch = touches[i];
-
-                if (isHit(touch, elem.item)) {
-                    this.onGoingTouches[touches[i].identifier] = elem;
-                    elem.push();
+        function iterate(touch) {
+            iterateEntries(self.elements, function (touchable) {
+                if (isHit(touch, touchable.item)) {
+                    self.onGoingTouches[touch.identifier] = touchable;
+                    touchable.push();
                 }
-            }
+            });
         }
     };
 
@@ -31,7 +31,7 @@ var PushReleaseHandler = (function (isHit) {
         for (var i = 0; i < touches.length; i++) {
             var activeElem = this.onGoingTouches[touches[i].identifier];
 
-            if (activeElem !== undefined) {
+            if (activeElem) {
                 delete this.onGoingTouches[touches[i].identifier];
                 activeElem.release();
             }
@@ -39,20 +39,18 @@ var PushReleaseHandler = (function (isHit) {
     };
 
     PushReleaseHandler.prototype.mouseDown = function (event) {
-
-        for (var key in this.elements) {
-            var elem = this.elements[key];
-
-            if (isHit(event, elem.item)) {
-                this._currentMouse = elem;
-                elem.push();
-                return;
+        iterateSomeEntries(this.elements, function (touchable) {
+            if (isHit(event, touchable.item)) {
+                this._currentMouse = touchable;
+                touchable.push();
+                return true;
             }
-        }
+            return false;
+        }, this);
     };
 
-    PushReleaseHandler.prototype.mouseUp = function (event) {
-        if (this._currentMouse === undefined) {
+    PushReleaseHandler.prototype.mouseUp = function () {
+        if (!this._currentMouse) {
             return;
         }
         this._currentMouse.release();
@@ -68,4 +66,4 @@ var PushReleaseHandler = (function (isHit) {
     };
 
     return PushReleaseHandler;
-})(isHit);
+})(isHit, iterateEntries, iterateSomeEntries);

@@ -33,7 +33,7 @@ var App = (function ($) {
             sceneServices.fullScreen = new $.FullScreenController(self.services.screen);
             sceneServices.sceneStorage = {};
 
-            concatenateProperties(self.services, sceneServices);
+            $.concatenateProperties(self.services, sceneServices);
 
             self.scenes = $.installScenes(sceneServices);
             self.__run();
@@ -41,14 +41,6 @@ var App = (function ($) {
 
         resourceLoader.load();
     };
-
-    function concatenateProperties(source, target) {
-        for (var property in source) {
-            if (source.hasOwnProperty(property)) {
-                target[property] = source[property];
-            }
-        }
-    }
 
     App.prototype.__run = function () {
         this.scenes.next();
@@ -61,5 +53,6 @@ var App = (function ($) {
     SimpleLoadingScreen: SimpleLoadingScreen,
     installScenes: installMyScenes,
     FullScreenController: FullScreenController,
-    installLoop: installLoop
+    installLoop: installLoop,
+    concatenateProperties: concatenateProperties
 });

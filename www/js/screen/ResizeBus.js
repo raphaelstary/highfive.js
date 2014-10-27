@@ -1,4 +1,4 @@
-var ResizeBus = (function () {
+var ResizeBus = (function (iterateEntries) {
     "use strict";
 
     function ResizeBus(width, height) {
@@ -20,9 +20,9 @@ var ResizeBus = (function () {
         this.width = width;
         this.height = height;
 
-        for (var key in this.resizeDict) {
-            this.resizeDict[key](width, height);
-        }
+        iterateEntries(this.resizeDict, function (fn) {
+            fn(width, height);
+        });
     };
 
     ResizeBus.prototype.getWidth = function () {
@@ -34,4 +34,4 @@ var ResizeBus = (function () {
     };
 
     return ResizeBus;
-})();
+})(iterateEntries);

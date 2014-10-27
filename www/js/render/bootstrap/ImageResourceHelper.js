@@ -1,4 +1,4 @@
-var ImageResourceHelper = (function (ImageCache) {
+var ImageResourceHelper = (function (ImageCache, Object) {
     "use strict";
 
     var GFX_FOLDER = 'gfx/';
@@ -27,11 +27,10 @@ var ImageResourceHelper = (function (ImageCache) {
 
     function processImages(images) {
         var gfxCache = new ImageCache();
-        for (var key in images) {
-            if (images.hasOwnProperty(key)) {
-                gfxCache.add(key, images[key])
-            }
-        }
+
+        Object.keys(images).forEach(function (key) {
+            gfxCache.add(key, images[key])
+        });
 
         return gfxCache;
     }
@@ -40,4 +39,4 @@ var ImageResourceHelper = (function (ImageCache) {
         register: registerImages,
         process: processImages
     };
-})(ImageCache);
+})(ImageCache, Object);

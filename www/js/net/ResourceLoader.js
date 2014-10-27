@@ -1,4 +1,4 @@
-var ResourceLoader = (function (Blob, BlobBuilder, Image) {
+var ResourceLoader = (function (Blob, BlobBuilder, Image, Object) {
     "use strict";
 
     var ResourceType = {
@@ -62,11 +62,10 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image) {
 
                 xhr.onload = function () {
                     var json = JSON.parse(this.responseText);
-                    for (var k in json) {
-                        if (json.hasOwnProperty(k)) {
-                            elem.file[k] = json[k];
-                        }
-                    }
+                    Object.keys(json).forEach(function (key) {
+                        elem.file[key] = json[key];
+                    });
+
                     self.onResourceLoad();
                 };
                 xhr.send();
@@ -112,4 +111,4 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image) {
     };
 
     return ResourceLoader;
-})(Blob, window.WebKitBlobBuilder, Image);
+})(Blob, window.WebKitBlobBuilder, Image, Object);

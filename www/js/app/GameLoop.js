@@ -1,4 +1,4 @@
-var GameLoop = (function (requestAnimationFrame) {
+var GameLoop = (function (requestAnimationFrame, Object) {
     "use strict";
 
     // callback from animationFrame infrastructure. tick list of given periodic handlers
@@ -9,9 +9,10 @@ var GameLoop = (function (requestAnimationFrame) {
     GameLoop.prototype.run = function () {
         requestAnimationFrame(this.run.bind(this));
 
-        for (var key in this.tickBus) {
-            this.tickBus[key]();
-        }
+        var self = this;
+        Object.keys(self.tickBus).forEach(function (key) {
+            self.tickBus[key]();
+        });
     };
 
     GameLoop.prototype.add = function (id, periodicFunction) {
@@ -23,4 +24,4 @@ var GameLoop = (function (requestAnimationFrame) {
     };
 
     return GameLoop;
-})(requestAnimFrame);
+})(requestAnimFrame, Object);

@@ -1,4 +1,4 @@
-var Repository = (function () {
+var Repository = (function (Object) {
     "use strict";
 
     function Repository() {
@@ -24,10 +24,10 @@ var Repository = (function () {
         var self = this;
         var alreadyCalledMap = {};
 
-        for (var key in this.dict) {
+        Object.keys(this.dict).forEach(function (key) {
             var wrapper = this.dict[key];
             resizeItem(key, wrapper.fn, wrapper.dependencies);
-        }
+        }, this);
 
         function resizeItem(id, fn, dependencies) {
             alreadyCalledMap[id] = true;
@@ -46,4 +46,4 @@ var Repository = (function () {
     };
 
     return Repository;
-})();
+})(Object);

@@ -1,4 +1,4 @@
-var DragHandler = (function (isHit) {
+var DragHandler = (function (isHit, iterateEntries, iterateSomeEntries) {
     "use strict";
 
     function DragHandler() {
@@ -9,17 +9,18 @@ var DragHandler = (function (isHit) {
     DragHandler.prototype.touchStart = function (event) {
         event.preventDefault();
 
-        for (var key in this.elements) {
-            var elem = this.elements[key];
-            var touches = event.changedTouches;
-            for (var i = 0; i < touches.length; i++) {
-                var touch = touches[i];
+        for (var i = 0; i < event.changedTouches.length; i++)
+            processTouch(event.changedTouches[i]);
 
+        var self = this;
+
+        function processTouch(touch) {
+            iterateEntries(self.elements, function (elem) {
                 if (isHit(touch, elem.touchable)) {
-                    this.onGoingTouches[touches[i].identifier] = elem;
+                    self.onGoingTouches[touch.identifier] = elem;
                     elem.start(event.clientX, event.clientY);
                 }
-            }
+            });
         }
     };
 
@@ -51,16 +52,14 @@ var DragHandler = (function (isHit) {
     };
 
     DragHandler.prototype.pointerDown = function (event) {
-
-        for (var key in this.elements) {
-            var elem = this.elements[key];
-
+        iterateSomeEntries(this.elements, function (elem) {
             if (isHit(event, elem.touchable)) {
                 this._currentMouse = elem;
                 elem.start(event.clientX, event.clientY);
-                return;
+                return true;
             }
-        }
+            return false;
+        }, this);
     };
 
     DragHandler.prototype.pointerMove = function (event) {
@@ -80,7 +79,12 @@ var DragHandler = (function (isHit) {
     };
 
     DragHandler.prototype.add = function (touchable, startCallback, moveCallback, endCallback) {
-        this.elements[touchable.id] = {touchable: touchable, start: startCallback, move: moveCallback, end: endCallback};
+        this.elements[touchable.id] = {
+            touchable: touchable,
+            start: startCallback,
+            move: moveCallback,
+            end: endCallback
+        };
     };
 
     DragHandler.prototype.remove = function (touchable) {
@@ -88,4 +92,4 @@ var DragHandler = (function (isHit) {
     };
 
     return DragHandler;
-})(isHit);
+})(isHit, iterateEntries, iterateSomeEntries);
