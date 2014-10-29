@@ -1,4 +1,4 @@
-var GamePad = (function (getGamepads) {
+var GamePad = (function (navigator) {
     "use strict";
 
     var Button = {
@@ -34,7 +34,7 @@ var GamePad = (function (getGamepads) {
     }
 
     GamePad.prototype.update = function () {
-        var pad = getGamepads()[this.index];
+        var pad = navigator.webkitGetGamepads()[this.index];
 
         if (pad.timestamp > this.lastUpdate) {
             this.buttons = pad.buttons;
@@ -79,4 +79,4 @@ var GamePad = (function (getGamepads) {
     };
 
     return GamePad;
-})(navigator.webkitGetGamepads.bind(navigator));
+})(navigator);

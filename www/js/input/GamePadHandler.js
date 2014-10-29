@@ -1,4 +1,4 @@
-var GamePadHandler = (function (GamePad, getGamepads) {
+var GamePadHandler = (function (GamePad, navigator) {
     "use strict";
 
     function GamePadHandler() {
@@ -15,7 +15,7 @@ var GamePadHandler = (function (GamePad, getGamepads) {
     };
 
     GamePadHandler.prototype.detect = function () {
-        var pads = getGamepads();
+        var pads = navigator.webkitGetGamepads();
 
         for (var i = 0; i < pads.length; i++) {
             var probablePad = pads[i];
@@ -45,4 +45,4 @@ var GamePadHandler = (function (GamePad, getGamepads) {
 
     return GamePadHandler;
 
-})(GamePad, navigator.webkitGetGamepads.bind(navigator));
+})(GamePad, navigator);
