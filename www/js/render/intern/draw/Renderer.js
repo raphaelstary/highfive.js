@@ -1,4 +1,4 @@
-var Renderer = (function (Object) {
+var Renderer = (function (Object, getFunctionName) {
     "use strict";
 
     function Renderer(screen) {
@@ -62,8 +62,13 @@ var Renderer = (function (Object) {
     };
 
     Renderer.prototype.registerRenderer = function (prototype, fn) {
-        this.renderServices[prototype.constructor.name] = fn;
+        if (prototype.constructor.name)
+            this.renderServices[prototype.constructor.name] = fn; else {
+            var functionName = getFunctionName(prototype.constructor);
+            this.renderServices[functionName] = fn;
+            prototype.constructor.name = functionName;
+        }
     };
 
     return Renderer;
-})(Object);
+})(Object, getFunctionName);
