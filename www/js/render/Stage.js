@@ -33,7 +33,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     Stage.prototype.getPath = function (x, y, endX, endY, speed, spacingFn, loop) {
-        return Paths.get(x, y, endX, endY, speed, spacingFn, loop);
+        return Paths.getLine(x, y, endX, endY, speed, spacingFn, loop);
     };
 
     Stage.prototype.getGraphic = function (imgPathName) {

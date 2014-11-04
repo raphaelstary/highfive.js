@@ -2,7 +2,14 @@ var renderRectangle = (function () {
     "use strict";
 
     function renderRectangle(ctx, drawable) {
-        ctx.strokeRect(drawable.getCornerX(), drawable.getCornerY(), drawable.getWidth(), drawable.getHeight());
+        if (drawable.data.filled) {
+            ctx.fillStyle = drawable.data.color;
+            ctx.fillRect(drawable.getCornerX(), drawable.getCornerY(), drawable.getWidth(), drawable.getHeight());
+        } else {
+            ctx.strokeStyle = drawable.data.color;
+            ctx.lineWidth = drawable.data.lineWidth;
+            ctx.strokeRect(drawable.getCornerX(), drawable.getCornerY(), drawable.getWidth(), drawable.getHeight());
+        }
     }
 
     return renderRectangle;

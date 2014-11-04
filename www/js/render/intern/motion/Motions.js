@@ -1,4 +1,4 @@
-var Motions = (function (Math, Object) {
+var Motions = (function (Math, Object, BezierCurve, calcBezierPoint, Line) {
     "use strict";
 
     // handles low level moving of draw-ables
@@ -7,24 +7,12 @@ var Motions = (function (Math, Object) {
     }
 
     Motions.prototype.move = function (drawable, path, callback) {
-        var axis;
-        if (path) {
-            if (path.startX === path.endX) {
-                axis = 'y';
-            } else if (path.startY === path.endY) {
-                axis = 'x';
-//            axis = path.startX === path.endX ? 'y' : 'x';
-            } else {
-                axis = 'line'
-            }
-        }
 
         this.motionsDict[drawable.id] = {
             item: drawable,
             path: path,
             ready: callback,
             time: 0,
-            axis: axis,
             moving: true
         };
     };
@@ -38,25 +26,27 @@ var Motions = (function (Math, Object) {
             }
 
             var path = motion.path;
+            var curve = path.curve;
+
             if (path.duration > motion.time) {
 
-                if (motion.axis === 'x') {
-                    motion.item.x = Math.floor(path.timingFn(motion.time, path.startX, path.length, path.duration));
+                if (curve instanceof Line) {
+                    var magnitude = path.timingFn(motion.time, 0, curve.length, path.duration);
 
-                } else if (motion.axis === 'y') {
-                    motion.item.y = Math.floor(path.timingFn(motion.time, path.startY, path.length, path.duration));
+                    motion.item.x = Math.floor(curve.startX + curve.unitVectorX * magnitude);
+                    motion.item.y = Math.floor(curve.startY + curve.unitVectorY * magnitude);
 
-                } else if (motion.axis == 'line') {
-                    //var magnitude = Math.floor(path.timingFn(motion.time, 0, path.length, path.duration));
-                    // todo implement movement on every (diagonal) line
-                    // x + length * unitVector.x, y + length * unitVector.y -> end point
-                    // see https://github.com/raphaelstary/highfive/blob/master/www/js/render/Renderer.js
+                } else if (curve instanceof BezierCurve) {
+                    var time = path.timingFn(motion.time, 0, 1, path.duration);
+                    var point = calcBezierPoint(time, curve);
+                    motion.item.x = point.x;
+                    motion.item.y = point.y;
                 }
 
                 motion.time++;
             } else {
-                motion.item.x = path.endX;
-                motion.item.y = path.endY;
+                motion.item.x = curve.endX;
+                motion.item.y = curve.endY;
 
                 if (path.loop) {
                     motion.time = 0;
@@ -88,4 +78,4 @@ var Motions = (function (Math, Object) {
     };
 
     return Motions;
-})(Math, Object);
+})(Math, Object, BezierCurve, calcBezierPoint, Line);
