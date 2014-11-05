@@ -2,7 +2,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     "use strict";
 
     function Stage(gfxCache, motions, motionTimer, motionHelper, spriteAnimations, spriteTimer, animations,
-        animationHelper, animationTimer, propertyAnimations, renderer) {
+        animationHelper, animationTimer, propertyAnimations, renderer, timer) {
         this.gfxCache = gfxCache;
         this.motions = motions;
         this.motionTimer = motionTimer;
@@ -14,6 +14,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
         this.animationTimer = animationTimer;
         this.propertyAnimations = propertyAnimations;
         this.renderer = renderer;
+        this.timer = timer;
 
         this._id = 0;
     }
@@ -65,13 +66,13 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
 
     Stage.prototype.animateLater = function (drawableToAdd, duration, callback) {
         var extendedCallback;
-        if (this.renderer.has(drawableToAdd.item)) {
+        if (this.renderer.has(drawableToAdd.drawable)) {
             extendedCallback = callback;
         } else {
             var self = this;
             extendedCallback = function () {
-                self.renderer.add(drawableToAdd.item);
-                if (callback !== undefined) {
+                self.renderer.add(drawableToAdd.drawable);
+                if (callback) {
                     callback();
                 }
             }
@@ -127,9 +128,9 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
         var movedItem = {
-            item: drawable,
+            drawable: drawable,
             path: path,
-            ready: callback
+            callback: callback
         };
         this.moveLater(movedItem, delay, startedMovingCallback);
 
@@ -151,13 +152,13 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
 
     Stage.prototype.moveLater = function (drawableToAdd, duration, callback) {
         var extendedCallback;
-        if (this.renderer.has(drawableToAdd.item)) {
+        if (this.renderer.has(drawableToAdd.drawable)) {
             extendedCallback = callback;
         } else {
             var self = this;
             extendedCallback = function () {
-                self.renderer.add(drawableToAdd.item);
-                if (callback !== undefined) {
+                self.renderer.add(drawableToAdd.drawable);
+                if (callback) {
                     callback();
                 }
             }
@@ -247,7 +248,8 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
 
     Stage.prototype.update = function () {
         this.renderer.draw();
-        this.motionTimer.update();
+        this.timer.update();
+        //this.motionTimer.update();
         this.motions.update();
         this.spriteTimer.update();
         this.spriteAnimations.update();

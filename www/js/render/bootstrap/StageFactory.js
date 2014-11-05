@@ -21,10 +21,15 @@ var StageFactory = (function ($) {
         var spriteAnimations = new $.SpriteAnimations();
         var animations = new $.BasicAnimations();
         var animationHelper = new $.BasicAnimationHelper(animations);
+        var timer = new $.CallbackTimer();
 
-        return new $.Stage(gfxCache, motions, new $.MotionTimer(motions), new $.MotionHelper(motions), spriteAnimations,
-            new $.SpriteAnimationTimer(spriteAnimations), animations, animationHelper,
-            new $.BasicAnimationTimer(animations), new $.PropertyAnimations(animations, animationHelper), renderer);
+        var motionTimer = new $.MotionTimer(motions, timer);
+        var spriteAnimationTimer = new $.SpriteAnimationTimer(spriteAnimations);
+        var basicAnimationTimer = new $.BasicAnimationTimer(animations);
+
+        return new $.Stage(gfxCache, motions, motionTimer, new $.MotionHelper(motions), spriteAnimations,
+            spriteAnimationTimer, animations, animationHelper, basicAnimationTimer,
+            new $.PropertyAnimations(animations, animationHelper), renderer, timer);
     }
 
     function createResponsive(gfxCache, renderer, resize) {

@@ -9,7 +9,7 @@ var BasicAnimations = (function (Object) {
         this.dict[drawable.id] = {
             setter: setter,
             animation: animation,
-            ready: callback,
+            callback: callback,
             time: 0,
             active: true
         };
@@ -38,8 +38,8 @@ var BasicAnimations = (function (Object) {
                     delete this.dict[key];
                 }
 
-                if (wrapper.ready) {
-                    wrapper.ready();
+                if (wrapper.callback) {
+                    wrapper.callback();
                 }
             }
         }, this);
