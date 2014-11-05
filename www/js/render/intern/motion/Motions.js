@@ -1,4 +1,4 @@
-var Motions = (function (Math, Object, BezierCurve, calcBezierPoint, Line) {
+var Motions = (function (Math, Object, BezierCurve, calcBezierPoint, Line, calcLinePoint) {
     "use strict";
 
     // handles low level moving of draw-ables
@@ -30,17 +30,21 @@ var Motions = (function (Math, Object, BezierCurve, calcBezierPoint, Line) {
 
             if (path.duration > motion.time) {
 
+                var time = path.timingFn(motion.time, 0, 1, path.duration);
+                var point;
                 if (curve instanceof Line) {
-                    var magnitude = path.timingFn(motion.time, 0, curve.length, path.duration);
+                    //var magnitude = path.timingFn(motion.time, 0, curve.length, path.duration);
 
-                    motion.item.x = Math.floor(curve.startX + curve.unitVectorX * magnitude);
-                    motion.item.y = Math.floor(curve.startY + curve.unitVectorY * magnitude);
+                    //motion.item.x = Math.floor(curve.startX + curve.unitVectorX * magnitude);
+                    //motion.item.y = Math.floor(curve.startY + curve.unitVectorY * magnitude);
+                    point = calcLinePoint(time, curve);
+                    motion.item.x = Math.floor(point.x);
+                    motion.item.y = Math.floor(point.y);
 
                 } else if (curve instanceof BezierCurve) {
-                    var time = path.timingFn(motion.time, 0, 1, path.duration);
-                    var point = calcBezierPoint(time, curve);
-                    motion.item.x = point.x;
-                    motion.item.y = point.y;
+                    point = calcBezierPoint(time, curve);
+                    motion.item.x = Math.floor(point.x);
+                    motion.item.y = Math.floor(point.y);
                 }
 
                 motion.time++;
@@ -78,4 +82,4 @@ var Motions = (function (Math, Object, BezierCurve, calcBezierPoint, Line) {
     };
 
     return Motions;
-})(Math, Object, BezierCurve, calcBezierPoint, Line);
+})(Math, Object, BezierCurve, calcBezierPoint, Line, calcLinePoint);

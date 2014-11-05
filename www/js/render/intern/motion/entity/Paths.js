@@ -5,7 +5,7 @@ var Paths = (function (Path, Math, Line, BezierCurve, Vectors) {
         var vector = Vectors.get(startX, startY, endX, endY);
         var length = Vectors.magnitude(vector.x, vector.y);
         var unitVector = Vectors.normalize(vector.x, vector.y);
-        var line = new Line(startX, startY, endX, endY, unitVector.x, unitVector.y, length);
+        var line = new Line(startX, startY, endX, endY, vector.x, vector.y, unitVector.x, unitVector.y, length);
 
         return new Path(line, speed, spacingFn, loop);
     }
