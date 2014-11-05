@@ -140,7 +140,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     Stage.prototype.move = function (drawable, path, callback) {
-        this.motions.move(drawable, path, callback);
+        this.motions.animate(drawable, path, callback);
         this.__softAdd(drawable);
     };
 

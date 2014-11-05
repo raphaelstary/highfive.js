@@ -11,12 +11,12 @@ var MotionHelper = (function () {
 
         function startRoundTrip() {
             if (callbackTo) {
-                self.motions.move(drawable, pathTo, function () {
+                self.motions.animate(drawable, pathTo, function () {
                     callbackTo();
                     fromBtoA();
                 });
             } else {
-                self.motions.move(drawable, pathTo, fromBtoA);
+                self.motions.animate(drawable, pathTo, fromBtoA);
             }
         }
 
@@ -30,18 +30,18 @@ var MotionHelper = (function () {
             if (self.motions.has(drawable)) {
                 if (loopTheTrip) {
                     if (callbackReturn) {
-                        self.motions.move(drawable, pathReturn, function () {
+                        self.motions.animate(drawable, pathReturn, function () {
                             callbackReturn();
                             fromAtoB();
                         });
                     } else {
-                        self.motions.move(drawable, pathReturn, fromAtoB);
+                        self.motions.animate(drawable, pathReturn, fromAtoB);
                     }
                 } else {
                     if (callbackReturn) {
-                        self.motions.move(drawable, pathReturn, callbackReturn);
+                        self.motions.animate(drawable, pathReturn, callbackReturn);
                     } else {
-                        self.motions.move(drawable, pathReturn);
+                        self.motions.animate(drawable, pathReturn);
                     }
                 }
             }

@@ -17,7 +17,7 @@ var StageFactory = (function ($) {
 
     function create(gfxCache, renderer) {
 
-        var motions = new $.Motions();
+        var motions = new $.Motions(new $.BasicAnimations());
         var spriteAnimations = new $.SpriteAnimations();
         var animations = new $.BasicAnimations();
         var animationHelper = new $.BasicAnimationHelper(animations);
