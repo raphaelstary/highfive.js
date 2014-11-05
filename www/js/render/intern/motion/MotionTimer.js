@@ -11,9 +11,8 @@ var MotionTimer = (function () {
         this.timer.doLater(function () {
             self.motions.move(drawableToAdd.drawable, drawableToAdd.path, drawableToAdd.callback);
 
-            if (callback) {
+            if (callback)
                 callback();
-            }
         }, duration);
     };
 

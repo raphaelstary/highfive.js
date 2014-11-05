@@ -23,12 +23,9 @@ var StageFactory = (function ($) {
         var animationHelper = new $.BasicAnimationHelper(animations);
         var timer = new $.CallbackTimer();
 
-        var motionTimer = new $.MotionTimer(motions, timer);
-        var spriteAnimationTimer = new $.SpriteAnimationTimer(spriteAnimations);
-        var basicAnimationTimer = new $.BasicAnimationTimer(animations);
-
-        return new $.Stage(gfxCache, motions, motionTimer, new $.MotionHelper(motions), spriteAnimations,
-            spriteAnimationTimer, animations, animationHelper, basicAnimationTimer,
+        return new $.Stage(gfxCache, motions, new $.MotionTimer(motions, timer), new $.MotionHelper(motions),
+            spriteAnimations, new $.SpriteTimer(spriteAnimations, timer), animations, animationHelper,
+            new $.BasicAnimationTimer(animations, timer),
             new $.PropertyAnimations(animations, animationHelper), renderer, timer);
     }
 
@@ -67,7 +64,7 @@ var StageFactory = (function ($) {
     MotionHelper: MotionHelper,
     MotionTimer: MotionTimer,
     Motions: Motions,
-    SpriteAnimationTimer: SpriteTimer,
+    SpriteTimer: SpriteTimer,
     SpriteAnimations: SpriteAnimations,
     PropertyAnimations: PropertyAnimations,
     BasicAnimationHelper: AnimationHelper,

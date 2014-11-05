@@ -1,40 +1,20 @@
 var AnimationTimer = (function () {
     "use strict";
 
-    // high level animation methods
-    function AnimationTimer(animations) {
+    function AnimationTimer(animations, timer) {
         this.animations = animations;
-        this.todos = [];
+        this.timer = timer;
     }
 
-    AnimationTimer.prototype.update = function () {
-
-        for (var i = this.todos.length - 1; i >= 0; i--) {
-            var toAdd = this.todos[i];
-
-            if (toAdd.duration < toAdd.time) {
-                this.animations.animate(toAdd.addable.drawable, toAdd.addable.setter, toAdd.addable.animation,
-                    toAdd.addable.callback);
-
-                if (toAdd.callback) {
-                    toAdd.callback();
-                }
-
-                this.todos.splice(i, 1);
-
-            } else {
-                toAdd.time++;
-            }
-        }
-    };
-
     AnimationTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
-        this.todos.push({
-            addable: drawableToAdd,
-            duration: duration,
-            time: 0,
-            callback: callback
-        });
+        var self = this;
+        this.timer.doLater(function () {
+            self.animations.animate(drawableToAdd.drawable, drawableToAdd.setter, drawableToAdd.animation,
+                drawableToAdd.callback);
+
+            if (callback)
+                callback();
+        }, duration);
     };
 
     return AnimationTimer;

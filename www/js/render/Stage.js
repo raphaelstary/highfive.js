@@ -249,11 +249,8 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     Stage.prototype.update = function () {
         this.renderer.draw();
         this.timer.update();
-        //this.motionTimer.update();
         this.motions.update();
-        this.spriteTimer.update();
         this.spriteAnimations.update();
-        this.animationTimer.update();
         this.animations.update();
     };
 

@@ -1,7 +1,6 @@
 var CallbackTimer = (function () {
     "use strict";
 
-    // high level move methods
     function CallbackTimer() {
         this.todos = [];
     }
