@@ -7,7 +7,12 @@ var Renderer = (function (Object, getFunctionName) {
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
-        this.drawableDict = {'0': {}, '1': {}, '2': {}, '3': {}};
+        this.drawableDict = {
+            '0': {},
+            '1': {},
+            '2': {},
+            '3': {}
+        };
         this.renderServices = {};
     }
 

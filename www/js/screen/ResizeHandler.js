@@ -12,7 +12,7 @@ var ResizeHandler = (function (requestAnimationFrame) {
         if (this.drawing === false && event !== undefined && event.target !== undefined) {
             this.resizeFired = true;
 
-            this._initiateResize(event.target.innerWidth , event.target.innerHeight);
+            this._initiateResize(event.target.innerWidth, event.target.innerHeight);
         }
     };
 

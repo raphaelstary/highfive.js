@@ -4,7 +4,7 @@ var installDragNDrop = (function (window, DragHandler) {
     function installDragNDrop(canvas) {
         var drag = new DragHandler();
 
-        if(window.PointerEvent) {
+        if (window.PointerEvent) {
 
             canvas.addEventListener('pointerdown', drag.pointerDown.bind(drag));
             canvas.addEventListener('pointermove', drag.pointerMove.bind(drag));

@@ -7,7 +7,10 @@ var KeyPushReleaseHandler = (function (Object) {
     }
 
     KeyPushReleaseHandler.prototype.add = function (keyCode, pushCallback, releaseCallback) {
-        this.keys[keyCode] = {push: pushCallback, release: releaseCallback};
+        this.keys[keyCode] = {
+            push: pushCallback,
+            release: releaseCallback
+        };
     };
 
     KeyPushReleaseHandler.prototype.remove = function (keyCode) {

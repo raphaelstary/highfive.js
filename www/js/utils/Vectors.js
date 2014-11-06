@@ -4,7 +4,8 @@ var Vectors = (function (Math) {
     return {
         get: function (pointA_X, pointA_Y, pointB_X, pointB_Y) {
             return {
-                x: pointB_X - pointA_X, y: pointB_Y - pointA_Y
+                x: pointB_X - pointA_X,
+                y: pointB_Y - pointA_Y
             };
         },
 
@@ -20,19 +21,22 @@ var Vectors = (function (Math) {
 
         normalizeWithMagnitude: function (x, y, magnitude) {
             return {
-                x: x / magnitude, y: y / magnitude
+                x: x / magnitude,
+                y: y / magnitude
             };
         },
 
         normalRight: function (x, y) {
             return {
-                x: -y, y: x
+                x: -y,
+                y: x
             };
         },
 
         normalLeft: function (x, y) {
             return {
-                x: y, y: -x
+                x: y,
+                y: -x
             };
         },
 

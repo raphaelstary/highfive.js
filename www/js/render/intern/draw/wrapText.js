@@ -13,8 +13,7 @@ var wrapText = (function () {
                 context.fillText(line, x, y);
                 line = words[n] + ' ';
                 y += lineHeight;
-            }
-            else {
+            } else {
                 line = testLine;
             }
         }

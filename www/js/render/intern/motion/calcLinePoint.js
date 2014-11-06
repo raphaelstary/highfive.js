@@ -6,7 +6,8 @@ var calcLinePoint = (function () {
         var y = line.startY + time * line.vectorY;
 
         return {
-            x: x, y: y
+            x: x,
+            y: y
         }
     }
 

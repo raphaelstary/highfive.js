@@ -10,8 +10,7 @@ var App = (function ($) {
     App.prototype.start = function () {
         // show loading screen, load binary resources
 
-        var resourceLoader = new $.ResourceLoader(),
-            initialScreen = new $.SimpleLoadingScreen(this.services.screen.getContext('2d'));
+        var resourceLoader = new $.ResourceLoader(), initialScreen = new $.SimpleLoadingScreen(this.services.screen.getContext('2d'));
 
         var filesCount = this.resources.create(resourceLoader);
 

@@ -4,7 +4,7 @@ var installPushRelease = (function (window, PushReleaseHandler) {
     function installPushRelease(canvas) {
         var pushRelease = new PushReleaseHandler();
 
-        if(window.PointerEvent) {
+        if (window.PointerEvent) {
 
             canvas.addEventListener('pointerdown', pushRelease.mouseDown.bind(pushRelease));
             canvas.addEventListener('pointerup', pushRelease.mouseUp.bind(pushRelease));

@@ -34,7 +34,10 @@ var TapHandler = (function (isHit, iterateSomeEntries) {
     };
 
     TapHandler.prototype.add = function (touchable, callback) {
-        this.elements[touchable.id] = {touchable: touchable, callback: callback}
+        this.elements[touchable.id] = {
+            touchable: touchable,
+            callback: callback
+        }
     };
 
     TapHandler.prototype.remove = function (touchable) {

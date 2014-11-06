@@ -58,7 +58,11 @@ var PushReleaseHandler = (function (isHit, iterateEntries, iterateSomeEntries) {
     };
 
     PushReleaseHandler.prototype.add = function (touchable, pushCallback, releaseCallback) {
-        this.elements[touchable.id] = {item: touchable, push: pushCallback, release: releaseCallback};
+        this.elements[touchable.id] = {
+            item: touchable,
+            push: pushCallback,
+            release: releaseCallback
+        };
     };
 
     PushReleaseHandler.prototype.remove = function (touchable) {
