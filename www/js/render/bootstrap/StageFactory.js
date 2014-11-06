@@ -5,6 +5,7 @@ var StageFactory = (function ($) {
         var renderer = new $.Renderer(screen);
         renderer.registerRenderer($.SubImage.prototype, $.renderAtlas);
         renderer.registerRenderer($.TextWrapper.prototype, $.renderText);
+        renderer.registerRenderer($.Rectangle.prototype, $.renderRectangle);
         return renderer;
     }
 
@@ -12,6 +13,7 @@ var StageFactory = (function ($) {
         var renderer = new $.Renderer(screen);
         renderer.registerRenderer($.ImageWrapper.prototype, $.renderImage);
         renderer.registerRenderer($.TextWrapper.prototype, $.renderText);
+        renderer.registerRenderer($.Rectangle.prototype, $.renderRectangle);
         return renderer;
     }
 
@@ -74,5 +76,7 @@ var StageFactory = (function ($) {
     Repository: Repository,
     Touchables: Touchables,
     fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,
-    CallbackTimer: CallbackTimer
+    CallbackTimer: CallbackTimer,
+    Rectangle: Rectangle,
+    renderRectangle: renderRectangle
 });

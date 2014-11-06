@@ -7,7 +7,8 @@ var renderRectangle = (function () {
             ctx.fillRect(drawable.getCornerX(), drawable.getCornerY(), drawable.getWidth(), drawable.getHeight());
         } else {
             ctx.strokeStyle = drawable.data.color;
-            ctx.lineWidth = drawable.data.lineWidth;
+            if (drawable.data.lineWidth)
+                ctx.lineWidth = drawable.data.lineWidth;
             ctx.strokeRect(drawable.getCornerX(), drawable.getCornerY(), drawable.getWidth(), drawable.getHeight());
         }
     }

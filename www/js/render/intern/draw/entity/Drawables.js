@@ -1,4 +1,4 @@
-var Drawables = (function (Drawable, TextWrapper) {
+var Drawables = (function (Drawable, TextWrapper, Rectangle) {
     "use strict";
 
     function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
@@ -21,8 +21,15 @@ var Drawables = (function (Drawable, TextWrapper) {
         }, 0);
     }
 
+    function createRectangle(seed, x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
+        var rect = new Rectangle(width, height, color, filled, lineWidth);
+        return new Drawable(generateHash(x + y + width + height + color + filled) + seed, x, y, rect, zIndex, alpha,
+            rotation, scale);
+    }
+
     return {
         getGraphic: createNewGfx,
-        getTxt: createNewText
+        getTxt: createNewText,
+        getRect: createRectangle
     };
-})(Drawable, TextWrapper);
+})(Drawable, TextWrapper, Rectangle);

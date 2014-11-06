@@ -1,5 +1,5 @@
 var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, inheritMethods, TextWrapper,
-    iterateEntries, Object) {
+    iterateEntries, Object, changeRectangle) {
     "use strict";
 
     function ResizableStage(stage, gfx, resizer, createInput, changeInput, width, height, timer) {
@@ -57,9 +57,9 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     ResizableStage.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex,
-        resizeIsDependentOnThisDrawables, rotation, alpha, maxLineLength, lineHeight) {
+        resizeIsDependentOnThisDrawables, rotation, alpha, maxLineLength, lineHeight, scale) {
         var drawable = this.stage.drawText(xFn(this.width), yFn(this.height), text, sizeFn(this.width, this.height),
-            font, color, zIndex, rotation, alpha, maxLineLength, lineHeight);
+            font, color, zIndex, rotation, alpha, maxLineLength, lineHeight, scale);
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
             drawable.data.size = sizeFn(width, height);
@@ -69,9 +69,9 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     ResizableStage.prototype.drawTextWithInput = function (xFn, yFn, text, sizeFn, font, color, zIndex,
-        resizeIsDependentOnThisDrawables, alpha, rotation, maxLineLength, lineHeight) {
+        resizeIsDependentOnThisDrawables, alpha, rotation, maxLineLength, lineHeight, scale) {
         var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text,
-            sizeFn(this.width, this.height), font, color, rotation, alpha, maxLineLength, lineHeight);
+            sizeFn(this.width, this.height), font, color, rotation, alpha, maxLineLength, lineHeight, scale);
         this.stage.draw(drawable);
         var input = this.createInput(drawable);
         var self = this;
@@ -80,6 +80,44 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             drawable.data.size = sizeFn(width, height);
             self.changeInput(input, drawable);
         }, resizeIsDependentOnThisDrawables);
+
+        return {
+            drawable: drawable,
+            input: input
+        };
+    };
+
+    ResizableStage.prototype.drawRectangle = function (xFn, yFn, widthFn, heightFn, color, filled, lineWidthFn, zIndex,
+        alpha, rotation, scale, resizeDependencies) {
+
+        var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
+        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width),
+            heightFn(this.height), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width), yFn(height));
+            var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
+            changeRectangle(drawable.data, widthFn(width), heightFn(height), lineWidth);
+        }, resizeDependencies);
+
+        return drawable;
+    };
+
+    ResizableStage.prototype.drawRectWithInput = function (xFn, yFn, widthFn, heightFn, color, filled, lineWidthFn,
+        zIndex, alpha, rotation, scale, resizeDependencies) {
+
+        var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
+        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width),
+            heightFn(this.height), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+
+        var input = this.createInput(drawable);
+        var self = this;
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width), yFn(height));
+            var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
+            changeRectangle(drawable.data, widthFn(width), heightFn(height), lineWidth);
+            self.changeInput(input, drawable);
+        }, resizeDependencies);
 
         return {
             drawable: drawable,
@@ -376,4 +414,5 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     return ResizableStage;
-})(changeCoords, changePath, CanvasImageCollisionDetector, inheritMethods, TextWrapper, iterateEntries, Object);
+})(changeCoords, changePath, CanvasImageCollisionDetector, inheritMethods, TextWrapper, iterateEntries, Object,
+    changeRectangle);
