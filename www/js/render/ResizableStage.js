@@ -103,7 +103,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         return drawable;
     };
 
-    ResizableStage.prototype.drawRectWithInput = function (xFn, yFn, widthFn, heightFn, color, filled, lineWidthFn,
+    ResizableStage.prototype.drawRectangleWithInput = function (xFn, yFn, widthFn, heightFn, color, filled, lineWidthFn,
         zIndex, alpha, rotation, scale, resizeDependencies) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;

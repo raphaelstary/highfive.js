@@ -121,7 +121,8 @@ var ScreenShaker = (function (Math) {
             return 0;
         }
 
-        return Math.floor(amplitude * Math.pow(2, -10 * currentTime) * Math.sin((currentTime * duration) * (2 * Math.PI) / period));
+        return Math.floor(amplitude * Math.pow(2, -10 * currentTime) *
+        Math.sin((currentTime * duration) * (2 * Math.PI) / period));
     }
 
     ScreenShaker.prototype.add = function (drawable) {

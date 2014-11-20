@@ -48,7 +48,7 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
 
     Drawable.prototype.__getHeight = function () {
         if (this.data instanceof TextWrapper) {
-            return measureText(this.data).height;
+            return this.data.size;
         }
         if (this.data instanceof SubImage) {
             return this.data.trimmedTileHeight;

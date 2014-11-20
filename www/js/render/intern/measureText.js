@@ -1,9 +1,10 @@
-var measureText = (function () {
+var measureText = (function (document) {
     "use strict";
 
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+
     function measureText(text) {
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
 
         if (text.alpha || text.alpha === 0) {
             ctx.globalAlpha = text.alpha;
@@ -29,4 +30,4 @@ var measureText = (function () {
     }
 
     return measureText;
-})();
+})(window.document);

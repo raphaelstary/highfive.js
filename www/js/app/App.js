@@ -29,6 +29,11 @@ var App = (function ($) {
 
             sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.resize);
             sceneServices.loop = $.installLoop(sceneServices.stage);
+
+            var timer = new $.CallbackTimer();
+            sceneServices.loop.add('scene_timer', timer.update.bind(timer));
+            sceneServices.timer = timer;
+
             sceneServices.fullScreen = new $.FullScreenController(self.services.screen);
             sceneServices.sceneStorage = {};
 
@@ -53,5 +58,6 @@ var App = (function ($) {
     installScenes: installMyScenes,
     FullScreenController: FullScreenController,
     installLoop: installLoop,
-    concatenateProperties: concatenateProperties
+    concatenateProperties: concatenateProperties,
+    CallbackTimer: CallbackTimer
 });
