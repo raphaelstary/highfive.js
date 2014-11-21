@@ -1,8 +1,9 @@
 var ButtonFactory = (function () {
     "use strict";
 
-    function ButtonFactory(stage, input, timer, font, playSoundCallback, primaryColor, primaryTextColor, secondaryColor,
-        secondaryTextColor) {
+    function ButtonFactory(stage, input, timer, font, playSoundCallback, primaryColor, primaryTextColor,
+        primaryTextSize, primaryWidthFactor, secondaryColor, secondaryTextColor, secondaryTextSize,
+        secondaryWidthFactor) {
         this.stage = stage;
         this.input = input;
         this.font = font;
@@ -10,11 +11,15 @@ var ButtonFactory = (function () {
         this.timer = timer;
         this.primaryColor = primaryColor;
         this.primaryTextColor = primaryTextColor;
+        this.primaryTextSize = primaryTextSize;
+        this.primaryWidthFactor = primaryWidthFactor;
         this.secondaryColor = secondaryColor;
         this.secondaryTextColor = secondaryTextColor;
+        this.secondaryTextSize = secondaryTextSize;
+        this.secondaryWidthFactor = secondaryWidthFactor;
     }
 
-    ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, txtSizeFn, callback) {
+    ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback) {
         function pressPrimaryButton(text, background) {
             background.alpha = 1;
         }
@@ -23,11 +28,11 @@ var ButtonFactory = (function () {
             background.alpha = 0.5;
         }
 
-        return this.__createButton(xFn, yFn, msg, txtSizeFn, this.primaryColor, this.primaryTextColor, 1, callback,
-            true, pressPrimaryButton, resetPrimaryButton);
+        return this.__createButton(xFn, yFn, msg, this.primaryTextSize, this.primaryColor, this.primaryTextColor, 1,
+            callback, true, undefined, this.primaryWidthFactor, pressPrimaryButton, resetPrimaryButton);
     };
 
-    ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, txtSizeFn, callback) {
+    ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, callback) {
         function pressSecondaryButton(text, background) {
             text.alpha = 1;
             background.data.filled = true;
@@ -38,18 +43,20 @@ var ButtonFactory = (function () {
             background.data.filled = false;
         }
 
-        return this.__createButton(xFn, yFn, msg, txtSizeFn, this.secondaryColor, this.secondaryTextColor, 0.5,
-            callback, false, pressSecondaryButton, resetSecondaryButton);
+        return this.__createButton(xFn, yFn, msg, this.secondaryTextSize, this.secondaryColor, this.secondaryTextColor,
+            0.5, callback, false, function () {
+                return 1;
+            }, this.secondaryWidthFactor, pressSecondaryButton, resetSecondaryButton);
     };
 
     ButtonFactory.prototype.__createButton = function (xFn, yFn, msg, txtSizeFn, color, textColor, textAlpha, callback,
-        backgroundFilled, pressButton, resetButton) {
+        backgroundFilled, lineWidthFn, widthMultiplier, pressButton, resetButton) {
 
         var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, 3, undefined, undefined,
             textAlpha);
 
         function getWidth() {
-            return textDrawable.getWidth() * 3;
+            return textDrawable.getWidth() * widthMultiplier;
         }
 
         function getHeight() {
@@ -57,7 +64,7 @@ var ButtonFactory = (function () {
         }
 
         var backgroundWrapper = this.stage.drawRectangleWithInput(xFn, yFn, getWidth, getHeight, color,
-            backgroundFilled, undefined, 2, 0.5, undefined, undefined, [textDrawable]);
+            backgroundFilled, lineWidthFn, 2, 0.5, undefined, undefined, [textDrawable]);
 
         var touchable = backgroundWrapper.input;
         var backgroundDrawable = backgroundWrapper.drawable;
