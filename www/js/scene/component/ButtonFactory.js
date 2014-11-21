@@ -89,5 +89,11 @@ var ButtonFactory = (function () {
         };
     };
 
+    ButtonFactory.prototype.remove = function (button) {
+        this.stage.remove(button.text);
+        this.stage.remove(button.background);
+        this.input.remove(button.input);
+    };
+
     return ButtonFactory;
 })();
