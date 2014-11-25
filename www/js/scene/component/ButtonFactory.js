@@ -19,7 +19,7 @@ var ButtonFactory = (function () {
         this.secondaryWidthFactor = secondaryWidthFactor;
     }
 
-    ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback) {
+    ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback, multiSubmit) {
         function pressPrimaryButton(text, background) {
             background.alpha = 1;
         }
@@ -29,10 +29,10 @@ var ButtonFactory = (function () {
         }
 
         return this.__createButton(xFn, yFn, msg, this.primaryTextSize, this.primaryColor, this.primaryTextColor, 1,
-            callback, true, undefined, this.primaryWidthFactor, pressPrimaryButton, resetPrimaryButton);
+            callback, true, undefined, this.primaryWidthFactor, pressPrimaryButton, resetPrimaryButton, multiSubmit);
     };
 
-    ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, callback) {
+    ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, callback, multiSubmit) {
         function pressSecondaryButton(text, background) {
             text.alpha = 1;
             background.data.filled = true;
@@ -46,11 +46,13 @@ var ButtonFactory = (function () {
         return this.__createButton(xFn, yFn, msg, this.secondaryTextSize, this.secondaryColor, this.secondaryTextColor,
             0.5, callback, false, function () {
                 return 1;
-            }, this.secondaryWidthFactor, pressSecondaryButton, resetSecondaryButton);
+            }, this.secondaryWidthFactor, pressSecondaryButton, resetSecondaryButton, multiSubmit);
     };
 
     ButtonFactory.prototype.__createButton = function (xFn, yFn, msg, txtSizeFn, color, textColor, textAlpha, callback,
-        backgroundFilled, lineWidthFn, widthMultiplier, pressButton, resetButton) {
+        backgroundFilled, lineWidthFn, widthMultiplier, pressButton, resetButton, multiSubmit) {
+
+        var isMultiSubmitOn = multiSubmit !== undefined ? multiSubmit : false;
 
         var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, 3, undefined, undefined,
             textAlpha);
@@ -69,8 +71,19 @@ var ButtonFactory = (function () {
         var touchable = backgroundWrapper.input;
         var backgroundDrawable = backgroundWrapper.drawable;
 
+        var returnObject = {
+            text: textDrawable,
+            background: backgroundDrawable,
+            input: touchable,
+            used: false
+        };
+
         var self = this;
         var extendedCallback = function () {
+            if (!isMultiSubmitOn && returnObject.used)
+                return;
+
+            returnObject.used = true;
             pressButton(textDrawable, backgroundDrawable);
 
             self.playSound();
@@ -82,11 +95,7 @@ var ButtonFactory = (function () {
 
         this.input.add(touchable, extendedCallback);
 
-        return {
-            text: textDrawable,
-            background: backgroundDrawable,
-            input: touchable
-        };
+        return returnObject;
     };
 
     ButtonFactory.prototype.remove = function (button) {
