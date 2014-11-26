@@ -49,6 +49,12 @@ var Renderer = (function (Object, getFunctionName) {
 
                 self.ctx.save();
 
+                if (drawable.mask) {
+                    self.ctx.beginPath();
+                    self.ctx.rect(drawable.mask.x, drawable.mask.y, drawable.mask.width, drawable.mask.height);
+                    self.ctx.clip();
+                }
+
                 if (drawable.alpha || drawable.alpha === 0) {
                     self.ctx.globalAlpha = drawable.alpha;
                 }

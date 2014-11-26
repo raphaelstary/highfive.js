@@ -1,4 +1,4 @@
-var Drawables = (function (Drawable, TextWrapper, Rectangle) {
+var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask) {
     "use strict";
 
     function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
@@ -27,9 +27,14 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle) {
             rotation, scale);
     }
 
+    function createClippingMask(x, y, width, height) {
+        return new RectangleMask(x, y, width, height);
+    }
+
     return {
         getGraphic: createNewGfx,
         getTxt: createNewText,
-        getRect: createRectangle
+        getRect: createRectangle,
+        getMask: createClippingMask
     };
-})(Drawable, TextWrapper, Rectangle);
+})(Drawable, TextWrapper, Rectangle, RectangleMask);

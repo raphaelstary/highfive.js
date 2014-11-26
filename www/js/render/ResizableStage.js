@@ -393,6 +393,9 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             id: drawable.id + '_2'
         };
         this.resizer.remove(idOfPossibleTxtSizeAfterPath);
+
+        if (drawable.mask)
+            this.unmask(drawable);
         this.stage.remove(drawable);
     };
 
@@ -406,6 +409,34 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     ResizableStage.prototype.has = function (drawable) {
         return this.resizer.has(drawable) || this.stage.has(drawable);
+    };
+
+    var MASK = '_mask';
+
+    ResizableStage.prototype.mask = function (drawable, pointA_xFn, pointA_yFn, pointB_xFn, pointB_yFn) {
+        var x = pointA_xFn(this.width);
+        var y = pointA_yFn(this.height);
+        var width = pointB_xFn(this.width) - x;
+        var height = pointB_yFn(this.height) - y;
+
+        drawable.mask = Drawables.getMask(x, y, width, height);
+        var maskId = {
+            id: drawable.id + MASK
+        };
+        this.resizer.add(maskId, function (width, height) {
+            drawable.mask.x = pointA_xFn(width);
+            drawable.mask.y = pointA_yFn(height);
+            drawable.mask.width = pointB_xFn(width) - drawable.mask.x;
+            drawable.mask.height = pointB_yFn(height) - drawable.mask.y;
+        });
+    };
+
+    ResizableStage.prototype.unmask = function (drawable) {
+        var idOfPossibleClippingMask = {
+            id: drawable.id + MASK
+        };
+        this.resizer.remove(idOfPossibleClippingMask);
+        delete drawable.mask;
     };
 
     ResizableStage.prototype.update = function () {
