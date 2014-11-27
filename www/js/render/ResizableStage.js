@@ -1,5 +1,5 @@
 var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, inheritMethods, TextWrapper,
-    iterateEntries, Object, changeRectangle) {
+    iterateEntries, Object, changeRectangle, changeMask) {
     "use strict";
 
     function ResizableStage(stage, gfx, resizer, createInput, changeInput, width, height, timer) {
@@ -414,21 +414,17 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     var MASK = '_mask';
 
     ResizableStage.prototype.mask = function (drawable, pointA_xFn, pointA_yFn, pointB_xFn, pointB_yFn) {
-        var x = pointA_xFn(this.width);
-        var y = pointA_yFn(this.height);
-        var width = pointB_xFn(this.width) - x;
-        var height = pointB_yFn(this.height) - y;
+        var mask = this.stage.mask(drawable, pointA_xFn(this.width), pointA_yFn(this.height), pointB_xFn(this.width),
+            pointB_yFn(this.height));
 
-        drawable.mask = Drawables.getMask(x, y, width, height);
         var maskId = {
             id: drawable.id + MASK
         };
         this.resizer.add(maskId, function (width, height) {
-            drawable.mask.x = pointA_xFn(width);
-            drawable.mask.y = pointA_yFn(height);
-            drawable.mask.width = pointB_xFn(width) - drawable.mask.x;
-            drawable.mask.height = pointB_yFn(height) - drawable.mask.y;
+            changeMask(mask, pointA_xFn(width), pointA_yFn(height), pointB_xFn(width), pointB_yFn(height));
         });
+
+        return mask;
     };
 
     ResizableStage.prototype.unmask = function (drawable) {
@@ -436,7 +432,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             id: drawable.id + MASK
         };
         this.resizer.remove(idOfPossibleClippingMask);
-        delete drawable.mask;
+        this.stage.unmask(drawable);
     };
 
     ResizableStage.prototype.update = function () {
@@ -446,4 +442,4 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     return ResizableStage;
 })(changeCoords, changePath, CanvasImageCollisionDetector, inheritMethods, TextWrapper, iterateEntries, Object,
-    changeRectangle);
+    changeRectangle, changeMask);

@@ -202,7 +202,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     Stage.prototype.animateAlpha = function (drawable, value, duration, easing, loop, callback) {
-        this.propertyAnimations.animateAlpha(drawable, value, duration, easing, loop, callback);
+        return this.propertyAnimations.animateAlpha(drawable, value, duration, easing, loop, callback);
     };
 
     Stage.prototype.animateAlphaPattern = function (drawable, valuePairs, loop) {
@@ -210,7 +210,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     Stage.prototype.animateRotation = function (drawable, value, duration, easing, loop, callback) {
-        this.propertyAnimations.animateRotation(drawable, value, duration, easing, loop, callback);
+        return this.propertyAnimations.animateRotation(drawable, value, duration, easing, loop, callback);
     };
 
     Stage.prototype.animateRotationPattern = function (drawable, valuePairs, loop) {
@@ -218,11 +218,20 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     Stage.prototype.animateScale = function (drawable, value, duration, easing, loop, callback) {
-        this.propertyAnimations.animateScale(drawable, value, duration, easing, loop, callback);
+        return this.propertyAnimations.animateScale(drawable, value, duration, easing, loop, callback);
     };
 
     Stage.prototype.animateScalePattern = function (drawable, valuePairs, loop) {
         this.propertyAnimations.animateScalePattern(drawable, valuePairs, loop);
+    };
+
+    Stage.prototype.mask = function (drawable, pointA_x, pointA_y, pointB_x, pointB_y) {
+        drawable.mask = Drawables.getMask(pointA_x, pointA_y, pointB_x - pointA_x, pointB_y - pointA_y);
+        return drawable.mask;
+    };
+
+    Stage.prototype.unmask = function (drawable) {
+        delete drawable.mask;
     };
 
     Stage.prototype.basicAnimation = function (drawable, setter, animation, callback) {
