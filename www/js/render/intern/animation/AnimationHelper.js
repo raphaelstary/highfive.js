@@ -28,9 +28,18 @@ var AnimationHelper = (function () {
                     };
                 }
             } else if (loop) {
-                callback = function () {
-                    self.animateWithKeyFrames(copy, loop);
-                };
+                if (wrapper.callback) {
+                    callback = function () {
+                        wrapper.callback();
+                        self.animateWithKeyFrames(copy, loop);
+                    };
+                } else {
+                    callback = function () {
+                        self.animateWithKeyFrames(copy, loop);
+                    };
+                }
+            } else {
+                callback = wrapper.callback;
             }
             self.animations.animate(wrapper.drawable, wrapper.setter, wrapper.animation, callback);
         }
