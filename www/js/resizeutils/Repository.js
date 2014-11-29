@@ -5,10 +5,10 @@ var Repository = (function (Object) {
         this.dict = {};
     }
 
-    Repository.prototype.add = function (item, fn, resizeIsDependentOnThisDrawables) {
+    Repository.prototype.add = function (item, fn, resizeDependencies) {
         this.dict[item.id] = {
             fn: fn,
-            dependencies: resizeIsDependentOnThisDrawables
+            dependencies: resizeDependencies
         };
     };
 
