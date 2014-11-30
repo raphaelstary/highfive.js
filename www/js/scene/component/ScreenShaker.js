@@ -1,9 +1,12 @@
-var ScreenShaker = (function (Math) {
+var ScreenShaker = (function (Math, Object) {
     "use strict";
 
-    function ScreenShaker(initialDrawables) {
-        this.shaker = initialDrawables ? initialDrawables.slice() : [];
+    function ScreenShaker() {
+        this.shaker = {};
+        this.__init();
+    }
 
+    ScreenShaker.prototype.__init = function () {
         this.shaking = false;
         this.smallShaking = false;
         this.bigShaking = false;
@@ -11,21 +14,23 @@ var ScreenShaker = (function (Math) {
         this.time = 0;
         this.duration = 60;
         this.lastOffSetY = 0;
-    }
+    };
 
     ScreenShaker.prototype.startBigShake = function () {
+        var self = this;
         if (this.shaking) {
             if (this.smallShaking) {
                 this.smallShaking = false;
             }
 
-            this.shaker.forEach(function (item) {
+            Object.keys(this.shaker).forEach(function (key) {
+                var item = self.shaker[key];
                 item.x = item._startValueX;
             });
 
             if (this.bigShaking) {
-                var self = this;
-                this.shaker.forEach(function (item) {
+                Object.keys(this.shaker).forEach(function (key) {
+                    var item = self.shaker[key];
                     item.y = item.y - self.lastOffSetY;
                 });
                 this.lastOffSetY = 0;
@@ -38,11 +43,13 @@ var ScreenShaker = (function (Math) {
     };
 
     ScreenShaker.prototype.startSmallShake = function () {
+        var self = this;
         if (this.shaking) {
             if (this.bigShaking) {
                 return;
             }
-            this.shaker.forEach(function (item) {
+            Object.keys(this.shaker).forEach(function (key) {
+                var item = self.shaker[key];
                 item.x = item._startValueX;
             });
         }
@@ -58,7 +65,8 @@ var ScreenShaker = (function (Math) {
             if (this.smallShaking) {
                 var offSet = elasticOutShake(this.time, this.duration, 25, 5);
 
-                this.shaker.forEach(function (item) {
+                Object.keys(this.shaker).forEach(function (key) {
+                    var item = self.shaker[key];
                     if (self.time == 0) {
                         item._startValueX = item.x;
                     }
@@ -75,7 +83,8 @@ var ScreenShaker = (function (Math) {
                 var offSetX = elasticOutShake(this.time, this.duration, amplitude - 50, period + 5);
                 var offSetY = elasticOutShake(this.time, this.duration, amplitude, period);
 
-                this.shaker.forEach(function (item) {
+                Object.keys(this.shaker).forEach(function (key) {
+                    var item = self.shaker[key];
                     if (self.time == 0) {
                         item._startValueX = item.x;
 //                            item._startValueY = item.y;
@@ -100,7 +109,8 @@ var ScreenShaker = (function (Math) {
                 this.time = 0;
                 this.shaking = false;
 
-                this.shaker.forEach(function (item) {
+                Object.keys(this.shaker).forEach(function (key) {
+                    var item = self.shaker[key];
                     item.x = item._startValueX;
                     delete item._startValueX;
 
@@ -126,16 +136,27 @@ var ScreenShaker = (function (Math) {
     }
 
     ScreenShaker.prototype.add = function (drawable) {
-        this.shaker.push(drawable);
+        this.shaker[drawable.id] = drawable;
+    };
+
+    ScreenShaker.prototype.remove = function (drawable) {
+        delete this.shaker[drawable.id];
     };
 
     ScreenShaker.prototype.resize = function () {
-        this.shaker.forEach(function (item) {
+        var self = this;
+        Object.keys(this.shaker).forEach(function (key) {
+            var item = self.shaker[key];
             if (item._startValueX) {
                 item._startValueX = item.x;
             }
         });
     };
 
+    ScreenShaker.prototype.reset = function () {
+        this.shaker = {};
+        this.__init();
+    };
+
     return ScreenShaker;
-})(Math);
+})(Math, Object);
