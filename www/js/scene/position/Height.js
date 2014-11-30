@@ -15,7 +15,7 @@ var Height = (function (calcScreenConst) {
             return height;
         },
         FIFTH: function (height) {
-            calcScreenConst(height, 5);
+            return calcScreenConst(height, 5);
         },
         FOUR_FIFTH: function (height) {
             return calcScreenConst(height, 5, 4);
