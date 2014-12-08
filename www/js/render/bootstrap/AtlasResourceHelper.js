@@ -1,8 +1,9 @@
-var AtlasResourceHelper = (function (AtlasCache, resolveAtlasPaths, screenWidth, screenHeight) {
+var AtlasResourceHelper = (function (AtlasCache, resolveAtlasPaths, screenWidth, screenHeight, getDevicePixelRatio) {
     "use strict";
 
     function registerAtlases(resourceLoader, atlases) {
-        resolveAtlasPaths(screenWidth, screenHeight).forEach(function (groupedAtlasInfo) {
+        var pixelRatio = getDevicePixelRatio();
+        resolveAtlasPaths(screenWidth * pixelRatio, screenHeight * pixelRatio).forEach(function (groupedAtlasInfo) {
             atlases.push({
                 atlas: resourceLoader.addImage(groupedAtlasInfo.gfx),
                 info: resourceLoader.addJSON(groupedAtlasInfo.data)
@@ -21,4 +22,4 @@ var AtlasResourceHelper = (function (AtlasCache, resolveAtlasPaths, screenWidth,
         register: registerAtlases,
         process: processAtlases
     };
-})(AtlasCache, resolveAtlasPaths, window.screen.availWidth, window.screen.availHeight);
+})(AtlasCache, resolveAtlasPaths, window.screen.availWidth, window.screen.availHeight, getDevicePixelRatio);

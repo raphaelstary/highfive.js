@@ -1,4 +1,4 @@
-var ResizeHandler = (function (requestAnimationFrame) {
+var ResizeHandler = (function (requestAnimationFrame, getDevicePixelRatio) {
     "use strict";
 
     function ResizeHandler(resizeBus) {
@@ -23,7 +23,8 @@ var ResizeHandler = (function (requestAnimationFrame) {
             this.drawing = true;
 
             // actually do the resize
-            this.resizeBus.resize(width, height);
+            var pixelRatio = getDevicePixelRatio();
+            this.resizeBus.resize(width * pixelRatio, height * pixelRatio);
 
             requestAnimationFrame(this._initiateResize.bind(this, width, height));
         } else {
@@ -32,4 +33,4 @@ var ResizeHandler = (function (requestAnimationFrame) {
     };
 
     return ResizeHandler;
-})(requestAnimFrame);
+})(requestAnimFrame, getDevicePixelRatio);
