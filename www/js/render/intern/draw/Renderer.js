@@ -11,11 +11,16 @@ var Renderer = (function (Object, getFunctionName) {
         this.renderServices = {};
     }
 
-    Renderer.prototype.resize = function (width, height) {
-        this.screen.width = width;
-        this.screen.height = height;
-        this.screenWidth = width;
-        this.screenHeight = height;
+    Renderer.prototype.resize = function (width, height, cssWidth, cssHeight, pixelRatio) {
+        if (pixelRatio > 1) {
+            this.screen.style.width = cssWidth + 'px';
+            this.screen.style.height = cssHeight + 'px';
+            this.screen.width = this.screenWidth = width;
+            this.screen.height = this.screenHeight = height;
+        } else {
+            this.screen.width = this.screenWidth = width;
+            this.screen.height = this.screenHeight = height;
+        }
     };
 
     Renderer.prototype.add = function (drawable) {

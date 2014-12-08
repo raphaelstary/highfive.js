@@ -102,12 +102,18 @@ var resolveAtlasPaths = (function () {
         for (var i = 0; i < atlases.length; i++) {
             var atlas = atlases[i];
             if (height <= atlas.size) {
-                return getFileTypedNames(getFileNames(atlas.size, atlas.count));
+                return {
+                    paths: getFileTypedNames(getFileNames(atlas.size, atlas.count)),
+                    defaultSize: atlas.size
+                };
             }
         }
 
         var last = atlases[atlases.length - 1];
-        return getFileTypedNames(getFileNames(last.size, last.count));
+        return {
+            paths: getFileTypedNames(getFileNames(last.size, last.count)),
+            defaultSize: last.size
+        };
     }
 
     function getFileTypedNames(names) {

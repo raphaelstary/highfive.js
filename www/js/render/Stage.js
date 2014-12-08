@@ -278,8 +278,8 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
         this.animations.update();
     };
 
-    Stage.prototype.resize = function (width, height) {
-        this.renderer.resize(width, height);
+    Stage.prototype.resize = function (width, height, cssWidth, cssHeight, pixelRatio) {
+        this.renderer.resize(width, height, cssWidth, cssHeight, pixelRatio);
     };
 
     Stage.prototype.pause = function (drawable) {

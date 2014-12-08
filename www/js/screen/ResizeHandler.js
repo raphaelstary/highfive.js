@@ -24,7 +24,7 @@ var ResizeHandler = (function (requestAnimationFrame, getDevicePixelRatio) {
 
             // actually do the resize
             var pixelRatio = getDevicePixelRatio();
-            this.resizeBus.resize(width * pixelRatio, height * pixelRatio);
+            this.resizeBus.resize(width * pixelRatio, height * pixelRatio, width, height, pixelRatio);
 
             requestAnimationFrame(this._initiateResize.bind(this, width, height));
         } else {

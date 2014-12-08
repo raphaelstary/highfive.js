@@ -51,7 +51,7 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
             return this.data.size;
         }
         if (this.data instanceof SubImage) {
-            return this.data.trimmedTileHeight;
+            return this.data.scaledTrimmedHeight;
         }
         if (this.data instanceof ImageWrapper)
             return this.data.height * this.data.scale;
@@ -63,7 +63,7 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
             return measureText(this.data).width;
         }
         if (this.data instanceof SubImage) {
-            return this.data.trimmedTileWidth;
+            return this.data.scaledTrimmedWidth;
         }
         if (this.data instanceof ImageWrapper)
             return this.data.width * this.data.scale;

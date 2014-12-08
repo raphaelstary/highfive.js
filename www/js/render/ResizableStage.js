@@ -125,17 +125,16 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         };
     };
 
-    ResizableStage.prototype.resize = function (width, height) {
+    ResizableStage.prototype.resize = function (width, height, cssWidth, cssHeight, pixelRatio) {
         this.width = width;
         this.height = height;
-
-        this.stage.resize(width, height);
         if (this.gfx.resize)
-            this.gfx.resize(width, height);
-        this.resizer.call(width, height);
+            this.gfx.resize(width, height, cssWidth, cssHeight, pixelRatio);
+        this.stage.resize(width, height, cssWidth, cssHeight, pixelRatio);
+        this.resizer.call(width, height, cssWidth, cssHeight, pixelRatio);
 
         iterateEntries(this.collisions, function (detector) {
-            detector.resize();
+            detector.resize(width, height, cssWidth, cssHeight, pixelRatio);
         });
     };
 

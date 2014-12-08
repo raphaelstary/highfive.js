@@ -16,12 +16,12 @@ var ResizeBus = (function (iterateEntries) {
         delete  this.resizeDict[id];
     };
 
-    ResizeBus.prototype.resize = function (width, height) {
+    ResizeBus.prototype.resize = function (width, height, cssWidth, cssHeight, pixelRatio) {
         this.width = width;
         this.height = height;
 
         iterateEntries(this.resizeDict, function (fn) {
-            fn(width, height);
+            fn(width, height, cssWidth, cssHeight, pixelRatio);
         });
     };
 

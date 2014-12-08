@@ -8,8 +8,9 @@ var renderAtlas = (function () {
                 drawable.getHeight());
         } else {
             ctx.drawImage(drawable.data.img, drawable.data.x, drawable.data.y, drawable.data.width,
-                drawable.data.height, drawable.x + drawable.data.offSetX, drawable.y + drawable.data.offSetY,
-                drawable.data.trimmedTileWidth, drawable.data.trimmedTileHeight);
+                drawable.data.height, drawable.x + drawable.data.scaledOffSetX,
+                drawable.y + drawable.data.scaledOffSetY, drawable.data.scaledTrimmedWidth,
+                drawable.data.scaledTrimmedHeight);
         }
     }
 
