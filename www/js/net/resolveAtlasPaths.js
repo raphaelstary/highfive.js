@@ -99,9 +99,10 @@ var resolveAtlasPaths = (function () {
     }
 
     function resolveAtlasPaths(width, height) {
+        var size = width > height ? width : height;
         for (var i = 0; i < atlases.length; i++) {
             var atlas = atlases[i];
-            if (height <= atlas.size) {
+            if (size <= atlas.size) {
                 return {
                     paths: getFileTypedNames(getFileNames(atlas.size, atlas.count)),
                     defaultSize: atlas.size
