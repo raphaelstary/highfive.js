@@ -3,7 +3,7 @@ var installResize = (function (window, ResizeBus, ResizeHandler, width, height, 
 
     function installResize() {
         var pixelRatio = getDevicePixelRatio();
-        var resizeBus = new ResizeBus(width * pixelRatio, height * pixelRatio);
+        var resizeBus = new ResizeBus(width * pixelRatio, height * pixelRatio, width, height, pixelRatio);
         var resizeHandler = new ResizeHandler(resizeBus);
         window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
 
