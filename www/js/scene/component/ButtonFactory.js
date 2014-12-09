@@ -77,7 +77,8 @@ var ButtonFactory = (function () {
             text: textDrawable,
             background: backgroundDrawable,
             input: touchable,
-            used: false
+            used: false,
+            reset: true
         };
 
         var self = this;
@@ -90,7 +91,8 @@ var ButtonFactory = (function () {
 
             self.playSound();
 
-            self.timer.doLater(resetButton.bind(undefined, textDrawable, backgroundDrawable), 30);
+            if (returnObject.reset)
+                self.timer.doLater(resetButton.bind(undefined, textDrawable, backgroundDrawable), 30);
 
             callback();
         };
