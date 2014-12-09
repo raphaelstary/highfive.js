@@ -3,6 +3,7 @@ var SpriteAnimations = (function (Object) {
 
     function SpriteAnimations() {
         this.animationsDict = {};
+        this.paused = {};
         this.ticker = 0;
     }
 
@@ -50,10 +51,21 @@ var SpriteAnimations = (function (Object) {
 
     SpriteAnimations.prototype.remove = function (drawable) {
         delete this.animationsDict[drawable.id];
+        delete this.paused[drawable.id];
     };
 
     SpriteAnimations.prototype.has = function (drawable) {
-        return this.animationsDict[drawable.id] !== undefined;
+        return this.animationsDict[drawable.id] !== undefined || this.paused[drawable.id] !== undefined;
+    };
+
+    SpriteAnimations.prototype.pause = function (drawable) {
+        this.paused[drawable.id] = this.animationsDict[drawable.id];
+        delete this.animationsDict[drawable.id];
+    };
+
+    SpriteAnimations.prototype.play = function (drawable) {
+        this.animationsDict[drawable.id] = this.paused[drawable.id];
+        delete this.paused[drawable.id];
     };
 
     return SpriteAnimations;

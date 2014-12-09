@@ -3,6 +3,7 @@ var TapHandler = (function (isHit, iterateSomeEntries) {
 
     function TapHandler() {
         this.elements = {};
+        this.disabled = {};
     }
 
     TapHandler.prototype.touchStart = function (event) {
@@ -42,6 +43,17 @@ var TapHandler = (function (isHit, iterateSomeEntries) {
 
     TapHandler.prototype.remove = function (touchable) {
         delete this.elements[touchable.id];
+        delete this.disabled[touchable.id];
+    };
+
+    TapHandler.prototype.disable = function (touchable) {
+        this.disabled[touchable.id] = this.elements[touchable.id];
+        delete this.elements[touchable.id];
+    };
+
+    TapHandler.prototype.enable = function (touchable) {
+        this.elements[touchable.id] = this.disabled[touchable.id];
+        delete this.disabled[touchable.id];
     };
 
     return TapHandler;

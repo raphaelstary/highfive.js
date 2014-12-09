@@ -283,11 +283,21 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     Stage.prototype.pause = function (drawable) {
-        this.motions.pause(drawable);
+        if (this.motions.has(drawable))
+            this.motions.pause(drawable);
+        if (this.animations.has(drawable))
+            this.animations.pause(drawable);
+        if (this.spriteAnimations.has(drawable))
+            this.spriteAnimations.pause(drawable);
     };
 
     Stage.prototype.play = function (drawable) {
-        this.motions.play(drawable);
+        if (this.motions.has(drawable))
+            this.motions.play(drawable);
+        if (this.animations.has(drawable))
+            this.animations.play(drawable);
+        if (this.spriteAnimations.has(drawable))
+            this.spriteAnimations.play(drawable);
     };
 
     return Stage;

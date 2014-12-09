@@ -4,6 +4,7 @@ var GameLoop = (function (requestAnimationFrame, Object) {
     // callback from animationFrame infrastructure. tick list of given periodic handlers
     function GameLoop() {
         this.tickBus = {};
+        this.disabled = {};
     }
 
     GameLoop.prototype.run = function () {
@@ -23,6 +24,17 @@ var GameLoop = (function (requestAnimationFrame, Object) {
 
     GameLoop.prototype.remove = function (id) {
         delete this.tickBus[id];
+        delete this.disabled[id];
+    };
+
+    GameLoop.prototype.disable = function (id) {
+        this.disabled[id] = this.tickBus[id];
+        delete this.tickBus[id];
+    };
+
+    GameLoop.prototype.enable = function (id) {
+        this.tickBus[id] = this.disabled[id];
+        delete this.disabled[id];
     };
 
     return GameLoop;

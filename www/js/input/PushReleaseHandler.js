@@ -3,7 +3,7 @@ var PushReleaseHandler = (function (isHit, iterateEntries, iterateSomeEntries) {
 
     function PushReleaseHandler() {
         this.elements = {};
-
+        this.disabled = {};
         this.onGoingTouches = {};
     }
 
@@ -65,8 +65,19 @@ var PushReleaseHandler = (function (isHit, iterateEntries, iterateSomeEntries) {
         };
     };
 
+    PushReleaseHandler.prototype.disable = function (touchable) {
+        this.disabled[touchable.id] = this.elements[touchable.id];
+        delete this.elements[touchable.id];
+    };
+
+    PushReleaseHandler.prototype.enable = function (touchable) {
+        this.elements[touchable.id] = this.disabled[touchable.id];
+        delete this.disabled[touchable.id];
+    };
+
     PushReleaseHandler.prototype.remove = function (touchable) {
         delete this.elements[touchable.id];
+        delete this.disabled[touchable.id];
     };
 
     return PushReleaseHandler;

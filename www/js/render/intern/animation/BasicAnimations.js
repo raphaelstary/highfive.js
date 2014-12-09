@@ -3,6 +3,7 @@ var BasicAnimations = (function (Object) {
 
     function BasicAnimations() {
         this.dict = {};
+        this.paused = {};
     }
 
     BasicAnimations.prototype.animate = function (drawable, setter, animation, callback) {
@@ -18,9 +19,6 @@ var BasicAnimations = (function (Object) {
     BasicAnimations.prototype.update = function () {
         Object.keys(this.dict).forEach(function (key) {
             var wrapper = this.dict[key];
-
-            if (!wrapper.active)
-                return;
 
             var animation = wrapper.animation;
             if (animation.duration > wrapper.time) {
@@ -47,18 +45,21 @@ var BasicAnimations = (function (Object) {
 
     BasicAnimations.prototype.remove = function (drawable) {
         delete this.dict[drawable.id];
+        delete this.paused[drawable.id];
     };
 
     BasicAnimations.prototype.has = function (drawable) {
-        return this.dict[drawable.id] !== undefined;
+        return this.dict[drawable.id] !== undefined || this.paused[drawable.id] !== undefined;
     };
 
     BasicAnimations.prototype.pause = function (drawable) {
-        this.dict[drawable.id].active = false;
+        this.paused[drawable.id] = this.dict[drawable.id];
+        delete this.dict[drawable.id];
     };
 
     BasicAnimations.prototype.play = function (drawable) {
-        this.dict[drawable.id].active = true;
+        this.dict[drawable.id] = this.paused[drawable.id];
+        delete this.paused[drawable.id];
     };
 
     return BasicAnimations;
