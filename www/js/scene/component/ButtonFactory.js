@@ -3,7 +3,7 @@ var ButtonFactory = (function () {
 
     function ButtonFactory(stage, input, timer, font, playSoundCallback, primaryColor, primaryTextColor,
         primaryTextSize, primaryWidthFactor, secondaryColor, secondaryTextColor, secondaryTextSize,
-        secondaryWidthFactor) {
+        secondaryWidthFactor, zIndex) {
         this.stage = stage;
         this.input = input;
         this.font = font;
@@ -17,6 +17,7 @@ var ButtonFactory = (function () {
         this.secondaryTextColor = secondaryTextColor;
         this.secondaryTextSize = secondaryTextSize;
         this.secondaryWidthFactor = secondaryWidthFactor;
+        this.zIndex = zIndex;
     }
 
     ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback, multiSubmit) {
@@ -54,7 +55,8 @@ var ButtonFactory = (function () {
 
         var isMultiSubmitOn = multiSubmit !== undefined ? multiSubmit : false;
 
-        var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, 3, undefined, undefined,
+        var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, this.zIndex + 1,
+            undefined, undefined,
             textAlpha);
 
         function getWidth() {
@@ -66,7 +68,7 @@ var ButtonFactory = (function () {
         }
 
         var backgroundWrapper = this.stage.drawRectangleWithInput(xFn, yFn, getWidth, getHeight, color,
-            backgroundFilled, lineWidthFn, 2, 0.5, undefined, undefined, [textDrawable]);
+            backgroundFilled, lineWidthFn, this.zIndex, 0.5, undefined, undefined, [textDrawable]);
 
         var touchable = backgroundWrapper.input;
         var backgroundDrawable = backgroundWrapper.drawable;
