@@ -5,10 +5,10 @@ var Repository = (function (Object) {
         this.dict = {};
     }
 
-    Repository.prototype.add = function (item, fn, resizeDependencies) {
+    Repository.prototype.add = function (item, fn, dependencies) {
         this.dict[item.id] = {
             fn: fn,
-            dependencies: resizeDependencies
+            dependencies: dependencies
         };
     };
 
@@ -20,28 +20,28 @@ var Repository = (function (Object) {
         delete this.dict[item.id];
     };
 
-    Repository.prototype.call = function (width, height) {
+    Repository.prototype.call = function (arg1, arg2) {
         var self = this;
         var alreadyCalledMap = {};
 
         Object.keys(this.dict).forEach(function (key) {
             var wrapper = this.dict[key];
-            resizeItem(key, wrapper.fn, wrapper.dependencies);
+            callItem(key, wrapper.fn, wrapper.dependencies);
         }, this);
 
-        function resizeItem(id, fn, dependencies) {
+        function callItem(id, fn, dependencies) {
             alreadyCalledMap[id] = true;
             if (dependencies) {
                 dependencies.forEach(function (dependency) {
                     var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
                     if (dependencyNotAlreadyCalled) {
                         var wrapper = self.dict[dependency.id];
-                        resizeItem(dependency.id, wrapper.fn, wrapper.dependencies);
+                        callItem(dependency.id, wrapper.fn, wrapper.dependencies);
                     }
                 });
             }
 
-            fn(width, height);
+            fn(arg1, arg2);
         }
     };
 
