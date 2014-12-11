@@ -1,21 +1,21 @@
 var installTap = (function (window, TapHandler) {
     "use strict";
 
-    function installTap(canvas) {
+    function installTap(element) {
         var tapHandler = new TapHandler();
 
         if (window.PointerEvent) {
-            canvas.addEventListener('pointerdown', tapHandler.click.bind(tapHandler));
+            element.addEventListener('pointerdown', tapHandler.click.bind(tapHandler));
 
         } else if (window.MSPointerEvent) {
-            canvas.addEventListener('MSPointerDown', tapHandler.click.bind(tapHandler));
+            element.addEventListener('MSPointerDown', tapHandler.click.bind(tapHandler));
 
         } else {
             if ('ontouchstart' in window) {
-                canvas.addEventListener('touchstart', tapHandler.touchStart.bind(tapHandler));
+                element.addEventListener('touchstart', tapHandler.touchStart.bind(tapHandler));
             }
 
-            canvas.addEventListener('click', tapHandler.click.bind(tapHandler));
+            element.addEventListener('click', tapHandler.click.bind(tapHandler));
         }
 
         return tapHandler;

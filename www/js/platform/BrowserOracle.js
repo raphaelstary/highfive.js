@@ -1,11 +1,10 @@
-var BrowserOracle = (function () {
+var BrowserOracle = (function (userAgent) {
     "use strict";
 
-    function BrowserOracle(userAgent) {
-        this.userAgent = userAgent;
-        this.isFirefox = /firefox/i.test(this.userAgent);
-        this.isMobile = /mobile/i.test(this.userAgent);
+    function BrowserOracle() {
+        this.isFirefox = /firefox/i.test(userAgent);
+        this.isMobile = /mobile/i.test(userAgent);
     }
 
     return BrowserOracle;
-})();
+})(window.navigator.userAgent);
