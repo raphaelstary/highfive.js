@@ -45,15 +45,11 @@
 <script src="js/scene/position/Font.js"></script>
 
 <script src="js/render/Transition.js"></script>
-<script src="js/scene/viewhelper/ShieldsHelper.js"></script>
-<script src="js/scene/viewhelper/EnergyBarHelper.js"></script>
-<script src="js/scene/viewhelper/LifeHelper.js"></script>
-<script src="js/scene/viewhelper/CountHelper.js"></script>
-<script src="js/scene/viewhelper/ShipHelper.js"></script>
-<script src="js/scene/viewhelper/FireHelper.js"></script>
-<script src="js/scene/viewhelper/CountHelper.js"></script>
-<script src="js/scene/viewhelper/BackGroundHelper.js"></script>
+<script src="js/scene/viewhelper/drawShip.js"></script>
+<script src="js/scene/viewhelper/drawBackGround.js"></script>
+<script src="js/scene/viewhelper/Fire.js"></script>
 <script src="js/scene/viewhelper/drawSpeedStripes.js"></script>
+<script src="js/scene/viewhelper/drawShields.js"></script>
 <script src="js/scene/viewhelper/drawSharedGameStuff.js"></script>
 <script src="js/scene/viewhelper/ScoreBoard.js"></script>
 <script src="js/scene/viewhelper/EnergyBar.js"></script>
@@ -64,19 +60,22 @@
 
 <script src="js/render/intern/draw/entity/RectangleMask.js"></script>
 
-<script src="js/scene/control/CanvasCollisionDetector.js"></script>
+<script src="js/scene/component/ShieldsHitView.js"></script>
+<script src="js/scene/component/ShipHitView.js"></script>
+<script src="js/scene/component/LivesView.js"></script>
 <script src="js/scene/component/ScoreView.js"></script>
 <script src="js/scene/component/CollectView.js"></script>
 <script src="js/scene/component/OdometerView.js"></script>
 <script src="js/scene/component/Odometer.js"></script>
 
-<script src="js/scene/control/ScreenShaker.js"></script>
+<script src="js/scene/component/ScreenShaker.js"></script>
 
 <script src="js/platform/UniversalTranslator.js"></script>
 <script src="js/platform/addFontToDOM.js"></script>
 <script src="js/platform/requestAnimFrame.js"></script>
 <script src="js/platform/BrowserOracle.js"></script>
 <script src="js/platform/FullScreenController.js"></script>
+<script src="js/platform/ScreenOrientation.js"></script>
 
 <script src="js/input/entity/Touchable.js"></script>
 <script src="js/input/entity/Touchables.js"></script>
@@ -136,11 +135,15 @@
 <script src="js/render/ImageCache.js"></script>
 <script src="js/render/AtlasCache.js"></script>
 
+<script src="js/input/bootstrap/installOneTimeTap.js"></script>
+<script src="js/scene/myscenes/SplashScreen.js"></script>
+<script src="js/scene/myscenes/Settings.js"></script>
 <script src="js/scene/myscenes/Credits.js"></script>
 <script src="js/utils/range.js"></script>
 <script src="js/scene/component/ObstaclesView.js"></script>
 <script src="js/scene/component/LevelGenerator.js"></script>
 <script src="js/scene/component/ButtonFactory.js"></script>
+<script src="js/scene/component/PlayFactory.js"></script>
 <script src="js/scene/myscenes/GetReady.js"></script>
 <script src="js/scene/myscenes/Intro.js"></script>
 <script src="js/scene/myscenes/KillScreen.js"></script>
