@@ -44,19 +44,5 @@ var FullScreenController = (function (document) {
         return !this.isFullScreen();
     };
 
-    document.addEventListener("fullscreenchange", fullScreenDebugHandler);
-    document.addEventListener("webkitfullscreenchange", fullScreenDebugHandler);
-    document.addEventListener("mozfullscreenchange", fullScreenDebugHandler);
-    document.addEventListener("MSFullscreenChange", fullScreenDebugHandler);
-    document.addEventListener('MSFullscreenError', fullScreenDebugHandler);
-
-    function fullScreenDebugHandler(event) {
-        console.log(event.target);
-        console.log('full screen event fired');
-        var isFs = (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement ||
-            document.msFullscreenElement) != null;
-        console.log('is full screen: ' + isFs);
-    }
-
     return FullScreenController;
 })(window.document);
