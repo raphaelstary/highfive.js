@@ -2,7 +2,10 @@ var getDevicePixelRatio = (function (window) {
     "use strict";
 
     return function () {
-        var windowsPhone8 = window.screen.deviceXDPI / window.screen.logicalXDPI;
-        return window.devicePixelRatio || windowsPhone8 || 1;
+        var calculatedDevicePixelRatio;
+        if ('screen' in window) {
+            calculatedDevicePixelRatio = window.screen.deviceXDPI / window.screen.logicalXDPI;
+        }
+        return window.devicePixelRatio || calculatedDevicePixelRatio || 1;
     }
 })(window);
