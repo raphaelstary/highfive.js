@@ -10,7 +10,8 @@ var Bootstrapper = (function ($) {
         gamePad: addGamePad,
         keyPushRelease: addKeyPushRelease,
         dragNDrop: addDragNDrop,
-        atlas: useAtlasesRendering
+        atlas: useAtlasesRendering,
+        orientation: addScreenOrientation
     };
 
     var screen = $.installCanvas();
@@ -38,6 +39,11 @@ var Bootstrapper = (function ($) {
 
     function useAtlasesRendering() {
         useAtlases = true;
+        return Bootstrapper;
+    }
+
+    function addScreenOrientation() {
+        globalServices.orientation = $.installOrientation();
         return Bootstrapper;
     }
 
@@ -88,5 +94,6 @@ var Bootstrapper = (function ($) {
     installGamePad: installGamePad,
     installKeyPushRelease: installKeyPushRelease,
     installDragNDrop: installDragNDrop,
+    installOrientation: installOrientation,
     App: App
 });
