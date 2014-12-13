@@ -34,6 +34,12 @@ var App = (function ($) {
             sceneServices.loop.add('scene_timer', timer.update.bind(timer));
             sceneServices.timer = timer;
 
+            var events = new $.EventBus();
+            sceneServices.loop.add('event_bus', events.update.bind(events));
+            sceneServices.events = events;
+
+            sceneServices.device = new $.BrowserOracle();
+
             sceneServices.sceneStorage = {};
 
             $.concatenateProperties(self.services, sceneServices);
@@ -57,5 +63,7 @@ var App = (function ($) {
     installScenes: installMyScenes,
     installLoop: installLoop,
     concatenateProperties: concatenateProperties,
-    CallbackTimer: CallbackTimer
+    CallbackTimer: CallbackTimer,
+    EventBus: EventBus,
+    BrowserOracle: BrowserOracle
 });
