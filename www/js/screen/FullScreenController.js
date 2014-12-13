@@ -1,4 +1,4 @@
-var FullScreenController = (function (document) {
+var FullScreenController = (function (document, navigator) {
     "use strict";
 
     function FullScreenController(screen, bus) {
@@ -24,7 +24,7 @@ var FullScreenController = (function (document) {
 
     FullScreenController.prototype.isFullScreen = function () {
         return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement ||
-            document.msFullscreenElement) != null;
+            document.msFullscreenElement) != null || navigator.standalone;
     };
 
     FullScreenController.prototype.isSupported = function () {
@@ -50,4 +50,4 @@ var FullScreenController = (function (document) {
     };
 
     return FullScreenController;
-})(window.document);
+})(window.document, window.navigator);

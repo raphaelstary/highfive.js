@@ -1,4 +1,4 @@
-var EventBus = (function (iterateSomeEntries, Object) {
+var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
     "use strict";
 
     function EventBus() {
@@ -15,7 +15,6 @@ var EventBus = (function (iterateSomeEntries, Object) {
             });
             delete this.pending[key];
         }, this);
-
     };
 
     EventBus.prototype.fire = function (eventName) {
@@ -23,6 +22,12 @@ var EventBus = (function (iterateSomeEntries, Object) {
         if (subscribers) {
             this.pending[eventName] = true;
         }
+    };
+
+    EventBus.prototype.syncFire = function (eventName) {
+        iterateEntries(this.dict[eventName], function (callback) {
+            callback();
+        });
     };
 
     EventBus.prototype.subscribe = function (eventName, callback) {
@@ -45,4 +50,4 @@ var EventBus = (function (iterateSomeEntries, Object) {
     };
 
     return EventBus;
-})(iterateSomeEntries, Object);
+})(iterateSomeEntries, Object, iterateEntries);
