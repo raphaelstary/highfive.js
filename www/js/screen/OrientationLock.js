@@ -1,7 +1,10 @@
-var ScreenOrientation = (function (screen) {
+var OrientationLock = (function (screen) {
     "use strict";
 
     function lock(orientation) {
+        if (!screen)
+            return false;
+
         if ('orientation' in screen && 'angle' in screen.orientation) {
             return screen.orientation.lock(orientation);
         } else { // old API version
@@ -17,6 +20,9 @@ var ScreenOrientation = (function (screen) {
     }
 
     function unlock() {
+        if (!screen)
+            return false;
+
         if ('orientation' in screen && 'angle' in screen.orientation) {
             return screen.orientation.unlock();
         } else { // old API version

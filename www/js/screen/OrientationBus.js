@@ -1,4 +1,4 @@
-var OrientationBus = (function () {
+var OrientationBus = (function (OrientationLock) {
     "use strict";
 
     function OrientationBus() {
@@ -21,5 +21,8 @@ var OrientationBus = (function () {
         return this.orientation;
     };
 
+    OrientationBus.prototype.lock = OrientationLock.lock;
+    OrientationBus.prototype.unlock = OrientationLock.unlock;
+
     return OrientationBus;
-})();
+})(OrientationLock);

@@ -34,7 +34,6 @@ var App = (function ($) {
             sceneServices.loop.add('scene_timer', timer.update.bind(timer));
             sceneServices.timer = timer;
 
-            sceneServices.fullScreen = new $.FullScreenController(self.services.screen);
             sceneServices.sceneStorage = {};
 
             $.concatenateProperties(self.services, sceneServices);
@@ -56,7 +55,6 @@ var App = (function ($) {
     ResourceLoader: ResourceLoader,
     SimpleLoadingScreen: SimpleLoadingScreen,
     installScenes: installMyScenes,
-    FullScreenController: FullScreenController,
     installLoop: installLoop,
     concatenateProperties: concatenateProperties,
     CallbackTimer: CallbackTimer

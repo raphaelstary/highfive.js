@@ -11,7 +11,8 @@ var Bootstrapper = (function ($) {
         keyPushRelease: addKeyPushRelease,
         dragNDrop: addDragNDrop,
         atlas: useAtlasesRendering,
-        orientation: addScreenOrientation
+        orientation: addScreenOrientation,
+        fullScreen: addFullScreen
     };
 
     var screen = $.installCanvas();
@@ -44,6 +45,11 @@ var Bootstrapper = (function ($) {
 
     function addScreenOrientation() {
         globalServices.orientation = $.installOrientation();
+        return Bootstrapper;
+    }
+
+    function addFullScreen() {
+        globalServices.fullScreen = $.installFullScreen(screen);
         return Bootstrapper;
     }
 
@@ -95,5 +101,6 @@ var Bootstrapper = (function ($) {
     installKeyPushRelease: installKeyPushRelease,
     installDragNDrop: installDragNDrop,
     installOrientation: installOrientation,
+    installFullScreen: installFullScreen,
     App: App
 });
