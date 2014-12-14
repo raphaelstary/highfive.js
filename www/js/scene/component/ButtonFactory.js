@@ -102,6 +102,14 @@ var ButtonFactory = (function () {
         return returnObject;
     };
 
+    ButtonFactory.prototype.enable = function (button) {
+        this.input.enable(button.input);
+    };
+
+    ButtonFactory.prototype.disable = function (button) {
+        this.input.disable(button.input);
+    };
+
     ButtonFactory.prototype.remove = function (button) {
         this.stage.remove(button.text);
         this.stage.remove(button.background);
