@@ -29,5 +29,14 @@ var CallbackTimer = (function () {
         });
     };
 
+    CallbackTimer.prototype.pause = function () {
+        this.paused = this.todos.splice(0, this.todos.length);
+    };
+
+    CallbackTimer.prototype.resume = function () {
+        this.todos.push.apply(this.todos, this.paused);
+        delete this.paused;
+    };
+
     return CallbackTimer;
 })();
