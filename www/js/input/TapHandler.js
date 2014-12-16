@@ -1,4 +1,4 @@
-var TapHandler = (function (isHit, iterateSomeEntries) {
+var TapHandler = (function (isHit, iterateSomeEntries, iterateEntries) {
     "use strict";
 
     function TapHandler() {
@@ -51,10 +51,24 @@ var TapHandler = (function (isHit, iterateSomeEntries) {
         delete this.elements[touchable.id];
     };
 
+    TapHandler.prototype.disableAll = function () {
+        iterateEntries(this.elements, function (wrapper, id) {
+            this.disabled[id] = wrapper;
+            delete this.elements[id];
+        }, this);
+    };
+
     TapHandler.prototype.enable = function (touchable) {
         this.elements[touchable.id] = this.disabled[touchable.id];
         delete this.disabled[touchable.id];
     };
 
+    TapHandler.prototype.enableAll = function () {
+        iterateEntries(this.disabled, function (wrapper, id) {
+            this.elements[id] = wrapper;
+            delete this.disabled[id];
+        }, this);
+    };
+
     return TapHandler;
-})(isHit, iterateSomeEntries);
+})(isHit, iterateSomeEntries, iterateEntries);

@@ -110,6 +110,14 @@ var ButtonFactory = (function () {
         this.input.disable(button.input);
     };
 
+    ButtonFactory.prototype.enableAll = function () {
+        this.input.enableAll();
+    };
+
+    ButtonFactory.prototype.disableAll = function () {
+        this.input.disableAll();
+    };
+
     ButtonFactory.prototype.remove = function (button) {
         this.stage.remove(button.text);
         this.stage.remove(button.background);

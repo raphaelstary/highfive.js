@@ -70,9 +70,23 @@ var PushReleaseHandler = (function (isHit, iterateEntries, iterateSomeEntries) {
         delete this.elements[touchable.id];
     };
 
+    PushReleaseHandler.prototype.disableAll = function () {
+        iterateEntries(this.elements, function (wrapper, id) {
+            this.disabled[id] = wrapper;
+            delete this.elements[id];
+        }, this);
+    };
+
     PushReleaseHandler.prototype.enable = function (touchable) {
         this.elements[touchable.id] = this.disabled[touchable.id];
         delete this.disabled[touchable.id];
+    };
+
+    PushReleaseHandler.prototype.enableAll = function () {
+        iterateEntries(this.disabled, function (wrapper, id) {
+            this.elements[id] = wrapper;
+            delete this.disabled[id];
+        }, this);
     };
 
     PushReleaseHandler.prototype.remove = function (touchable) {
