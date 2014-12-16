@@ -1,4 +1,4 @@
-var SpriteAnimations = (function (Object) {
+var SpriteAnimations = (function (Object, iterateEntries) {
     "use strict";
 
     function SpriteAnimations() {
@@ -63,10 +63,24 @@ var SpriteAnimations = (function (Object) {
         delete this.animationsDict[drawable.id];
     };
 
+    SpriteAnimations.prototype.pauseAll = function () {
+        iterateEntries(this.animationsDict, function (wrapper, id) {
+            this.paused[id] = wrapper;
+            delete this.animationsDict[id];
+        }, this);
+    };
+
     SpriteAnimations.prototype.play = function (drawable) {
         this.animationsDict[drawable.id] = this.paused[drawable.id];
         delete this.paused[drawable.id];
     };
 
+    SpriteAnimations.prototype.playAll = function () {
+        iterateEntries(this.paused, function (wrapper, id) {
+            this.animationsDict[id] = wrapper;
+            delete this.paused[id];
+        }, this);
+    };
+
     return SpriteAnimations;
-})(Object);
+})(Object, iterateEntries);

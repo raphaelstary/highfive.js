@@ -300,5 +300,17 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
             this.spriteAnimations.play(drawable);
     };
 
+    Stage.prototype.pauseAll = function () {
+        this.motions.pauseAll();
+        this.animations.pauseAll();
+        this.spriteAnimations.pauseAll();
+    };
+
+    Stage.prototype.playAll = function () {
+        this.motions.playAll();
+        this.animations.playAll();
+        this.spriteAnimations.playAll();
+    };
+
     return Stage;
 })(Sprites, Drawables, Paths, Animations);
