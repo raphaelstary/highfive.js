@@ -38,7 +38,7 @@ var App = (function ($) {
             sceneServices.loop.add('event_bus', events.update.bind(events));
             sceneServices.events = events;
 
-            sceneServices.device = new $.BrowserOracle();
+            sceneServices.device = new $.DeviceInfo();
 
             sceneServices.sceneStorage = {};
 
@@ -65,5 +65,5 @@ var App = (function ($) {
     concatenateProperties: concatenateProperties,
     CallbackTimer: CallbackTimer,
     EventBus: EventBus,
-    BrowserOracle: BrowserOracle
+    DeviceInfo: DeviceInfo
 });
