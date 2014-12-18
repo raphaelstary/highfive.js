@@ -26,7 +26,7 @@ var FullScreenController = (function (document, navigator) {
             document.msFullscreenElement) != null || navigator.standalone;
     };
 
-    FullScreenController.prototype.isSupported = function () {
+    FullScreenController.prototype.__isSupported = function () {
         return this.isSupported;
     };
 

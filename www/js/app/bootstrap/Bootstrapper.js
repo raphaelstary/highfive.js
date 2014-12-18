@@ -22,7 +22,9 @@ var Bootstrapper = (function ($) {
     var useAtlases = false;
 
     var globalServices = {
-        screen: screen
+        screen: screen,
+        events: events,
+        device: device
     };
 
     function buildApp(myResources) {
@@ -56,7 +58,7 @@ var Bootstrapper = (function ($) {
         var fs = $.installFullScreen(screen, events);
         device.requestFullScreen = fs.request.bind(fs);
         device.isFullScreen = fs.isFullScreen.bind(fs);
-        device.isFullScreenSupported = fs.isSupported.bind(fs);
+        device.isFullScreenSupported = fs.__isSupported.bind(fs);
         device.exitFullScreen = fs.exit.bind(device);
         return Bootstrapper;
     }
