@@ -16,6 +16,8 @@ var Bootstrapper = (function ($) {
     };
 
     var screen = $.installCanvas();
+    var events = new $.EventBus();
+    var device = new $.DeviceInfo($.userAgent);
     var isResponsive = false;
     var useAtlases = false;
 
@@ -44,17 +46,33 @@ var Bootstrapper = (function ($) {
     }
 
     function addScreenOrientation() {
-        globalServices.orientation = $.installOrientation();
+        $.installOrientation(events, device);
+        device.lockOrientation = $.OrientationLock.lock;
+        device.unlockOrientation = $.OrientationLock.unlock;
         return Bootstrapper;
     }
 
     function addFullScreen() {
-        globalServices.fullScreen = $.installFullScreen(screen);
+        var fs = $.installFullScreen(screen, events);
+        device.requestFullScreen = fs.request.bind(fs);
+        device.isFullScreen = fs.isFullScreen.bind(fs);
+        device.isFullScreenSupported = fs.isSupported.bind(fs);
+        device.exitFullScreen = fs.exit.bind(device);
         return Bootstrapper;
     }
 
     function addResize() {
-        globalServices.resize = $.installResize();
+        $.installResize(events, device);
+        var self = this;
+        device.forceResize = function () {
+            self.events.fire(Event.RESIZE, {
+                width: this.width,
+                height: this.height,
+                cssWidth: this.cssWidth,
+                cssHeight: this.cssHeight,
+                devicePixelRatio: this.devicePixelRatio
+            });
+        };
         isResponsive = true;
         return Bootstrapper;
     }
@@ -102,5 +120,11 @@ var Bootstrapper = (function ($) {
     installDragNDrop: installDragNDrop,
     installOrientation: installOrientation,
     installFullScreen: installFullScreen,
-    App: App
+    App: App,
+    EventBus: EventBus,
+    DeviceInfo: DeviceInfo,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    getDevicePixelRatio: getDevicePixelRatio,
+    OrientationLock: OrientationLock
 });

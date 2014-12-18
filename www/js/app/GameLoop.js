@@ -1,41 +1,51 @@
-var GameLoop = (function (requestAnimationFrame, Object) {
+var GameLoop = (function (requestAnimationFrame, Event) {
     "use strict";
 
     // callback from animationFrame infrastructure. tick list of given periodic handlers
-    function GameLoop() {
-        this.tickBus = {};
-        this.disabled = {};
+    function GameLoop(events) {
+        this.events = events;
+
+        this.isMove = true;
+        this.isCollision = true;
     }
 
     GameLoop.prototype.run = function () {
         requestAnimationFrame(this.run.bind(this));
 
-        var self = this;
-        Object.keys(self.tickBus).forEach(function (key) {
-            var fn = self.tickBus[key];
-            if (fn)
-                fn();
-        });
+        this.events.syncFire(Event.TICK_START);
+
+        // input phase
+        this.events.syncFire(Event.TICK_INPUT);
+
+        // move phase
+        if (this.isMove)
+            this.events.syncFire(Event.TICK_MOVE);
+
+        // collision phase
+        if (this.isCollision)
+            this.events.syncFire(Event.TICK_COLLISION);
+
+        // draw phase
+        this.events.syncFire(Event.TICK_DRAW);
+
+        this.events.syncFire(Event.TICK_END);
     };
 
-    GameLoop.prototype.add = function (id, periodicFunction) {
-        this.tickBus[id] = periodicFunction;
+    GameLoop.prototype.disableMove = function () {
+        this.isMove = false;
     };
 
-    GameLoop.prototype.remove = function (id) {
-        delete this.tickBus[id];
-        delete this.disabled[id];
+    GameLoop.prototype.enableMove = function () {
+        this.isMove = true;
     };
 
-    GameLoop.prototype.disable = function (id) {
-        this.disabled[id] = this.tickBus[id];
-        delete this.tickBus[id];
+    GameLoop.prototype.disableCollision = function () {
+        this.isCollision = false;
     };
 
-    GameLoop.prototype.enable = function (id) {
-        this.tickBus[id] = this.disabled[id];
-        delete this.disabled[id];
+    GameLoop.prototype.enableCollision = function () {
+        this.isCollision = true;
     };
 
     return GameLoop;
-})(requestAnimFrame, Object);
+})(requestAnimFrame, Event);

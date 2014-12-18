@@ -29,9 +29,9 @@ var SimpleLoadingScreen = (function (Math) {
         }
     };
 
-    SimpleLoadingScreen.prototype.resize = function (width, height) {
-        this._resizeScreen(width, height);
-        this._calcScreenPositions(width, height);
+    SimpleLoadingScreen.prototype.resize = function (event) {
+        this._resizeScreen(event.width, event.height);
+        this._calcScreenPositions(event.width, event.height);
         this._initialRendering();
 
         this.screenCtx.fillRect(this.startBarX, this.startBarY, this.barWidth / this.parts * this.progressCounter,

@@ -1,9 +1,8 @@
-var installOrientation = (function (window, screen, OrientationBus, OrientationHandler) {
+var installOrientation = (function (window, screen, OrientationHandler, Event) {
     "use strict";
 
-    function installOrientation() {
-        var bus = new OrientationBus();
-        var handler = new OrientationHandler(bus);
+    function installOrientation(events, device) {
+        var handler = new OrientationHandler(events);
 
         if ('orientation' in screen && 'angle' in screen.orientation) {
             handler.orientationType();
@@ -23,10 +22,12 @@ var installOrientation = (function (window, screen, OrientationBus, OrientationH
             handler.handleResize();
             window.addEventListener("resize", handler.handleResize.bind(handler));
         }
-        bus.orientation = handler.lastOrientation;
+        device.orientation = handler.lastOrientation;
 
-        return bus;
+        events.subscribe(Event.ORIENTATION, function (orientation) {
+            device.orientation = orientation;
+        });
     }
 
     return installOrientation;
-})(window, window.screen, OrientationBus, OrientationHandler);
+})(window, window.screen, OrientationHandler, Event);

@@ -1,21 +1,21 @@
-var OrientationHandler = (function (window, Orientation, screen) {
+var OrientationHandler = (function (window, Orientation, screen, Event) {
     "use strict";
 
-    function OrientationHandler(orientationBus) {
-        this.bus = orientationBus;
+    function OrientationHandler(events) {
+        this.events = events;
         this.lastOrientation = -1;
     }
 
     OrientationHandler.prototype.orientationType = function () {
         var currentOrientation = /portrait/i.test(screen.orientation.type) ? Orientation.PORTRAIT :
             Orientation.LANDSCAPE;
-        this.__callBus(currentOrientation);
+        this.__fireEvent(currentOrientation);
     };
 
     OrientationHandler.prototype.screenOrientation = function () {
         var screenOrientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
         var currentOrientation = /portrait/i.test(screenOrientation) ? Orientation.PORTRAIT : Orientation.LANDSCAPE;
-        this.__callBus(currentOrientation);
+        this.__fireEvent(currentOrientation);
     };
 
     OrientationHandler.prototype.windowOrientation = function () {
@@ -34,21 +34,22 @@ var OrientationHandler = (function (window, Orientation, screen) {
                 currentOrientation = Orientation.PORTRAIT;
                 break;
         }
-        this.__callBus(currentOrientation);
+        this.__fireEvent(currentOrientation);
     };
 
     OrientationHandler.prototype.handleResize = function () {
         var currentOrientation = (window.innerWidth > window.innerHeight) ? Orientation.LANDSCAPE :
             Orientation.PORTRAIT;
-        this.__callBus(currentOrientation);
+        this.__fireEvent(currentOrientation);
     };
 
-    OrientationHandler.prototype.__callBus = function (currentOrientation) {
+    OrientationHandler.prototype.__fireEvent = function (currentOrientation) {
         if (this.lastOrientation === currentOrientation)
             return;
-        this.bus.changeOrientation(currentOrientation);
+
+        this.events.fire(Event.ORIENTATION, currentOrientation);
         this.lastOrientation = currentOrientation;
     };
 
     return OrientationHandler;
-})(window, Orientation, window.screen);
+})(window, Orientation, window.screen, Event);

@@ -9,25 +9,33 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
 
     EventBus.prototype.update = function () {
         Object.keys(this.pending).forEach(function (key) {
+            var payload = this.pending[key];
             var subscribers = this.dict[key];
             Object.keys(subscribers).forEach(function (subscriberKey) {
-                subscribers[subscriberKey]();
+                subscribers[subscriberKey](payload);
             });
             delete this.pending[key];
         }, this);
     };
 
-    EventBus.prototype.fire = function (eventName) {
+    EventBus.prototype.fire = function (eventName, payload) {
         var subscribers = this.dict[eventName];
         if (subscribers) {
-            this.pending[eventName] = true;
+            if (payload) {
+                this.pending[eventName] = payload;
+            } else {
+                this.pending[eventName] = true;
+            }
         }
     };
 
     EventBus.prototype.syncFire = function (eventName) {
-        iterateEntries(this.dict[eventName], function (callback) {
-            callback();
-        });
+        var dict = this.dict[eventName];
+        if (dict) {
+            iterateEntries(dict, function (callback) {
+                callback();
+            });
+        }
     };
 
     EventBus.prototype.subscribe = function (eventName, callback) {

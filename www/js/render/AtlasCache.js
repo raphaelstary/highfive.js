@@ -37,8 +37,8 @@ var AtlasCache = (function (SubImage, Math, window, getDevicePixelRatio, iterate
         return this.atlasDict[key];
     };
 
-    AtlasCache.prototype.resize = function (width, height) {
-        var scale = height / this.defaultSize;
+    AtlasCache.prototype.resize = function (event) {
+        var scale = event.height / this.defaultSize;
         iterateEntries(this.atlasDict, function (subImage) {
             subImage.scaledOffSetX = Math.floor(subImage.offSetX * scale);
             subImage.scaledOffSetY = Math.floor(subImage.offSetY * scale);

@@ -1,10 +1,9 @@
-var installFullScreen = (function (document, FullScreenBus, FullScreenController, FullScreenHandler) {
+var installFullScreen = (function (document, FullScreenController, FullScreenHandler) {
     "use strict";
 
-    function installFullScreen(screenElement) {
-        var bus = new FullScreenBus();
-        var controller = new FullScreenController(screenElement, bus);
-        var handler = new FullScreenHandler(controller, bus);
+    function installFullScreen(screenElement, events) {
+        var controller = new FullScreenController(screenElement);
+        var handler = new FullScreenHandler(controller, events);
         if (controller.isSupported) {
             document.addEventListener("fullscreenchange", handler.change.bind(handler));
             document.addEventListener("webkitfullscreenchange", handler.change.bind(handler));
@@ -16,4 +15,4 @@ var installFullScreen = (function (document, FullScreenBus, FullScreenController
     }
 
     return installFullScreen;
-})(window.document, FullScreenBus, FullScreenController, FullScreenHandler);
+})(window.document, FullScreenController, FullScreenHandler);

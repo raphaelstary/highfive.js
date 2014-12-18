@@ -1,14 +1,17 @@
-var installResize = (function (window, ResizeBus, ResizeHandler, width, height, getDevicePixelRatio) {
+var installResize = (function (window, ResizeHandler, Event) {
     "use strict";
 
-    function installResize() {
-        var pixelRatio = getDevicePixelRatio();
-        var resizeBus = new ResizeBus(width * pixelRatio, height * pixelRatio, width, height, pixelRatio);
-        var resizeHandler = new ResizeHandler(resizeBus);
+    function installResize(events, device) {
+        var resizeHandler = new ResizeHandler(events);
         window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
-
-        return resizeBus;
+        events.subscribe(Event.RESIZE, function (event) {
+            device.width = event.width;
+            device.height = event.height;
+            device.cssWidth = event.cssWidth;
+            device.cssHeight = event.cssHeight;
+            device.devicePixelRatio = event.devicePixelRatio;
+        });
     }
 
     return installResize;
-})(window, ResizeBus, ResizeHandler, window.innerWidth, window.innerHeight, getDevicePixelRatio);
+})(window, ResizeHandler, Event);

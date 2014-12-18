@@ -9,7 +9,7 @@ var UniversalTranslator = (function (defaultLanguage, Repository) {
 
     UniversalTranslator.prototype.setLanguage = function (languageCode) {
         this.language = languageCode;
-        this.repo.call(this);
+        this.repo.call();
     };
 
     UniversalTranslator.prototype.get = function (domainKey, msgKey) {

@@ -11,15 +11,15 @@ var Renderer = (function (Object, getFunctionName) {
         this.renderServices = {};
     }
 
-    Renderer.prototype.resize = function (width, height, cssWidth, cssHeight, pixelRatio) {
-        if (pixelRatio > 1) {
-            this.screen.style.width = cssWidth + 'px';
-            this.screen.style.height = cssHeight + 'px';
-            this.screen.width = this.screenWidth = width;
-            this.screen.height = this.screenHeight = height;
+    Renderer.prototype.resize = function (event) {
+        if (event.devicePixelRatio > 1) {
+            this.screen.style.width = event.cssWidth + 'px';
+            this.screen.style.height = event.cssHeight + 'px';
+            this.screen.width = this.screenWidth = event.width;
+            this.screen.height = this.screenHeight = event.height;
         } else {
-            this.screen.width = this.screenWidth = width;
-            this.screen.height = this.screenHeight = height;
+            this.screen.width = this.screenWidth = event.width;
+            this.screen.height = this.screenHeight = event.height;
         }
     };
 

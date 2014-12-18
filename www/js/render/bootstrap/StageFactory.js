@@ -31,24 +31,24 @@ var StageFactory = (function ($) {
             renderer, timer);
     }
 
-    function createResponsive(gfxCache, renderer, resize) {
+    function createResponsive(gfxCache, renderer, device, events) {
         var stage = new $.ResizableStage(create(gfxCache, renderer), gfxCache, new $.Repository(), $.Touchables.get,
-            $.fetchDrawableIntoTouchable, resize.getWidth(), resize.getHeight(), new $.CallbackTimer());
+            $.fetchDrawableIntoTouchable, device.width, device.height, new $.CallbackTimer());
 
-        resize.add('stage', stage.resize.bind(stage));
+        events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
 
         return stage;
     }
 
     return {
-        getResponsiveAtlasStage: function (screen, gfxCache, resize) {
-            return createResponsive(gfxCache, createAtlasRenderer(screen), resize);
+        getResponsiveAtlasStage: function (screen, gfxCache, device, events) {
+            return createResponsive(gfxCache, createAtlasRenderer(screen), device, events);
         },
         getAtlasStage: function (screen, gfxCache) {
             return create(gfxCache, createAtlasRenderer(screen));
         },
-        getResponsiveImageStage: function (screen, gfxCache, resize) {
-            return createResponsive(gfxCache, createImageRenderer(screen), resize);
+        getResponsiveImageStage: function (screen, gfxCache, device, events) {
+            return createResponsive(gfxCache, createImageRenderer(screen), device, events);
         },
         getImageStage: function (screen, gfxCache) {
             return create(gfxCache, createImageRenderer(screen));
@@ -78,5 +78,6 @@ var StageFactory = (function ($) {
     fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,
     CallbackTimer: CallbackTimer,
     Rectangle: Rectangle,
-    renderRectangle: renderRectangle
+    renderRectangle: renderRectangle,
+    Event: Event
 });

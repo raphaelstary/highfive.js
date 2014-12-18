@@ -15,8 +15,8 @@ var ImageCache = (function (ImageWrapper, screen, iterateEntries, getDevicePixel
         return this.imgDict[key];
     };
 
-    ImageCache.prototype.resize = function () {
-        var newScaleFactor = screen.availHeight * getDevicePixelRatio() / this.baseScale;
+    ImageCache.prototype.resize = function (event) {
+        var newScaleFactor = event.height / this.baseScale;
         iterateEntries(this.imgDict, function (img) {
             img.scale = newScaleFactor;
         });

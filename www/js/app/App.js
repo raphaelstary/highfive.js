@@ -10,35 +10,29 @@ var App = (function ($) {
     App.prototype.start = function () {
         // show loading screen, load binary resources
 
-        var resourceLoader = new $.ResourceLoader(), initialScreen = new $.SimpleLoadingScreen(this.services.screen.getContext('2d'));
+        var resourceLoader = new $.ResourceLoader();
+        var initialScreen = new $.SimpleLoadingScreen(this.services.screen.getContext('2d'));
 
         var filesCount = this.resources.create(resourceLoader);
-
+        var events = this.services.events;
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
-        if (this.services.resize)
-            this.services.resize.add('initial_screen', initialScreen.resize.bind(initialScreen));
+        var initScreenId = events.subscribe(Event.RESIZE, initialScreen.resize.bind(initialScreen));
 
         initialScreen.showNew(filesCount);
 
         var self = this;
         resourceLoader.onComplete = function () {
-            if (self.services.resize)
-                self.services.resize.remove('initial_screen');
+            events.unsubscribe(initScreenId);
 
             var sceneServices = self.resources.process();
 
-            sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.resize);
-            sceneServices.loop = $.installLoop(sceneServices.stage);
+            sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.device,
+                events);
+            sceneServices.loop = $.installLoop(sceneServices.stage, events);
 
             var timer = new $.CallbackTimer();
-            sceneServices.loop.add('scene_timer', timer.update.bind(timer));
+            events.subscribe($.Event.TICK_MOVE, timer.update.bind(timer));
             sceneServices.timer = timer;
-
-            var events = new $.EventBus();
-            sceneServices.loop.add('event_bus', events.update.bind(events));
-            sceneServices.events = events;
-
-            sceneServices.device = new $.DeviceInfo();
 
             sceneServices.sceneStorage = {};
 
@@ -64,6 +58,5 @@ var App = (function ($) {
     installLoop: installLoop,
     concatenateProperties: concatenateProperties,
     CallbackTimer: CallbackTimer,
-    EventBus: EventBus,
-    DeviceInfo: DeviceInfo
+    Event: Event
 });
