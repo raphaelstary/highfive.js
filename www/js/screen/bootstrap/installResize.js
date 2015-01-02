@@ -11,6 +11,15 @@ var installResize = (function (window, ResizeHandler, Event) {
             device.cssHeight = event.cssHeight;
             device.devicePixelRatio = event.devicePixelRatio;
         });
+        device.forceResize = function () {
+            events.fire(Event.RESIZE, {
+                width: this.width,
+                height: this.height,
+                cssWidth: this.cssWidth,
+                cssHeight: this.cssHeight,
+                devicePixelRatio: this.devicePixelRatio
+            });
+        };
     }
 
     return installResize;

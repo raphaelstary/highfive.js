@@ -17,7 +17,7 @@ var Bootstrapper = (function ($) {
 
     var screen = $.installCanvas();
     var events = new $.EventBus();
-    var device = new $.DeviceInfo($.userAgent);
+    var device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio());
     var isResponsive = false;
     var useAtlases = false;
 
@@ -65,16 +65,6 @@ var Bootstrapper = (function ($) {
 
     function addResize() {
         $.installResize(events, device);
-        var self = this;
-        device.forceResize = function () {
-            self.events.fire(Event.RESIZE, {
-                width: this.width,
-                height: this.height,
-                cssWidth: this.cssWidth,
-                cssHeight: this.cssHeight,
-                devicePixelRatio: this.devicePixelRatio
-            });
-        };
         isResponsive = true;
         return Bootstrapper;
     }
@@ -128,5 +118,6 @@ var Bootstrapper = (function ($) {
     width: window.innerWidth,
     height: window.innerHeight,
     getDevicePixelRatio: getDevicePixelRatio,
-    OrientationLock: OrientationLock
+    OrientationLock: OrientationLock,
+    userAgent: window.navigator.userAgent
 });

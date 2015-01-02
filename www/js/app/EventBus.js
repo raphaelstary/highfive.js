@@ -5,6 +5,7 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
         this.dict = {};
         this.idGenerator = 0;
         this.pending = {};
+        this.pendingDeletes = [];
     }
 
     EventBus.prototype.update = function () {
@@ -21,7 +22,7 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
     EventBus.prototype.fire = function (eventName, payload) {
         var subscribers = this.dict[eventName];
         if (subscribers) {
-            if (payload) {
+            if (payload != null) {
                 this.pending[eventName] = payload;
             } else {
                 this.pending[eventName] = true;
@@ -48,6 +49,10 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
     };
 
     EventBus.prototype.unsubscribe = function (id) {
+        this.pendingDeletes.push(id);
+    };
+
+    EventBus.prototype.__delete = function (id) {
         iterateSomeEntries(this.dict, function (subscribers) {
             if (subscribers[id]) {
                 delete subscribers[id];
@@ -55,6 +60,12 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
             }
             return false;
         });
+    };
+
+    EventBus.prototype.updateDeletes = function () {
+        this.pendingDeletes.forEach(this.__delete.bind(this));
+        while (this.pendingDeletes.length > 0)
+            this.pendingDeletes.pop();
     };
 
     return EventBus;

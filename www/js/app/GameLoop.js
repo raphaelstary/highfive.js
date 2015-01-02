@@ -14,6 +14,9 @@ var GameLoop = (function (requestAnimationFrame, Event) {
 
         this.events.syncFire(Event.TICK_START);
 
+        // deliver queued events
+        this.events.update();
+
         // input phase
         this.events.syncFire(Event.TICK_INPUT);
 

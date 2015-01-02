@@ -23,7 +23,7 @@ var FullScreenController = (function (document, navigator) {
 
     FullScreenController.prototype.isFullScreen = function () {
         return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement ||
-            document.msFullscreenElement) != null || navigator.standalone;
+            document.msFullscreenElement || navigator.standalone) != null;
     };
 
     FullScreenController.prototype.__isSupported = function () {

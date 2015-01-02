@@ -1,4 +1,4 @@
-var installLoop = (function (GameLoop, Event) {
+var installLoop = (function (GameLoop, Event, stats) {
     "use strict";
 
     function installLoop(stage, events) {
@@ -7,7 +7,10 @@ var installLoop = (function (GameLoop, Event) {
 
         events.subscribe(Event.TICK_DRAW, stage.updateDraw.bind(stage));
         events.subscribe(Event.TICK_MOVE, stage.updateMove.bind(stage));
-        events.subscribe(Event.TICK_START, events.updateDeletes.bind(events));
+        events.subscribe(Event.TICK_INPUT, events.updateDeletes.bind(events));
+
+        events.subscribe(Event.TICK_START, stats.begin.bind(stats));
+        events.subscribe(Event.TICK_END, stats.end.bind(stats));
 
         gameLoop.run();
 
@@ -15,4 +18,4 @@ var installLoop = (function (GameLoop, Event) {
     }
 
     return installLoop;
-})(GameLoop, Event);
+})(GameLoop, Event, stats);
