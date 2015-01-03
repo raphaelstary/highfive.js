@@ -1,4 +1,4 @@
-var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
+var EventBus = (function (iterateSomeEntries, Object) {
     "use strict";
 
     function EventBus() {
@@ -33,8 +33,8 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
     EventBus.prototype.syncFire = function (eventName) {
         var dict = this.dict[eventName];
         if (dict) {
-            iterateEntries(dict, function (callback) {
-                callback();
+            Object.keys(dict).forEach(function (key) {
+                dict[key]();
             });
         }
     };
@@ -69,4 +69,4 @@ var EventBus = (function (iterateSomeEntries, Object, iterateEntries) {
     };
 
     return EventBus;
-})(iterateSomeEntries, Object, iterateEntries);
+})(iterateSomeEntries, Object);

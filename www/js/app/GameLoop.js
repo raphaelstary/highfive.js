@@ -10,8 +10,6 @@ var GameLoop = (function (requestAnimationFrame, Event) {
     }
 
     GameLoop.prototype.run = function () {
-        requestAnimationFrame(this.run.bind(this));
-
         this.events.syncFire(Event.TICK_START);
 
         // deliver queued events
@@ -32,6 +30,8 @@ var GameLoop = (function (requestAnimationFrame, Event) {
         this.events.syncFire(Event.TICK_DRAW);
 
         this.events.syncFire(Event.TICK_END);
+
+        requestAnimationFrame(this.run.bind(this));
     };
 
     GameLoop.prototype.disableMove = function () {

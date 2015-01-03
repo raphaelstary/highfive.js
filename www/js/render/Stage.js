@@ -270,14 +270,14 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
             this.animations.has(drawable);
     };
 
-    Stage.prototype.updateMove = function () {
+    Stage.prototype.update = function () {
+        // move stuff
         this.timer.update();
         this.motions.update();
         this.spriteAnimations.update();
         this.animations.update();
-    };
 
-    Stage.prototype.updateDraw = function () {
+        // draw stuff
         this.renderer.draw();
     };
 

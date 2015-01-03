@@ -434,9 +434,9 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         this.stage.unmask(drawable);
     };
 
-    ResizableStage.prototype.updateMove = function () {
+    ResizableStage.prototype.update = function () {
         this.timer.update();
-        this.stage.updateMove();
+        this.stage.update();
     };
 
     return ResizableStage;
