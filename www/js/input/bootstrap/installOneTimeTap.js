@@ -16,7 +16,7 @@ var installOneTimeTap = (function (window) {
 
             element.removeEventListener('click', handleClick);
 
-            callback();
+            callback(event);
         }
     }
 
