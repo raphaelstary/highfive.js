@@ -24,7 +24,7 @@ var installOrientation = (function (window, screen, OrientationHandler, Event) {
         }
         device.orientation = handler.lastOrientation;
 
-        events.subscribe(Event.ORIENTATION, function (orientation) {
+        events.subscribe(Event.SCREEN_ORIENTATION, function (orientation) {
             device.orientation = orientation;
         });
     }

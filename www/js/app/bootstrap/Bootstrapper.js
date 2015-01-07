@@ -80,7 +80,7 @@ var Bootstrapper = (function ($) {
     }
 
     function addKeyBoard() {
-        globalServices.keyBoard = $.installKeyBoard();
+        globalServices.keyBoard = $.installKeyBoard(events);
         return Bootstrapper;
     }
 

@@ -47,7 +47,7 @@ var OrientationHandler = (function (window, Orientation, screen, Event) {
         if (this.lastOrientation === currentOrientation)
             return;
 
-        this.events.fire(Event.ORIENTATION, currentOrientation);
+        this.events.fire(Event.SCREEN_ORIENTATION, currentOrientation);
         this.lastOrientation = currentOrientation;
     };
 

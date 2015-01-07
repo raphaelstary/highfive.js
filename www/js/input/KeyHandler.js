@@ -1,24 +1,28 @@
-var KeyHandler = (function (Object) {
+var KeyHandler = (function (Event) {
     "use strict";
 
-    function KeyHandler() {
-        this.keys = {};
+    function KeyHandler(events) {
+        this.events = events;
+        this.pressedKeys = {};
+        this.changed = false;
     }
 
-    KeyHandler.prototype.add = function (keyCode, callback) {
-        this.keys[keyCode] = callback;
-    };
-
-    KeyHandler.prototype.remove = function (keyCode) {
-        delete this.keys[keyCode];
-    };
-
     KeyHandler.prototype.keyDown = function (event) {
-        Object.keys(this.keys).forEach(function (key) {
-            if (event.keyCode == key)
-                this.keys[key]();
-        }, this);
+        this.pressedKeys[event.keyCode] = true;
+        this.changed = true;
+    };
+
+    KeyHandler.prototype.keyUp = function (event) {
+        delete this.pressedKeys[event.keyCode];
+        this.changed = true;
+    };
+
+    KeyHandler.prototype.update = function () {
+        if (this.changed) {
+            this.events.syncFire(Event.KEY_BOARD, this.pressedKeys);
+            this.changed = false;
+        }
     };
 
     return KeyHandler;
-})(Object);
+})(Event);

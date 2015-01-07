@@ -30,11 +30,11 @@ var EventBus = (function (iterateSomeEntries, Object) {
         }
     };
 
-    EventBus.prototype.syncFire = function (eventName) {
+    EventBus.prototype.syncFire = function (eventName, payload) {
         var dict = this.dict[eventName];
         if (dict) {
             Object.keys(dict).forEach(function (key) {
-                dict[key]();
+                dict[key](payload);
             });
         }
     };
