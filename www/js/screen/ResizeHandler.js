@@ -1,42 +1,24 @@
-var ResizeHandler = (function (requestAnimationFrame, getDevicePixelRatio, Event) {
+var ResizeHandler = (function (getDevicePixelRatio, Event) {
     "use strict";
 
     function ResizeHandler(events) {
         this.events = events;
-
-        this.resizeFired = false;
-        this.drawing = false;
     }
 
     ResizeHandler.prototype.handleResize = function (event) {
-        if (this.drawing === false && event !== undefined && event.target !== undefined) {
-            this.resizeFired = true;
+        var width = event.target.innerWidth;
+        var height = event.target.innerHeight;
 
-            this._initiateResize(event.target.innerWidth, event.target.innerHeight);
-        }
-    };
+        var pixelRatio = getDevicePixelRatio();
 
-    ResizeHandler.prototype._initiateResize = function (width, height) {
-        // render friendly resize loop
-        if (this.resizeFired === true) {
-            this.resizeFired = false;
-            this.drawing = true;
-
-            // actually do the resize
-            var pixelRatio = getDevicePixelRatio();
-            this.events.fire(Event.RESIZE, {
-                width: width * pixelRatio,
-                height: height * pixelRatio,
-                cssWidth: width,
-                cssHeight: height,
-                devicePixelRatio: pixelRatio
-            });
-
-            requestAnimationFrame(this._initiateResize.bind(this, width, height));
-        } else {
-            this.drawing = false;
-        }
+        this.events.fire(Event.RESIZE, {
+            width: width * pixelRatio,
+            height: height * pixelRatio,
+            cssWidth: width,
+            cssHeight: height,
+            devicePixelRatio: pixelRatio
+        });
     };
 
     return ResizeHandler;
-})(requestAnimFrame, getDevicePixelRatio, Event);
+})(getDevicePixelRatio, Event);
