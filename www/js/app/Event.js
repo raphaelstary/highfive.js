@@ -5,8 +5,7 @@ var Event = {
     FULL_SCREEN: 'full_screen',
     KEY_BOARD: 'key_board',
     GAME_PAD: 'game_pad',
-    MOUSE: 'mouse',
-    TOUCH: 'touch',
+    POINTER: 'pointer',
     DEVICE_ORIENTATION: 'device_orientation',
 
     TICK_START: 'tick_start',

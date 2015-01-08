@@ -4,15 +4,12 @@ var Bootstrapper = (function ($) {
     var Bootstrapper = {
         build: buildApp,
         responsive: addResize,
-        tap: addTap,
-        pushRelease: addPushRelease,
         keyBoard: addKeyBoard,
         gamePad: addGamePad,
-        keyPushRelease: addKeyPushRelease,
-        dragNDrop: addDragNDrop,
         atlas: useAtlasesRendering,
         orientation: addScreenOrientation,
-        fullScreen: addFullScreen
+        fullScreen: addFullScreen,
+        pointer: addPointer
     };
 
     var screen = $.installCanvas();
@@ -69,33 +66,18 @@ var Bootstrapper = (function ($) {
         return Bootstrapper;
     }
 
-    function addTap() {
-        globalServices.tap = $.installTap(screen);
-        return Bootstrapper;
-    }
-
-    function addPushRelease() {
-        globalServices.pushRelease = $.installPushRelease(screen);
-        return Bootstrapper;
-    }
-
     function addKeyBoard() {
         globalServices.keyBoard = $.installKeyBoard(events);
         return Bootstrapper;
     }
 
     function addGamePad() {
-        globalServices.gamePad = $.installGamePad();
+        globalServices.gamePad = $.installGamePad(events);
         return Bootstrapper;
     }
 
-    function addKeyPushRelease() {
-        globalServices.keyPushRelease = $.installKeyPushRelease();
-        return Bootstrapper;
-    }
-
-    function addDragNDrop() {
-        globalServices.dragNDrop = $.installDragNDrop(screen);
+    function addPointer() {
+        globalServices.pointer = $.installPointer(events, screen);
         return Bootstrapper;
     }
 
@@ -104,14 +86,11 @@ var Bootstrapper = (function ($) {
     installCanvas: installCanvas,
     StageFactory: StageFactory,
     installResize: installResize,
-    installTap: installTap,
-    installPushRelease: installPushRelease,
     installKeyBoard: installKeyBoard,
     installGamePad: installGamePad,
-    installKeyPushRelease: installKeyPushRelease,
-    installDragNDrop: installDragNDrop,
     installOrientation: installOrientation,
     installFullScreen: installFullScreen,
+    installPointer: installPointer,
     App: App,
     EventBus: EventBus,
     DeviceInfo: DeviceInfo,

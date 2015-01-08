@@ -12,26 +12,26 @@ var GameLoop = (function (requestAnimationFrame, Event) {
     GameLoop.prototype.run = function () {
         requestAnimationFrame(this.run.bind(this));
 
-        this.events.syncFire(Event.TICK_START);
+        this.events.fireSync(Event.TICK_START);
 
         // deliver queued events
         this.events.update();
 
         // input phase
-        this.events.syncFire(Event.TICK_INPUT);
+        this.events.fireSync(Event.TICK_INPUT);
 
         // move phase
         if (this.isMove)
-            this.events.syncFire(Event.TICK_MOVE);
+            this.events.fireSync(Event.TICK_MOVE);
 
         // collision phase
         if (this.isCollision)
-            this.events.syncFire(Event.TICK_COLLISION);
+            this.events.fireSync(Event.TICK_COLLISION);
 
         // draw phase
-        this.events.syncFire(Event.TICK_DRAW);
+        this.events.fireSync(Event.TICK_DRAW);
 
-        this.events.syncFire(Event.TICK_END);
+        this.events.fireSync(Event.TICK_END);
     };
 
     GameLoop.prototype.disableMove = function () {

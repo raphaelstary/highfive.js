@@ -19,7 +19,7 @@ var KeyHandler = (function (Event) {
 
     KeyHandler.prototype.update = function () {
         if (this.changed) {
-            this.events.syncFire(Event.KEY_BOARD, this.pressedKeys);
+            this.events.fireSync(Event.KEY_BOARD, this.pressedKeys);
             this.changed = false;
         }
     };

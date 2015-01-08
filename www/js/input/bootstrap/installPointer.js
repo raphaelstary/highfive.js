@@ -1,0 +1,41 @@
+var installPointer = (function (PointerHandler, Event) {
+    "use strict";
+
+    function installPointer(events, canvas) {
+        var pointerHandler = new PointerHandler(events);
+
+        if (window.PointerEvent) {
+
+            canvas.addEventListener('pointerdown', pointerHandler.pointerDown.bind(pointerHandler));
+            canvas.addEventListener('pointermove', pointerHandler.pointerMove.bind(pointerHandler));
+            canvas.addEventListener('pointerup', pointerHandler.pointerUp.bind(pointerHandler));
+            canvas.addEventListener('pointerout', pointerHandler.pointerCancel.bind(pointerHandler));
+
+        } else if (window.MSPointerEvent) {
+
+            canvas.addEventListener('MSPointerDown', pointerHandler.pointerDown.bind(pointerHandler));
+            canvas.addEventListener('MSPointerMove', pointerHandler.pointerMove.bind(pointerHandler));
+            canvas.addEventListener('MSPointerUp', pointerHandler.pointerUp.bind(pointerHandler));
+            canvas.addEventListener('MSPointerOut', pointerHandler.pointerCancel.bind(pointerHandler));
+
+        } else {
+            if ('ontouchstart' in window) {
+
+                canvas.addEventListener('touchstart', pointerHandler.touchStart.bind(pointerHandler));
+                canvas.addEventListener('touchmove', pointerHandler.touchMove.bind(pointerHandler));
+                canvas.addEventListener('touchend', pointerHandler.touchEnd.bind(pointerHandler));
+                canvas.addEventListener('touchcancel', pointerHandler.touchCancel)
+            }
+            canvas.addEventListener('mousedown', pointerHandler.mouseDown.bind(pointerHandler));
+            canvas.addEventListener('mousemove', pointerHandler.mouseMove.bind(pointerHandler));
+            canvas.addEventListener('mouseup', pointerHandler.mouseUp.bind(pointerHandler));
+            canvas.addEventListener('mouseout', pointerHandler.mouseCancel.bind(pointerHandler));
+        }
+
+        events.subscribe(Event.TICK_INPUT, pointerHandler.update.bind(pointerHandler));
+
+        return pointerHandler;
+    }
+
+    return installPointer;
+})(PointerHandler, Event);

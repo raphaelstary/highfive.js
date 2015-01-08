@@ -30,7 +30,7 @@ var EventBus = (function (iterateSomeEntries, Object) {
         }
     };
 
-    EventBus.prototype.syncFire = function (eventName, payload) {
+    EventBus.prototype.fireSync = function (eventName, payload) {
         var dict = this.dict[eventName];
         if (dict) {
             Object.keys(dict).forEach(function (key) {
