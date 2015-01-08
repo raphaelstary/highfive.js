@@ -8,8 +8,7 @@ var isHit = (function (getDevicePixelRatio) {
         var y = rect.y / PIXEL_RATIO;
         var width = rect.width / PIXEL_RATIO;
         var height = rect.height / PIXEL_RATIO;
-        return pointer.clientX > x && pointer.clientX < x + width && pointer.clientY > y &&
-            pointer.clientY < y + height;
+        return pointer.x > x && pointer.x < x + width && pointer.y > y && pointer.y < y + height;
     }
 
     return isHit;
