@@ -67,17 +67,17 @@ var Bootstrapper = (function ($) {
     }
 
     function addKeyBoard() {
-        globalServices.keyBoard = $.installKeyBoard(events);
+        $.installKeyBoard(events);
         return Bootstrapper;
     }
 
     function addGamePad() {
-        globalServices.gamePad = $.installGamePad(events);
+        $.installGamePad(events);
         return Bootstrapper;
     }
 
     function addPointer() {
-        globalServices.pointer = $.installPointer(events, screen);
+        $.installPointer(events, screen);
         return Bootstrapper;
     }
 

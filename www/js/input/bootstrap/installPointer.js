@@ -1,4 +1,4 @@
-var installPointer = (function (PointerHandler, Event) {
+var installPointer = (function (PointerHandler, Event, window) {
     "use strict";
 
     function installPointer(events, canvas) {
@@ -38,4 +38,4 @@ var installPointer = (function (PointerHandler, Event) {
     }
 
     return installPointer;
-})(PointerHandler, Event);
+})(PointerHandler, Event, window);
