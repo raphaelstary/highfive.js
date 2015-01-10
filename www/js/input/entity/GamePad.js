@@ -34,7 +34,9 @@ var GamePad = (function (navigator) {
     }
 
     GamePad.prototype.update = function () {
-        var pad = navigator.webkitGetGamepads()[this.index];
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() :
+            (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+        var pad = gamepads[this.index];
 
         if (pad.timestamp > this.lastUpdate) {
             this.buttons = pad.buttons;
@@ -75,7 +77,7 @@ var GamePad = (function (navigator) {
     };
 
     GamePad.prototype._isButtonPressed = function (button) {
-        return this.buttons[button] === 1;
+        return this.buttons[button].pressed;
     };
 
     return GamePad;

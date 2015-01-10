@@ -1,31 +1,23 @@
-var GamePadHandler = (function (GamePad, navigator) {
+var GamePadHandler = (function (GamePad, navigator, Event) {
     "use strict";
 
-    function GamePadHandler() {
+    function GamePadHandler(events) {
+        this.events = events;
         this.gamePads = [];
     }
 
     GamePadHandler.prototype.connect = function (event) {
-        var pad = event.gamepad;
-
-        console.log('game pad connected');
-        console.log(pad.index);
-
-        this.gamePads.push(new GamePad(pad.index));
+        this.gamePads.push(new GamePad(event.gamepad.index));
     };
 
     GamePadHandler.prototype.detect = function () {
-        var pads = navigator.webkitGetGamepads();
+        var pads = navigator.getGamepads ? navigator.getGamepads() :
+            (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
 
         for (var i = 0; i < pads.length; i++) {
             var probablePad = pads[i];
-
             if (!probablePad)
                 continue;
-
-            console.log('game pad connected');
-            console.log(probablePad.index);
-            console.log(probablePad.timestamp);
 
             this.gamePads.push(new GamePad(probablePad.index));
         }
@@ -43,6 +35,17 @@ var GamePadHandler = (function (GamePad, navigator) {
         this.gamePads.forEach(callback);
     };
 
+    GamePadHandler.prototype.update = function () {
+        if (this.shouldDetect())
+            this.detect();
+
+        var self = this;
+        this.iterateGamePads(function (gamePad) {
+            if (gamePad.update())
+                self.events.fireSync(Event.GAME_PAD, gamePad);
+        });
+    };
+
     return GamePadHandler;
 
-})(GamePad, navigator);
+})(GamePad, navigator, Event);
