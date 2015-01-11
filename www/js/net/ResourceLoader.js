@@ -1,4 +1,4 @@
-var ResourceLoader = (function (Blob, BlobBuilder, Image, Object) {
+var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
     "use strict";
 
     var ResourceType = {
@@ -36,6 +36,9 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object) {
     };
 
     ResourceLoader.prototype.addFont = function (fontSrc) {
+        if (!URL)
+            return;
+
         var font = {};
         this.resources.push({
             type: ResourceType.FONT,
@@ -111,4 +114,4 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object) {
     };
 
     return ResourceLoader;
-})(Blob, window.WebKitBlobBuilder, Image, Object);
+})(Blob, window.WebKitBlobBuilder, Image, Object, window.URL || window.webkitURL);
