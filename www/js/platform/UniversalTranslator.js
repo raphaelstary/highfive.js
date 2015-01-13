@@ -4,12 +4,27 @@ var UniversalTranslator = (function (defaultLanguage, Repository) {
     function UniversalTranslator(locales) {
         this.locales = locales;
         this.language = defaultLanguage ? defaultLanguage.substring(0, 2) : 'en';
+
+        if (!this.locales[this.language])
+            this.language = 'en';
+
         this.repo = new Repository();
     }
 
     UniversalTranslator.prototype.setLanguage = function (languageCode) {
         this.language = languageCode;
         this.repo.call(this);
+    };
+
+    UniversalTranslator.prototype.getLanguages = function () {
+        var languages = [];
+        Object.keys(this.locales).forEach(function (language) {
+            languages.push({
+                language: language,
+                name: this.locales[language].display_name
+            })
+        }, this);
+        return languages;
     };
 
     UniversalTranslator.prototype.get = function (domainKey, msgKey) {
