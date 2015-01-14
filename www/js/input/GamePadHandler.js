@@ -31,16 +31,12 @@ var GamePadHandler = (function (GamePad, navigator, Event) {
 
     };
 
-    GamePadHandler.prototype.iterateGamePads = function (callback) {
-        this.gamePads.forEach(callback);
-    };
-
     GamePadHandler.prototype.update = function () {
         if (this.shouldDetect())
             this.detect();
 
         var self = this;
-        this.iterateGamePads(function (gamePad) {
+        this.gamePads.forEach(function (gamePad) {
             if (gamePad.update())
                 self.events.fireSync(Event.GAME_PAD, gamePad);
         });
