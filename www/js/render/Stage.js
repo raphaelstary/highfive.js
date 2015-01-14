@@ -1,4 +1,4 @@
-var Stage = (function (Sprites, Drawables, Paths, Animations) {
+var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     "use strict";
 
     function Stage(gfxCache, motions, motionTimer, motionHelper, spriteAnimations, spriteTimer, animations,
@@ -18,6 +18,14 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
 
         this._id = 0;
     }
+
+    Stage.prototype.getImageWidth = function (name) {
+        return Math.floor(this.gfxCache.get(name).width * this.gfxCache.defaultScaleFactor);
+    };
+
+    Stage.prototype.getImageHeight = function (name) {
+        return Math.floor(this.gfxCache.get(name).height * this.gfxCache.defaultScaleFactor);
+    };
 
     Stage.prototype.getDrawable = function (x, y, imgPathName, zIndex, alpha, rotation, scale) {
         return Drawables.getGraphic(this.gfxCache, ++this._id, x, y, imgPathName, zIndex, alpha, rotation, scale);
@@ -316,4 +324,4 @@ var Stage = (function (Sprites, Drawables, Paths, Animations) {
     };
 
     return Stage;
-})(Sprites, Drawables, Paths, Animations);
+})(Sprites, Drawables, Paths, Animations, Math);

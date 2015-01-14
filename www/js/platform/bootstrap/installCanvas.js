@@ -1,17 +1,16 @@
-var installCanvas = (function (document, innerWidth, innerHeight, getDevicePixelRatio) {
+var installCanvas = (function (document) {
     "use strict";
 
-    function installCanvas() {
+    function installCanvas(width, height, pixelRatio) {
         var canvas = document.createElement('canvas');
-        var pixelRatio = getDevicePixelRatio();
         if (pixelRatio > 1) {
-            canvas.style.width = innerWidth + 'px';
-            canvas.style.height = innerHeight + 'px';
-            canvas.width = innerWidth * pixelRatio;
-            canvas.height = innerHeight * pixelRatio;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            canvas.width = width * pixelRatio;
+            canvas.height = height * pixelRatio;
         } else {
-            canvas.width = innerWidth;
-            canvas.height = innerHeight;
+            canvas.width = width;
+            canvas.height = height;
         }
         document.body.appendChild(canvas);
 
@@ -19,4 +18,4 @@ var installCanvas = (function (document, innerWidth, innerHeight, getDevicePixel
     }
 
     return installCanvas;
-})(window.document, window.innerWidth, window.innerHeight, getDevicePixelRatio);
+})(window.document);

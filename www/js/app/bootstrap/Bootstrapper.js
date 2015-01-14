@@ -12,7 +12,7 @@ var Bootstrapper = (function ($) {
         pointer: addPointer
     };
 
-    var screen = $.installCanvas();
+    var screen = $.installCanvas($.width, $.height, $.getDevicePixelRatio());
     var events = new $.EventBus();
     var device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio());
     var isResponsive = false;

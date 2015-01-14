@@ -1,14 +1,17 @@
-var AtlasCache = (function (SubImage, Math, window, getDevicePixelRatio, iterateEntries) {
+var AtlasCache = (function (SubImage, Math, getDevicePixelRatio, iterateEntries) {
     "use strict";
 
-    function AtlasCache() {
+    function AtlasCache(width, height, scale) {
         this.atlasDict = {};
+        this.defaultScaleFactor = scale || 1;
+        this.width = width;
+        this.height = height;
     }
 
     AtlasCache.prototype.init = function (atlasInfos, defaultSize) {
         var self = this;
         this.defaultSize = defaultSize;
-        var scale = window.innerHeight * getDevicePixelRatio() / defaultSize;
+        var scale = this.defaultScaleFactor = this.height / defaultSize;
         atlasInfos.forEach(function (atlasInfoWrapper) {
             var atlas = atlasInfoWrapper.atlas;
             var info = atlasInfoWrapper.info;
@@ -38,7 +41,7 @@ var AtlasCache = (function (SubImage, Math, window, getDevicePixelRatio, iterate
     };
 
     AtlasCache.prototype.resize = function (event) {
-        var scale = event.height / this.defaultSize;
+        var scale = this.defaultScaleFactor = event.height / this.defaultSize;
         iterateEntries(this.atlasDict, function (subImage) {
             subImage.scaledOffSetX = Math.floor(subImage.offSetX * scale);
             subImage.scaledOffSetY = Math.floor(subImage.offSetY * scale);
@@ -48,4 +51,4 @@ var AtlasCache = (function (SubImage, Math, window, getDevicePixelRatio, iterate
     };
 
     return AtlasCache;
-})(SubImage, Math, window, getDevicePixelRatio, iterateEntries);
+})(SubImage, Math, getDevicePixelRatio, iterateEntries);

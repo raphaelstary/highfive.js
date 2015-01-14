@@ -1,10 +1,10 @@
-var ImageCache = (function (ImageWrapper, screen, iterateEntries, getDevicePixelRatio) {
+var ImageCache = (function (ImageWrapper, iterateEntries, getDevicePixelRatio) {
     "use strict";
 
-    function ImageCache(baseScale) {
+    function ImageCache(width, height, baseScale) {
         this.baseScale = baseScale || 3840;
         this.imgDict = {};
-        this.defaultScaleFactor = screen.availHeight * getDevicePixelRatio() / this.baseScale;
+        this.defaultScaleFactor = height / this.baseScale;
     }
 
     ImageCache.prototype.add = function (key, img) {
@@ -16,11 +16,11 @@ var ImageCache = (function (ImageWrapper, screen, iterateEntries, getDevicePixel
     };
 
     ImageCache.prototype.resize = function (event) {
-        var newScaleFactor = event.height / this.baseScale;
+        var newScaleFactor = this.defaultScaleFactor = event.height / this.baseScale;
         iterateEntries(this.imgDict, function (img) {
             img.scale = newScaleFactor;
         });
     };
 
     return ImageCache;
-})(ImageWrapper, window.screen, iterateEntries, getDevicePixelRatio);
+})(ImageWrapper, iterateEntries, getDevicePixelRatio);
