@@ -6,15 +6,13 @@ var TapManager = (function (isHit, iterateSomeEntries, iterateEntries) {
         this.disabled = {};
     }
 
-    TapManager.prototype.inputChanged = function (pointers) {
-        iterateEntries(pointers, function (pointer) {
-            iterateSomeEntries(this.elements, function (elem) {
-                if (isHit(pointer, elem.touchable)) {
-                    elem.callback();
-                    return true;
-                }
-                return false;
-            }, this);
+    TapManager.prototype.inputChanged = function (pointer) {
+        iterateSomeEntries(this.elements, function (elem) {
+            if (isHit(pointer, elem.touchable)) {
+                elem.callback();
+                return true;
+            }
+            return false;
         }, this);
     };
 
