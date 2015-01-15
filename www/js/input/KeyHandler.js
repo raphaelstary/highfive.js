@@ -8,11 +8,13 @@ var KeyHandler = (function (Event) {
     }
 
     KeyHandler.prototype.keyDown = function (event) {
+        event.preventDefault();
         this.pressedKeys[event.keyCode] = true;
         this.changed = true;
     };
 
     KeyHandler.prototype.keyUp = function (event) {
+        event.preventDefault();
         delete this.pressedKeys[event.keyCode];
         this.changed = true;
     };

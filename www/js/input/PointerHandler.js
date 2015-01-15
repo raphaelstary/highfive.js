@@ -1,4 +1,4 @@
-var PointerHandler = (function (Event) {
+var PointerHandler = (function (Event, Object) {
     "use strict";
 
     function PointerHandler(events) {
@@ -8,24 +8,29 @@ var PointerHandler = (function (Event) {
     }
 
     PointerHandler.prototype.pointerDown = function (event) {
+        event.preventDefault();
         this.activePointers[event.pointerId] = {
             id: event.pointerId,
             x: event.clientX,
-            y: event.clientY
+            y: event.clientY,
+            changed: true
         };
         this.changed = true;
     };
 
     PointerHandler.prototype.pointerMove = function (event) {
+        event.preventDefault();
         var current = this.activePointers[event.pointerId];
         if (current) {
             current.x = event.clientX;
             current.y = event.clientY;
+            current.changed = true;
             this.changed = true;
         }
     };
 
     PointerHandler.prototype.pointerUp = function (event) {
+        event.preventDefault();
         delete this.activePointers[event.pointerId];
         this.changed = true;
     };
@@ -35,24 +40,29 @@ var PointerHandler = (function (Event) {
     };
 
     PointerHandler.prototype.mouseDown = function (event) {
+        event.preventDefault();
         this.activePointers['mouse'] = {
             id: 'mouse',
             x: event.clientX,
-            y: event.clientY
+            y: event.clientY,
+            changed: true
         };
         this.changed = true;
     };
 
     PointerHandler.prototype.mouseMove = function (event) {
+        event.preventDefault();
         var current = this.activePointers['mouse'];
         if (current) {
             current.x = event.clientX;
             current.y = event.clientY;
+            current.changed = true;
             this.changed = true;
         }
     };
 
-    PointerHandler.prototype.mouseUp = function () {
+    PointerHandler.prototype.mouseUp = function (event) {
+        event.preventDefault();
         delete this.activePointers['mouse'];
         this.changed = true;
     };
@@ -69,7 +79,8 @@ var PointerHandler = (function (Event) {
             this.activePointers[touches[i].identifier] = {
                 id: touches[i].identifier,
                 x: touches[i].clientX,
-                y: touches[i].clientY
+                y: touches[i].clientY,
+                changed: true
             };
             this.changed = true;
         }
@@ -83,6 +94,7 @@ var PointerHandler = (function (Event) {
             var current = this.activePointers[ref.identifier];
             current.x = ref.clientX;
             current.y = ref.clientY;
+            current.changed = true;
             this.changed = true;
         }
     };
@@ -107,10 +119,15 @@ var PointerHandler = (function (Event) {
 
     PointerHandler.prototype.update = function () {
         if (this.changed) {
-            this.events.fireSync(Event.POINTER, this.activePointers);
+            Object.keys(this.activePointers).forEach(function (pointer) {
+                if (pointer.changed) {
+                    this.events.fireSync(Event.POINTER, pointer);
+                    pointer.changed = false;
+                }
+            }, this);
             this.changed = false;
         }
     };
 
     return PointerHandler;
-})(Event);
+})(Event, Object);
