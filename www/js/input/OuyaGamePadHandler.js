@@ -9,21 +9,29 @@ var OuyaGamePadHandler = (function (OuyaGamePad, Event, Object) {
             2: new OuyaGamePad(2),
             3: new OuyaGamePad(3)
         };
+        this.changed = false;
     }
 
     OuyaGamePadHandler.prototype.update = function () {
-        Object.keys(this.gamePads).forEach(function (gamePad) {
-            if (gamePad.changed)
-                this.events.fireSync(Event.GAME_PAD, gamePad);
-        }, this);
+        if (this.changed) {
+            Object.keys(this.gamePads).forEach(function (gamePad) {
+                if (gamePad.changed) {
+                    this.events.fireSync(Event.GAME_PAD, gamePad);
+                    gamePad.changed = false;
+                }
+            }, this);
+            this.changed = false;
+        }
     };
 
     OuyaGamePadHandler.prototype.keyDown = function (playerNumber, button) {
         updateButton(this.gamePads[playerNumber], button, true);
+        this.changed = true;
     };
 
     OuyaGamePadHandler.prototype.keyUp = function (playerNumber, button) {
         updateButton(this.gamePads[playerNumber], button, false);
+        this.changed = true;
     };
 
     OuyaGamePadHandler.prototype.genericMotionEvent = function (playerNumber, axis, value) {
@@ -51,6 +59,7 @@ var OuyaGamePadHandler = (function (OuyaGamePad, Event, Object) {
                 gamePad.axes.R2 = value;
                 break;
         }
+        this.changed = true;
     };
 
     function updateButton(gamePad, button, pressed) {
