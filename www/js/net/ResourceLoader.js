@@ -50,6 +50,11 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
     };
 
     ResourceLoader.prototype.load = function () {
+        if (this.resources.length == this.resourcesLoaded && this.onComplete) {
+            this.onComplete();
+            return;
+        }
+
         var self = this;
         self.resources.forEach(function (elem) {
 
