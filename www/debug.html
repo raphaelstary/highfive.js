@@ -3,13 +3,25 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Crappy Space Miner</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+<script src="debug/stats.min.js"></script>
+<script>
+    var stats = new Stats();
+    stats.setMode(0); // 0: fps, 1: ms
 
+    // align top-left
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+
+    document.body.appendChild(stats.domElement);
+
+</script>
+
+<script src="debug/console-log-viewer.js"></script>
 <script src="js/lib/howler.js"></script>
 <script src="js/utils/iterateEntries.js"></script>
 <script src="js/utils/iterateSomeEntries.js"></script>
@@ -67,11 +79,9 @@
 <script src="js/input/entity/Key.js"></script>
 <script src="js/input/entity/WiiUGamePad.js"></script>
 <script src="js/input/entity/WiiURemote.js"></script>
-<script src="js/input/entity/OuyaGamePad.js"></script>
 <script src="js/input/KeyHandler.js"></script>
 <script src="js/input/GamePadHandler.js"></script>
 <script src="js/input/WiiUGamePadHandler.js"></script>
-<script src="js/input/OuyaGamePadHandler.js"></script>
 <script src="js/input/PointerHandler.js"></script>
 <script src="js/input/TapManager.js"></script>
 
@@ -128,7 +138,10 @@
 <script src="js/scene/SceneManager.js"></script>
 <script src="js/scene/myscenes/installMyScenes.js"></script>
 <script src="js/app/GameLoop.js"></script>
-<script src="js/app/bootstrap/installLoop.js"></script>
+
+// debug
+<script src="debug/installDebugLoop.js"></script>
+
 <script src="js/render/bootstrap/StageFactory.js"></script>
 <script src="js/render/bootstrap/AtlasResourceHelper.js"></script>
 <script src="js/render/bootstrap/ImageResourceHelper.js"></script>
