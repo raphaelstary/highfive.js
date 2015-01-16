@@ -1,4 +1,4 @@
-var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask) {
+var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine) {
     "use strict";
 
     function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
@@ -31,10 +31,24 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask) {
         return new RectangleMask(x, y, width, height);
     }
 
+    function createCircle(seed, x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
+        var circle = new Circle(radius, color, filled, lineWidth);
+        return new Drawable(generateHash(x + y + radius + color + filled) + seed, x, y, circle, zIndex, alpha,
+            rotation, scale);
+    }
+
+    function createLine(seed, x, y, length, color, lineWidth, zIndex, alpha, rotation, scale) {
+        var line = new DrawableLine(length, color, lineWidth);
+        return new Drawable(generateHash(x + y + length + color) + seed, x, y, line, zIndex, alpha,
+            rotation, scale);
+    }
+
     return {
         getGraphic: createNewGfx,
         getTxt: createNewText,
         getRect: createRectangle,
-        getMask: createClippingMask
+        getMask: createClippingMask,
+        getCircle: createCircle,
+        getLine: createLine
     };
-})(Drawable, TextWrapper, Rectangle, RectangleMask);
+})(Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine);

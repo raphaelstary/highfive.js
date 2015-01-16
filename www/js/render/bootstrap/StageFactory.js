@@ -6,6 +6,8 @@ var StageFactory = (function ($) {
         renderer.registerRenderer($.SubImage.prototype, $.renderAtlas);
         renderer.registerRenderer($.TextWrapper.prototype, $.renderText);
         renderer.registerRenderer($.Rectangle.prototype, $.renderRectangle);
+        renderer.registerRenderer($.Circle.prototype, $.renderCircle);
+        renderer.registerRenderer($.DrawableLine.prototype, $.renderLine);
         return renderer;
     }
 
@@ -14,6 +16,8 @@ var StageFactory = (function ($) {
         renderer.registerRenderer($.ImageWrapper.prototype, $.renderImage);
         renderer.registerRenderer($.TextWrapper.prototype, $.renderText);
         renderer.registerRenderer($.Rectangle.prototype, $.renderRectangle);
+        renderer.registerRenderer($.Circle.prototype, $.renderCircle);
+        renderer.registerRenderer($.DrawableLine.prototype, $.renderLine);
         return renderer;
     }
 
@@ -79,5 +83,9 @@ var StageFactory = (function ($) {
     CallbackTimer: CallbackTimer,
     Rectangle: Rectangle,
     renderRectangle: renderRectangle,
+    Circle: Circle,
+    renderCircle: renderCircle,
+    DrawableLine: DrawableLine,
+    renderLine: renderLine,
     Event: Event
 });

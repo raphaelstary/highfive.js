@@ -209,6 +209,20 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         return drawable;
     };
 
+    Stage.prototype.drawCircle = function (x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
+        var drawable = Drawables.getCircle(++this._id, x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation,
+            scale);
+        this.draw(drawable);
+        return drawable;
+    };
+
+    Stage.prototype.drawLine = function (x, y, length, color, lineWidth, zIndex, alpha, rotation, scale) {
+        var drawable = Drawables.getLine(++this._id, x, y, length, color, lineWidth, zIndex, alpha, rotation,
+            scale);
+        this.draw(drawable);
+        return drawable;
+    };
+
     Stage.prototype.animateAlpha = function (drawable, value, duration, easing, loop, callback) {
         return this.propertyAnimations.animateAlpha(drawable, value, duration, easing, loop, callback);
     };

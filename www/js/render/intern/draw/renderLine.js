@@ -3,8 +3,11 @@ var renderLine = (function () {
 
     function renderLine(ctx, drawable) {
         ctx.beginPath();
-        ctx.moveTo(drawable.data.xPointA, drawable.data.yPointA);
-        ctx.lineTo(drawable.data.xPointB, drawable.data.yPointB);
+        ctx.moveTo(drawable.getCornerX(), drawable.getCornerY());
+        ctx.lineTo(drawable.getEndX(), drawable.getEndY());
+        ctx.strokeStyle = drawable.data.color;
+        if (drawable.data.lineWidth)
+            ctx.lineWidth = drawable.data.lineWidth;
         ctx.stroke();
     }
 

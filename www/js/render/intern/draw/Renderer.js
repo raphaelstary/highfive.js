@@ -60,11 +60,12 @@ var Renderer = (function (Object, getFunctionName) {
                 }
 
                 if (drawable.rotation) {
-                    self.ctx.translate(drawable.getAnchorX(), drawable.getAnchorY());
+                    self.ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
                     self.ctx.rotate(drawable.rotation);
-                    self.ctx.translate(-drawable.getAnchorX(), -drawable.getAnchorY());
+                    self.ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
                 }
 
+                self.ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);
                 self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
 
                 self.ctx.restore();

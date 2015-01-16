@@ -1,4 +1,4 @@
-var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper) {
+var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine) {
     "use strict";
 
     function Drawable(id, x, y, data, zIndex, alpha, rotation, scale) {
@@ -10,9 +10,19 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
         this.rotation = rotation;
         this.alpha = alpha;
         this.scale = scale || 1;
+        this.rotationAnchorOffsetX = 0;
+        this.rotationAnchorOffsetY = 0;
         this.anchorOffsetX = 0;
         this.anchorOffsetY = 0;
     }
+
+    Drawable.prototype.getRotationAnchorX = function () {
+        return this.x + this.rotationAnchorOffsetX;
+    };
+
+    Drawable.prototype.getRotationAnchorY = function () {
+        return this.y + this.rotationAnchorOffsetY;
+    };
 
     Drawable.prototype.getAnchorX = function () {
         return this.x + this.anchorOffsetX;
@@ -23,23 +33,31 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
     };
 
     Drawable.prototype.getCornerX = function () {
-        return this.x - Math.floor(this.__getWidth() / 2 * this.scale);
+        return this.x - this.getWidthHalf();
     };
 
     Drawable.prototype.getCornerY = function () {
-        return this.y - Math.floor(this.__getHeight() / 2 * this.scale);
+        return this.y - this.getHeightHalf();
     };
 
     Drawable.prototype.getEndX = function () {
-        return this.x + Math.floor(this.__getWidth() / 2 * this.scale);
+        return this.x + this.getWidthHalf();
     };
 
     Drawable.prototype.getEndY = function () {
-        return this.y + Math.floor(this.__getHeight() / 2 * this.scale);
+        return this.y + this.getHeightHalf();
     };
 
     Drawable.prototype.getWidth = function () {
         return Math.floor(this.__getWidth() * this.scale);
+    };
+
+    Drawable.prototype.getWidthHalf = function () {
+        return Math.floor(this.__getWidth() / 2 * this.scale);
+    };
+
+    Drawable.prototype.getHeightHalf = function () {
+        return Math.floor(this.__getHeight() / 2 * this.scale);
     };
 
     Drawable.prototype.getHeight = function () {
@@ -53,8 +71,15 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
         if (this.data instanceof SubImage) {
             return this.data.scaledTrimmedHeight;
         }
-        if (this.data instanceof ImageWrapper)
+        if (this.data instanceof ImageWrapper) {
             return this.data.height * this.data.scale;
+        }
+        if (this.data instanceof DrawableLine) {
+            return 0;
+        }
+        if (this.data instanceof Circle) {
+            return this.data.radius * 2;
+        }
         return this.data.height;
     };
 
@@ -65,10 +90,17 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
         if (this.data instanceof SubImage) {
             return this.data.scaledTrimmedWidth;
         }
-        if (this.data instanceof ImageWrapper)
+        if (this.data instanceof ImageWrapper) {
             return this.data.width * this.data.scale;
+        }
+        if (this.data instanceof DrawableLine) {
+            return this.data.length;
+        }
+        if (this.data instanceof Circle) {
+            return this.data.radius * 2;
+        }
         return this.data.width;
     };
 
     return Drawable;
-})(Math, measureText, TextWrapper, SubImage, ImageWrapper);
+})(Math, measureText, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine);
