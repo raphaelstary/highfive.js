@@ -76,6 +76,14 @@ var GamePad = (function (navigator) {
         return this._isButtonPressed(Button.B);
     };
 
+    GamePad.prototype.isRightBumperPressed = function () {
+        return this._isButtonPressed(Button.RIGHT_BUMPER);
+    };
+
+    GamePad.prototype.isLeftBumperPressed = function () {
+        return this._isButtonPressed(Button.LEFT_BUMPER);
+    };
+
     GamePad.prototype._isButtonPressed = function (button) {
         return this.buttons[button].pressed;
     };
