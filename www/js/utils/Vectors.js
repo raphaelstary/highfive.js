@@ -42,6 +42,22 @@ var Vectors = (function (Math) {
 
         dotProduct: function (vectorA_X, vectorA_Y, vectorB_X, vectorB_Y) {
             return vectorA_X * vectorB_X + vectorA_Y * vectorB_Y;
+        },
+
+        toRadians: function (degrees) {
+            return degrees * Math.PI / 180;
+        },
+
+        getX: function (pointX, magnitude, angle) {
+            return pointX + magnitude * Math.cos(angle);
+        },
+
+        getY: function (pointY, magnitude, angle) {
+            return pointY + magnitude * Math.sin(angle);
+        },
+
+        getAngle: function (x, y) {
+            return Math.atan2(x, y);
         }
     };
 })(Math);
