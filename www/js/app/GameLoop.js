@@ -28,6 +28,8 @@ var GameLoop = (function (requestAnimationFrame, Event) {
         if (this.isCollision)
             this.events.fireSync(Event.TICK_COLLISION);
 
+        // pre draw phase
+        this.events.fireSync(Event.TICK_CAMERA);
         // draw phase
         this.events.fireSync(Event.TICK_DRAW);
 
