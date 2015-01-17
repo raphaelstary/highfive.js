@@ -46,6 +46,8 @@ var Renderer = (function (Object, getFunctionName) {
         function iterate(layer) {
             Object.keys(layer).forEach(function (key) {
                 var drawable = layer[key];
+                if (!drawable.show)
+                    return;
 
                 self.ctx.save();
 

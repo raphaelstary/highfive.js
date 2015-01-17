@@ -14,6 +14,7 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
         this.rotationAnchorOffsetY = 0;
         this.anchorOffsetX = 0;
         this.anchorOffsetY = 0;
+        this.show = true;
     }
 
     Drawable.prototype.getRotationAnchorX = function () {
