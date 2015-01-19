@@ -28,6 +28,7 @@ var installCanvas = (function (document, Event) {
             document.body.appendChild(scaledCanvas);
 
             events.subscribe(Event.TICK_END, function () {
+                context.clearRect(0, 0, scaledWidth, scaledHeight);
                 context.drawImage(canvas, 0, 0, pixelWidth, pixelHeight, 0, 0, scaledWidth, scaledHeight);
             });
 
