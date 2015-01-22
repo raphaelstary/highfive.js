@@ -1,4 +1,4 @@
-var ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, width, height) {
+var ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio) {
     "use strict";
 
     var GFX_FOLDER = 'gfx/';
@@ -25,9 +25,9 @@ var ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, wi
         });
     }
 
-    function processImages(images) {
+    function processImages(images, width, height, defaultSize) {
         var pixelRatio = getDevicePixelRatio();
-        var gfxCache = new ImageCache(width * pixelRatio, height * pixelRatio);
+        var gfxCache = new ImageCache(width * pixelRatio, height * pixelRatio, defaultSize);
 
         Object.keys(images).forEach(function (key) {
             gfxCache.add(key, images[key])
@@ -40,4 +40,4 @@ var ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, wi
         register: registerImages,
         process: processImages
     };
-})(ImageCache, Object, getDevicePixelRatio, window.innerWidth, window.innerHeight);
+})(ImageCache, Object, getDevicePixelRatio);
