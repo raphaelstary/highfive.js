@@ -1,8 +1,9 @@
-var PointerHandler = (function (Event, Object) {
+var PointerHandler = (function (Event, Object, Math) {
     "use strict";
 
-    function PointerHandler(events) {
+    function PointerHandler(events, device) {
         this.events = events;
+        this.device = device;
         this.activePointers = {};
         this.changed = false;
         this.pendingDeletes = [];
@@ -150,6 +151,10 @@ var PointerHandler = (function (Event, Object) {
             Object.keys(this.activePointers).forEach(function (pointerId) {
                 var pointer = this.activePointers[pointerId];
                 if (pointer.changed) {
+                    if (this.device.screenScale) {
+                        pointer.x = Math.floor(pointer.x / this.device.screenScale);
+                        pointer.y = Math.floor(pointer.y / this.device.screenScale);
+                    }
                     this.events.fireSync(Event.POINTER, pointer);
                     pointer.changed = false;
                 }
@@ -165,4 +170,4 @@ var PointerHandler = (function (Event, Object) {
     };
 
     return PointerHandler;
-})(Event, Object);
+})(Event, Object, Math);

@@ -9,22 +9,39 @@ var Bootstrapper = (function ($) {
         atlas: useAtlasesRendering,
         orientation: addScreenOrientation,
         fullScreen: addFullScreen,
-        pointer: addPointer
+        pointer: addPointer,
+        lowRez: addLowResolutionRendering
     };
 
+    // dependencies on screen, therefore flags because you need a screen first (build: screen -> features: with screen)
+    var lowRezWidth;
+    var lowRezHeight;
+    var useLowRez = false;
+    var useFullScreen = false;
+    var usePointer = false;
+
     var events = new $.EventBus();
-    var screen = $.installCanvas($.width, $.height, $.getDevicePixelRatio(), $.usePixelCanvas, events);
     var device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio());
     var isResponsive = false;
     var useAtlases = false;
 
-    var globalServices = {
-        screen: screen,
-        events: events,
-        device: device
-    };
-
     function buildApp(myResources) {
+        var screen = useLowRez ?
+            $.installCanvas(events, device, $.width, $.height, $.getDevicePixelRatio(), lowRezWidth, lowRezHeight) :
+            $.installCanvas(events, device, $.width, $.height, $.getDevicePixelRatio());
+
+        if (useFullScreen) {
+            var fs = $.installFullScreen(useLowRez ? screen.scaledScreen : screen.screen, events);
+            device.requestFullScreen = fs.request.bind(fs);
+            device.isFullScreen = fs.isFullScreen.bind(fs);
+            device.isFullScreenSupported = fs.__isSupported.bind(fs);
+            device.exitFullScreen = fs.exit.bind(device);
+        }
+
+        if (usePointer) {
+            $.installPointer(events, device, useLowRez ? screen.scaledScreen : screen.screen);
+        }
+
         var getStage;
         if (isResponsive && useAtlases) {
             getStage = $.StageFactory.getResponsiveAtlasStage;
@@ -35,12 +52,24 @@ var Bootstrapper = (function ($) {
         } else {
             getStage = $.StageFactory.getImageStage;
         }
-
+        var globalServices = {
+            screen: screen.screen,
+            events: events,
+            device: device,
+            scaledScreen: screen.scaledScreen
+        };
         return new $.App(globalServices, myResources, getStage);
     }
 
     function useAtlasesRendering() {
         useAtlases = true;
+        return Bootstrapper;
+    }
+
+    function addLowResolutionRendering(width, height) {
+        lowRezWidth = width;
+        lowRezHeight = height;
+        useLowRez = true;
         return Bootstrapper;
     }
 
@@ -52,11 +81,7 @@ var Bootstrapper = (function ($) {
     }
 
     function addFullScreen() {
-        var fs = $.installFullScreen(screen, events);
-        device.requestFullScreen = fs.request.bind(fs);
-        device.isFullScreen = fs.isFullScreen.bind(fs);
-        device.isFullScreenSupported = fs.__isSupported.bind(fs);
-        device.exitFullScreen = fs.exit.bind(device);
+        useFullScreen = true;
         return Bootstrapper;
     }
 
@@ -77,7 +102,7 @@ var Bootstrapper = (function ($) {
     }
 
     function addPointer() {
-        $.installPointer(events, screen);
+        usePointer = true;
         return Bootstrapper;
     }
 
@@ -98,6 +123,5 @@ var Bootstrapper = (function ($) {
     height: window.innerHeight,
     getDevicePixelRatio: getDevicePixelRatio,
     OrientationLock: OrientationLock,
-    userAgent: window.navigator.userAgent,
-    usePixelCanvas: true
+    userAgent: window.navigator.userAgent
 });

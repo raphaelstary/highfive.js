@@ -1,8 +1,8 @@
 var installPointer = (function (PointerHandler, Event, window) {
     "use strict";
 
-    function installPointer(events, canvas) {
-        var pointerHandler = new PointerHandler(events);
+    function installPointer(events, device, canvas) {
+        var pointerHandler = new PointerHandler(events, device);
 
         if (window.PointerEvent) {
 
