@@ -43,7 +43,7 @@ build/config/buildinfo.properties
 
 www-built
 www-ghdeploy
-www/js/lib
+*/lib
 node_modules
 www/sandbox*
 www/gfx/test*
