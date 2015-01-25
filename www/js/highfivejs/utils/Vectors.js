@@ -58,6 +58,15 @@ var Vectors = (function (Math) {
 
         getAngle: function (x, y) {
             return Math.atan2(x, y);
+        },
+
+        getIntersectionPoint: function (a1_x, a1_y, a2_x, a2_y, b1_x, b1_y, b2_x, b2_y) {
+            var denominator = ( b2_y - b1_y) * (a2_x - a1_x) - (b2_x - b1_x) * (a2_y - a1_y);
+            var ua = ((b2_x - b1_x) * (a1_y - b1_y) - (b2_y - b1_y) * (a1_x - b1_x)) / denominator;
+            return {
+                x: a1_x + ua * (a2_x - a1_x),
+                y: a1_y + ua * (a2_y - a1_y)
+            }
         }
     };
 })(Math);
