@@ -4,8 +4,13 @@ var renderRectangle = (function () {
     function renderRectangle(ctx, drawable) {
         if (drawable.data.filled) {
             ctx.fillStyle = drawable.data.color;
-            ctx.fillRect(drawable.getCornerX() - 0.5, drawable.getCornerY() - 0.5, drawable.getWidth(),
-                drawable.getHeight());
+            if (drawable.flipHorizontally) {
+                ctx.fillRect((drawable.getCornerX() - 0.5) * -1, drawable.getCornerY() - 0.5, drawable.getWidth(),
+                    drawable.getHeight());
+            } else {
+                ctx.fillRect(drawable.getCornerX() - 0.5, drawable.getCornerY() - 0.5, drawable.getWidth(),
+                    drawable.getHeight());
+            }
         } else {
             ctx.strokeStyle = drawable.data.color;
             if (drawable.data.lineWidth)
