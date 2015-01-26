@@ -61,10 +61,20 @@ var Renderer = (function (Object, getFunctionName) {
                     self.ctx.globalAlpha = drawable.alpha;
                 }
 
-                if (drawable.rotation) {
-                    self.ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
-                    self.ctx.rotate(drawable.rotation);
-                    self.ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
+                if (drawable.flipHorizontally) {
+                    self.ctx.translate(drawable.getWidth(), 0);
+                    self.ctx.scale(-1, 1);
+                    if (drawable.rotation) {
+                        self.ctx.translate(-drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
+                        self.ctx.rotate(drawable.rotation);
+                        self.ctx.translate(drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
+                    }
+                } else {
+                    if (drawable.rotation) {
+                        self.ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
+                        self.ctx.rotate(drawable.rotation);
+                        self.ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
+                    }
                 }
 
                 self.ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);

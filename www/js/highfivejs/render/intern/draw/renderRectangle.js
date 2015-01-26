@@ -10,8 +10,13 @@ var renderRectangle = (function () {
             ctx.strokeStyle = drawable.data.color;
             if (drawable.data.lineWidth)
                 ctx.lineWidth = drawable.data.lineWidth;
-            ctx.strokeRect(drawable.getCornerX() - 0.5, drawable.getCornerY() - 0.5, drawable.getWidth(),
-                drawable.getHeight());
+            if (drawable.flipHorizontally) {
+                ctx.strokeRect((drawable.getCornerX() - 0.5) * -1, drawable.getCornerY() - 0.5, drawable.getWidth(),
+                    drawable.getHeight());
+            } else {
+                ctx.strokeRect(drawable.getCornerX() - 0.5, drawable.getCornerY() - 0.5, drawable.getWidth(),
+                    drawable.getHeight());
+            }
         }
     }
 
