@@ -38,6 +38,11 @@ var GamePad = (function (navigator) {
             (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
         var pad = gamepads[this.index];
 
+        if (!pad) {
+            // todo fire exception
+            return;
+        }
+
         if (pad.timestamp > this.lastUpdate) {
             this.buttons = pad.buttons;
             this.axes = pad.axes;
