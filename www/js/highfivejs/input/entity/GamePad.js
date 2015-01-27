@@ -84,6 +84,10 @@ var GamePad = (function (navigator) {
         return this.__isButtonPressed(Button.LEFT_BUMPER);
     };
 
+    GamePad.prototype.isStartPressed = function () {
+        return this.__isButtonPressed(Button.START);
+    };
+
     GamePad.prototype.__isButtonPressed = function (button) {
         return this.buttons[button].pressed;
     };
