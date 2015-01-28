@@ -11,7 +11,7 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
         scale) {
         var txt = new TextWrapper(msg, size, fontFamily, color, maxLineLength, lineHeight);
 
-        return new Drawable(generateHash(msg) + seed, x, y, txt, zIndex, alpha, rotation, scale);
+        return new Drawable(generateHash(x + y + msg + size) + seed, x, y, txt, zIndex, alpha, rotation, scale);
     }
 
     function generateHash(s) {
