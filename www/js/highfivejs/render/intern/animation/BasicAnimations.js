@@ -7,39 +7,68 @@ var BasicAnimations = (function (Object, iterateEntries) {
     }
 
     BasicAnimations.prototype.animate = function (drawable, setter, animation, callback) {
-        this.dict[drawable.id] = {
-            setter: setter,
-            animation: animation,
-            callback: callback,
-            time: 0,
-            active: true
-        };
+        var hasEntry = this.dict[drawable.id] !== undefined;
+        var isPaused = this.paused[drawable.id] !== undefined;
+
+        if (hasEntry) {
+            this.dict[drawable.id].push({
+                setter: setter,
+                animation: animation,
+                callback: callback,
+                time: 0,
+                active: true
+            });
+
+        } else if (isPaused) {
+            this.paused[drawable.id].push({
+                setter: setter,
+                animation: animation,
+                callback: callback,
+                time: 0,
+                active: true
+            });
+
+        } else {
+            this.dict[drawable.id] = [
+                {
+                    setter: setter,
+                    animation: animation,
+                    callback: callback,
+                    time: 0,
+                    active: true
+                }
+            ];
+        }
     };
 
     BasicAnimations.prototype.update = function () {
         Object.keys(this.dict).forEach(function (key) {
-            var wrapper = this.dict[key];
+            this.dict[key].forEach(function (wrapper, index, list) {
 
-            var animation = wrapper.animation;
-            if (animation.duration > wrapper.time) {
+                var animation = wrapper.animation;
+                if (animation.duration > wrapper.time) {
 
-                var value = animation.timingFn(wrapper.time, animation.start, animation.length, animation.duration);
-                wrapper.setter(value, wrapper.time);
-                wrapper.time++;
+                    var value = animation.timingFn(wrapper.time, animation.start, animation.length, animation.duration);
+                    wrapper.setter(value, wrapper.time);
+                    wrapper.time++;
 
-            } else {
-                wrapper.setter(animation.end, wrapper.time);
-
-                if (animation.loop) {
-                    wrapper.time = 0;
                 } else {
-                    delete this.dict[key];
-                }
+                    wrapper.setter(animation.end, wrapper.time);
 
-                if (wrapper.callback) {
-                    wrapper.callback();
+                    if (animation.loop) {
+                        wrapper.time = 0;
+                    } else {
+                        list.splice(index, 1);
+                        if (list.length == 0) {
+                            delete this.dict[key];
+                        }
+                    }
+
+                    if (wrapper.callback) {
+                        wrapper.callback();
+                    }
                 }
-            }
+            }, this);
         }, this);
     };
 
