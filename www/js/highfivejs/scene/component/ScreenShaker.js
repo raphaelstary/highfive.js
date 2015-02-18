@@ -69,9 +69,10 @@ var ScreenShaker = (function (Math, Object) {
 
                 Object.keys(this.shaker).forEach(function (key) {
                     var item = self.shaker[key];
-                    if (self.time == 0) {
+                    if (self.time == 0 || item._startValueX == undefined) {
                         item._startValueX = item.x;
                     }
+
                     if (offSet != 0) {
                         item.x = item._startValueX + offSet;
                     } else {
@@ -87,7 +88,7 @@ var ScreenShaker = (function (Math, Object) {
 
                 Object.keys(this.shaker).forEach(function (key) {
                     var item = self.shaker[key];
-                    if (self.time == 0) {
+                    if (self.time == 0 || item._startValueX == undefined) {
                         item._startValueX = item.x;
 //                            item._startValueY = item.y;
                         self.lastOffSetY = 0;
