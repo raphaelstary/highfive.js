@@ -25,7 +25,8 @@ var ScreenShaker = (function (Math, Object) {
 
             Object.keys(this.shaker).forEach(function (key) {
                 var item = self.shaker[key];
-                item.x = item._startValueX;
+                if (item._startValueX != undefined)
+                    item.x = item._startValueX;
             });
 
             if (this.bigShaking) {
@@ -50,7 +51,8 @@ var ScreenShaker = (function (Math, Object) {
             }
             Object.keys(this.shaker).forEach(function (key) {
                 var item = self.shaker[key];
-                item.x = item._startValueX;
+                if (item._startValueX != undefined)
+                    item.x = item._startValueX;
             });
         }
 
