@@ -30,8 +30,8 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         delete this.collisions[collisionDetector.drawable.id];
     };
 
-    ResizableStage.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeDependencies, alpha,
-        rotation, scale) {
+    ResizableStage.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeDependencies, alpha, rotation,
+        scale) {
         var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex, alpha, rotation, scale);
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
@@ -40,8 +40,8 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         return drawable;
     };
 
-    ResizableStage.prototype.drawFreshWithInput = function (xFn, yFn, imgName, zIndex, resizeDependencies,
-        alpha, rotation, scale) {
+    ResizableStage.prototype.drawFreshWithInput = function (xFn, yFn, imgName, zIndex, resizeDependencies, alpha,
+        rotation, scale) {
         var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex, alpha, rotation, scale);
         var self = this;
         var input = self.createInput(drawable);
@@ -57,27 +57,40 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     ResizableStage.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex, resizeDependencies,
-        rotation, alpha, maxLineLength, lineHeight, scale) {
+        rotation, alpha, maxLineLengthFn, lineHeightFn, scale) {
+
         var drawable = this.stage.drawText(xFn(this.width), yFn(this.height), text, sizeFn(this.width, this.height),
-            font, color, zIndex, rotation, alpha, maxLineLength, lineHeight, scale);
+            font, color, zIndex, rotation, alpha, maxLineLengthFn ? maxLineLengthFn(this.width) : undefined,
+            lineHeightFn ? lineHeightFn(this.height) : undefined, scale);
+
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
             drawable.data.size = sizeFn(width, height);
+            if (maxLineLengthFn)
+                drawable.data.maxLineLength = maxLineLengthFn(width);
+            if (lineHeightFn)
+                drawable.data.lineHeight = lineHeightFn(height);
         }, resizeDependencies);
 
         return drawable;
     };
 
     ResizableStage.prototype.drawTextWithInput = function (xFn, yFn, text, sizeFn, font, color, zIndex,
-        resizeDependencies, alpha, rotation, maxLineLength, lineHeight, scale) {
+        resizeDependencies, alpha, rotation, maxLineLengthFn, lineHeightFn, scale) {
         var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text,
-            sizeFn(this.width, this.height), font, color, rotation, alpha, maxLineLength, lineHeight, scale);
+            sizeFn(this.width, this.height), font, color, rotation, alpha,
+            maxLineLengthFn ? maxLineLengthFn(this.width) : undefined,
+            lineHeightFn ? lineHeightFn(this.height) : undefined, scale);
         this.stage.draw(drawable);
         var input = this.createInput(drawable);
         var self = this;
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
             drawable.data.size = sizeFn(width, height);
+            if (maxLineLengthFn)
+                drawable.data.maxLineLength = maxLineLengthFn(width);
+            if (lineHeightFn)
+                drawable.data.lineHeight = lineHeightFn(height);
             self.changeInput(input, drawable);
         }, resizeDependencies);
 
@@ -187,13 +200,17 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     ResizableStage.prototype.moveFreshText = function (xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed,
-        spacing, loop, callback, resizeDependencies, zIndex, alpha, rotation, maxLineLength, lineHeight) {
+        spacing, loop, callback, resizeDependencies, zIndex, alpha, rotation, maxLineLengthFn, lineHeightFn) {
 
         var self = this;
         var registerResizeAfterMove = function () {
             self.resizer.add(wrapper.drawable, function (width, height) {
                 changeCoords(wrapper.drawable, endXFn(width), endYFn(height));
                 wrapper.drawable.data.size = sizeFn(width, height);
+                if (maxLineLengthFn)
+                    wrapper.drawable.data.maxLineLength = maxLineLengthFn(width);
+                if (lineHeightFn)
+                    wrapper.drawable.data.lineHeight = lineHeightFn(height);
             }, resizeDependencies);
         };
 
@@ -209,11 +226,16 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
         var wrapper = this.stage.moveFreshText(xFn(this.width), yFn(this.height), text, sizeFn(this.width, this.height),
             font, color, endXFn(this.width), endYFn(this.height), speed, spacing, loop, enhancedCallBack, zIndex, alpha,
-            rotation, maxLineLength, lineHeight);
+            rotation, maxLineLengthFn ? maxLineLengthFn(this.width) : undefined,
+            lineHeightFn ? lineHeightFn(this.height) : undefined);
 
         this.resizer.add(wrapper.drawable, function (width, height) {
             changeCoords(wrapper.drawable, xFn(width), yFn(height));
             wrapper.drawable.data.size = sizeFn(width, height);
+            if (maxLineLengthFn)
+                wrapper.drawable.data.maxLineLength = maxLineLengthFn(width);
+            if (lineHeightFn)
+                wrapper.drawable.data.lineHeight = lineHeightFn(height);
             changePath(wrapper.path, xFn(width), yFn(height), endXFn(width), endYFn(height));
         }, resizeDependencies);
 
@@ -298,13 +320,13 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     ResizableStage.prototype.moveFreshTextLater = function (xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed,
-        spacing, delay, loop, callback, startedMovingCallback, resizeDependencies, zIndex, alpha,
-        rotation, maxLineLength, lineHeight) {
+        spacing, delay, loop, callback, startedMovingCallback, resizeDependencies, zIndex, alpha, rotation,
+        maxLineLengthFn, lineHeightFn) {
         var returnObject = {};
         var self = this;
         this.timer.doLater(function () {
             var wrapper = self.moveFreshText(xFn, yFn, text, sizeFn, font, color, endXFn, endYFn, speed, spacing, loop,
-                callback, resizeDependencies, zIndex, alpha, rotation, maxLineLength, lineHeight);
+                callback, resizeDependencies, zIndex, alpha, rotation, maxLineLengthFn, lineHeightFn);
 
             Object.keys(wrapper).forEach(function (key) {
                 returnObject[key] = wrapper[key];
