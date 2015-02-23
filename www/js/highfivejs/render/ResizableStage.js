@@ -1,5 +1,5 @@
 var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, inheritMethods, TextWrapper,
-    iterateEntries, Object, changeRectangle, changeMask) {
+    iterateEntries, Object, changeRectangle, changeMask, Rectangle) {
     "use strict";
 
     function ResizableStage(stage, gfx, resizer, createInput, changeInput, width, height, timer) {
@@ -346,9 +346,10 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var registerResizeAfterMove = function () {
             self.resizer.remove(pathId);
 
-            if (drawable.data instanceof TextWrapper) {
-                var afterFontSize_id = {id: drawable.id + '_2'};
-                self.resizer.add(afterFontSize_id, function (width, height) {
+            if (drawable.data instanceof TextWrapper || drawable.data instanceof Rectangle) {
+                // todo add all other entity classes or refactor
+                var afterEntitySpecificStuff_nowXnYPosition_id = {id: drawable.id + '_2'};
+                self.resizer.add(afterEntitySpecificStuff_nowXnYPosition_id, function (width, height) {
                     changeCoords(drawable, endXFn(width), endYFn(height));
                 }, resizeDependencies);
             } else {
@@ -463,4 +464,4 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     return ResizableStage;
 })(changeCoords, changePath, CanvasImageCollisionDetector, inheritMethods, TextWrapper, iterateEntries, Object,
-    changeRectangle, changeMask);
+    changeRectangle, changeMask, Rectangle);
