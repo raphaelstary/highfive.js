@@ -30,7 +30,11 @@ var CallbackTimer = (function () {
     };
 
     CallbackTimer.prototype.pause = function () {
-        this.paused = this.todos.splice(0, this.todos.length);
+        if (this.paused) {
+            this.paused.push.apply(this.paused, this.todos.splice(0, this.todos.length));
+        } else {
+            this.paused = this.todos.splice(0, this.todos.length);
+        }
     };
 
     CallbackTimer.prototype.resume = function () {
