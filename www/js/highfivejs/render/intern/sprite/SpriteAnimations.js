@@ -5,7 +5,12 @@ var SpriteAnimations = (function (Object, iterateEntries) {
         this.animationsDict = {};
         this.paused = {};
         this.ticker = 0;
+        this.is30fps = false;
     }
+
+    SpriteAnimations.prototype.set30fps = function (is30fps) {
+        this.is30fps = is30fps !== undefined ? is30fps : true;
+    };
 
     SpriteAnimations.prototype.animate = function (drawable, sprite, callback) {
         drawable.data = sprite.frames[0];
@@ -42,7 +47,7 @@ var SpriteAnimations = (function (Object, iterateEntries) {
     };
 
     SpriteAnimations.prototype.update = function () {
-        if (this.ticker % 2 === 0) {
+        if (this.is30fps || this.ticker % 2 === 0) {
             this.nextFrame();
             this.ticker = 0;
         }
