@@ -7,6 +7,8 @@ var TapManager = (function (isHit, iterateSomeEntries, iterateEntries) {
     }
 
     TapManager.prototype.inputChanged = function (pointer) {
+        if (pointer.type == 'move' || pointer.type == 'up')
+            return;
         iterateSomeEntries(this.elements, function (elem) {
             if (isHit(pointer, elem.touchable)) {
                 elem.callback();
