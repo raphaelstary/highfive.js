@@ -1,4 +1,4 @@
-var installCanvas = (function (document, Event) {
+var installCanvas = (function (document, Event, Math) {
     "use strict";
 
     function installCanvas(events, device, width, height, pixelRatio, pixelWidth, pixelHeight) {
@@ -47,8 +47,8 @@ var installCanvas = (function (document, Event) {
         } else if (pixelRatio > 1) {
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
-            canvas.width = width * pixelRatio;
-            canvas.height = height * pixelRatio;
+            canvas.width = Math.floor(width * pixelRatio);
+            canvas.height = Math.floor(height * pixelRatio);
         } else {
             canvas.width = width;
             canvas.height = height;
@@ -62,4 +62,4 @@ var installCanvas = (function (document, Event) {
     }
 
     return installCanvas;
-})(window.document, Event);
+})(window.document, Event, Math);

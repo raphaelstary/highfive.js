@@ -1,4 +1,4 @@
-var AtlasCache = (function (SubImage, Math, getDevicePixelRatio, iterateEntries) {
+var AtlasCache = (function (SubImage, Math, iterateEntries) {
     "use strict";
 
     function AtlasCache(width, height, defaultScreenHeight) {
@@ -48,4 +48,4 @@ var AtlasCache = (function (SubImage, Math, getDevicePixelRatio, iterateEntries)
     };
 
     return AtlasCache;
-})(SubImage, Math, getDevicePixelRatio, iterateEntries);
+})(SubImage, Math, iterateEntries);

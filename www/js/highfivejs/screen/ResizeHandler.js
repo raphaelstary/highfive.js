@@ -1,4 +1,4 @@
-var ResizeHandler = (function (getDevicePixelRatio, Event) {
+var ResizeHandler = (function (getDevicePixelRatio, Event, Math) {
     "use strict";
 
     function ResizeHandler(events) {
@@ -12,8 +12,8 @@ var ResizeHandler = (function (getDevicePixelRatio, Event) {
         var pixelRatio = getDevicePixelRatio();
 
         this.events.fire(Event.RESIZE, {
-            width: width * pixelRatio,
-            height: height * pixelRatio,
+            width: Math.floor(width * pixelRatio),
+            height: Math.floor(height * pixelRatio),
             cssWidth: width,
             cssHeight: height,
             devicePixelRatio: pixelRatio
@@ -21,4 +21,4 @@ var ResizeHandler = (function (getDevicePixelRatio, Event) {
     };
 
     return ResizeHandler;
-})(getDevicePixelRatio, Event);
+})(getDevicePixelRatio, Event, Math);
