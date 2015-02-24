@@ -7,6 +7,7 @@ var Event = {
     GAME_PAD: 'game_pad',
     POINTER: 'pointer',
     DEVICE_ORIENTATION: 'device_orientation',
+    PAGE_VISIBILITY: 'page_visibility',
 
     TICK_START: 'tick_start',
     TICK_INPUT: 'tick_input',

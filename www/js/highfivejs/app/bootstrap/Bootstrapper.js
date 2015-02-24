@@ -10,7 +10,8 @@ var Bootstrapper = (function ($) {
         orientation: addScreenOrientation,
         fullScreen: addFullScreen,
         pointer: addPointer,
-        lowRez: addLowResolutionRendering
+        lowRez: addLowResolutionRendering,
+        visibility: addPageVisibility
     };
 
     // dependencies on screen, therefore flags because you need a screen first (build: screen -> features: with screen)
@@ -80,6 +81,11 @@ var Bootstrapper = (function ($) {
         return Bootstrapper;
     }
 
+    function addPageVisibility() {
+        $.installVisibility(events, device);
+        return Bootstrapper;
+    }
+
     function addFullScreen() {
         useFullScreen = true;
         return Bootstrapper;
@@ -116,6 +122,7 @@ var Bootstrapper = (function ($) {
     installOrientation: installOrientation,
     installFullScreen: installFullScreen,
     installPointer: installPointer,
+    installVisibility: installVisibility,
     App: App,
     EventBus: EventBus,
     DeviceInfo: DeviceInfo,
