@@ -16,6 +16,8 @@ var changePath = (function (Math, BezierCurve, Line, Vectors) {
             curve.length = length;
             curve.unitVectorX = unitVector.x;
             curve.unitVectorY = unitVector.y;
+            curve.vectorX = vector.x;
+            curve.vectorY = vector.y;
 
         } else if (curve instanceof BezierCurve) {
             curve.pointA_x = startX;
