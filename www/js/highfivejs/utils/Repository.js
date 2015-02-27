@@ -36,7 +36,8 @@ var Repository = (function (Object) {
                     var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
                     if (dependencyNotAlreadyCalled) {
                         var wrapper = self.dict[dependency.id];
-                        callItem(dependency.id, wrapper.fn, wrapper.dependencies);
+                        if (wrapper)
+                            callItem(dependency.id, wrapper.fn, wrapper.dependencies);
                     }
                 });
             }
