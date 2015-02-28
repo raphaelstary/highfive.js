@@ -104,13 +104,13 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         alpha, rotation, scale, resizeDependencies) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
-        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width),
-            heightFn(this.height), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width, this.height),
+            heightFn(this.height, this.width), color, filled, lineWidth, zIndex, alpha, rotation, scale);
 
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
             var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
-            changeRectangle(drawable.data, widthFn(width), heightFn(height), lineWidth);
+            changeRectangle(drawable.data, widthFn(width, height), heightFn(height, width), lineWidth);
         }, resizeDependencies);
 
         return drawable;
@@ -120,15 +120,15 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         zIndex, alpha, rotation, scale, resizeDependencies) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
-        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width),
-            heightFn(this.height), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width, this.height),
+            heightFn(this.height, this.width), color, filled, lineWidth, zIndex, alpha, rotation, scale);
 
         var input = this.createInput(drawable);
         var self = this;
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width), yFn(height));
             var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
-            changeRectangle(drawable.data, widthFn(width), heightFn(height), lineWidth);
+            changeRectangle(drawable.data, widthFn(width, height), heightFn(height, width), lineWidth);
             self.changeInput(input, drawable);
         }, resizeDependencies);
 
