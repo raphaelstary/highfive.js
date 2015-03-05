@@ -5,19 +5,28 @@ var wrapText = (function () {
         var words = text.split(' ');
         var line = '';
 
+        var readyLines = [];
+
         for (var n = 0; n < words.length; n++) {
             var testLine = line + words[n] + ' ';
             var metrics = context.measureText(testLine);
             var testWidth = metrics.width;
             if (testWidth > maxWidth && n > 0) {
-                context.fillText(line, x, y);
+                readyLines.push(line);
                 line = words[n] + ' ';
-                y += lineHeight;
             } else {
                 line = testLine;
             }
         }
-        context.fillText(line, x, y);
+        readyLines.push(line);
+
+        var totalHeight = readyLines.length * lineHeight / 2;
+        var newStartY = y - Math.floor(totalHeight / 2);
+
+        for (var i = 0; i < readyLines.length; i++) {
+            context.fillText(readyLines[i], x, newStartY);
+            newStartY += lineHeight;
+        }
     }
 
     return wrapText;
