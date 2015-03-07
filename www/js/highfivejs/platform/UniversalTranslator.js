@@ -41,5 +41,9 @@ var UniversalTranslator = (function (defaultLanguage, Repository) {
         this.repo.remove(idObj);
     };
 
+    UniversalTranslator.prototype.resetStorage = function () {
+        this.repo = new Repository();
+    };
+
     return UniversalTranslator;
 })(window.navigator.language || window.navigator.userLanguage, Repository);
