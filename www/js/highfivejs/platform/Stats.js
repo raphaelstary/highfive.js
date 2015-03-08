@@ -1,4 +1,4 @@
-var Stats = (function (Math) {
+var Stats = (function (Math, Date) {
     "use strict";
     var startTime = Date.now(), previousTime = startTime;
     var ms = 0, msMin = Infinity, msMax = 0;
@@ -43,4 +43,4 @@ var Stats = (function (Math) {
             }
         }
     };
-})(Math);
+})(Math, Date);
