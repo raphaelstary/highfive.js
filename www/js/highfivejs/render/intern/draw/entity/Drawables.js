@@ -11,7 +11,8 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
         scale) {
         var txt = new TextWrapper(msg, size, fontFamily, color, maxLineLength, lineHeight);
 
-        return new Drawable(generateHash(x + y + msg + size) + seed, x, y, txt, zIndex, alpha, rotation, scale);
+        return new Drawable(generateHash(x.toString() + y + msg + size) + seed, x, y, txt, zIndex, alpha, rotation,
+            scale);
     }
 
     function generateHash(s) {
@@ -23,7 +24,8 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
 
     function createRectangle(seed, x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var rect = new Rectangle(width, height, color, filled, lineWidth);
-        return new Drawable(generateHash(x + y + width + height + color + filled) + seed, x, y, rect, zIndex, alpha,
+        return new Drawable(generateHash(x.toString() + y + width + height + color + filled) + seed, x, y, rect, zIndex,
+            alpha,
             rotation, scale);
     }
 
@@ -33,13 +35,14 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
 
     function createCircle(seed, x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var circle = new Circle(radius, color, filled, lineWidth);
-        return new Drawable(generateHash(x + y + radius + color + filled) + seed, x, y, circle, zIndex, alpha,
+        return new Drawable(generateHash(x.toString() + y + radius + color + filled) + seed, x, y, circle, zIndex,
+            alpha,
             rotation, scale);
     }
 
     function createLine(seed, x, y, length, color, lineWidth, zIndex, alpha, rotation, scale) {
         var line = new DrawableLine(length, color, lineWidth);
-        return new Drawable(generateHash(x + y + length + color) + seed, x, y, line, zIndex, alpha,
+        return new Drawable(generateHash(x.toString() + y + length + color) + seed, x, y, line, zIndex, alpha,
             rotation, scale);
     }
 
