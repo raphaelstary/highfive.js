@@ -46,8 +46,9 @@ var BasicAnimations = (function (Object, iterateEntries) {
             var list = this.dict[key];
             if (!list)
                 return; // ie11 has null references after removing todo maybe change to pendingDeletes list?
-            list.forEach(function (wrapper, index, list) {
 
+            for (var i = list.length - 1; i >= 0; i--) {
+                var wrapper = list[i];
                 var animation = wrapper.animation;
                 if (animation.duration > wrapper.time) {
 
@@ -61,14 +62,15 @@ var BasicAnimations = (function (Object, iterateEntries) {
                     if (animation.loop) {
                         wrapper.time = 0;
                     } else {
-                        list.splice(index, 1);
+                        list.splice(i, 1);
                     }
 
                     if (wrapper.callback) {
                         wrapper.callback();
                     }
                 }
-            }, this);
+            }
+
             if (list.length == 0) {
                 delete this.dict[key];
             }
