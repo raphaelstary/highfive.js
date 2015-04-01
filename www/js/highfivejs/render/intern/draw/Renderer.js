@@ -1,4 +1,5 @@
-var Renderer = (function (Object, getFunctionName) {
+var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle,
+                          renderRectangle, DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage) {
     "use strict";
 
     function Renderer(screen) {
@@ -78,7 +79,23 @@ var Renderer = (function (Object, getFunctionName) {
                 }
 
                 self.ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);
-                self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
+
+                // todo fixme: I don't work minified
+                //self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
+                // i work minified:
+                if (drawable.data instanceof SubImage) {
+                    renderAtlas(self.ctx, drawable);
+                } else if (drawable.data instanceof TextWrapper) {
+                    renderText(self.ctx, drawable);
+                } else if (drawable.data instanceof Rectangle) {
+                    renderRectangle(self.ctx, drawable);
+                } else if (drawable.data instanceof DrawableLine) {
+                    renderLine(self.ctx, drawable);
+                } else if (drawable.data instanceof Circle) {
+                    renderCircle(self.ctx, drawable);
+                } else if (drawable.data instanceof ImageWrapper) {
+                    renderImage(self.ctx, drawable);
+                }
 
                 self.ctx.restore();
             });
@@ -95,4 +112,5 @@ var Renderer = (function (Object, getFunctionName) {
     };
 
     return Renderer;
-})(Object, getFunctionName);
+})(Object, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle, DrawableLine,
+    renderLine, Circle, renderCircle, ImageWrapper, renderImage);
