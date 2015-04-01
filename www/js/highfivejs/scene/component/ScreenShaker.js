@@ -153,6 +153,11 @@ var ScreenShaker = (function (Math, Object, calcScreenConst) {
     };
 
     ScreenShaker.prototype.resize = function (event) {
+        this.bigShaking = false;
+        this.smallShaking = false;
+        this.shaking = false;
+        this.time = 0;
+
         var self = this;
         Object.keys(this.shaker).forEach(function (key) {
             var item = self.shaker[key];
