@@ -12,6 +12,9 @@ var lclStorage = (function (window) {
             },
             setItem: function (id, value) {
                 this.dict[id] = value;
+            },
+            clear: function () {
+                this.dict = {};
             }
         }
     }
