@@ -13,6 +13,10 @@ var Vectors = (function (Math) {
             return Math.sqrt(x * x + y * y);
         },
 
+        squaredMagnitude: function (x, y) {
+            return x * x + y * y;
+        },
+
         normalize: function (x, y) {
             var magnitude = this.magnitude(x, y);
 
