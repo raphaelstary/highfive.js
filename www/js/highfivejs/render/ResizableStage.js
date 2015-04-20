@@ -141,7 +141,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     ResizableStage.prototype.resize = function (event) {
         this.width = event.width;
         this.height = event.height;
-        if (this.gfx.resize)
+        if (this.gfx && this.gfx.resize)
             this.gfx.resize(event);
         this.stage.resize(event);
         this.resizer.call(event.width, event.height);
