@@ -6,10 +6,12 @@ var CallbackTimer = (function () {
     }
 
     CallbackTimer.prototype.update = function () {
-
+        if (this.todos.length == 0)
+            return;
         for (var i = this.todos.length - 1; i >= 0; i--) {
             var toAdd = this.todos[i];
-
+            if (!toAdd)
+                continue;
             if (toAdd.duration < toAdd.time) {
                 toAdd.callback();
 
