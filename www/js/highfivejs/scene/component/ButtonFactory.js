@@ -1,9 +1,9 @@
-var ButtonFactory = (function () {
+var ButtonFactory = (function (Math, Width) {
     "use strict";
 
     function ButtonFactory(stage, input, timer, font, playSoundCallback, primaryColor, primaryTextColor,
         primaryTextSize, primaryWidthFactor, secondaryColor, secondaryTextColor, secondaryTextSize,
-        secondaryWidthFactor, zIndex) {
+        secondaryWidthFactor) {
         this.stage = stage;
         this.input = input;
         this.font = font;
@@ -17,10 +17,10 @@ var ButtonFactory = (function () {
         this.secondaryTextColor = secondaryTextColor;
         this.secondaryTextSize = secondaryTextSize;
         this.secondaryWidthFactor = secondaryWidthFactor;
-        this.zIndex = zIndex;
     }
 
-    ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback, multiSubmit) {
+    ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback, zIndex, multiSubmit, widthFn,
+        heightFn) {
         function pressPrimaryButton(text, background) {
             background.alpha = 1;
         }
@@ -30,10 +30,13 @@ var ButtonFactory = (function () {
         }
 
         return this.__createButton(xFn, yFn, msg, this.primaryTextSize, this.primaryColor, this.primaryTextColor, 1,
-            callback, true, undefined, this.primaryWidthFactor, pressPrimaryButton, resetPrimaryButton, multiSubmit);
+            callback, true, undefined, this.primaryWidthFactor, pressPrimaryButton, resetPrimaryButton, zIndex,
+            multiSubmit, widthFn, heightFn);
     };
 
-    ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, callback, multiSubmit) {
+    ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, callback, zIndex, multiSubmit, widthFn,
+        heightFn) {
+
         function pressSecondaryButton(text, background) {
             text.alpha = 1;
             background.data.filled = true;
@@ -47,17 +50,18 @@ var ButtonFactory = (function () {
         return this.__createButton(xFn, yFn, msg, this.secondaryTextSize, this.secondaryColor, this.secondaryTextColor,
             0.5, callback, false, function () {
                 return 1;
-            }, this.secondaryWidthFactor, pressSecondaryButton, resetSecondaryButton, multiSubmit);
+            }, this.secondaryWidthFactor, pressSecondaryButton, resetSecondaryButton, zIndex, multiSubmit, widthFn,
+            heightFn);
     };
 
     ButtonFactory.prototype.__createButton = function (xFn, yFn, msg, txtSizeFn, color, textColor, textAlpha, callback,
-        backgroundFilled, lineWidthFn, widthMultiplier, pressButton, resetButton, multiSubmit) {
+        backgroundFilled, lineWidthFn, widthMultiplier, pressButton, resetButton, zIndex, multiSubmit, widthFn,
+        heightFn) {
 
         var isMultiSubmitOn = multiSubmit !== undefined ? multiSubmit : false;
 
-        var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, this.zIndex + 1,
-            undefined, undefined,
-            textAlpha);
+        var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, zIndex + 1, undefined,
+            undefined, textAlpha);
 
         function getWidth(width) {
             var max = Width.get(10, 9)(width);
@@ -66,11 +70,12 @@ var ButtonFactory = (function () {
         }
 
         function getHeight() {
-            return textDrawable.getHeight() * 2;
+            return Math.floor(textDrawable.getHeight() * 2.5);
         }
 
-        var backgroundWrapper = this.stage.drawRectangleWithInput(xFn, yFn, getWidth, getHeight, color,
-            backgroundFilled, lineWidthFn, this.zIndex, 0.5, undefined, undefined, [textDrawable]);
+        var backgroundWrapper = this.stage.drawRectangleWithInput(xFn, yFn, widthFn ? widthFn : getWidth,
+            heightFn ? heightFn : getHeight, color, backgroundFilled, lineWidthFn, zIndex, 0.5, undefined, undefined,
+            [textDrawable]);
 
         var touchable = backgroundWrapper.input;
         var backgroundDrawable = backgroundWrapper.drawable;
@@ -127,4 +132,4 @@ var ButtonFactory = (function () {
     };
 
     return ButtonFactory;
-})();
+})(Math, Width);
