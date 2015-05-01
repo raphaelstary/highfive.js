@@ -116,6 +116,22 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         return drawable;
     };
 
+    ResizableStage.prototype.drawEqTriangle = function (xFn, yFn, angle, radiusFn, color, filled, lineWidthFn, zIndex,
+        alpha, rotation, scale, resizeDependencies) {
+        var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
+        var drawable = this.stage.drawEqTriangle(xFn(this.width, this.height), yFn(this.height, this.width), angle,
+            radiusFn(this.width, this.height), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+
+        this.resizer.add(drawable, function (width, height) {
+            changeCoords(drawable, xFn(width, height), yFn(height, width));
+            var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
+            drawable.data.radius = radiusFn(width, height);
+            drawable.data.lineWidth = lineWidth;
+        }, resizeDependencies);
+
+        return drawable;
+    };
+
     ResizableStage.prototype.drawRectangleWithInput = function (xFn, yFn, widthFn, heightFn, color, filled, lineWidthFn,
         zIndex, alpha, rotation, scale, resizeDependencies) {
 

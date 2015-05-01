@@ -1,5 +1,6 @@
 var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle,
-                          renderRectangle, DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage) {
+    renderRectangle, DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle,
+    renderEqTriangle) {
     "use strict";
 
     function Renderer(screen) {
@@ -83,7 +84,9 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
                 // todo fixme: I don't work minified
                 //self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
                 // i work minified:
-                if (drawable.data instanceof SubImage) {
+                if (drawable.data instanceof EquilateralTriangle) {
+                    renderEqTriangle(self.ctx, drawable);
+                } else if (drawable.data instanceof SubImage) {
                     renderAtlas(self.ctx, drawable);
                 } else if (drawable.data instanceof TextWrapper) {
                     renderText(self.ctx, drawable);
@@ -113,4 +116,4 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
 
     return Renderer;
 })(Object, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle, DrawableLine,
-    renderLine, Circle, renderCircle, ImageWrapper, renderImage);
+    renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle, renderEqTriangle);

@@ -25,8 +25,7 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
     function createRectangle(seed, x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var rect = new Rectangle(width, height, color, filled, lineWidth);
         return new Drawable(generateHash(x.toString() + y + width + height + color + filled) + seed, x, y, rect, zIndex,
-            alpha,
-            rotation, scale);
+            alpha, rotation, scale);
     }
 
     function createClippingMask(x, y, width, height) {
@@ -36,14 +35,20 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
     function createCircle(seed, x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var circle = new Circle(radius, color, filled, lineWidth);
         return new Drawable(generateHash(x.toString() + y + radius + color + filled) + seed, x, y, circle, zIndex,
-            alpha,
-            rotation, scale);
+            alpha, rotation, scale);
     }
 
     function createLine(seed, x, y, length, color, lineWidth, zIndex, alpha, rotation, scale) {
         var line = new DrawableLine(length, color, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + length + color) + seed, x, y, line, zIndex, alpha,
-            rotation, scale);
+        return new Drawable(generateHash(x.toString() + y + length + color) + seed, x, y, line, zIndex, alpha, rotation,
+            scale);
+    }
+
+    function createEquilateralTriangle(seed, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation,
+        scale) {
+        var triangle = new EquilateralTriangle(angle, radius, color, filled, lineWidth);
+        return new Drawable(generateHash(x.toString() + y + angle + radius + color + filled) + seed, x, y, triangle,
+            zIndex, alpha, rotation, scale);
     }
 
     return {
@@ -52,6 +57,7 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
         getRect: createRectangle,
         getMask: createClippingMask,
         getCircle: createCircle,
-        getLine: createLine
+        getLine: createLine,
+        getEqTriangle: createEquilateralTriangle
     };
-})(Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine);
+})(Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine, EquilateralTriangle);

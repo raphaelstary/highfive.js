@@ -217,8 +217,15 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.drawLine = function (x, y, length, color, lineWidth, zIndex, alpha, rotation, scale) {
-        var drawable = Drawables.getLine(++this._id, x, y, length, color, lineWidth, zIndex, alpha, rotation,
-            scale);
+        var drawable = Drawables.getLine(++this._id, x, y, length, color, lineWidth, zIndex, alpha, rotation, scale);
+        this.draw(drawable);
+        return drawable;
+    };
+
+    Stage.prototype.drawEqTriangle = function (x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation,
+        scale) {
+        var drawable = Drawables.getEqTriangle(++this._id, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha,
+            rotation, scale);
         this.draw(drawable);
         return drawable;
     };

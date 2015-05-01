@@ -2,7 +2,7 @@ var renderHexagon = (function (renderPolygon, Math) {
     "use strict";
 
     function renderHexagon(ctx, drawable) {
-        renderPolygon(ctx, drawable.x, drawable.y, drawable.data.radius, 6, -Math.PI / 2)
+        renderPolygon(ctx, drawable.x, drawable.y, drawable.data, 6);
     }
 
     return renderHexagon;
