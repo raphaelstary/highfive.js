@@ -159,6 +159,16 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.__softAdd(drawable);
     };
 
+    Stage.prototype.moveCircular = function (drawable, x, y, radius, startAngle, endAngle, speed, spacingFn, loop,
+        callback) {
+
+        var path = Paths.getCircle(x, y, radius, startAngle, endAngle, speed, spacingFn, loop);
+        this.motions.animate(drawable, path, callback);
+        this.__softAdd(drawable);
+
+        return path;
+    };
+
     Stage.prototype.moveRoundTrip = function (drawable, pathTo, pathReturn, loopTheTrip, callbackTo, callbackReturn) {
         this.motionHelper.moveRoundTrip(drawable, pathTo, pathReturn, loopTheTrip, callbackTo, callbackReturn);
         this.__softAdd(drawable);

@@ -1,5 +1,5 @@
 var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, inheritMethods, TextWrapper,
-    iterateEntries, Object, changeRectangle, changeMask, Rectangle) {
+    iterateEntries, Object, changeRectangle, changeMask, Rectangle, Vectors) {
     "use strict";
 
     function ResizableStage(stage, gfx, resizer, createInput, changeInput, width, height, timer) {
@@ -208,17 +208,20 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
         var enhancedCallBack;
         if (callback) {
-            if (loop)
-                enhancedCallBack = callback; else {
+            if (loop) {
+                enhancedCallBack = callback;
+            } else {
                 enhancedCallBack = function () {
                     callback();
                     registerResizeAfterMove();
                 }
             }
         } else {
-            if (loop)
-                enhancedCallBack = undefined; else
+            if (loop) {
+                enhancedCallBack = undefined;
+            } else {
                 enhancedCallBack = registerResizeAfterMove;
+            }
         }
 
         var wrapper = this.stage.moveFresh(xFn(this.width), yFn(this.height), imgName, endXFn(this.width),
@@ -421,6 +424,64 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         }, resizeDependencies);
     };
 
+    ResizableStage.prototype.moveCircular = function (drawable, xFn, yFn, radiusFn, startAngle, endAngle, speed,
+        spacing, loop, callback, resizeDependencies) {
+
+        var pathId = {id: drawable.id + '_1'};
+        var self = this;
+        var registerResizeAfterMove = function () {
+            self.resizer.remove(pathId);
+
+            if (drawable.data instanceof TextWrapper || drawable.data instanceof Rectangle) {
+                // todo add all other entity classes or refactor
+                var afterEntitySpecificStuff_nowXnYPosition_id = {id: drawable.id + '_2'};
+                self.resizer.add(afterEntitySpecificStuff_nowXnYPosition_id, function (width, height) {
+                    changeCoords(drawable, Vectors.getX(xFn(width), radiusFn(width, height), endAngle),
+                        Vectors.getY(yFn(height), radiusFn(width, height), endAngle));
+                }, resizeDependencies);
+            } else {
+                resizeDependencies = resizeDependencies.filter(function (element) {
+                    return element.id != drawable.id;
+                });
+                self.resizer.add(drawable, function (width, height) {
+                    changeCoords(drawable, Vectors.getX(xFn(width), radiusFn(width, height), endAngle),
+                        Vectors.getY(yFn(height), radiusFn(width, height), endAngle));
+                }, resizeDependencies);
+            }
+        };
+
+        var enhancedCallBack;
+        if (callback) {
+            if (loop) {
+                enhancedCallBack = callback;
+            } else {
+                enhancedCallBack = function () {
+                    registerResizeAfterMove();
+                    callback();
+                }
+            }
+        } else {
+            if (loop) {
+                enhancedCallBack = undefined;
+            } else {
+                enhancedCallBack = registerResizeAfterMove;
+            }
+        }
+
+        var path = this.stage.moveCircular(drawable, xFn(this.width), yFn(this.height),
+            radiusFn(this.width, this.height), startAngle, endAngle, speed, spacing, loop, enhancedCallBack);
+
+        if (resizeDependencies) {
+            resizeDependencies.push(drawable);
+        } else {
+            resizeDependencies = [drawable];
+        }
+
+        this.resizer.add(pathId, function (width, height) {
+            changePath(path, xFn(width), yFn(height), radiusFn(width, height));
+        }, resizeDependencies);
+    };
+
     ResizableStage.prototype.moveRoundTrip = function (drawable, endXFn, endYFn, speed, spacing, loopTheTrip,
         callbackTo, callbackReturn, resizeDependencies, zIndex, alpha, rotation, scale) {
         //todo implement
@@ -497,4 +558,4 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     return ResizableStage;
 })(changeCoords, changePath, CanvasImageCollisionDetector, inheritMethods, TextWrapper, iterateEntries, Object,
-    changeRectangle, changeMask, Rectangle);
+    changeRectangle, changeMask, Rectangle, Vectors);

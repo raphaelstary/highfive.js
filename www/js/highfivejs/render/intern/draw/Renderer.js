@@ -56,6 +56,7 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
                 if (drawable.mask) {
                     self.ctx.beginPath();
                     self.ctx.rect(drawable.mask.x, drawable.mask.y, drawable.mask.width, drawable.mask.height);
+                    self.ctx.closePath();
                     self.ctx.clip();
                 }
 

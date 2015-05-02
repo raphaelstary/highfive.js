@@ -1,7 +1,7 @@
-var Line = (function () {
+var LinePath = (function () {
     "use strict";
 
-    function Line(startX, startY, endX, endY, vectorX, vectorY, unitVectorX, unitVectorY, length) {
+    function LinePath(startX, startY, endX, endY, vectorX, vectorY, unitVectorX, unitVectorY, length) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -13,5 +13,5 @@ var Line = (function () {
         this.length = length;
     }
 
-    return Line;
+    return LinePath;
 })();
