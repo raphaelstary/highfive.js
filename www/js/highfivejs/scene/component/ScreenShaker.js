@@ -96,7 +96,7 @@ var ScreenShaker = (function (Math, Object, calcScreenConst) {
                     var item = self.shaker[key];
                     if (self.time == 0 || item._startValueX == undefined) {
                         item._startValueX = item.x;
-//                            item._startValueY = item.y;
+                        //                            item._startValueY = item.y;
                         self.lastOffSetY = 0;
                     }
                     if (offSetX != 0) {
@@ -141,7 +141,7 @@ var ScreenShaker = (function (Math, Object, calcScreenConst) {
         }
 
         return Math.floor(amplitude * Math.pow(2, -10 * currentTime) *
-        Math.sin((currentTime * duration) * (2 * Math.PI) / period));
+            Math.sin((currentTime * duration) * (2 * Math.PI) / period));
     }
 
     ScreenShaker.prototype.add = function (drawable) {

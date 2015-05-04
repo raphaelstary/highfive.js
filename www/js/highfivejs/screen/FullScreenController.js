@@ -5,7 +5,7 @@ var FullScreenController = (function (document, navigator) {
         this.screen = screen;
 
         this.isSupported = document.fullscreenEnabled || document.webkitFullscreenEnabled ||
-        document.mozFullScreenEnabled || document.msFullscreenEnabled;
+            document.mozFullScreenEnabled || document.msFullscreenEnabled;
     }
 
     FullScreenController.prototype.request = function () {
