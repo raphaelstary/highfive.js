@@ -155,6 +155,10 @@ var PointerHandler = (function (Event, Object, Math) {
                         pointer.x = Math.floor(pointer.x / this.device.screenScale);
                         pointer.y = Math.floor(pointer.y / this.device.screenScale);
                     }
+                    if (this.device.devicePixelRatio > 1) {
+                        pointer.x = Math.floor(pointer.x * this.device.devicePixelRatio);
+                        pointer.y = Math.floor(pointer.y * this.device.devicePixelRatio);
+                    }
                     this.events.fireSync(Event.POINTER, pointer);
                     pointer.changed = false;
                 }
