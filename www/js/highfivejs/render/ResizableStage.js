@@ -32,9 +32,10 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     ResizableStage.prototype.drawFresh = function (xFn, yFn, imgName, zIndex, resizeDependencies, alpha, rotation,
         scale) {
-        var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawFresh(xFn(this.width, this.height), yFn(this.height, this.width), imgName, zIndex,
+            alpha, rotation, scale);
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height));
         }, resizeDependencies);
 
         return drawable;
@@ -42,11 +43,12 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     ResizableStage.prototype.drawFreshWithInput = function (xFn, yFn, imgName, zIndex, resizeDependencies, alpha,
         rotation, scale) {
-        var drawable = this.stage.drawFresh(xFn(this.width), yFn(this.height), imgName, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawFresh(xFn(this.width, this.height), yFn(this.height, this.width), imgName, zIndex,
+            alpha, rotation, scale);
         var self = this;
         var input = self.createInput(drawable);
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height));
             self.changeInput(input, drawable);
         }, resizeDependencies);
 
@@ -59,17 +61,18 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     ResizableStage.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex, resizeDependencies,
         rotation, alpha, maxLineLengthFn, lineHeightFn, scale) {
 
-        var drawable = this.stage.drawText(xFn(this.width), yFn(this.height), text, sizeFn(this.width, this.height),
-            font, color, zIndex, rotation, alpha, maxLineLengthFn ? maxLineLengthFn(this.width) : undefined,
-            lineHeightFn ? lineHeightFn(this.height) : undefined, scale);
+        var drawable = this.stage.drawText(xFn(this.width, this.height), yFn(this.height, this.width), text,
+            sizeFn(this.width, this.height), font, color, zIndex, rotation, alpha,
+            maxLineLengthFn ? maxLineLengthFn(this.width, this.height) : undefined,
+            lineHeightFn ? lineHeightFn(this.height, this.width) : undefined, scale);
 
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height));
             drawable.data.size = sizeFn(width, height);
             if (maxLineLengthFn)
-                drawable.data.maxLineLength = maxLineLengthFn(width);
+                drawable.data.maxLineLength = maxLineLengthFn(width, height);
             if (lineHeightFn)
-                drawable.data.lineHeight = lineHeightFn(height);
+                drawable.data.lineHeight = lineHeightFn(height, width);
         }, resizeDependencies);
 
         return drawable;
@@ -77,20 +80,20 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
     ResizableStage.prototype.drawTextWithInput = function (xFn, yFn, text, sizeFn, font, color, zIndex,
         resizeDependencies, alpha, rotation, maxLineLengthFn, lineHeightFn, scale) {
-        var drawable = this.stage.getDrawableText(xFn(this.width), yFn(this.height), zIndex, text,
-            sizeFn(this.width, this.height), font, color, rotation, alpha,
-            maxLineLengthFn ? maxLineLengthFn(this.width) : undefined,
-            lineHeightFn ? lineHeightFn(this.height) : undefined, scale);
+        var drawable = this.stage.getDrawableText(xFn(this.width, this.height), yFn(this.height, this.width), zIndex,
+            text, sizeFn(this.width, this.height), font, color, rotation, alpha,
+            maxLineLengthFn ? maxLineLengthFn(this.width, this.height) : undefined,
+            lineHeightFn ? lineHeightFn(this.height, this.width) : undefined, scale);
         this.stage.draw(drawable);
         var input = this.createInput(drawable);
         var self = this;
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height, width));
             drawable.data.size = sizeFn(width, height);
             if (maxLineLengthFn)
-                drawable.data.maxLineLength = maxLineLengthFn(width);
+                drawable.data.maxLineLength = maxLineLengthFn(width, height);
             if (lineHeightFn)
-                drawable.data.lineHeight = lineHeightFn(height);
+                drawable.data.lineHeight = lineHeightFn(height, width);
             self.changeInput(input, drawable);
         }, resizeDependencies);
 
@@ -104,11 +107,12 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         alpha, rotation, scale, resizeDependencies) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
-        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width, this.height),
-            heightFn(this.height, this.width), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawRectangle(xFn(this.width, this.height), yFn(this.height, this.width),
+            widthFn(this.width, this.height), heightFn(this.height, this.width), color, filled, lineWidth, zIndex,
+            alpha, rotation, scale);
 
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height, width));
             var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
             changeRectangle(drawable.data, widthFn(width, height), heightFn(height, width), lineWidth);
         }, resizeDependencies);
@@ -120,11 +124,11 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         rotation, scale, resizeDependencies) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
-        var drawable = this.stage.drawCircle(xFn(this.width), yFn(this.height), radiusFn(this.width, this.height),
-            color, filled, lineWidth, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawCircle(xFn(this.width, this.height), yFn(this.height, this.width),
+            radiusFn(this.width, this.height), color, filled, lineWidth, zIndex, alpha, rotation, scale);
 
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height, width));
             var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
             drawable.data.radius = radiusFn(width, height);
             drawable.data.lineWidth = lineWidth;
@@ -153,13 +157,14 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         zIndex, alpha, rotation, scale, resizeDependencies) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
-        var drawable = this.stage.drawRectangle(xFn(this.width), yFn(this.height), widthFn(this.width, this.height),
-            heightFn(this.height, this.width), color, filled, lineWidth, zIndex, alpha, rotation, scale);
+        var drawable = this.stage.drawRectangle(xFn(this.width, this.height), yFn(this.height, this.width),
+            widthFn(this.width, this.height), heightFn(this.height, this.width), color, filled, lineWidth, zIndex,
+            alpha, rotation, scale);
 
         var input = this.createInput(drawable);
         var self = this;
         this.resizer.add(drawable, function (width, height) {
-            changeCoords(drawable, xFn(width), yFn(height));
+            changeCoords(drawable, xFn(width, height), yFn(height, width));
             var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
             changeRectangle(drawable.data, widthFn(width, height), heightFn(height, width), lineWidth);
             self.changeInput(input, drawable);
@@ -187,11 +192,11 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     ResizableStage.prototype.animateFresh = function (xFn, yFn, imgPathName, numberOfFrames, loop, resizeDependencies,
         zIndex, alpha, rotation, scale) {
 
-        var wrapper = this.stage.animateFresh(xFn(this.width), yFn(this.height), imgPathName, numberOfFrames, loop,
-            zIndex, alpha, rotation, scale);
+        var wrapper = this.stage.animateFresh(xFn(this.width, this.height), yFn(this.height, this.width), imgPathName,
+            numberOfFrames, loop, zIndex, alpha, rotation, scale);
 
         this.resizer.add(wrapper.drawable, function (width, height) {
-            changeCoords(wrapper.drawable, xFn(width), yFn(height));
+            changeCoords(wrapper.drawable, xFn(width, height), yFn(height, width));
         }, resizeDependencies);
 
         return wrapper;
@@ -202,7 +207,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var self = this;
         var registerResizeAfterMove = function () {
             self.resizer.add(wrapper.drawable, function (width, height) {
-                changeCoords(wrapper.drawable, endXFn(width), endYFn(height));
+                changeCoords(wrapper.drawable, endXFn(width, height), endYFn(height, width));
             }, resizeDependencies);
         };
 
@@ -224,12 +229,14 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             }
         }
 
-        var wrapper = this.stage.moveFresh(xFn(this.width), yFn(this.height), imgName, endXFn(this.width),
-            endYFn(this.height), speed, spacing, loop, enhancedCallBack, zIndex, alpha, rotation, scale);
+        var wrapper = this.stage.moveFresh(xFn(this.width, this.height), yFn(this.height, this.width), imgName,
+            endXFn(this.width, this.height), endYFn(this.height, this.width), speed, spacing, loop, enhancedCallBack,
+            zIndex, alpha, rotation, scale);
 
         this.resizer.add(wrapper.drawable, function (width, height) {
-            changeCoords(wrapper.drawable, xFn(width), yFn(height));
-            changePath(wrapper.path, xFn(width), yFn(height), endXFn(width), endYFn(height));
+            changeCoords(wrapper.drawable, xFn(width, height), yFn(height, width));
+            changePath(wrapper.path, xFn(width, height), yFn(height, width), endXFn(width, height),
+                endYFn(height, width));
         }, resizeDependencies);
 
         return wrapper;
@@ -241,12 +248,12 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var self = this;
         var registerResizeAfterMove = function () {
             self.resizer.add(wrapper.drawable, function (width, height) {
-                changeCoords(wrapper.drawable, endXFn(width), endYFn(height));
+                changeCoords(wrapper.drawable, endXFn(width, height), endYFn(height, width));
                 wrapper.drawable.data.size = sizeFn(width, height);
                 if (maxLineLengthFn)
-                    wrapper.drawable.data.maxLineLength = maxLineLengthFn(width);
+                    wrapper.drawable.data.maxLineLength = maxLineLengthFn(width, height);
                 if (lineHeightFn)
-                    wrapper.drawable.data.lineHeight = lineHeightFn(height);
+                    wrapper.drawable.data.lineHeight = lineHeightFn(height, width);
             }, resizeDependencies);
         };
 
@@ -260,19 +267,21 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             enhancedCallBack = registerResizeAfterMove;
         }
 
-        var wrapper = this.stage.moveFreshText(xFn(this.width), yFn(this.height), text, sizeFn(this.width, this.height),
-            font, color, endXFn(this.width), endYFn(this.height), speed, spacing, loop, enhancedCallBack, zIndex, alpha,
-            rotation, maxLineLengthFn ? maxLineLengthFn(this.width) : undefined,
-            lineHeightFn ? lineHeightFn(this.height) : undefined);
+        var wrapper = this.stage.moveFreshText(xFn(this.width, this.height), yFn(this.height, this.width), text,
+            sizeFn(this.width, this.height), font, color, endXFn(this.width, this.height),
+            endYFn(this.height, this.width), speed, spacing, loop, enhancedCallBack, zIndex, alpha, rotation,
+            maxLineLengthFn ? maxLineLengthFn(this.width, this.height) : undefined,
+            lineHeightFn ? lineHeightFn(this.height, this.width) : undefined);
 
         this.resizer.add(wrapper.drawable, function (width, height) {
-            changeCoords(wrapper.drawable, xFn(width), yFn(height));
+            changeCoords(wrapper.drawable, xFn(width, height), yFn(height, width));
             wrapper.drawable.data.size = sizeFn(width, height);
             if (maxLineLengthFn)
-                wrapper.drawable.data.maxLineLength = maxLineLengthFn(width);
+                wrapper.drawable.data.maxLineLength = maxLineLengthFn(width, height);
             if (lineHeightFn)
-                wrapper.drawable.data.lineHeight = lineHeightFn(height);
-            changePath(wrapper.path, xFn(width), yFn(height), endXFn(width), endYFn(height));
+                wrapper.drawable.data.lineHeight = lineHeightFn(height, width);
+            changePath(wrapper.path, xFn(width, height), yFn(height, width), endXFn(width, height),
+                endYFn(height, width));
         }, resizeDependencies);
 
         return wrapper;
@@ -284,9 +293,11 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         var self = this;
         var registerResizeReturn = function () {
             self.resizer.add(wrapper.drawable, function (width, height) {
-                changeCoords(wrapper.drawable, endXFn(width), endYFn(height));
-                changePath(wrapper.pathTo, xFn(width), yFn(height), endXFn(width), endYFn(height));
-                changePath(wrapper.pathReturn, endXFn(width), endYFn(height), xFn(width), yFn(height));
+                changeCoords(wrapper.drawable, endXFn(width, height), endYFn(height, width));
+                changePath(wrapper.pathTo, xFn(width, height), yFn(height, width), endXFn(width, height),
+                    endYFn(height, width));
+                changePath(wrapper.pathReturn, endXFn(width, height), endYFn(height, width), xFn(width, height),
+                    yFn(height, width));
             }, resizeDependencies);
         };
 
@@ -302,9 +313,11 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
 
         var initResize = function () {
             self.resizer.add(wrapper.drawable, function (width, height) {
-                changeCoords(wrapper.drawable, xFn(width), yFn(height));
-                changePath(wrapper.pathTo, xFn(width), yFn(height), endXFn(width), endYFn(height));
-                changePath(wrapper.pathReturn, endXFn(width), endYFn(height), xFn(width), yFn(height));
+                changeCoords(wrapper.drawable, xFn(width, height), yFn(height, width));
+                changePath(wrapper.pathTo, xFn(width, height), yFn(height, width), endXFn(width, height),
+                    endYFn(height, width));
+                changePath(wrapper.pathReturn, endXFn(width, height), endYFn(height, width), xFn(width, height),
+                    yFn(height, width));
             }, resizeDependencies);
         };
 
@@ -313,7 +326,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
                 initResize();
             } else {
                 self.resizer.add(wrapper.drawable, function (width, height) {
-                    changeCoords(wrapper.drawable, xFn(width), yFn(height));
+                    changeCoords(wrapper.drawable, xFn(width, height), yFn(height, width));
                 }, resizeDependencies);
             }
         };
@@ -328,9 +341,9 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             enhancedCallBackFrom = registerResizeTo;
         }
 
-        var wrapper = this.stage.moveFreshRoundTrip(xFn(this.width), yFn(this.height), imgName, endXFn(this.width),
-            endYFn(this.height), speed, spacing, loopTheTrip, enhancedCallBackTo, enhancedCallBackFrom, zIndex, alpha,
-            rotation, scale);
+        var wrapper = this.stage.moveFreshRoundTrip(xFn(this.width, this.height), yFn(this.height, this.width), imgName,
+            endXFn(this.width, this.height), endYFn(this.height, this.width), speed, spacing, loopTheTrip,
+            enhancedCallBackTo, enhancedCallBackFrom, zIndex, alpha, rotation, scale);
 
         initResize();
 
@@ -386,14 +399,14 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
                 // todo add all other entity classes or refactor
                 var afterEntitySpecificStuff_nowXnYPosition_id = {id: drawable.id + '_2'};
                 self.resizer.add(afterEntitySpecificStuff_nowXnYPosition_id, function (width, height) {
-                    changeCoords(drawable, endXFn(width), endYFn(height));
+                    changeCoords(drawable, endXFn(width, height), endYFn(height, width));
                 }, resizeDependencies);
             } else {
                 resizeDependencies = resizeDependencies.filter(function (element) {
                     return element.id != drawable.id;
                 });
                 self.resizer.add(drawable, function (width, height) {
-                    changeCoords(drawable, endXFn(width), endYFn(height));
+                    changeCoords(drawable, endXFn(width, height), endYFn(height, width));
                 }, resizeDependencies);
             }
         };
@@ -408,8 +421,8 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             enhancedCallBack = registerResizeAfterMove;
         }
 
-        var path = this.stage.getPath(drawable.x, drawable.y, endXFn(this.width), endYFn(this.height), speed, spacing,
-            loop);
+        var path = this.stage.getPath(drawable.x, drawable.y, endXFn(this.width, this.height),
+            endYFn(this.height, this.width), speed, spacing, loop);
 
         this.stage.move(drawable, path, enhancedCallBack);
 
@@ -420,7 +433,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         }
 
         this.resizer.add(pathId, function (width, height) {
-            changePath(path, drawable.x, drawable.y, endXFn(width), endYFn(height));
+            changePath(path, drawable.x, drawable.y, endXFn(width, height), endYFn(height, width));
         }, resizeDependencies);
     };
 
@@ -436,16 +449,16 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
                 // todo add all other entity classes or refactor
                 var afterEntitySpecificStuff_nowXnYPosition_id = {id: drawable.id + '_2'};
                 self.resizer.add(afterEntitySpecificStuff_nowXnYPosition_id, function (width, height) {
-                    changeCoords(drawable, Vectors.getX(xFn(width), radiusFn(width, height), endAngle),
-                        Vectors.getY(yFn(height), radiusFn(width, height), endAngle));
+                    changeCoords(drawable, Vectors.getX(xFn(width, height), radiusFn(width, height), endAngle),
+                        Vectors.getY(yFn(height, width), radiusFn(width, height), endAngle));
                 }, resizeDependencies);
             } else {
                 resizeDependencies = resizeDependencies.filter(function (element) {
                     return element.id != drawable.id;
                 });
                 self.resizer.add(drawable, function (width, height) {
-                    changeCoords(drawable, Vectors.getX(xFn(width), radiusFn(width, height), endAngle),
-                        Vectors.getY(yFn(height), radiusFn(width, height), endAngle));
+                    changeCoords(drawable, Vectors.getX(xFn(width, height), radiusFn(width, height), endAngle),
+                        Vectors.getY(yFn(height, width), radiusFn(width, height), endAngle));
                 }, resizeDependencies);
             }
         };
@@ -468,7 +481,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
             }
         }
 
-        var path = this.stage.moveCircular(drawable, xFn(this.width), yFn(this.height),
+        var path = this.stage.moveCircular(drawable, xFn(this.width, this.height), yFn(this.height, this.width),
             radiusFn(this.width, this.height), startAngle, endAngle, speed, spacing, loop, enhancedCallBack);
 
         if (resizeDependencies) {
@@ -478,7 +491,7 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
         }
 
         this.resizer.add(pathId, function (width, height) {
-            changePath(path, xFn(width), yFn(height), radiusFn(width, height));
+            changePath(path, xFn(width, height), yFn(height, width), radiusFn(width, height));
         }, resizeDependencies);
     };
 
@@ -530,14 +543,15 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     var MASK = '_mask';
 
     ResizableStage.prototype.mask = function (drawable, pointA_xFn, pointA_yFn, pointB_xFn, pointB_yFn) {
-        var mask = this.stage.mask(drawable, pointA_xFn(this.width), pointA_yFn(this.height), pointB_xFn(this.width),
-            pointB_yFn(this.height));
+        var mask = this.stage.mask(drawable, pointA_xFn(this.width, this.height), pointA_yFn(this.height, this.width),
+            pointB_xFn(this.width, this.height), pointB_yFn(this.height, this.width));
 
         var maskId = {
             id: drawable.id + MASK
         };
         this.resizer.add(maskId, function (width, height) {
-            changeMask(mask, pointA_xFn(width), pointA_yFn(height), pointB_xFn(width), pointB_yFn(height));
+            changeMask(mask, pointA_xFn(width, height), pointA_yFn(height, width), pointB_xFn(width, height),
+                pointB_yFn(height, width));
         }, [drawable]);
 
         return mask;
