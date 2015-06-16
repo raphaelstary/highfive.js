@@ -16,7 +16,7 @@ var App = (function ($) {
         var filesCount = this.resources.create(resourceLoader);
         var events = this.services.events;
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
-        var initScreenId = events.subscribe(Event.RESIZE, initialScreen.resize.bind(initialScreen));
+        var initScreenId = events.subscribe($.Event.RESIZE, initialScreen.resize.bind(initialScreen));
 
         initialScreen.showNew(filesCount);
 
