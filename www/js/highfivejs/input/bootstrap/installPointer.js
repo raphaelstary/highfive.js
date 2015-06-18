@@ -24,7 +24,7 @@ var installPointer = (function (PointerHandler, Event, window) {
                 canvas.addEventListener('touchstart', pointerHandler.touchStart.bind(pointerHandler));
                 canvas.addEventListener('touchmove', pointerHandler.touchMove.bind(pointerHandler));
                 canvas.addEventListener('touchend', pointerHandler.touchEnd.bind(pointerHandler));
-                canvas.addEventListener('touchcancel', pointerHandler.touchCancel);
+                canvas.addEventListener('touchcancel', pointerHandler.touchCancel.bind(pointerHandler));
             }
             canvas.addEventListener('mousedown', pointerHandler.mouseDown.bind(pointerHandler));
             canvas.addEventListener('mousemove', pointerHandler.mouseMove.bind(pointerHandler));
