@@ -20,7 +20,7 @@ var ButtonFactory = (function (Math, Width) {
     }
 
     ButtonFactory.prototype.createPrimaryButton = function (xFn, yFn, msg, callback, zIndex, multiSubmit, widthFn,
-        heightFn) {
+        heightFn, hitWidthFn, hitHeightFn) {
         function pressPrimaryButton(text, background) {
             background.alpha = 1;
         }
@@ -31,11 +31,11 @@ var ButtonFactory = (function (Math, Width) {
 
         return this.__createButton(xFn, yFn, msg, this.primaryTextSize, this.primaryColor, this.primaryTextColor, 1,
             callback, true, undefined, this.primaryWidthFactor, pressPrimaryButton, resetPrimaryButton, zIndex,
-            multiSubmit, widthFn, heightFn);
+            multiSubmit, widthFn, heightFn, hitWidthFn, hitHeightFn);
     };
 
     ButtonFactory.prototype.createSecondaryButton = function (xFn, yFn, msg, callback, zIndex, multiSubmit, widthFn,
-        heightFn) {
+        heightFn, hitWidthFn, hitHeightFn) {
 
         function pressSecondaryButton(text, background) {
             text.alpha = 1;
@@ -51,12 +51,12 @@ var ButtonFactory = (function (Math, Width) {
             0.5, callback, false, function () {
                 return 1;
             }, this.secondaryWidthFactor, pressSecondaryButton, resetSecondaryButton, zIndex, multiSubmit, widthFn,
-            heightFn);
+            heightFn, hitWidthFn, hitHeightFn);
     };
 
     ButtonFactory.prototype.__createButton = function (xFn, yFn, msg, txtSizeFn, color, textColor, textAlpha, callback,
         backgroundFilled, lineWidthFn, widthMultiplier, pressButton, resetButton, zIndex, multiSubmit, widthFn,
-        heightFn) {
+        heightFn, customHitWidthFn, customHitHeightFn) {
 
         var isMultiSubmitOn = multiSubmit !== undefined ? multiSubmit : false;
 
@@ -75,7 +75,7 @@ var ButtonFactory = (function (Math, Width) {
 
         var backgroundWrapper = this.stage.drawRectangleWithInput(xFn, yFn, widthFn ? widthFn : getWidth,
             heightFn ? heightFn : getHeight, color, backgroundFilled, lineWidthFn, zIndex, 0.5, undefined, undefined,
-            [textDrawable]);
+            [textDrawable], customHitWidthFn, customHitHeightFn);
 
         var touchable = backgroundWrapper.input;
         var backgroundDrawable = backgroundWrapper.drawable;

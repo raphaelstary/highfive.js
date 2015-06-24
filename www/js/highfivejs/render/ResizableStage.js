@@ -154,20 +154,50 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     ResizableStage.prototype.drawRectangleWithInput = function (xFn, yFn, widthFn, heightFn, color, filled, lineWidthFn,
-        zIndex, alpha, rotation, scale, resizeDependencies) {
+        zIndex, alpha, rotation, scale, resizeDependencies, customHitWidthFn, customHitHeightFn) {
 
         var lineWidth = lineWidthFn ? lineWidthFn(this.width, this.height) : undefined;
         var drawable = this.stage.drawRectangle(xFn(this.width, this.height), yFn(this.height, this.width),
             widthFn(this.width, this.height), heightFn(this.height, this.width), color, filled, lineWidth, zIndex,
             alpha, rotation, scale);
 
+        if (customHitWidthFn) {
+            var tempWidth = drawable.data.width;
+            drawable.data.width = customHitWidthFn(this.width, this.height);
+        }
+        if (customHitHeightFn) {
+            var tempHeight = drawable.data.height;
+            drawable.data.height = customHitHeightFn(this.height, this.width);
+        }
+
         var input = this.createInput(drawable);
+
+        if (tempWidth)
+            drawable.data.width = tempWidth;
+        if (tempHeight)
+            drawable.data.height = tempHeight;
+
         var self = this;
         this.resizer.add(drawable, function (width, height) {
             changeCoords(drawable, xFn(width, height), yFn(height, width));
             var lineWidth = lineWidthFn ? lineWidthFn(width, height) : undefined;
             changeRectangle(drawable.data, widthFn(width, height), heightFn(height, width), lineWidth);
+
+            if (customHitWidthFn) {
+                var tempWidth = drawable.data.width;
+                drawable.data.width = customHitWidthFn(width, height);
+            }
+            if (customHitHeightFn) {
+                var tempHeight = drawable.data.height;
+                drawable.data.height = customHitHeightFn(height, width);
+            }
+
             self.changeInput(input, drawable);
+
+            if (tempWidth)
+                drawable.data.width = tempWidth;
+            if (tempHeight)
+                drawable.data.height = tempHeight;
         }, resizeDependencies);
 
         return {
