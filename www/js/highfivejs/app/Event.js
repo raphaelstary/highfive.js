@@ -17,6 +17,8 @@ var Event = {
     TICK_DRAW: 'tick_draw',
     TICK_END: 'tick_end',
 
+    ANALYTICS: 'analytics',
+
     // custom events
     PAUSE: 'pause',
     RESUME: 'resume',

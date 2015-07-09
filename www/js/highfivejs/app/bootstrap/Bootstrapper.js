@@ -11,7 +11,8 @@ var Bootstrapper = (function ($) {
         fullScreen: addFullScreen,
         pointer: addPointer,
         lowRez: addLowResolutionRendering,
-        visibility: addPageVisibility
+        visibility: addPageVisibility,
+        analytics: addAnalytics
     };
 
     // dependencies on screen, therefore flags because you need a screen first (build: screen -> features: with screen)
@@ -112,6 +113,11 @@ var Bootstrapper = (function ($) {
         return Bootstrapper;
     }
 
+    function addAnalytics(url, tenantCode, appKeyCode) {
+        $.installAnalytics(url, tenantCode, appKeyCode, events);
+        return Bootstrapper;
+    }
+
     return Bootstrapper;
 })({
     installCanvas: installCanvas,
@@ -123,6 +129,7 @@ var Bootstrapper = (function ($) {
     installFullScreen: installFullScreen,
     installPointer: installPointer,
     installVisibility: installVisibility,
+    installAnalytics: installHolmes,
     App: App,
     EventBus: EventBus,
     DeviceInfo: DeviceInfo,
