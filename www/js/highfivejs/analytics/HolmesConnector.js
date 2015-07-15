@@ -15,8 +15,10 @@ var HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage)
 
     HolmesConnector.prototype.register = function () {
         var clientId = loadString(this.appKeyCode + CLIENT_ID);
-        if (clientId)
+        if (clientId) {
+            this.clientId = clientId;
             return;
+        }
 
         var self = this;
         this.__request(Method.REGISTER, {tenant: this.tenantCode}, function () {
