@@ -23,7 +23,8 @@ var Bootstrapper = (function ($) {
     var usePointer = false;
 
     var events = new $.EventBus();
-    var device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio());
+    var device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio(), $.screenWidth,
+        $.screenHeight);
     var isResponsive = false;
     var useAtlases = false;
 
@@ -135,6 +136,8 @@ var Bootstrapper = (function ($) {
     DeviceInfo: DeviceInfo,
     width: window.innerWidth,
     height: window.innerHeight,
+    screenWidth: window.screen.availWidth,
+    screenHeight: window.screen.availHeight,
     getDevicePixelRatio: getDevicePixelRatio,
     OrientationLock: OrientationLock,
     userAgent: window.navigator.userAgent

@@ -3,6 +3,7 @@ var UniversalTranslator = (function (defaultLanguage, Repository) {
 
     function UniversalTranslator(locales) {
         this.locales = locales;
+        this.defaultLanguageCode = defaultLanguage;
         this.language = defaultLanguage ? defaultLanguage.substring(0, 2) : 'en';
 
         if (!this.locales[this.language])
