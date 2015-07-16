@@ -1,4 +1,4 @@
-var sendSystemEvent = (function (Event, location) {
+var sendSystemEvent = (function (Event, location, appName, appVersion) {
     "use strict";
 
     function sendSystemEvent(device, messages, events) {
@@ -16,11 +16,13 @@ var sendSystemEvent = (function (Event, location) {
             language: messages.defaultLanguageCode,
             userTime: Date.now(),
             userTimeString: Date(),
-            location: location.href
+            location: location.href,
+            app: appName,
+            version: appVersion
         };
 
         events.fire(Event.ANALYTICS, payload);
     }
 
     return sendSystemEvent;
-})(Event, window.location);
+})(Event, window.location, window.appName, window.appVersion);
