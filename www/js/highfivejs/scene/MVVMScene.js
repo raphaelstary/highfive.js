@@ -1,4 +1,4 @@
-var MVVMScene = (function (iterateEntries) {
+var MVVMScene = (function (iterateEntries, Width, Height) {
     "use strict";
 
     function MVVMScene(model, view, viewModel) {
@@ -44,35 +44,56 @@ var MVVMScene = (function (iterateEntries) {
 
             var zIndex = layerKey[layerKey.length - 1];
             layer.forEach(function (elem) {
+
+                var x = xFn(elem.x);
+                var y = yFn(elem.y);
+
+                if (elem.tags && elem.tags.some(function (tag) {
+                        return tag.position == 'relativeToSize';
+                    }) && elem.tags.some(function (tag) {
+                        return tag.anchor == 'widthHalf';
+                    })) {
+                    // very specific use case
+
+                    x = function (width, height) {
+                        return Math.floor(width / 2 +
+                            ((elem.x - sceneRect.width / 2) / elem.height) * yFn(elem.height)(height));
+                    };
+
+                }
+
                 var drawable;
                 if (elem.type == 'image') {
                     var imgName = elem.filename.substring(0, elem.filename.lastIndexOf('.'));
-                    drawable = this.stage.drawFresh(xFn(elem.x), yFn(elem.y), imgName, zIndex, undefined, elem.alpha,
-                        elem.rotation, elem.scale);
+                    drawable = this.stage.drawFresh(x, y, imgName, zIndex, undefined, elem.alpha, elem.rotation,
+                        elem.scale);
                     drawables.push(drawable);
                     if (elem.viewId) {
                         this.dict[elem.viewId] = drawable;
                     }
 
                 } else if (elem.type == 'text') {
-                    drawable = this.stage.drawText(xFn(elem.x), yFn(elem.y), elem.msg, yFn(elem.size), elem.font,
-                        elem.color, zIndex, undefined, elem.rotation, elem.alpha, undefined, undefined, elem.scale);
+                    drawable = this.stage.drawText(x, y, elem.msg, yFn(elem.size), elem.font, elem.color, zIndex,
+                        undefined, elem.rotation, elem.alpha, undefined, undefined, elem.scale);
                     drawables.push(drawable);
                     if (elem.viewId) {
                         this.dict[elem.viewId] = drawable;
                     }
 
                 } else if (elem.type == 'rectangle') {
-                    drawable = this.stage.drawRectangle(xFn(elem.x), yFn(elem.y), xFn(elem.width), yFn(elem.height),
-                        elem.color, elem.filled, undefined, zIndex, elem.alpha, elem.rotation, elem.scale, undefined);
+                    drawable = this.stage.drawRectangle(x, y, xFn(elem.width), yFn(elem.height), elem.color,
+                        elem.filled, undefined, zIndex, elem.alpha, elem.rotation, elem.scale, undefined);
                     drawables.push(drawable);
                     if (elem.viewId) {
                         this.dict[elem.viewId] = drawable;
                     }
 
                 } else if (elem.type == 'button') {
-                    drawable = this.buttons.createPrimaryButton(xFn(elem.text.x), yFn(elem.text.y), elem.text.msg,
-                        undefined, zIndex, undefined, xFn(elem.background.width), yFn(elem.background.height));
+                    x = xFn(elem.text.x);
+                    y = yFn(elem.text.y);
+
+                    drawable = this.buttons.createPrimaryButton(x, y, elem.text.msg, undefined, zIndex, undefined,
+                        xFn(elem.background.width), yFn(elem.background.height));
                     // todo: rethink this shit with buttons
 
                     buttons.push(drawable);
@@ -86,4 +107,4 @@ var MVVMScene = (function (iterateEntries) {
     };
 
     return MVVMScene;
-})(iterateEntries);
+})(iterateEntries, Width, Height);
