@@ -20,9 +20,9 @@ var Width = (function (calcScreenConst) {
         TWO_THIRD: function (width) {
             return calcScreenConst(width, 3, 2);
         },
-        get: function (numerator, denominator) {
+        get: function (denominator, numerator) {
             return function (width) {
-                return calcScreenConst(width, numerator, denominator);
+                return calcScreenConst(width, denominator, numerator);
             };
         }
     };

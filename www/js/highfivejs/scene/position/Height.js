@@ -41,9 +41,9 @@ var Height = (function (calcScreenConst) {
         TWO_THIRD: function (height) {
             return calcScreenConst(height, 3, 2);
         },
-        get: function (numerator, denominator) {
+        get: function (denominator, numerator) {
             return function (height) {
-                return calcScreenConst(height, numerator, denominator);
+                return calcScreenConst(height, denominator, numerator);
             };
         }
     };

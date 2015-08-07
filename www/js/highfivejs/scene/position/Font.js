@@ -29,9 +29,9 @@ var Font = (function (calcScreenConst) {
         _60: function (width, height) {
             return calcScreenConst(height, 60);
         },
-        get: function (numerator, denominator) {
+        get: function (denominator, numerator) {
             return function (width, height) {
-                return calcScreenConst(height, numerator, denominator);
+                return calcScreenConst(height, denominator, numerator);
             };
         }
     };
