@@ -34,14 +34,13 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
             return Height.get(sceneRect.height, y);
         }
 
-        iterateEntries(this.view, function (layer, layerKey) {
+        iterateEntries(this.view, function (layers, layerKey) {
             if (layerKey == 'screen') {
-                sceneRect = layer;
+                sceneRect = layers;
                 return;
             }
 
-            var zIndex = layerKey[layerKey.length - 1];
-            layer.forEach(function (elem) {
+            layers.forEach(function (elem) {
 
                 var x = xFn(elem.x);
                 var y = yFn(elem.y);
@@ -63,7 +62,7 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                 var drawable;
                 if (elem.type == 'image') {
                     var imgName = elem.filename.substring(0, elem.filename.lastIndexOf('.'));
-                    drawable = this.stage.drawFresh(x, y, imgName, zIndex, undefined, elem.alpha, elem.rotation,
+                    drawable = this.stage.drawFresh(x, y, imgName, elem.zIndex, undefined, elem.alpha, elem.rotation,
                         elem.scale);
                     drawables.push(drawable);
                     if (elem.viewId) {
@@ -71,7 +70,7 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                     }
 
                 } else if (elem.type == 'text') {
-                    drawable = this.stage.drawText(x, y, elem.msg, yFn(elem.size), elem.font, elem.color, zIndex,
+                    drawable = this.stage.drawText(x, y, elem.msg, yFn(elem.size), elem.font, elem.color, elem.zIndex,
                         undefined, elem.rotation, elem.alpha, undefined, undefined, elem.scale);
                     drawables.push(drawable);
                     if (elem.viewId) {
@@ -100,7 +99,7 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
 
                     } else {
                         drawable = this.stage.drawRectangle(x, y, xFn(elem.width), yFn(elem.height), elem.color,
-                            elem.filled, undefined, zIndex, elem.alpha, elem.rotation, elem.scale, undefined);
+                            elem.filled, undefined, elem.zIndex, elem.alpha, elem.rotation, elem.scale, undefined);
                         drawables.push(drawable);
 
                         if (elem.viewId) {
@@ -121,7 +120,7 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                     //});
 
                     //drawable = this.buttons.createPrimaryButton(x, y, elem.text.msg,
-                    //    this.viewModel[callbackFnName].bind(this.viewModel), zIndex, false,
+                    //    this.viewModel[callbackFnName].bind(this.viewModel), elem.zIndex, false,
                     // xFn(elem.background.width), yFn(elem.background.height)); //todo: rethink this shit with buttons
                     //   buttons.push(drawable);  if (elem.viewId) {  this.viewModel[elem.viewId] = drawable;  }
 
@@ -141,24 +140,34 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                     taps.push(inputWrapper.input);
 
                     drawable = this.stage.drawText(xFn(elem.text.x), yFn(elem.text.y), elem.text.msg,
-                        yFn(elem.text.size), elem.text.font, elem.text.color, zIndex + 1, undefined, elem.text.rotation,
-                        elem.text.alpha, undefined, undefined, elem.text.scale);
+                        yFn(elem.text.size), elem.text.font, elem.text.color, elem.zIndex + 1, undefined,
+                        elem.text.rotation, elem.text.alpha, undefined, undefined, elem.text.scale);
                     drawables.push(drawable);
 
                     if (elem.background.type == 'image') {
                         var bgName = elem.background.filename.substring(0, elem.background.filename.lastIndexOf('.'));
-                        drawable = this.stage.drawFresh(xFn(elem.background.x), yFn(elem.background.y), bgName, zIndex,
-                            undefined, elem.background.alpha, elem.background.rotation, elem.background.scale);
+                        drawable = this.stage.drawFresh(xFn(elem.background.x), yFn(elem.background.y), bgName,
+                            elem.zIndex, undefined, elem.background.alpha, elem.background.rotation,
+                            elem.background.scale);
                         drawables.push(drawable);
 
                     } else if (elem.background.type == 'rectangle') {
                         drawable = this.stage.drawRectangle(xFn(elem.background.x), yFn(elem.background.y),
                             xFn(elem.background.width), yFn(elem.background.height), elem.background.color,
-                            elem.background.filled, undefined, zIndex, elem.background.alpha, elem.background.rotation,
-                            elem.background.scale, undefined);
+                            elem.background.filled, undefined, elem.zIndex, elem.background.alpha,
+                            elem.background.rotation, elem.background.scale, undefined);
                         drawables.push(drawable);
                     }
 
+                }
+
+                if (elem.animations) {
+                    var animations = elem.animations;
+                    if (animations.transform) {
+                        animations.transform.forEach(function (frame) {
+
+                        });
+                    }
                 }
 
             }, this);
