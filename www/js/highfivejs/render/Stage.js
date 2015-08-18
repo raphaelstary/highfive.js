@@ -55,6 +55,10 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         return this.gfxCache.get(imgPathName);
     };
 
+    Stage.prototype.changeZIndex = function (drawable, newZIndex) {
+        this.renderer.changeZIndex(drawable, newZIndex);
+    };
+
     Stage.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames, loop, zIndex, alpha, rotation, scale) {
         var sprite = this.getSprite(imgPathName, numberOfFrames, loop);
         var drawable = this.getDrawable(x, y, imgPathName, zIndex, alpha, rotation, scale);

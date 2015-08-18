@@ -37,6 +37,12 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
         return this.drawableDict[drawable.zIndex][drawable.id] !== undefined;
     };
 
+    Renderer.prototype.changeZIndex = function (drawable, newZIndex) {
+        this.drawableDict[newZIndex][drawable.id] = this.drawableDict[drawable.zIndex][drawable.id];
+        delete this.drawableDict[drawable.zIndex][drawable.id];
+        drawable.zIndex = newZIndex;
+    };
+
     Renderer.prototype.draw = function () {
         var self = this;
         this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
