@@ -93,10 +93,26 @@ var Setter = (function (changeCoords) {
             resizer.add(drawable, function (width, height) {
                 drawable.data.lineWidth = lineWidthFn(width, height);
             }, resizeDependencies);
+
+            return drawable;
         },
 
         setFilled: function (drawable, filled) {
             drawable.data.filled = filled;
+            return drawable;
+        },
+
+        setRadius: function (resizer, screen, drawable, radiusFn, resizeDependencies) {
+            drawable.data.radius = radiusFn(screen.width, screen.height);
+            resizer.add(drawable, function (width, height) {
+                drawable.data.radius = radiusFn(width, height);
+            }, resizeDependencies);
+
+            return drawable;
+        },
+
+        setAngle: function (drawable, angle) {
+            drawable.data.angle = angle;
             return drawable;
         }
     };

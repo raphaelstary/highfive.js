@@ -1,4 +1,4 @@
-var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine) {
+var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine, EquilateralTriangle) {
     "use strict";
 
     function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
