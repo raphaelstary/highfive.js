@@ -143,23 +143,23 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
         return drawable;
     }
 
-    NewStageAPI.prototype.remove = function (drawable) {
-        // todo 10000 removes
-        this.stage.remove(drawable);
-    };
-
-    NewStageAPI.prototype.show = function (drawable) {
-        this.stage.draw(drawable);
-    };
-
-    NewStageAPI.prototype.hide = function (drawable) {
-        this.stage.remove(drawable);
-    };
-
-    NewStageAPI.prototype.has = function (drawable) {
-        // todo 10000 has checks
-        return this.stage.has(drawable);
-    };
+    //NewStageAPI.prototype.remove = function () {
+    //    // todo 10000 removes
+    //    this.stage.remove(drawable);
+    //};
+    //
+    //NewStageAPI.prototype.show = function () {
+    //    this.stage.draw(drawable);
+    //};
+    //
+    //NewStageAPI.prototype.hide = function () {
+    //    this.stage.remove(drawable);
+    //};
+    //
+    //NewStageAPI.prototype.has = function () {
+    //    // todo 10000 has checks
+    //    return this.stage.has(drawable);
+    //};
 
     NewStageAPI.prototype.update = function () {
         this.timer.update();
