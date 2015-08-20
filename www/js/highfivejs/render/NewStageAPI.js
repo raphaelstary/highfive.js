@@ -1,4 +1,4 @@
-var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterateEntries) {
+var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityServices) {
     "use strict";
 
     function NewStageAPI(stage, gfx, positionResizer, sizeResizer, lengthResizer, heightResizer, maskResizer, width,
@@ -21,8 +21,6 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
         this.timer = timer;
 
         this.collisions = {};
-
-        inheritMethods(stage, this, NewStageAPI.prototype);
     }
 
     /**
@@ -30,7 +28,7 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
      * @return {Drawable}
      */
     NewStageAPI.prototype.createImage = function (imgName) {
-        return addServiceMethods(this.stage.drawFresh(wrap(0), wrap(0), imgName), this);
+        return addImageServiceMethods(addServiceMethods(this.stage.drawFresh(wrap(0), wrap(0), imgName), this), this);
     };
 
     /**
@@ -64,42 +62,43 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
      * @param {boolean} [filled = false]
      * @return {Drawable}
      */
-    NewStageAPI.prototype.drawEqTriangle = function (filled) {
+    NewStageAPI.prototype.createEqTriangle = function (filled) {
         var drawable = this.stage.drawEqTriangle(wrap(0), wrap(0), 0, wrap(100), 'black', filled);
         return addEqTriangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
-    //NewStageAPI.prototype.move = function (drawable) {
-    //    // todo implement
-    //};
-    //
-    //NewStageAPI.prototype.moveCircular = function (drawable) {
-    //    // todo implement
-    //};
-    //
-    //NewStageAPI.prototype.moveRoundTrip = function (drawable) {
-    //    //todo implement
-    //};
-    //
-    //NewStageAPI.prototype.moveLater = function (drawable) {
-    //    // todo implement
-    //};
-    //
-    //NewStageAPI.prototype.mask = function (drawable) {
-    //    // todo implement
-    //};
-    //
-    //NewStageAPI.prototype.unmask = function (drawable) {
-    //    // todo implement
-    //};
-
     function addServiceMethods(drawable, self) {
-        drawable.setPosition = Setter.setPosition.bind(self.positionResizer, self.screen, drawable);
+        drawable.setPosition = Setter.setPosition.bind(undefined, self.positionResizer, self.screen, drawable);
         drawable.setAlpha = Setter.setAlpha.bind(undefined, drawable);
         drawable.setRotation = Setter.setRotation.bind(undefined, drawable);
         drawable.setScale = Setter.setScale.bind(undefined, drawable);
         drawable.setZIndex = self.stage.changeZIndex.bind(self.stage, drawable);
 
+        drawable.moveTo = EntityServices.moveTo.bind(undefined, self.stage, self.positionResizer, self.screen,
+            drawable);
+        drawable.show = EntityServices.show.bind(undefined, self.stage, drawable);
+        drawable.hide = EntityServices.hide.bind(undefined, self.stage, drawable);
+        drawable.remove = EntityServices.remove.bind(undefined, self.stage, drawable);
+        drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
+        drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
+        drawable.setCallback = function (callback) {
+            // for sprite animations
+            drawable.__callback = callback;
+            return drawable;
+        };
+        drawable.animate = EntityServices.sprite.bind(undefined, self.stage, drawable);
+        drawable.rotateTo = EntityServices.rotateTo.bind(undefined, self.stage, drawable);
+        drawable.rotationPattern = EntityServices.rotationPattern.bind(undefined, self.stage, drawable);
+        drawable.scaleTo = EntityServices.scaleTo.bind(undefined, self.stage, drawable);
+        drawable.scalePattern = EntityServices.scalePattern.bind(undefined, self.stage, drawable);
+        drawable.opacityTo = EntityServices.opacityTo.bind(undefined, self.stage, drawable);
+        drawable.opacityPattern = EntityServices.opacityPattern.bind(undefined, self.stage, drawable);
+
+        return drawable;
+    }
+
+    function addImageServiceMethods(drawable, self) {
+        drawable.setGraphic = Setter.setGraphic.bind(undefined, self.stage, drawable);
         return drawable;
     }
 
@@ -107,18 +106,19 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
         drawable.setText = Setter.setTextMessage.bind(undefined, drawable);
         drawable.setFont = Setter.setTextFont.bind(undefined, drawable);
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setSize = Setter.setTextSize.bind(self.sizeResizer, self.screen, drawable);
-        drawable.setMaxLineLength = Setter.setTextMaxLineLength.bind(self.widthResizer, self.screen, drawable);
-        drawable.setLineHeight = Setter.setTextLineHeight.bind(self.heightResizer, self.screen, drawable);
+        drawable.setSize = Setter.setTextSize.bind(undefined, self.sizeResizer, self.screen, drawable);
+        drawable.setMaxLineLength = Setter.setTextMaxLineLength.bind(undefined, self.widthResizer, self.screen,
+            drawable);
+        drawable.setLineHeight = Setter.setTextLineHeight.bind(undefined, self.heightResizer, self.screen, drawable);
 
         return drawable;
     }
 
     function addRectangleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setWidth = Setter.setWidth.bind(self.widthResizer, self.screen, drawable);
-        drawable.setHeight = Setter.setHeight.bind(self.heightResizer, self.screen, drawable);
-        drawable.setLineWidth = Setter.setLineWidth.bind(self.sizeResizer, self.screen, drawable);
+        drawable.setWidth = Setter.setWidth.bind(undefined, self.widthResizer, self.screen, drawable);
+        drawable.setHeight = Setter.setHeight.bind(undefined, self.heightResizer, self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.sizeResizer, self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
 
         return drawable;
@@ -126,40 +126,22 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
 
     function addCircleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setLineWidth = Setter.setLineWidth.bind(self.sizeResizer, self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.sizeResizer, self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
-        drawable.setRadius = Setter.setRadius.bind(self.widthResizer, self.screen, drawable);
+        drawable.setRadius = Setter.setRadius.bind(undefined, self.widthResizer, self.screen, drawable);
 
         return drawable;
     }
 
     function addEqTriangleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setLineWidth = Setter.setLineWidth.bind(self.sizeResizer, self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.sizeResizer, self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
-        drawable.setRadius = Setter.setRadius.bind(self.widthResizer, self.screen, drawable);
+        drawable.setRadius = Setter.setRadius.bind(undefined, self.widthResizer, self.screen, drawable);
         drawable.setAngle = Setter.setAngle.bind(undefined, drawable);
 
         return drawable;
     }
-
-    //NewStageAPI.prototype.remove = function () {
-    //    // todo 10000 removes
-    //    this.stage.remove(drawable);
-    //};
-    //
-    //NewStageAPI.prototype.show = function () {
-    //    this.stage.draw(drawable);
-    //};
-    //
-    //NewStageAPI.prototype.hide = function () {
-    //    this.stage.remove(drawable);
-    //};
-    //
-    //NewStageAPI.prototype.has = function () {
-    //    // todo 10000 has checks
-    //    return this.stage.has(drawable);
-    //};
 
     NewStageAPI.prototype.update = function () {
         this.timer.update();
@@ -181,4 +163,4 @@ var NewStageAPI = (function (inheritMethods, changeCoords, wrap, Setter, iterate
     };
 
     return NewStageAPI;
-})(inheritMethods, changeCoords, wrap, Setter, iterateEntries);
+})(changeCoords, wrap, Setter, iterateEntries, EntityServices);

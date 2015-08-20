@@ -114,6 +114,11 @@ var Setter = (function (changeCoords) {
         setAngle: function (drawable, angle) {
             drawable.data.angle = angle;
             return drawable;
+        },
+
+        setGraphic: function (stage, drawable, imgName) {
+            drawable.data = stage.getGraphic(imgName);
+            return drawable;
         }
     };
 })(changeCoords);
