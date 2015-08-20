@@ -11,7 +11,7 @@ var PropertyAnimations = (function (Animations) {
     };
 
     PropertyAnimations.prototype.animateAlphaPattern = function (drawable, valuePairs, loop) {
-        return this.__animatePropertyPattern(drawable, 'alpha', valuePairs, loop);
+        this.__animatePropertyPattern(drawable, 'alpha', valuePairs, loop);
     };
 
     PropertyAnimations.prototype.animateRotation = function (drawable, value, duration, easing, loop, callback) {
@@ -19,7 +19,7 @@ var PropertyAnimations = (function (Animations) {
     };
 
     PropertyAnimations.prototype.animateRotationPattern = function (drawable, valuePairs, loop) {
-        return this.__animatePropertyPattern(drawable, 'rotation', valuePairs, loop);
+        this.__animatePropertyPattern(drawable, 'rotation', valuePairs, loop);
     };
 
     PropertyAnimations.prototype.animateScale = function (drawable, value, duration, easing, loop, callback) {
@@ -27,7 +27,7 @@ var PropertyAnimations = (function (Animations) {
     };
 
     PropertyAnimations.prototype.animateScalePattern = function (drawable, valuePairs, loop) {
-        return this.__animatePropertyPattern(drawable, 'scale', valuePairs, loop);
+        this.__animatePropertyPattern(drawable, 'scale', valuePairs, loop);
     };
 
     PropertyAnimations.prototype.__animateProperty = function (drawable, propertyKey, value, duration, easing, loop,
