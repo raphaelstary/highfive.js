@@ -23,45 +23,25 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
         this.collisions = {};
     }
 
-    /**
-     * @param {string} imgName
-     * @return {Drawable}
-     */
     NewStageAPI.prototype.createImage = function (imgName) {
         return addImageServiceMethods(addServiceMethods(this.stage.drawFresh(wrap(0), wrap(0), imgName), this), this);
     };
 
-    /**
-     * @param {string} text
-     * @return {Drawable}
-     */
     NewStageAPI.prototype.createText = function (text) {
         var drawable = this.stage.drawText(wrap(0), wrap(0), text, wrap(60), 'Arial', 'black');
         return addTextServiceMethods(addServiceMethods(drawable, this), this);
     };
 
-    /**
-     * @param {boolean} [filled = false]
-     * @return {Drawable}
-     */
     NewStageAPI.prototype.createRectangle = function (filled) {
         var drawable = this.stage.drawRectangle(wrap(0), wrap(0), wrap(100), wrap(100), 'black', filled);
         return addRectangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
-    /**
-     * @param {boolean} [filled = false]
-     * @return {Drawable}
-     */
     NewStageAPI.prototype.createCircle = function (filled) {
         var drawable = this.stage.drawCircle(wrap(0), wrap(0), wrap(100), 'black', filled);
         return addCircleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
-    /**
-     * @param {boolean} [filled = false]
-     * @return {Drawable}
-     */
     NewStageAPI.prototype.createEqTriangle = function (filled) {
         var drawable = this.stage.drawEqTriangle(wrap(0), wrap(0), 0, wrap(100), 'black', filled);
         return addEqTriangleServiceMethods(addServiceMethods(drawable, this), this);
