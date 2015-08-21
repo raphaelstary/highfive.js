@@ -43,10 +43,12 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
         drawable.zIndex = newZIndex;
     };
 
+    Renderer.prototype.clear = function () {
+        this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
+    };
+
     Renderer.prototype.draw = function () {
         var self = this;
-        this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
-
         Object.keys(self.drawableDict).forEach(function (key) {
             iterate(self.drawableDict[key]);
         });

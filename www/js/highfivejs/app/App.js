@@ -33,8 +33,8 @@ var App = (function ($) {
             if (self.getNewStage) {
                 sceneServices.newStage = self.getNewStage(self.services.screen, sceneServices.gfxCache,
                     self.services.device, events);
-                //if (sceneServices.newStage)
-                //    stages.push(sceneServices.newStage);
+                if (sceneServices.newStage)
+                    stages.push(sceneServices.newStage);
             }
             sceneServices.loop = $.installLoop(stages, events);
 

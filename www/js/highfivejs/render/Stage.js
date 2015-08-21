@@ -313,6 +313,10 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
             this.animations.has(drawable);
     };
 
+    Stage.prototype.clear = function () {
+        this.renderer.clear();
+    };
+
     Stage.prototype.update = function () {
         // move stuff
         this.timer.update();

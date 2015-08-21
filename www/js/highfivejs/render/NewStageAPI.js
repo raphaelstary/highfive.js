@@ -122,6 +122,10 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
         return drawable;
     }
 
+    NewStageAPI.prototype.clear = function () {
+        this.stage.clear();
+    };
+
     NewStageAPI.prototype.update = function () {
         this.timer.update();
         this.stage.update();
