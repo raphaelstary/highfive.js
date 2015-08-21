@@ -50,10 +50,17 @@ var Bootstrapper = (function ($) {
             getStage = $.StageFactory.getResponsiveAtlasStage;
         } else if (isResponsive) {
             getStage = $.StageFactory.getResponsiveImageStage;
+        }
+
+        var getLegacyStage;
+        if (isResponsive && useAtlases) {
+            getLegacyStage = $.StageFactory.getResponsiveAtlasLegacyStage;
+        } else if (isResponsive) {
+            getLegacyStage = $.StageFactory.getResponsiveImageLegacyStage;
         } else if (useAtlases) {
-            getStage = $.StageFactory.getAtlasStage;
+            getLegacyStage = $.StageFactory.getAtlasLegacyStage;
         } else {
-            getStage = $.StageFactory.getImageStage;
+            getLegacyStage = $.StageFactory.getImageLegacyStage;
         }
         var globalServices = {
             screen: screen.screen,
@@ -61,7 +68,7 @@ var Bootstrapper = (function ($) {
             device: device,
             scaledScreen: screen.scaledScreen
         };
-        return new $.App(globalServices, myResources, getStage);
+        return new $.App(globalServices, myResources, getLegacyStage, getStage);
     }
 
     function useAtlasesRendering() {

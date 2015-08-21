@@ -21,7 +21,7 @@ var StageFactory = (function ($) {
         return renderer;
     }
 
-    function create(gfxCache, renderer) {
+    function createLegacy(gfxCache, renderer) {
 
         var motions = new $.Motions(new $.BasicAnimations());
         var spriteAnimations = new $.SpriteAnimations();
@@ -35,9 +35,22 @@ var StageFactory = (function ($) {
             renderer, timer);
     }
 
+    function createResponsiveLegacy(gfxCache, renderer, device, events) {
+        var stage = new $.ResizableStage(createLegacy(gfxCache, renderer), gfxCache, new $.Repository(),
+            $.Touchables.get, $.fetchDrawableIntoTouchable, device.width, device.height, new $.CallbackTimer());
+
+        events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
+
+        return stage;
+    }
+
     function createResponsive(gfxCache, renderer, device, events) {
-        var stage = new $.ResizableStage(create(gfxCache, renderer), gfxCache, new $.Repository(), $.Touchables.get,
-            $.fetchDrawableIntoTouchable, device.width, device.height, new $.CallbackTimer());
+        var repoKeys = [
+            'position', 'width', 'height', 'size', 'lineWidth', 'lineHeight', 'lineLength', 'path', 'radius'
+        ];
+        var legacyStage = createLegacy(gfxCache, renderer);
+        var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
+            new $.CallbackTimer());
 
         events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
 
@@ -45,17 +58,23 @@ var StageFactory = (function ($) {
     }
 
     return {
+        getResponsiveAtlasLegacyStage: function (screen, gfxCache, device, events) {
+            return createResponsiveLegacy(gfxCache, createAtlasRenderer(screen), device, events);
+        },
         getResponsiveAtlasStage: function (screen, gfxCache, device, events) {
             return createResponsive(gfxCache, createAtlasRenderer(screen), device, events);
         },
-        getAtlasStage: function (screen, gfxCache) {
-            return create(gfxCache, createAtlasRenderer(screen));
+        getAtlasLegacyStage: function (screen, gfxCache) {
+            return createLegacy(gfxCache, createAtlasRenderer(screen));
+        },
+        getResponsiveImageLegacyStage: function (screen, gfxCache, device, events) {
+            return createResponsiveLegacy(gfxCache, createImageRenderer(screen), device, events);
         },
         getResponsiveImageStage: function (screen, gfxCache, device, events) {
             return createResponsive(gfxCache, createImageRenderer(screen), device, events);
         },
-        getImageStage: function (screen, gfxCache) {
-            return create(gfxCache, createImageRenderer(screen));
+        getImageLegacyStage: function (screen, gfxCache) {
+            return createLegacy(gfxCache, createImageRenderer(screen));
         }
     };
 })({
@@ -77,7 +96,9 @@ var StageFactory = (function ($) {
     BasicAnimationTimer: AnimationTimer,
     BasicAnimations: BasicAnimations,
     ResizableStage: ResizableStage,
+    NewStageAPI: NewStageAPI,
     Repository: Repository,
+    KeyRepository: KeyRepository,
     Touchables: Touchables,
     fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,
     CallbackTimer: CallbackTimer,

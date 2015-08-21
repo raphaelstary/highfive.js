@@ -5,6 +5,7 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
         this.services = model;
 
         this.stage = model.stage;
+        this.newStage = model.newStage;
         this.sceneStorage = model.sceneStorage;
         this.buttons = model.buttons;
         this.messages = model.messages;
@@ -64,6 +65,12 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                     var imgName = elem.filename.substring(0, elem.filename.lastIndexOf('.'));
                     drawable = this.stage.drawFresh(x, y, imgName, elem.zIndex, undefined, elem.alpha, elem.rotation,
                         elem.scale);
+
+                    drawable = this.newStage.createImage(imgName).setPosition(x,
+                        y).setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
+                    if (elem.zIndex != 3)
+                        drawable.setZIndex(elem.zIndex);
+
                     drawables.push(drawable);
                     if (elem.viewId) {
                         this.viewModel[elem.viewId] = drawable;
@@ -72,6 +79,11 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                 } else if (elem.type == 'text') {
                     drawable = this.stage.drawText(x, y, elem.msg, yFn(elem.size), elem.font, elem.color, elem.zIndex,
                         undefined, elem.rotation, elem.alpha, undefined, undefined, elem.scale);
+
+                    //drawable =
+                    // this.newStage.createText(elem.msg).setSize(yFn(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
+                    // if (elem.zIndex != 3) drawable.setZIndex(elem.zIndex);
+
                     drawables.push(drawable);
                     if (elem.viewId) {
                         this.viewModel[elem.viewId] = drawable;

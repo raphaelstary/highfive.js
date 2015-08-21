@@ -1,10 +1,11 @@
 var App = (function ($) {
     "use strict";
 
-    function App(services, myResources, getStage) {
+    function App(services, myResources, getLegacyStage, getStage) {
         this.services = services;
         this.resources = myResources;
-        this.getStage = getStage;
+        this.getStage = getLegacyStage;
+        this.getNewStage = getStage;
     }
 
     App.prototype.start = function () {
@@ -28,7 +29,14 @@ var App = (function ($) {
 
             sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.device,
                 events);
-            sceneServices.loop = $.installLoop(sceneServices.stage, events);
+            var stages = [sceneServices.stage];
+            if (self.getNewStage) {
+                sceneServices.newStage = self.getNewStage(self.services.screen, sceneServices.gfxCache,
+                    self.services.device, events);
+                //if (sceneServices.newStage)
+                //    stages.push(sceneServices.newStage);
+            }
+            sceneServices.loop = $.installLoop(stages, events);
 
             var timer = new $.CallbackTimer();
             events.subscribe($.Event.TICK_MOVE, timer.update.bind(timer));

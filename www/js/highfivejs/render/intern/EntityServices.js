@@ -1,4 +1,4 @@
-var EntityServices = (function (Transition, changePath, TextWrapper, Rectangle) {
+var EntityServices = (function (Transition, changePath, changeCoords) {
     "use strict";
 
     function duration(animation, duration) {
@@ -32,25 +32,13 @@ var EntityServices = (function (Transition, changePath, TextWrapper, Rectangle) 
 
     return {
         moveTo: function (stage, resizer, screen, drawable, xFn, yFn, resizeDependencies) {
-            var pathId = {id: drawable.id + '_1'};
-
             var registerResizeAfterMove = function () {
-                resizer.remove(pathId);
+                resizer.removeKey('path', drawable);
 
-                if (drawable.data instanceof TextWrapper || drawable.data instanceof Rectangle) {
-                    // todo add all other entity classes or refactor
-                    var afterEntitySpecificStuff_nowXnYPosition_id = {id: drawable.id + '_2'};
-                    resizer.add(afterEntitySpecificStuff_nowXnYPosition_id, function (width, height) {
-                        changeCoords(drawable, xFn(width, height), yFn(height, width));
-                    }, resizeDependencies);
-                } else {
-                    resizeDependencies = resizeDependencies.filter(function (element) {
-                        return element.id != drawable.id;
-                    });
-                    resizer.add(drawable, function (width, height) {
-                        changeCoords(drawable, xFn(width, height), yFn(height, width));
-                    }, resizeDependencies);
-                }
+                resizer.add('position', drawable, function (width, height) {
+                    changeCoords(drawable, xFn(width, height), yFn(height, width));
+                }, resizeDependencies);
+
             };
 
             var path = stage.getPath(drawable.x, drawable.y, xFn(screen.width, screen.height),
@@ -64,13 +52,7 @@ var EntityServices = (function (Transition, changePath, TextWrapper, Rectangle) 
 
             stage.move(drawable, path, enhancedCallBack);
 
-            if (resizeDependencies) {
-                resizeDependencies.push(drawable);
-            } else {
-                resizeDependencies = [drawable];
-            }
-
-            resizer.add(pathId, function (width, height) {
+            resizer.add('path', drawable, function (width, height) {
                 changePath(path, drawable.x, drawable.y, xFn(width, height), yFn(height, width));
             }, resizeDependencies);
 
@@ -84,8 +66,10 @@ var EntityServices = (function (Transition, changePath, TextWrapper, Rectangle) 
             stage.remove(drawable);
             return drawable;
         },
-        remove: function (stage, drawable) {
-            // todo 10000 removes
+        remove: function (stage, resizer, drawable) {
+            resizer.remove(drawable);
+            if (drawable.mask)
+                this.unmask(drawable);
             stage.remove(drawable);
             return drawable;
         },
@@ -144,4 +128,4 @@ var EntityServices = (function (Transition, changePath, TextWrapper, Rectangle) 
             return drawable;
         }
     };
-})(Transition, changePath, TextWrapper, Rectangle);
+})(Transition, changePath, changeCoords);

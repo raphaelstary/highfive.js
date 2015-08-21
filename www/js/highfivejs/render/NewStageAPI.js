@@ -1,25 +1,15 @@
 var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityServices) {
     "use strict";
 
-    function NewStageAPI(stage, gfx, positionResizer, sizeResizer, lengthResizer, heightResizer, maskResizer, width,
-        height, timer) {
-
+    function NewStageAPI(stage, gfx, resizer, width, height, timer) {
         this.stage = stage;
         this.gfx = gfx;
-
-        this.positionResizer = positionResizer;
-        this.sizeResizer = sizeResizer;
-        this.widthResizer = lengthResizer;
-        this.heightResizer = heightResizer;
-        this.maskResizer = maskResizer;
-
+        this.resizer = resizer;
         this.screen = {
             width: width,
             height: height
         };
-
         this.timer = timer;
-
         this.collisions = {};
     }
 
@@ -48,17 +38,17 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
     };
 
     function addServiceMethods(drawable, self) {
-        drawable.setPosition = Setter.setPosition.bind(undefined, self.positionResizer, self.screen, drawable);
+        drawable.setPosition = Setter.setPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position'),
+            self.screen, drawable);
         drawable.setAlpha = Setter.setAlpha.bind(undefined, drawable);
         drawable.setRotation = Setter.setRotation.bind(undefined, drawable);
         drawable.setScale = Setter.setScale.bind(undefined, drawable);
         drawable.setZIndex = self.stage.changeZIndex.bind(self.stage, drawable);
 
-        drawable.moveTo = EntityServices.moveTo.bind(undefined, self.stage, self.positionResizer, self.screen,
-            drawable);
+        drawable.moveTo = EntityServices.moveTo.bind(undefined, self.stage, self.resizer, self.screen, drawable);
         drawable.show = EntityServices.show.bind(undefined, self.stage, drawable);
         drawable.hide = EntityServices.hide.bind(undefined, self.stage, drawable);
-        drawable.remove = EntityServices.remove.bind(undefined, self.stage, drawable);
+        drawable.remove = EntityServices.remove.bind(undefined, self.stage, self.resizer, drawable);
         drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
         drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
         drawable.setCallback = function (callback) {
@@ -86,19 +76,24 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
         drawable.setText = Setter.setTextMessage.bind(undefined, drawable);
         drawable.setFont = Setter.setTextFont.bind(undefined, drawable);
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setSize = Setter.setTextSize.bind(undefined, self.sizeResizer, self.screen, drawable);
-        drawable.setMaxLineLength = Setter.setTextMaxLineLength.bind(undefined, self.widthResizer, self.screen,
+        drawable.setSize = Setter.setTextSize.bind(undefined, self.resizer.add.bind(self.resizer, 'size'), self.screen,
             drawable);
-        drawable.setLineHeight = Setter.setTextLineHeight.bind(undefined, self.heightResizer, self.screen, drawable);
+        drawable.setMaxLineLength = Setter.setTextMaxLineLength.bind(undefined,
+            self.resizer.add.bind(self.resizer, 'lineLength'), self.screen, drawable);
+        drawable.setLineHeight = Setter.setTextLineHeight.bind(undefined,
+            self.resizer.add.bind(self.resizer, 'lineHeight'), self.screen, drawable);
 
         return drawable;
     }
 
     function addRectangleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setWidth = Setter.setWidth.bind(undefined, self.widthResizer, self.screen, drawable);
-        drawable.setHeight = Setter.setHeight.bind(undefined, self.heightResizer, self.screen, drawable);
-        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.sizeResizer, self.screen, drawable);
+        drawable.setWidth = Setter.setWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'width'), self.screen,
+            drawable);
+        drawable.setHeight = Setter.setHeight.bind(undefined, self.resizer.add.bind(self.resizer, 'height'),
+            self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
 
         return drawable;
@@ -106,18 +101,22 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
 
     function addCircleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.sizeResizer, self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
-        drawable.setRadius = Setter.setRadius.bind(undefined, self.widthResizer, self.screen, drawable);
+        drawable.setRadius = Setter.setRadius.bind(undefined, self.resizer.add.bind(self.resizer, 'radius'),
+            self.screen, drawable);
 
         return drawable;
     }
 
     function addEqTriangleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
-        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.sizeResizer, self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
-        drawable.setRadius = Setter.setRadius.bind(undefined, self.widthResizer, self.screen, drawable);
+        drawable.setRadius = Setter.setRadius.bind(undefined, self.resizer.add.bind(self.resizer, 'radius'),
+            self.screen, drawable);
         drawable.setAngle = Setter.setAngle.bind(undefined, drawable);
 
         return drawable;
@@ -134,9 +133,7 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
         if (this.gfx && this.gfx.resize)
             this.gfx.resize(event);
         this.stage.resize(event);
-
-        // todo 1000 resizer update calls like: this.resizer.call(event.width, event.height);
-
+        this.resizer.call(event.width, event.height);
         iterateEntries(this.collisions, function (detector) {
             detector.resize(event);
         });
