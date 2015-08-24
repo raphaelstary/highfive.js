@@ -27,16 +27,25 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
         }
 
         var tapListenerId = this.events.subscribe(Event.POINTER, function (pointer) {
-            if (pointer.type != 'up')
-                return;
-
-            taps.some(function (tap) {
-                if (isHit(pointer, tap.rectangle)) {
-                    tap.callback();
-                    return true;
-                }
-                return false;
-            });
+            if (pointer.type == 'up') {
+                taps.some(function (tap) {
+                    if (isHit(pointer, tap.rectangle)) {
+                        if (tap.up)
+                            tap.up();
+                        return true;
+                    }
+                    return false;
+                });
+            } else if (pointer.type == 'down') {
+                taps.some(function (tap) {
+                    if (isHit(pointer, tap.rectangle)) {
+                        if (tap.down)
+                            tap.down();
+                        return true;
+                    }
+                    return false;
+                });
+            }
         });
 
         var sceneRect;
@@ -105,11 +114,27 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                         return tag == 'input';
                     });
                     if (isInput) {
-                        var fnName;
-                        elem.tags.some(function (tag) {
-                            var foundSmth = tag.tap !== undefined;
+                        var pointerUpFnName;
+                        var hasUp = elem.tags.some(function (tag) {
+                            var foundSmth = tag.up !== undefined;
                             if (foundSmth)
-                                fnName = tag.tap;
+                                pointerUpFnName = tag.up;
+                            return foundSmth;
+                        });
+
+                        var pointerDownFnName;
+                        var hasDown = elem.tags.some(function (tag) {
+                            var foundSmth = tag.down !== undefined;
+                            if (foundSmth)
+                                pointerDownFnName = tag.down;
+                            return foundSmth;
+                        });
+
+                        var resetFnName;
+                        var hasReset = elem.tags.some(function (tag) {
+                            var foundSmth = tag.reset !== undefined;
+                            if (foundSmth)
+                                resetFnName = tag.reset;
                             return foundSmth;
                         });
 
@@ -118,10 +143,19 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                         drawable.hide();
 
                         drawables.push(drawable);
-                        taps.push({
-                            rectangle: drawable,
-                            callback: this.viewModel[fnName].bind(this.viewModel)
-                        });
+                        var tap = {
+                            rectangle: drawable
+                        };
+                        if (hasDown) {
+                            tap.down = this.viewModel[pointerDownFnName].bind(this.viewModel);
+                        }
+                        if (hasUp) {
+                            tap.up = this.viewModel[pointerUpFnName].bind(this.viewModel);
+                        }
+                        if (hasReset) {
+                            tap.reset = this.viewModel[resetFnName].bind(this.viewModel);
+                        }
+                        taps.push(tap);
 
                     } else {
 
@@ -139,11 +173,25 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
 
                 } else if (elem.type == 'button') {
 
-                    var btnFnName;
-                    elem.input.tags.some(function (tag) {
-                        var foundSmth = tag.tap !== undefined;
+                    var btnUpFnName;
+                    var hasBtnUp = elem.input.tags.some(function (tag) {
+                        var foundSmth = tag.up !== undefined;
                         if (foundSmth)
-                            btnFnName = tag.tap;
+                            btnUpFnName = tag.up;
+                        return foundSmth;
+                    });
+                    var btnDownFnName;
+                    var hasBtnDown = elem.input.tags.some(function (tag) {
+                        var foundSmth = tag.down !== undefined;
+                        if (foundSmth)
+                            btnDownFnName = tag.down;
+                        return foundSmth;
+                    });
+                    var btnResetFnName;
+                    var hasBtnReset = elem.input.tags.some(function (tag) {
+                        var foundSmth = tag.reset !== undefined;
+                        if (foundSmth)
+                            btnResetFnName = tag.reset;
                         return foundSmth;
                     });
 
@@ -152,7 +200,9 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                     drawable.hide();
                     taps.push({
                         rectangle: drawable,
-                        callback: this.viewModel[btnFnName].bind(this.viewModel)
+                        up: hasBtnUp ? this.viewModel[btnUpFnName].bind(this.viewModel) : undefined,
+                        down: hasBtnDown ? this.viewModel[btnDownFnName].bind(this.viewModel) : undefined,
+                        reset: hasBtnReset ? this.viewModel[btnResetFnName].bind(this.viewModel) : undefined
                     });
                     drawables.push(drawable);
 
