@@ -1,19 +1,16 @@
-var MVVMScene = (function (iterateEntries, Width, Height) {
+var MVVMScene = (function (iterateEntries, Width, Height, Event) {
     "use strict";
 
     function MVVMScene(model, view, viewModel) {
         this.services = model;
 
-        this.stage = model.stage;
-        this.newStage = model.newStage;
+        this.stage = model.newStage;
         this.sceneStorage = model.sceneStorage;
-        this.buttons = model.buttons;
         this.messages = model.messages;
         this.timer = model.timer;
         this.device = model.device;
         this.loop = model.loop;
         this.events = model.events;
-        this.tap = model.tap;
         this.sounds = model.sounds;
 
         this.view = view;
@@ -22,8 +19,25 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
 
     MVVMScene.prototype.show = function (next) {
         var drawables = [];
-        var buttons = [];
         var taps = [];
+
+        function isHit(pointer, drawable) {
+            return pointer.x > drawable.getCornerX() && pointer.x < drawable.getEndX() &&
+                pointer.y > drawable.getCornerY() && pointer.y < drawable.getEndY();
+        }
+
+        var tapListenerId = this.events.subscribe(Event.POINTER, function (pointer) {
+            if (pointer.type != 'up')
+                return;
+
+            taps.some(function (tap) {
+                if (isHit(pointer, tap.rectangle)) {
+                    tap.callback();
+                    return true;
+                }
+                return false;
+            });
+        });
 
         var sceneRect;
 
@@ -63,10 +77,8 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                 var drawable;
                 if (elem.type == 'image') {
                     var imgName = elem.filename.substring(0, elem.filename.lastIndexOf('.'));
-                    drawable = this.stage.drawFresh(x, y, imgName, elem.zIndex, undefined, elem.alpha, elem.rotation,
-                        elem.scale);
 
-                    drawable = this.newStage.createImage(imgName).setPosition(x,
+                    drawable = this.stage.createImage(imgName).setPosition(x,
                         y).setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
                     if (elem.zIndex != 3)
                         drawable.setZIndex(elem.zIndex);
@@ -77,12 +89,11 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                     }
 
                 } else if (elem.type == 'text') {
-                    drawable = this.stage.drawText(x, y, elem.msg, yFn(elem.size), elem.font, elem.color, elem.zIndex,
-                        undefined, elem.rotation, elem.alpha, undefined, undefined, elem.scale);
 
-                    //drawable =
-                    // this.newStage.createText(elem.msg).setSize(yFn(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
-                    // if (elem.zIndex != 3) drawable.setZIndex(elem.zIndex);
+                    drawable = this.stage.createText(elem.msg).setPosition(x,
+                        y).setSize(yFn(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
+                    if (elem.zIndex != 3)
+                        drawable.setZIndex(elem.zIndex);
 
                     drawables.push(drawable);
                     if (elem.viewId) {
@@ -101,17 +112,24 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                                 fnName = tag.tap;
                             return foundSmth;
                         });
-                        var wrapper = this.stage.drawRectangleWithInput(x, y, xFn(elem.width), yFn(elem.height),
-                            '#fff');
-                        this.tap.add(wrapper.input, this.viewModel[fnName].bind(this.viewModel));
 
-                        this.stage.hide(wrapper.drawable); //todo: clean up this mess and stop this drawable/input shit
-                        drawables.push(wrapper.drawable);
-                        taps.push(wrapper.input);
+                        drawable = this.stage.createRectangle().setPosition(x,
+                            y).setWidth(xFn(elem.width)).setHeight(yFn(elem.height)).setColor('#fff');
+                        drawable.hide();
+
+                        drawables.push(drawable);
+                        taps.push({
+                            rectangle: drawable,
+                            callback: this.viewModel[fnName].bind(this.viewModel)
+                        });
 
                     } else {
-                        drawable = this.stage.drawRectangle(x, y, xFn(elem.width), yFn(elem.height), elem.color,
-                            elem.filled, undefined, elem.zIndex, elem.alpha, elem.rotation, elem.scale, undefined);
+
+                        drawable = this.stage.createRectangle(elem.filled).setPosition(x,
+                            y).setWidth(xFn(elem.width)).setHeight(yFn(elem.height)).setColor(elem.color).setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
+                        if (elem.zIndex != 3)
+                            drawable.setZIndex(elem.zIndex);
+
                         drawables.push(drawable);
 
                         if (elem.viewId) {
@@ -120,21 +138,6 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                     }
 
                 } else if (elem.type == 'button') {
-                    //x = xFn(elem.text.x);
-                    //y = yFn(elem.text.y);
-
-                    //var callbackFnName;
-                    //elem.input.tags.some(function (tag) {
-                    //    var foundSmth = tag.tap !== undefined;
-                    //    if (foundSmth)
-                    //        callbackFnName = tag.tap;
-                    //    return foundSmth;
-                    //});
-
-                    //drawable = this.buttons.createPrimaryButton(x, y, elem.text.msg,
-                    //    this.viewModel[callbackFnName].bind(this.viewModel), elem.zIndex, false,
-                    // xFn(elem.background.width), yFn(elem.background.height)); //todo: rethink this shit with buttons
-                    //   buttons.push(drawable);  if (elem.viewId) {  this.viewModel[elem.viewId] = drawable;  }
 
                     var btnFnName;
                     elem.input.tags.some(function (tag) {
@@ -143,31 +146,35 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
                             btnFnName = tag.tap;
                         return foundSmth;
                     });
-                    var inputWrapper = this.stage.drawRectangleWithInput(xFn(elem.input.x), yFn(elem.input.y),
-                        xFn(elem.input.width), yFn(elem.input.height), '#fff');
-                    this.tap.add(inputWrapper.input, this.viewModel[btnFnName].bind(this.viewModel));
 
-                    this.stage.hide(inputWrapper.drawable); //todo: clean up this mess and stop this drawable/input shit
-                    drawables.push(inputWrapper.drawable);
-                    taps.push(inputWrapper.input);
+                    drawable = this.stage.createRectangle().setPosition(xFn(elem.input.x),
+                        yFn(elem.input.y)).setWidth(xFn(elem.input.width)).setHeight(yFn(elem.input.height)).setColor('#fff');
+                    drawable.hide();
+                    taps.push({
+                        rectangle: drawable,
+                        callback: this.viewModel[btnFnName].bind(this.viewModel)
+                    });
+                    drawables.push(drawable);
 
-                    drawable = this.stage.drawText(xFn(elem.text.x), yFn(elem.text.y), elem.text.msg,
-                        yFn(elem.text.size), elem.text.font, elem.text.color, elem.zIndex + 1, undefined,
-                        elem.text.rotation, elem.text.alpha, undefined, undefined, elem.text.scale);
+                    drawable = this.stage.createText(elem.text.msg).setPosition(xFn(elem.text.x),
+                        yFn(elem.text.y)).setSize(yFn(elem.text.size)).setFont(elem.text.font).setColor(elem.text.color).setRotation(elem.text.rotation).setAlpha(elem.text.alpha).setScale(elem.text.scale);
+                    if (elem.zIndex + 1 != 3)
+                        drawable.setZIndex(elem.zIndex + 1);
                     drawables.push(drawable);
 
                     if (elem.background.type == 'image') {
                         var bgName = elem.background.filename.substring(0, elem.background.filename.lastIndexOf('.'));
-                        drawable = this.stage.drawFresh(xFn(elem.background.x), yFn(elem.background.y), bgName,
-                            elem.zIndex, undefined, elem.background.alpha, elem.background.rotation,
-                            elem.background.scale);
+                        drawable = this.stage.createImage(bgName).setPosition(xFn(elem.background.x),
+                            yFn(elem.background.y)).setAlpha(elem.background.alpha).setRotation(elem.background.rotation).setScale(elem.background.scale);
+                        if (elem.zIndex != 3)
+                            drawable.setZIndex(elem.zIndex);
                         drawables.push(drawable);
 
                     } else if (elem.background.type == 'rectangle') {
-                        drawable = this.stage.drawRectangle(xFn(elem.background.x), yFn(elem.background.y),
-                            xFn(elem.background.width), yFn(elem.background.height), elem.background.color,
-                            elem.background.filled, undefined, elem.zIndex, elem.background.alpha,
-                            elem.background.rotation, elem.background.scale, undefined);
+                        drawable = this.stage.createRectangle(elem.background.filled).setPosition(xFn(elem.background.x),
+                            yFn(elem.background.y)).setWidth(xFn(elem.background.width)).setHeight(yFn(elem.background.height)).setColor(elem.background.color).setAlpha(elem.background.alpha).setRotation(elem.background.rotation).setScale(elem.background.scale);
+                        if (elem.zIndex != 3)
+                            drawable.setZIndex(elem.zIndex);
                         drawables.push(drawable);
                     }
 
@@ -194,9 +201,10 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
             if (self.viewModel.preDestroy)
                 self.viewModel.preDestroy();
 
-            drawables.forEach(self.stage.remove.bind(self.stage));
-            buttons.forEach(self.buttons.remove.bind(self.buttons));
-            taps.forEach(self.tap.remove.bind(self.tap));
+            drawables.forEach(function (drawable) {
+                drawable.remove();
+            });
+            self.events.unsubscribe(tapListenerId);
 
             next();
         }
@@ -205,4 +213,4 @@ var MVVMScene = (function (iterateEntries, Width, Height) {
     };
 
     return MVVMScene;
-})(iterateEntries, Width, Height);
+})(iterateEntries, Width, Height, Event);

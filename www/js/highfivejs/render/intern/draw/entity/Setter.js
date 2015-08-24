@@ -13,7 +13,7 @@ var Setter = (function (changeCoords) {
         },
 
         setScale: function (drawable, scale) {
-            drawable.scale = scale;
+            drawable.scale = scale || 1;
             return drawable;
         },
 
