@@ -59,6 +59,12 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
             return Height.get(sceneRect.height, y);
         }
 
+        function txtSize(size) {
+            return function (width, height) {
+                return calcScreenConst(height, sceneRect.height, size);
+            };
+        }
+
         iterateEntries(this.view, function (layers, layerKey) {
             if (layerKey == 'screen') {
                 sceneRect = layers;
@@ -101,7 +107,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                 } else if (elem.type == 'text') {
 
                     drawable = this.stage.createText(elem.msg).setPosition(x,
-                        y).setSize(yFn(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
+                        y).setSize(txtSize(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
                     if (elem.zIndex != 3)
                         drawable.setZIndex(elem.zIndex);
 
@@ -208,7 +214,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                     drawables.push(drawable);
 
                     drawable = this.stage.createText(elem.text.msg).setPosition(xFn(elem.text.x),
-                        yFn(elem.text.y)).setSize(yFn(elem.text.size)).setFont(elem.text.font).setColor(elem.text.color).setRotation(elem.text.rotation).setAlpha(elem.text.alpha).setScale(elem.text.scale);
+                        yFn(elem.text.y)).setSize(txtSize(elem.text.size)).setFont(elem.text.font).setColor(elem.text.color).setRotation(elem.text.rotation).setAlpha(elem.text.alpha).setScale(elem.text.scale);
                     if (elem.zIndex + 1 != 3)
                         drawable.setZIndex(elem.zIndex + 1);
                     drawables.push(drawable);
