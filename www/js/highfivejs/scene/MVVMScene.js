@@ -1,4 +1,4 @@
-var MVVMScene = (function (iterateEntries, Width, Height, Event) {
+var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
     "use strict";
 
     function MVVMScene(model, view, viewModel) {
@@ -65,6 +65,25 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
             };
         }
 
+        function hasPositionTag_relativeToSize(tags) {
+            return tags.some(function (tag) {
+                return tag.position == 'relativeToSize';
+            });
+        }
+
+        function hasAnchorTag_widthHalf(tags) {
+            return tags.some(function (tag) {
+                return tag.anchor == 'widthHalf';
+            });
+        }
+
+        function getXPositionRelativeToSize_anchorWithHalf(sceneRect, relativeToSize_elemHeight, x) {
+            return function (width, height) {
+                return Math.floor(width / 2 +
+                    ((x - sceneRect.width / 2) / relativeToSize_elemHeight) * yFn(relativeToSize_elemHeight)(height));
+            };
+        }
+
         iterateEntries(this.view, function (layers, layerKey) {
             if (layerKey == 'screen') {
                 sceneRect = layers;
@@ -76,18 +95,11 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                 var x = xFn(elem.x);
                 var y = yFn(elem.y);
 
-                if (elem.tags && elem.tags.some(function (tag) {
-                        return tag.position == 'relativeToSize';
-                    }) && elem.tags.some(function (tag) {
-                        return tag.anchor == 'widthHalf';
-                    })) {
+                var isRelativeToSize_widthHalf = elem.tags && hasPositionTag_relativeToSize(elem.tags) &&
+                    hasAnchorTag_widthHalf(elem.tags);
+                if (isRelativeToSize_widthHalf) {
                     // very specific use case
-
-                    x = function (width, height) {
-                        return Math.floor(width / 2 +
-                            ((elem.x - sceneRect.width / 2) / elem.height) * yFn(elem.height)(height));
-                    };
-
+                    x = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.height, elem.x);
                 }
 
                 var drawable;
@@ -245,11 +257,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                             x: elem.x,
                             y: elem.y,
                             time: 0
-                        }, animations.transform, true);
+                        }, animations.transform, true, isRelativeToSize_widthHalf ?
+                            getXPositionRelativeToSize_anchorWithHalf.bind(undefined, sceneRect, elem.height) :
+                            undefined);
                     }
                 }
 
-                function moveWithKeyFrames(drawable, currentFrame, frames, loop) {
+                function moveWithKeyFrames(drawable, currentFrame, frames, loop, customXFn, customYFn) {
                     if (loop) {
                         var framesCopy = frames.slice();
                     }
@@ -265,14 +279,17 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
                                 self.timer.doLater(continueMove, duration);
                             }
                         } else {
-                            drawable.moveTo(xFn(frame.x), yFn(frame.y)).setDuration(duration).setCallback(continueMove);
+                            var x = customXFn ? customXFn(frame.x) : xFn(frame.x);
+                            var y = customYFn ? customYFn(frame.y) : yFn(frame.y);
+
+                            drawable.moveTo(x, y).setDuration(duration).setCallback(continueMove);
                         }
 
                         function continueMove() {
                             if (frames.length > 0) {
                                 move(frames.shift(), frame);
                             } else if (loop) {
-                                moveWithKeyFrames(drawable, frame, framesCopy, loop);
+                                moveWithKeyFrames(drawable, frame, framesCopy, loop, customXFn, customYFn);
                             }
                         }
                     }
@@ -300,4 +317,4 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
     };
 
     return MVVMScene;
-})(iterateEntries, Width, Height, Event);
+})(iterateEntries, Width, Height, Event, Math);
