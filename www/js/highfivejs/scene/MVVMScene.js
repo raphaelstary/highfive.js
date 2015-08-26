@@ -18,6 +18,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
     }
 
     MVVMScene.prototype.show = function (next) {
+        var self = this;
         var drawables = [];
         var taps = [];
 
@@ -230,12 +231,44 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
 
                 }
 
+                // at the moment it's not possible to move a button, because drawable ref points only to a single elem
                 if (elem.animations) {
                     var animations = elem.animations;
                     if (animations.transform) {
-                        animations.transform.forEach(function (frame) {
+                        moveWithKeyFrames(drawable, {
+                            x: elem.x,
+                            y: elem.y,
+                            time: 0
+                        }, animations.transform, true);
+                    }
+                }
 
-                        });
+                function moveWithKeyFrames(drawable, currentFrame, frames, loop) {
+                    if (loop) {
+                        var framesCopy = frames.slice();
+                    }
+
+                    move(frames.shift(), currentFrame);
+
+                    function move(frame, lastFrame) {
+                        var duration = frame.time - lastFrame.time - 1;
+                        if (frame.x == lastFrame.x && frame.y == lastFrame.y) {
+                            if (duration == 0) {
+                                continueMove();
+                            } else {
+                                self.timer.doLater(continueMove, duration);
+                            }
+                        } else {
+                            drawable.moveTo(xFn(frame.x), yFn(frame.y)).setDuration(duration).setCallback(continueMove);
+                        }
+
+                        function continueMove() {
+                            if (frames.length > 0) {
+                                move(frames.shift(), frame);
+                            } else if (loop) {
+                                moveWithKeyFrames(drawable, frame, framesCopy, loop);
+                            }
+                        }
                     }
                 }
 
@@ -244,8 +277,6 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event) {
 
         if (this.viewModel.postConstruct)
             this.viewModel.postConstruct();
-
-        var self = this;
 
         function nextScene() {
             if (self.viewModel.preDestroy)
