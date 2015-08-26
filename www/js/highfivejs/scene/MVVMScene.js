@@ -253,27 +253,28 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                 if (elem.animations) {
                     var animations = elem.animations;
                     if (animations.transform) {
-                        moveWithKeyFrames(drawable, {
+                        var customXFn = isRelativeToSize_widthHalf ?
+                            getXPositionRelativeToSize_anchorWithHalf.bind(undefined, sceneRect, elem.height) :
+                            undefined;
+                        var currentFrame = {
                             x: elem.x,
                             y: elem.y,
                             time: 0
-                        }, animations.transform, true, isRelativeToSize_widthHalf ?
-                            getXPositionRelativeToSize_anchorWithHalf.bind(undefined, sceneRect, elem.height) :
-                            undefined);
+                        };
+                        moveWithKeyFrames(drawable, currentFrame, animations.transform, true, true, customXFn);
                     }
                 }
 
-                function moveWithKeyFrames(drawable, currentFrame, frames, loop, customXFn, customYFn) {
-                    if (loop) {
+                function moveWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, customXFn, customYFn) {
+                    if (loop)
                         var framesCopy = frames.slice();
-                    }
 
                     move(frames.shift(), currentFrame);
 
                     function move(frame, lastFrame) {
                         var duration = frame.time - lastFrame.time - 1;
                         if (frame.x == lastFrame.x && frame.y == lastFrame.y) {
-                            if (duration == 0) {
+                            if (duration < 1) {
                                 continueMove();
                             } else {
                                 self.timer.doLater(continueMove, duration);
@@ -286,10 +287,19 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                         }
 
                         function continueMove() {
+                            if (itIsOver)
+                                return;
+
                             if (frames.length > 0) {
                                 move(frames.shift(), frame);
                             } else if (loop) {
-                                moveWithKeyFrames(drawable, frame, framesCopy, loop, customXFn, customYFn);
+                                if (initialDelay) {
+                                    var x = customXFn ? customXFn(currentFrame.x) : xFn(currentFrame.x);
+                                    var y = customYFn ? customYFn(currentFrame.y) : yFn(currentFrame.y);
+                                    drawable.setPosition(x, y);
+                                }
+                                moveWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, customXFn,
+                                    customYFn);
                             }
                         }
                     }
@@ -301,7 +311,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
         if (this.viewModel.postConstruct)
             this.viewModel.postConstruct();
 
+        var itIsOver = false;
+
         function nextScene() {
+            if (itIsOver)
+                return;
+            itIsOver = true;
+
             if (self.viewModel.preDestroy)
                 self.viewModel.preDestroy();
 
