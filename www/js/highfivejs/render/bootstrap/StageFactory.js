@@ -25,7 +25,7 @@ var StageFactory = (function ($) {
 
         var motions = new $.Motions(new $.BasicAnimations());
         var spriteAnimations = new $.SpriteAnimations();
-        var animations = new $.BasicAnimations();
+        var animations = new $.BasicAnimations(); // todo check if it's possible to use same object for motions
         var animationHelper = new $.BasicAnimationHelper(animations);
         var timer = new $.CallbackTimer();
 
