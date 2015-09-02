@@ -61,7 +61,7 @@ var Vectors = (function (Math) {
         },
 
         getAngle: function (x, y) {
-            return Math.atan2(x, y);
+            return Math.atan2(y, x);
         },
 
         getIntersectionPoint: function (a1_x, a1_y, a2_x, a2_y, b1_x, b1_y, b2_x, b2_y) {
