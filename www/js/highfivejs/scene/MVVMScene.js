@@ -27,12 +27,12 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                 pointer.y > drawable.getCornerY() && pointer.y < drawable.getEndY();
         }
 
-        //var currentFrameNumber = 0;
-        //var tick = 0;
-        //var frameListenerId = this.events.subscribe(Event.TICK_START, function () {
-        //    if (++tick % 2 == 0)
-        //        currentFrameNumber++;
-        //});
+        var currentFrameNumber = 0;
+        var tick = 0;
+        var frameListenerId = this.events.subscribe(Event.TICK_START, function () {
+            if (++tick % 2 == 0)
+                currentFrameNumber++;
+        });
 
         var tapListenerId = this.events.subscribe(Event.POINTER, function (pointer) {
             if (pointer.type == 'up') {
@@ -326,26 +326,27 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             if (duration < 1) {
                                 continueMove();
                             } else {
-                                //if (lastFrame.time != currentFrameNumber % 330) {
-                                //    console.log(drawable.id + " starts alpha do_later - from: " + lastFrame.time +
-                                //        +" @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
-                                //        frame.opacity);
-                                //}
+                                if (lastFrame.time != currentFrameNumber % 330) {
+                                    console.log(drawable.id + " starts alpha do_later - from: " + lastFrame.time +
+                                        " @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
+                                        frame.opacity);
+                                }
 
                                 self.timer.doLater(continueMove, duration);
                             }
                         } else {
-                            //if (lastFrame.time != currentFrameNumber % 330) {
-                            //    console.log(drawable.id + " starts alpha animation - from: " + lastFrame.time + " @ "
-                            // + currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.opacity); }
+                            if (lastFrame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " starts alpha animation - from: " + lastFrame.time + " @ " +
+                                    currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.opacity);
+                            }
                             drawable.opacityTo(frame.opacity).setDuration(duration).setCallback(continueMove);
                         }
 
                         function continueMove() {
-                            //if (frame.time != currentFrameNumber % 330) {
-                            //    console.log(drawable.id + " ends alpha - from: " + frame.time + " @ " +
-                            //        currentFrameNumber % 330 + " value: " + frame.opacity);
-                            //}
+                            if (frame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " ends alpha - from: " + frame.time + " @ " +
+                                    currentFrameNumber % 330 + " value: " + frame.opacity);
+                            }
                             if (itIsOver)
                                 return;
 
@@ -397,13 +398,26 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             if (duration < 1) {
                                 continueMove();
                             } else {
+                                if (lastFrame.time != currentFrameNumber % 330) {
+                                    console.log(drawable.id + " starts rotate do_later - from: " + lastFrame.time +
+                                        " @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
+                                        frame.rotation);
+                                }
                                 self.timer.doLater(continueMove, duration);
                             }
                         } else {
+                            if (lastFrame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " starts rotate animation - from: " + lastFrame.time + " @ " +
+                                    currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.rotation);
+                            }
                             drawable.rotateTo(frame.rotation).setDuration(duration).setCallback(continueMove);
                         }
 
                         function continueMove() {
+                            if (frame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " ends rotate - from: " + frame.time + " @ " +
+                                    currentFrameNumber % 330 + " value: " + frame.rotation);
+                            }
                             if (itIsOver)
                                 return;
 
@@ -411,7 +425,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                                 move(frames.shift(), frame);
                             } else if (loop) {
                                 if (timing) {
-                                    var duration = (timing - frame.time) * 2 - 1;
+                                    var duration = (timing - frame.time) * 2 - 2;
                                     self.timer.doLater(function () {
                                         if (itIsOver)
                                             return;
@@ -454,13 +468,26 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             if (duration < 1) {
                                 continueMove();
                             } else {
+                                if (lastFrame.time != currentFrameNumber % 330) {
+                                    console.log(drawable.id + " starts scale do_later - from: " + lastFrame.time +
+                                        " @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
+                                        frame.scale);
+                                }
                                 self.timer.doLater(continueMove, duration);
                             }
                         } else {
+                            if (lastFrame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " starts scale animation - from: " + lastFrame.time + " @ " +
+                                    currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.scale);
+                            }
                             drawable.scaleTo(frame.scale).setDuration(duration).setCallback(continueMove);
                         }
 
                         function continueMove() {
+                            if (frame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " ends scale - from: " + frame.time + " @ " +
+                                    currentFrameNumber % 330 + " value: " + frame.scale);
+                            }
                             if (itIsOver)
                                 return;
 
@@ -469,7 +496,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             } else if (loop) {
 
                                 if (timing) {
-                                    var duration = (timing - frame.time) * 2 - 1;
+                                    var duration = (timing - frame.time) * 2 - 2;
                                     self.timer.doLater(function () {
                                         if (itIsOver)
                                             return;
@@ -503,29 +530,29 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             if (duration < 1) {
                                 continueMove();
                             } else {
-                                //if (lastFrame.time != currentFrameNumber % 330) {
-                                //    console.log(drawable.id + " starts move do_later - from: " + lastFrame.time +
-                                //        +" @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
-                                //        frame.x + " " + frame.y);
-                                //}
+                                if (lastFrame.time != currentFrameNumber % 330) {
+                                    console.log(drawable.id + " starts move do_later - from: " + lastFrame.time +
+                                        " @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.x +
+                                        " " + frame.y);
+                                }
                                 self.timer.doLater(continueMove, duration);
                             }
                         } else {
                             var x = customXFn ? customXFn(frame.x) : xFn(frame.x);
                             var y = customYFn ? customYFn(frame.y) : yFn(frame.y);
-                            //if (lastFrame.time != currentFrameNumber % 330) {
-                            //    console.log(drawable.id + " starts move animation - from: " + lastFrame.time + " @ " +
-                            //        currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.x + " " +
-                            //        frame.y);
-                            //}
+                            if (lastFrame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " starts move animation - from: " + lastFrame.time + " @ " +
+                                    currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.x + " " +
+                                    frame.y);
+                            }
                             drawable.moveTo(x, y).setDuration(duration).setCallback(continueMove);
                         }
 
                         function continueMove() {
-                            //if (frame.time != currentFrameNumber % 330) {
-                            //    console.log(drawable.id + " ends move - from: " + frame.time + " @ " +
-                            //        currentFrameNumber % 330 + " value: " + frame.x + " " + frame.y);
-                            //}
+                            if (frame.time != currentFrameNumber % 330) {
+                                console.log(drawable.id + " ends move - from: " + frame.time + " @ " +
+                                    currentFrameNumber % 330 + " value: " + frame.x + " " + frame.y);
+                            }
                             if (itIsOver)
                                 return;
 
@@ -581,7 +608,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                 drawable.remove();
             });
             self.events.unsubscribe(tapListenerId);
-            //self.events.unsubscribe(frameListenerId);
+            self.events.unsubscribe(frameListenerId);
 
             next();
         }
