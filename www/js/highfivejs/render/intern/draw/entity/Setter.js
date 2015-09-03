@@ -70,6 +70,15 @@ var Setter = (function (changeCoords) {
             return drawable;
         },
 
+        setLength: function (addToResizer, screen, drawable, lengthFn, resizeDependencies) {
+            drawable.data.length = lengthFn(screen.width, screen.height);
+            addToResizer(drawable, function (width, height) {
+                drawable.data.length = lengthFn(width, height);
+            }, resizeDependencies);
+
+            return drawable;
+        },
+
         setWidth: function (addToResizer, screen, drawable, widthFn, resizeDependencies) {
             drawable.data.width = widthFn(screen.width, screen.height);
             addToResizer(drawable, function (width, height) {

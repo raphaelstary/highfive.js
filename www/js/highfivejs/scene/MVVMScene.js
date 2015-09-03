@@ -135,6 +135,22 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                         this.viewModel[elem.viewId] = drawable;
                     }
 
+                } else if (elem.type == 'line') {
+                    drawable = this.stage.createLine().setPosition(x,
+                        y).setLength(txtSize(elem.length)).setColor(elem.color);
+
+                    drawable.setLineWidth(txtSize(elem.lineWidth));
+                    drawable.setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
+
+                    if (elem.zIndex != 3)
+                        drawable.setZIndex(elem.zIndex);
+
+                    drawables.push(drawable);
+
+                    if (elem.viewId) {
+                        this.viewModel[elem.viewId] = drawable;
+                    }
+
                 } else if (elem.type == 'rectangle') {
                     var isInput = elem.tags.some(function (tag) {
                         return tag == 'input';

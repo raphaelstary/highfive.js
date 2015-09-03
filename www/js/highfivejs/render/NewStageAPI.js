@@ -1,4 +1,4 @@
-var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityServices) {
+var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     "use strict";
 
     function NewStageAPI(stage, gfx, resizer, width, height, timer) {
@@ -14,26 +14,31 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
     }
 
     NewStageAPI.prototype.createImage = function (imgName) {
-        return addImageServiceMethods(addServiceMethods(this.stage.drawFresh(wrap(0), wrap(0), imgName), this), this);
+        return addImageServiceMethods(addServiceMethods(this.stage.drawFresh(0, 0, imgName), this), this);
     };
 
     NewStageAPI.prototype.createText = function (text) {
-        var drawable = this.stage.drawText(wrap(0), wrap(0), text, wrap(60), 'Arial', 'black');
+        var drawable = this.stage.drawText(0, 0, text, 60, 'Arial', 'black');
         return addTextServiceMethods(addServiceMethods(drawable, this), this);
     };
 
     NewStageAPI.prototype.createRectangle = function (filled) {
-        var drawable = this.stage.drawRectangle(wrap(0), wrap(0), wrap(100), wrap(100), 'black', filled);
+        var drawable = this.stage.drawRectangle(0, 0, 100, 100, 'black', filled);
         return addRectangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
     NewStageAPI.prototype.createCircle = function (filled) {
-        var drawable = this.stage.drawCircle(wrap(0), wrap(0), wrap(100), 'black', filled);
+        var drawable = this.stage.drawCircle(0, 0, 100, 'black', filled);
         return addCircleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    NewStageAPI.prototype.createLine = function () {
+        var drawable = this.stage.drawLine(0, 0, 100, 'black');
+        return addLineServiceMethods(addServiceMethods(drawable, this), this);
+    };
+
     NewStageAPI.prototype.createEqTriangle = function (filled) {
-        var drawable = this.stage.drawEqTriangle(wrap(0), wrap(0), 0, wrap(100), 'black', filled);
+        var drawable = this.stage.drawEqTriangle(0, 0, 0, 100, 'black', filled);
         return addEqTriangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
@@ -99,6 +104,16 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
         return drawable;
     }
 
+    function addLineServiceMethods(drawable, self) {
+        drawable.setColor = Setter.setColor.bind(undefined, drawable);
+        drawable.setLength = Setter.setLength.bind(undefined, self.resizer.add.bind(self.resizer, 'length'),
+            self.screen, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
+
+        return drawable;
+    }
+
     function addCircleServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
@@ -144,4 +159,4 @@ var NewStageAPI = (function (changeCoords, wrap, Setter, iterateEntries, EntityS
     };
 
     return NewStageAPI;
-})(changeCoords, wrap, Setter, iterateEntries, EntityServices);
+})(Setter, iterateEntries, EntityServices);
