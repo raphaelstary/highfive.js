@@ -1,4 +1,4 @@
-var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
+var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transition) {
     "use strict";
 
     function MVVMScene(model, view, viewModel) {
@@ -26,6 +26,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
             return pointer.x > drawable.getCornerX() && pointer.x < drawable.getEndX() &&
                 pointer.y > drawable.getCornerY() && pointer.y < drawable.getEndY();
         }
+
+        //var currentFrameNumber = 0;
+        //var tick = 0;
+        //var frameListenerId = this.events.subscribe(Event.TICK_START, function () {
+        //    if (++tick % 2 == 0)
+        //        currentFrameNumber++;
+        //});
 
         var tapListenerId = this.events.subscribe(Event.POINTER, function (pointer) {
             if (pointer.type == 'up') {
@@ -251,8 +258,16 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
 
                 // at the moment it's not possible to move a button, because drawable ref points only to a single elem
                 if (elem.animations) {
+                    var animationTiming;
+                    elem.tags.some(function (tag) {
+                        var foundSmth = tag.time !== undefined;
+                        if (foundSmth)
+                            animationTiming = tag.time;
+                        return foundSmth;
+                    });
+
                     var animations = elem.animations;
-                    if (animations.transform) {
+                    if (animations.position) {
                         var customXFn = isRelativeToSize_widthHalf ?
                             getXPositionRelativeToSize_anchorWithHalf.bind(undefined, sceneRect, elem.height) :
                             undefined;
@@ -261,29 +276,131 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             y: elem.y,
                             time: 0
                         };
-                        moveWithKeyFrames(drawable, currentFrame, animations.transform, true, true, customXFn);
+                        moveWithKeyFrames(drawable, currentFrame, animations.position, true, true, animationTiming,
+                            customXFn);
+                    }
+                    if (animations.opacity) {
+                        var currentOpacityFrame = {
+                            opacity: elem.alpha,
+                            time: 0
+                        };
+                        fadeWithKeyFrames(drawable, currentOpacityFrame, animations.opacity, true, true,
+                            animationTiming);
+                    }
+                    if (animations.scale) {
+                        var currentScaleFrame = {
+                            scale: elem.scale,
+                            time: 0
+                        };
+                        scaleWithKeyFrames(drawable, currentScaleFrame, animations.scale, true, true, animationTiming);
+                    }
+                    if (animations.rotation) {
+                        var currentRotationFrame = {
+                            rotation: elem.rotation,
+                            time: 0
+                        };
+                        rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation, true, true,
+                            animationTiming);
                     }
                 }
 
-                function moveWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, customXFn, customYFn) {
+                function fadeWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing) {
+                    //var valuePairs = [];
+                    //frames.forEach(function (frame) {
+                    //    valuePairs.push({
+                    //        value: frame.opacity,
+                    //        duration: frame.time,
+                    //        easing: Transition.LINEAR
+                    //    });
+                    //});
+                    //drawable.opacityPattern(valuePairs, loop);
+
                     if (loop)
                         var framesCopy = frames.slice();
 
                     move(frames.shift(), currentFrame);
 
                     function move(frame, lastFrame) {
-                        var duration = frame.time - lastFrame.time - 1;
-                        if (frame.x == lastFrame.x && frame.y == lastFrame.y) {
+                        var duration = (frame.time - lastFrame.time) * 2 - 1;
+                        if (frame.opacity == lastFrame.opacity) {
+                            if (duration < 1) {
+                                continueMove();
+                            } else {
+                                //if (lastFrame.time != currentFrameNumber % 330) {
+                                //    console.log(drawable.id + " starts alpha do_later - from: " + lastFrame.time +
+                                //        +" @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
+                                //        frame.opacity);
+                                //}
+
+                                self.timer.doLater(continueMove, duration);
+                            }
+                        } else {
+                            //if (lastFrame.time != currentFrameNumber % 330) {
+                            //    console.log(drawable.id + " starts alpha animation - from: " + lastFrame.time + " @ "
+                            // + currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.opacity); }
+                            drawable.opacityTo(frame.opacity).setDuration(duration).setCallback(continueMove);
+                        }
+
+                        function continueMove() {
+                            //if (frame.time != currentFrameNumber % 330) {
+                            //    console.log(drawable.id + " ends alpha - from: " + frame.time + " @ " +
+                            //        currentFrameNumber % 330 + " value: " + frame.opacity);
+                            //}
+                            if (itIsOver)
+                                return;
+
+                            if (frames.length > 0) {
+                                move(frames.shift(), frame);
+                            } else if (loop) {
+
+                                if (timing) {
+                                    var duration = (timing - frame.time) * 2 - 1;
+                                    self.timer.doLater(function () {
+                                        if (itIsOver)
+                                            return;
+                                        if (initialDelay) {
+                                            drawable.setAlpha(currentFrame.opacity);
+                                        }
+                                        fadeWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
+                                            timing);
+                                    }, duration);
+                                } else {
+                                    if (initialDelay) {
+                                        drawable.setAlpha(currentFrame.opacity);
+                                    }
+                                    fadeWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                function rotateWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing) {
+                    //var valuePairs = [];
+                    //frames.forEach(function (frame) {
+                    //    valuePairs.push({
+                    //        value: frame.rotation - 1.57079633,
+                    //        duration: frame.time,
+                    //        easing: Transition.LINEAR
+                    //    });
+                    //});
+                    //drawable.rotationPattern(valuePairs, loop);
+
+                    if (loop)
+                        var framesCopy = frames.slice();
+
+                    move(frames.shift(), currentFrame);
+
+                    function move(frame, lastFrame) {
+                        var duration = (frame.time - lastFrame.time) * 2 - 1;
+                        if (frame.rotation == lastFrame.rotation) {
                             if (duration < 1) {
                                 continueMove();
                             } else {
                                 self.timer.doLater(continueMove, duration);
                             }
                         } else {
-                            var x = customXFn ? customXFn(frame.x) : xFn(frame.x);
-                            var y = customYFn ? customYFn(frame.y) : yFn(frame.y);
-
-                            drawable.moveTo(x, y).setDuration(duration).setCallback(continueMove);
+                            drawable.rotateTo(frame.rotation).setDuration(duration).setCallback(continueMove);
                         }
 
                         function continueMove() {
@@ -293,13 +410,152 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             if (frames.length > 0) {
                                 move(frames.shift(), frame);
                             } else if (loop) {
-                                if (initialDelay) {
-                                    var x = customXFn ? customXFn(currentFrame.x) : xFn(currentFrame.x);
-                                    var y = customYFn ? customYFn(currentFrame.y) : yFn(currentFrame.y);
-                                    drawable.setPosition(x, y);
+                                if (timing) {
+                                    var duration = (timing - frame.time) * 2 - 1;
+                                    self.timer.doLater(function () {
+                                        if (itIsOver)
+                                            return;
+                                        if (initialDelay) {
+                                            drawable.setRotation(currentFrame.rotation);
+                                        }
+                                        rotateWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
+                                            timing);
+                                    }, duration);
+                                } else {
+                                    if (initialDelay) {
+                                        drawable.setRotation(currentFrame.rotation);
+                                    }
+                                    rotateWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay);
                                 }
-                                moveWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, customXFn,
-                                    customYFn);
+                            }
+                        }
+                    }
+                }
+
+                function scaleWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing) {
+                    //var valuePairs = [];
+                    //frames.forEach(function (frame) {
+                    //    valuePairs.push({
+                    //        value: frame.scale,
+                    //        duration: frame.time,
+                    //        easing: Transition.LINEAR
+                    //    });
+                    //});
+                    //drawable.scalePattern(valuePairs, loop);
+
+                    if (loop)
+                        var framesCopy = frames.slice();
+
+                    move(frames.shift(), currentFrame);
+
+                    function move(frame, lastFrame) {
+                        var duration = (frame.time - lastFrame.time) * 2 - 1;
+                        if (frame.scale == lastFrame.scale) {
+                            if (duration < 1) {
+                                continueMove();
+                            } else {
+                                self.timer.doLater(continueMove, duration);
+                            }
+                        } else {
+                            drawable.scaleTo(frame.scale).setDuration(duration).setCallback(continueMove);
+                        }
+
+                        function continueMove() {
+                            if (itIsOver)
+                                return;
+
+                            if (frames.length > 0) {
+                                move(frames.shift(), frame);
+                            } else if (loop) {
+
+                                if (timing) {
+                                    var duration = (timing - frame.time) * 2 - 1;
+                                    self.timer.doLater(function () {
+                                        if (itIsOver)
+                                            return;
+                                        if (initialDelay) {
+                                            drawable.setScale(currentFrame.scale);
+                                        }
+                                        scaleWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
+                                            timing);
+                                    }, duration);
+                                } else {
+                                    if (initialDelay) {
+                                        drawable.setScale(currentFrame.scale);
+                                    }
+                                    scaleWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, timing);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                function moveWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing, customXFn,
+                    customYFn) {
+                    if (loop)
+                        var framesCopy = frames.slice();
+
+                    move(frames.shift(), currentFrame);
+
+                    function move(frame, lastFrame) {
+                        var duration = (frame.time - lastFrame.time) * 2 - 1;
+                        if (frame.x == lastFrame.x && frame.y == lastFrame.y) {
+                            if (duration < 1) {
+                                continueMove();
+                            } else {
+                                //if (lastFrame.time != currentFrameNumber % 330) {
+                                //    console.log(drawable.id + " starts move do_later - from: " + lastFrame.time +
+                                //        +" @ " + currentFrameNumber % 330 + " to: " + frame.time + " value: " +
+                                //        frame.x + " " + frame.y);
+                                //}
+                                self.timer.doLater(continueMove, duration);
+                            }
+                        } else {
+                            var x = customXFn ? customXFn(frame.x) : xFn(frame.x);
+                            var y = customYFn ? customYFn(frame.y) : yFn(frame.y);
+                            //if (lastFrame.time != currentFrameNumber % 330) {
+                            //    console.log(drawable.id + " starts move animation - from: " + lastFrame.time + " @ " +
+                            //        currentFrameNumber % 330 + " to: " + frame.time + " value: " + frame.x + " " +
+                            //        frame.y);
+                            //}
+                            drawable.moveTo(x, y).setDuration(duration).setCallback(continueMove);
+                        }
+
+                        function continueMove() {
+                            //if (frame.time != currentFrameNumber % 330) {
+                            //    console.log(drawable.id + " ends move - from: " + frame.time + " @ " +
+                            //        currentFrameNumber % 330 + " value: " + frame.x + " " + frame.y);
+                            //}
+                            if (itIsOver)
+                                return;
+
+                            if (frames.length > 0) {
+                                move(frames.shift(), frame);
+                            } else if (loop) {
+
+                                if (timing) {
+                                    var duration = (timing - frame.time) * 2 - 2;
+                                    self.timer.doLater(function () {
+
+                                        if (itIsOver)
+                                            return;
+                                        if (initialDelay) {
+                                            var x = customXFn ? customXFn(currentFrame.x) : xFn(currentFrame.x);
+                                            var y = customYFn ? customYFn(currentFrame.y) : yFn(currentFrame.y);
+                                            drawable.setPosition(x, y);
+                                        }
+                                        moveWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
+                                            timing, customXFn, customYFn);
+                                    }, duration);
+                                } else {
+                                    if (initialDelay) {
+                                        var x = customXFn ? customXFn(currentFrame.x) : xFn(currentFrame.x);
+                                        var y = customYFn ? customYFn(currentFrame.y) : yFn(currentFrame.y);
+                                        drawable.setPosition(x, y);
+                                    }
+                                    moveWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, timing,
+                                        customXFn, customYFn);
+                                }
                             }
                         }
                     }
@@ -325,6 +581,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                 drawable.remove();
             });
             self.events.unsubscribe(tapListenerId);
+            //self.events.unsubscribe(frameListenerId);
 
             next();
         }
@@ -333,4 +590,4 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
     };
 
     return MVVMScene;
-})(iterateEntries, Width, Height, Event, Math);
+})(iterateEntries, Width, Height, Event, Math, Transition);
