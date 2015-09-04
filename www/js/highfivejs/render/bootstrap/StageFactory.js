@@ -46,7 +46,7 @@ var StageFactory = (function ($) {
 
     function createResponsive(gfxCache, renderer, device, events) {
         var repoKeys = [
-            'position', 'width', 'height', 'size', 'lineWidth', 'lineHeight', 'lineLength', 'path', 'radius'
+            'position', 'width', 'height', 'size', 'length', 'lineWidth', 'lineHeight', 'lineLength', 'path', 'radius'
         ];
         var legacyStage = createLegacy(gfxCache, renderer);
         var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
