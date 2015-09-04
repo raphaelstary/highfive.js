@@ -102,8 +102,8 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                 var x = xFn(elem.x);
                 var y = yFn(elem.y);
 
-                var isRelativeToSize_widthHalf = elem.tags && hasPositionTag_relativeToSize(elem.tags) &&
-                    hasAnchorTag_widthHalf(elem.tags);
+                var isRelativeToSize_widthHalf = elem.tags && hasPositionTag_relativeToSize(elem.tags);
+                //&& hasAnchorTag_widthHalf(elem.tags);
                 if (isRelativeToSize_widthHalf) {
                     // very specific use case
                     x = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.height, elem.x);
