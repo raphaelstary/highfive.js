@@ -49,11 +49,13 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.setRotation = Setter.setRotation.bind(undefined, drawable);
         drawable.setScale = Setter.setScale.bind(undefined, drawable);
         drawable.setZIndex = self.stage.changeZIndex.bind(self.stage, drawable);
+        drawable.setMask = Setter.setMask.bind(undefined, drawable);
 
         drawable.moveTo = EntityServices.moveTo.bind(undefined, self.stage, self.resizer, self.screen, drawable);
         drawable.show = EntityServices.show.bind(undefined, self.stage, drawable);
         drawable.hide = EntityServices.hide.bind(undefined, self.stage, drawable);
         drawable.remove = EntityServices.remove.bind(undefined, self.stage, self.resizer, drawable);
+        drawable.unmask = EntityServices.unmask.bind(undefined, self.stage, self.resizer, drawable);
         drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
         drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
         drawable.setCallback = function (callback) {

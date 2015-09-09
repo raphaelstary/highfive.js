@@ -1,4 +1,4 @@
-var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle,
+var Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle,
     renderRectangle, DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle,
     renderEqTriangle) {
     "use strict";
@@ -62,10 +62,30 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
                 self.ctx.save();
 
                 if (drawable.mask) {
+                    if (drawable.mask.rotation) {
+                        self.ctx.translate(drawable.mask.getRotationAnchorX(), drawable.mask.getRotationAnchorY());
+                        self.ctx.rotate(drawable.mask.rotation);
+                        self.ctx.translate(-drawable.mask.getRotationAnchorX(), -drawable.mask.getRotationAnchorY());
+                    }
+
                     self.ctx.beginPath();
-                    self.ctx.rect(drawable.mask.x, drawable.mask.y, drawable.mask.width, drawable.mask.height);
+                    if (drawable.mask.data instanceof Rectangle) {
+                        self.ctx.rect(drawable.mask.getCornerX() - 0.5, drawable.mask.getCornerY() - 0.5,
+                            drawable.mask.getWidth(), drawable.mask.getHeight());
+
+                    } else if (drawable.mask.data instanceof Circle) {
+                        self.ctx.arc(drawable.mask.x, drawable.mask.y, drawable.mask.getWidthHalf(), 0, 2 * Math.PI);
+
+                    }
+
                     self.ctx.closePath();
                     self.ctx.clip();
+
+                    if (drawable.mask.rotation) {
+                        self.ctx.translate(drawable.mask.getRotationAnchorX(), drawable.mask.getRotationAnchorY());
+                        self.ctx.rotate(-drawable.mask.rotation);
+                        self.ctx.translate(-drawable.mask.getRotationAnchorX(), -drawable.mask.getRotationAnchorY());
+                    }
                 }
 
                 if (drawable.alpha || drawable.alpha === 0) {
@@ -124,5 +144,5 @@ var Renderer = (function (Object, getFunctionName, SubImage, renderAtlas, TextWr
     };
 
     return Renderer;
-})(Object, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle, DrawableLine,
-    renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle, renderEqTriangle);
+})(Object, Math, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle,
+    DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle, renderEqTriangle);

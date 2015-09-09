@@ -66,10 +66,15 @@ var EntityServices = (function (Transition, changePath, changeCoords) {
             stage.remove(drawable);
             return drawable;
         },
+        unmask: function (stage, resizer, drawable) {
+            this.remove(stage, resizer, drawable.mask);
+        },
         remove: function (stage, resizer, drawable) {
             resizer.remove(drawable);
-            if (drawable.mask)
-                this.unmask(drawable);
+            if (drawable.mask) {
+                this.remove(stage, resizer, drawable.mask);
+                delete  drawable.mask;
+            }
             stage.remove(drawable);
             return drawable;
         },

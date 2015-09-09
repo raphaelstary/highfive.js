@@ -3,7 +3,7 @@ var renderCircle = (function (Math) {
 
     function renderCircle(ctx, drawable) {
         ctx.beginPath();
-        ctx.arc(drawable.x, drawable.y, drawable.data.radius, 0, 2 * Math.PI);
+        ctx.arc(drawable.x, drawable.y, drawable.getWidthHalf(), 0, 2 * Math.PI);
         ctx.closePath();
 
         if (drawable.data.lineWidth)

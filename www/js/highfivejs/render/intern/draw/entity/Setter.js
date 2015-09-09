@@ -128,6 +128,11 @@ var Setter = (function (changeCoords) {
         setGraphic: function (stage, drawable, imgName) {
             drawable.data = stage.getGraphic(imgName);
             return drawable;
+        },
+
+        setMask: function (drawable, drawableShapeMask) {
+            drawableShapeMask.hide();
+            drawable.mask = drawableShapeMask;
         }
     };
 })(changeCoords);
