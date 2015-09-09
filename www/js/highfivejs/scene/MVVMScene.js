@@ -272,6 +272,20 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
 
                 }
 
+                if (elem.mask) {
+                    var maskX = xFn(elem.mask.x);
+                    var maskY = yFn(elem.mask.y);
+
+                    if (isRelativeToSize_widthHalf) {
+                        // very specific use case
+                        maskX = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.mask.height, elem.mask.x);
+                    }
+
+                    var mask = this.stage.createRectangle().setPosition(maskX,
+                        maskY).setWidth(xFn(elem.mask.width)).setHeight(yFn(elem.mask.height)).setRotation(elem.mask.rotation);
+                    drawable.setMask(mask);
+                }
+
                 // at the moment it's not possible to move a button, because drawable ref points only to a single elem
                 if (elem.animations) {
                     var animationTiming = elem.animations.lastFrame;
@@ -331,6 +345,38 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation, isLoop, isInitialDelay,
+                            animationTiming);
+                    }
+                }
+
+                if (elem.animations && elem.animations.mask) {
+                    animations = elem.animations.mask;
+                    if (animations.position) {
+                        var customMaskXFn = isRelativeToSize_widthHalf ?
+                            getXPositionRelativeToSize_anchorWithHalf.bind(undefined, sceneRect, elem.mask.height) :
+                            undefined;
+                        var currentMaskFrame = {
+                            x: elem.mask.x,
+                            y: elem.mask.y,
+                            time: 0
+                        };
+                        moveWithKeyFrames(mask, currentMaskFrame, animations.position, isLoop, isInitialDelay,
+                            animationTiming, customMaskXFn);
+                    }
+                    if (animations.scale) {
+                        var currentMaskScaleFrame = {
+                            scale: elem.mask.scale,
+                            time: 0
+                        };
+                        scaleWithKeyFrames(mask, currentMaskScaleFrame, animations.scale, isLoop, isInitialDelay,
+                            animationTiming);
+                    }
+                    if (animations.rotation) {
+                        var currentMaskRotationFrame = {
+                            rotation: elem.mask.rotation,
+                            time: 0
+                        };
+                        rotateWithKeyFrames(mask, currentMaskRotationFrame, animations.rotation, isLoop, isInitialDelay,
                             animationTiming);
                     }
                 }
