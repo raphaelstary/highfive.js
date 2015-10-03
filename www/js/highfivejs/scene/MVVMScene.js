@@ -17,7 +17,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         this.viewModel = viewModel;
     }
 
-    MVVMScene.prototype.show = function (next) {
+    MVVMScene.prototype.show = function (next, optional_anchorXFn, optional_anchorYFn, parentSceneRect) {
         var self = this;
         var drawables = [];
         var taps = [];
@@ -59,17 +59,69 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         var sceneRect;
 
         function xFn(x) {
+            if (optional_anchorXFn && parentSceneRect) {
+                var subSceneWidth = Width.get(parentSceneRect.width, sceneRect.width);
+                var subSceneWidthHalf = multiply(subSceneWidth, 0.5);
+                var subSceneCornerX = subtract(optional_anchorXFn, subSceneWidthHalf);
+                var relativeElemPosition = function (width, height) {
+                    return Width.get(subSceneWidth(width, height), x)(width, height);
+                };
+                return add(subSceneCornerX, relativeElemPosition);
+            }
             return Width.get(sceneRect.width, x);
         }
 
         function yFn(y) {
+            if (optional_anchorYFn && parentSceneRect) {
+                var subSceneHeight = Height.get(parentSceneRect.height, sceneRect.height);
+                var subSceneHeightHalf = multiply(subSceneHeight, 0.5);
+                var subSceneCornerY = subtract(optional_anchorYFn, subSceneHeightHalf);
+                var relativeElemPosition = function (height, width) {
+                    return Height.get(subSceneHeight(height, width), y)(height, width);
+                };
+                return add(subSceneCornerY, relativeElemPosition);
+            }
             return Height.get(sceneRect.height, y);
         }
 
         function txtSize(size) {
+            if (optional_anchorYFn && parentSceneRect) {
+                var subSceneHeight = Height.get(parentSceneRect.height, sceneRect.height);
+                var subSceneHeightHalf = multiply(subSceneHeight, 0.5);
+                var subSceneCornerY = subtract(optional_anchorYFn, subSceneHeightHalf);
+                var relativeElemPosition = function (width, height) {
+                    return calcScreenConst(height, subSceneHeight(height, width), size);
+                };
+                return add(subSceneCornerY, relativeElemPosition);
+            }
+
             return function (width, height) {
                 return calcScreenConst(height, sceneRect.height, size);
             };
+        }
+
+        function hasTag(name, value) { // todo use instead of all other crap
+            return function (tags) {
+                return tags.some(function (tag) {
+                    return tag[name] == value;
+                });
+            }
+        }
+
+        function getTagValue(name) {
+            return function (tags) {
+                var returnValue;
+                var foundSmth = tags.some(function (tag) {
+                    if (tag[name] != undefined) {
+                        returnValue = tag[name];
+                        return true;
+                    }
+                    return false;
+                });
+                if (foundSmth)
+                    return returnValue;
+                return false;
+            }
         }
 
         function hasPositionTag_relativeToSize(tags) {
@@ -85,6 +137,17 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         }
 
         function getXPositionRelativeToSize_anchorWithHalf(sceneRect, relativeToSize_elemHeight, x) {
+            if (optional_anchorXFn && parentSceneRect) {
+                var subSceneWidth = Width.get(parentSceneRect.width, sceneRect.width);
+                var subSceneWidthHalf = multiply(subSceneWidth, 0.5);
+                var subSceneCornerX = subtract(optional_anchorXFn, subSceneWidthHalf);
+                var relativeElemPosition = function (width, height) {
+                    return Math.floor(width / 2 + ((x - subSceneWidth(width, height) / 2) / relativeToSize_elemHeight) *
+                        yFn(relativeToSize_elemHeight)(height));
+                };
+                return add(subSceneCornerX, relativeElemPosition);
+            }
+
             return function (width, height) {
                 return Math.floor(width / 2 +
                     ((x - sceneRect.width / 2) / relativeToSize_elemHeight) * yFn(relativeToSize_elemHeight)(height));
@@ -310,6 +373,14 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                         return foundSmth;
                     });
 
+                    var callbackMethodName = getTagValue('end');
+                    var callback;
+                    if (callbackMethodName) {
+                        callback = this.viewModel[callbackMethodName].bind(this.viewModel);
+                        // todo change to specific callback for specific type of animation ... nonono it's ok but it
+                        // has to be a callback counter ... or figure out which one is last
+                    }
+
                     var animations = elem.animations;
                     if (animations.position) {
                         var customXFn = isRelativeToSize_widthHalf ?
@@ -321,7 +392,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         moveWithKeyFrames(drawable, currentFrame, animations.position, isLoop, isInitialDelay,
-                            animationTiming, customXFn);
+                            animationTiming, customXFn, undefined, callback);
                     }
                     if (animations.opacity) {
                         var currentOpacityFrame = {
@@ -329,7 +400,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         fadeWithKeyFrames(drawable, currentOpacityFrame, animations.opacity, isLoop, isInitialDelay,
-                            animationTiming);
+                            animationTiming, callback);
                     }
                     if (animations.scale) {
                         var currentScaleFrame = {
@@ -337,7 +408,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         scaleWithKeyFrames(drawable, currentScaleFrame, animations.scale, isLoop, isInitialDelay,
-                            animationTiming);
+                            animationTiming, callback);
                     }
                     if (animations.rotation) {
                         var currentRotationFrame = {
@@ -345,7 +416,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation, isLoop, isInitialDelay,
-                            animationTiming);
+                            animationTiming, callback);
                     }
                 }
 
@@ -381,7 +452,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                     }
                 }
 
-                function fadeWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing) {
+                function fadeWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing, callback) {
                     if (loop)
                         var framesCopy = frames.slice();
 
@@ -446,12 +517,15 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                                             timing);
                                     }
                                 }
+                            } else {
+                                if (callback)
+                                    callback();
                             }
                         }
                     }
                 }
 
-                function rotateWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing) {
+                function rotateWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing, callback) {
                     if (loop)
                         var framesCopy = frames.slice();
 
@@ -514,12 +588,15 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                                             timing);
                                     }
                                 }
+                            } else {
+                                if (callback)
+                                    callback();
                             }
                         }
                     }
                 }
 
-                function scaleWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing) {
+                function scaleWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing, callback) {
                     if (loop)
                         var framesCopy = frames.slice();
 
@@ -584,13 +661,16 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                                             timing);
                                     }
                                 }
+                            } else {
+                                if (callback)
+                                    callback();
                             }
                         }
                     }
                 }
 
                 function moveWithKeyFrames(drawable, currentFrame, frames, loop, initialDelay, timing, customXFn,
-                    customYFn) {
+                    customYFn, callback) {
                     if (loop)
                         var framesCopy = frames.slice();
 
@@ -673,6 +753,9 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                                             timing, customXFn, customYFn);
                                     }
                                 }
+                            } else {
+                                if (callback)
+                                    callback();
                             }
                         }
                     }
