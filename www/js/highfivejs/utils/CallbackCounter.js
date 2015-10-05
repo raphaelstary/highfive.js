@@ -6,7 +6,7 @@ var CallbackCounter = (function () {
         this.callback = callback;
     }
 
-    CallbackCounter.prototype.registerCallback = function () {
+    CallbackCounter.prototype.register = function () {
         this.counter++;
         return this.__onProgress.bind(this);
     };

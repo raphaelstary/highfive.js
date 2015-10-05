@@ -1,7 +1,7 @@
-var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transition) {
+var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
     "use strict";
 
-    function MVVMScene(model, view, viewModel) {
+    function MVVMScene(model, view, viewModel, parentSceneRect, anchorXFn, anchorYFn) {
         this.services = model;
 
         this.stage = model.newStage;
@@ -15,9 +15,14 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
 
         this.view = view;
         this.viewModel = viewModel;
+
+        // sub scene
+        this.parentSceneRect = parentSceneRect;
+        this.anchorXFn = anchorXFn;
+        this.anchorYFn = anchorYFn;
     }
 
-    MVVMScene.prototype.show = function (next, optional_anchorXFn, optional_anchorYFn, parentSceneRect) {
+    MVVMScene.prototype.show = function (next) {
         var self = this;
         var drawables = [];
         var taps = [];
@@ -59,12 +64,12 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         var sceneRect;
 
         function xFn(x) {
-            if (optional_anchorXFn && parentSceneRect) {
-                var subSceneWidth = Width.get(parentSceneRect.width, sceneRect.width);
+            if (self.anchorXFn && self.parentSceneRect) {
+                var subSceneWidth = Width.get(self.parentSceneRect.width, sceneRect.width);
                 var subSceneWidthHalf = multiply(subSceneWidth, 0.5);
-                var subSceneCornerX = subtract(optional_anchorXFn, subSceneWidthHalf);
+                var subSceneCornerX = subtract(self.anchorXFn, subSceneWidthHalf);
                 var relativeElemPosition = function (width, height) {
-                    return Width.get(subSceneWidth(width, height), x)(width, height);
+                    return Width.get(sceneRect.width, x)(subSceneWidth(width, height));
                 };
                 return add(subSceneCornerX, relativeElemPosition);
             }
@@ -72,12 +77,12 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         }
 
         function yFn(y) {
-            if (optional_anchorYFn && parentSceneRect) {
-                var subSceneHeight = Height.get(parentSceneRect.height, sceneRect.height);
+            if (self.anchorYFn && self.parentSceneRect) {
+                var subSceneHeight = Height.get(self.parentSceneRect.height, sceneRect.height);
                 var subSceneHeightHalf = multiply(subSceneHeight, 0.5);
-                var subSceneCornerY = subtract(optional_anchorYFn, subSceneHeightHalf);
+                var subSceneCornerY = subtract(self.anchorYFn, subSceneHeightHalf);
                 var relativeElemPosition = function (height, width) {
-                    return Height.get(subSceneHeight(height, width), y)(height, width);
+                    return Height.get(sceneRect.height, y)(subSceneHeight(height, width));
                 };
                 return add(subSceneCornerY, relativeElemPosition);
             }
@@ -85,12 +90,12 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         }
 
         function txtSize(size) {
-            if (optional_anchorYFn && parentSceneRect) {
-                var subSceneHeight = Height.get(parentSceneRect.height, sceneRect.height);
+            if (self.anchorYFn && self.parentSceneRect) {
+                var subSceneHeight = Height.get(self.parentSceneRect.height, sceneRect.height);
                 var subSceneHeightHalf = multiply(subSceneHeight, 0.5);
-                var subSceneCornerY = subtract(optional_anchorYFn, subSceneHeightHalf);
+                var subSceneCornerY = subtract(self.anchorYFn, subSceneHeightHalf);
                 var relativeElemPosition = function (width, height) {
-                    return calcScreenConst(height, subSceneHeight(height, width), size);
+                    return calcScreenConst(subSceneHeight(height, width), sceneRect.height, size);
                 };
                 return add(subSceneCornerY, relativeElemPosition);
             }
@@ -137,12 +142,14 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
         }
 
         function getXPositionRelativeToSize_anchorWithHalf(sceneRect, relativeToSize_elemHeight, x) {
-            if (optional_anchorXFn && parentSceneRect) {
-                var subSceneWidth = Width.get(parentSceneRect.width, sceneRect.width);
+            if (self.anchorXFn && self.parentSceneRect) {
+                var subSceneWidth = Width.get(self.parentSceneRect.width, sceneRect.width);
                 var subSceneWidthHalf = multiply(subSceneWidth, 0.5);
-                var subSceneCornerX = subtract(optional_anchorXFn, subSceneWidthHalf);
+                var subSceneCornerX = subtract(self.anchorXFn, subSceneWidthHalf);
                 var relativeElemPosition = function (width, height) {
-                    return Math.floor(width / 2 + ((x - subSceneWidth(width, height) / 2) / relativeToSize_elemHeight) *
+                    // todo fix this - it's clearly not right - or at least not tested if it's right
+                    return Math.floor(width / 2 +
+                        (self.parentSceneRect.width / 2 / (x - sceneRect.width / 2) / relativeToSize_elemHeight) *
                         yFn(relativeToSize_elemHeight)(height));
                 };
                 return add(subSceneCornerX, relativeElemPosition);
@@ -373,12 +380,10 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                         return foundSmth;
                     });
 
-                    var callbackMethodName = getTagValue('end');
+                    var callbackMethodName = getTagValue('end')(elem.tags);
                     var callback;
                     if (callbackMethodName) {
-                        callback = this.viewModel[callbackMethodName].bind(this.viewModel);
-                        // todo change to specific callback for specific type of animation ... nonono it's ok but it
-                        // has to be a callback counter ... or figure out which one is last
+                        callback = new CallbackCounter(this.viewModel[callbackMethodName].bind(this.viewModel));
                     }
 
                     var animations = elem.animations;
@@ -392,7 +397,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         moveWithKeyFrames(drawable, currentFrame, animations.position, isLoop, isInitialDelay,
-                            animationTiming, customXFn, undefined, callback);
+                            animationTiming, customXFn, undefined, callback ? callback.register() : undefined);
                     }
                     if (animations.opacity) {
                         var currentOpacityFrame = {
@@ -400,7 +405,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         fadeWithKeyFrames(drawable, currentOpacityFrame, animations.opacity, isLoop, isInitialDelay,
-                            animationTiming, callback);
+                            animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.scale) {
                         var currentScaleFrame = {
@@ -408,7 +413,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         scaleWithKeyFrames(drawable, currentScaleFrame, animations.scale, isLoop, isInitialDelay,
-                            animationTiming, callback);
+                            animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.rotation) {
                         var currentRotationFrame = {
@@ -416,7 +421,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation, isLoop, isInitialDelay,
-                            animationTiming, callback);
+                            animationTiming, callback ? callback.register() : undefined);
                     }
                 }
 
@@ -432,7 +437,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         moveWithKeyFrames(mask, currentMaskFrame, animations.position, isLoop, isInitialDelay,
-                            animationTiming, customMaskXFn);
+                            animationTiming, customMaskXFn, undefined, callback ? callback.register() : undefined);
                     }
                     if (animations.scale) {
                         var currentMaskScaleFrame = {
@@ -440,7 +445,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         scaleWithKeyFrames(mask, currentMaskScaleFrame, animations.scale, isLoop, isInitialDelay,
-                            animationTiming);
+                            animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.rotation) {
                         var currentMaskRotationFrame = {
@@ -448,7 +453,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
                             time: 0
                         };
                         rotateWithKeyFrames(mask, currentMaskRotationFrame, animations.rotation, isLoop, isInitialDelay,
-                            animationTiming);
+                            animationTiming, callback ? callback.register() : undefined);
                     }
                 }
 
@@ -786,8 +791,10 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math, Transitio
             next();
         }
 
+        // dependency injection for globals inside your view model
         this.viewModel.nextScene = nextScene;
+        //this.viewModel.sceneRect = sceneRect;
     };
 
     return MVVMScene;
-})(iterateEntries, Width, Height, Event, Math, Transition);
+})(iterateEntries, Width, Height, Event, Math);
