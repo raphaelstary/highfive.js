@@ -34,7 +34,7 @@ var App = (function ($) {
                 sceneServices.newStage = self.getNewStage(self.services.screen, sceneServices.gfxCache,
                     self.services.device, events);
                 if (sceneServices.newStage)
-                    stages.push(sceneServices.newStage);
+                    stages.unshift(sceneServices.newStage);
             }
             sceneServices.loop = $.installLoop(stages, events);
 

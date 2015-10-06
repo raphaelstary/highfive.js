@@ -39,7 +39,11 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
         //        currentFrameNumber++;
         //});
 
+        var paused = false;
         var tapListenerId = this.events.subscribe(Event.POINTER, function (pointer) {
+            if (paused)
+                return;
+
             if (pointer.type == 'up') {
                 taps.some(function (tap) {
                     if (isHit(pointer, tap.rectangle)) {
@@ -794,6 +798,14 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
         // dependency injection for globals inside your view model
         this.viewModel.nextScene = nextScene;
         //this.viewModel.sceneRect = sceneRect;
+
+        this.events.subscribe(Event.PAUSE, function () {
+            paused = true;
+        });
+
+        this.events.subscribe(Event.RESUME, function () {
+            paused = false;
+        });
     };
 
     return MVVMScene;
