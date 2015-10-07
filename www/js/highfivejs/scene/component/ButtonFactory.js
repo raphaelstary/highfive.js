@@ -75,7 +75,9 @@ var ButtonFactory = (function (Math, Width) {
 
         var backgroundDrawable = this.stage.createRectangle(backgroundFilled).setPosition(xFn, yFn,
             [textDrawable]).setWidth(widthFn ? widthFn : getWidth).setHeight(heightFn ? heightFn :
-                getHeight).setColor(color).setLineWidth(lineWidthFn).setZIndex(zIndex).setAlpha(0.5);
+                getHeight).setColor(color).setZIndex(zIndex).setAlpha(0.5);
+        if (lineWidthFn)
+            backgroundDrawable.setLineWidth(lineWidthFn);
 
         var touchable = this.stage.createRectangle().setPosition(xFn, yFn).setColor('black');
         if (customHitWidthFn) {
