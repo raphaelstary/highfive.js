@@ -160,5 +160,9 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         });
     };
 
+    NewStageAPI.prototype.getGraphic = function (imgPathName) {
+        return this.stage.getGraphic(imgPathName);
+    };
+
     return NewStageAPI;
 })(Setter, iterateEntries, EntityServices);

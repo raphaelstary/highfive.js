@@ -57,6 +57,7 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
 
     Stage.prototype.changeZIndex = function (drawable, newZIndex) {
         this.renderer.changeZIndex(drawable, newZIndex);
+        return drawable;
     };
 
     Stage.prototype.animateFresh = function (x, y, imgPathName, numberOfFrames, loop, zIndex, alpha, rotation, scale) {
