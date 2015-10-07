@@ -60,8 +60,8 @@ var ButtonFactory = (function (Math, Width) {
 
         var isMultiSubmitOn = multiSubmit !== undefined ? multiSubmit : false;
 
-        var textDrawable = this.stage.drawText(xFn, yFn, msg, txtSizeFn, this.font, textColor, zIndex + 1, undefined,
-            undefined, textAlpha);
+        var textDrawable = this.stage.createText(msg).setPosition(xFn,
+            yFn).setSize(txtSizeFn).setFont(this.font).setColor(textColor).setZIndex(zIndex + 1).setAlpha(textAlpha);
 
         function getWidth(width) {
             var max = Width.get(10, 9)(width);
@@ -73,12 +73,26 @@ var ButtonFactory = (function (Math, Width) {
             return Math.floor(textDrawable.getHeight() * 2.5);
         }
 
-        var backgroundWrapper = this.stage.drawRectangleWithInput(xFn, yFn, widthFn ? widthFn : getWidth,
-            heightFn ? heightFn : getHeight, color, backgroundFilled, lineWidthFn, zIndex, 0.5, undefined, undefined,
-            [textDrawable], customHitWidthFn, customHitHeightFn);
+        var backgroundDrawable = this.stage.createRectangle(backgroundFilled).setPosition(xFn, yFn,
+            [textDrawable]).setWidth(widthFn ? widthFn : getWidth).setHeight(heightFn ? heightFn :
+                getHeight).setColor(color).setLineWidth(lineWidthFn).setZIndex(zIndex).setAlpha(0.5);
 
-        var touchable = backgroundWrapper.input;
-        var backgroundDrawable = backgroundWrapper.drawable;
+        var touchable = this.stage.createRectangle().setPosition(xFn, yFn).setColor('black');
+        if (customHitWidthFn) {
+            touchable.setWidth(customHitWidthFn);
+        } else if (widthFn) {
+            touchable.setWidth(widthFn);
+        } else {
+            touchable.setWidth(getWidth);
+        }
+        if (customHitHeightFn) {
+            touchable.setHeight(customHitHeightFn);
+        } else if (heightFn) {
+            touchable.setHeight(heightFn);
+        } else {
+            touchable.setHeight(getHeight);
+        }
+        touchable.hide();
 
         var returnObject = {
             text: textDrawable,
@@ -126,8 +140,9 @@ var ButtonFactory = (function (Math, Width) {
     };
 
     ButtonFactory.prototype.remove = function (button) {
-        this.stage.remove(button.text);
-        this.stage.remove(button.background);
+        button.text.remove();
+        button.background.remove();
+        button.input.remove();
         this.input.remove(button.input);
     };
 

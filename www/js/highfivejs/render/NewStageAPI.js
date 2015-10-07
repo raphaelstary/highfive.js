@@ -164,5 +164,13 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         return this.stage.getGraphic(imgPathName);
     };
 
+    NewStageAPI.prototype.playAll = function () {
+        this.stage.playAll();
+    };
+
+    NewStageAPI.prototype.pauseAll = function () {
+        this.stage.pauseAll();
+    };
+
     return NewStageAPI;
 })(Setter, iterateEntries, EntityServices);

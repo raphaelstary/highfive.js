@@ -2,8 +2,8 @@ var isHit = (function () {
     "use strict";
 
     function isHit(pointer, rect) {
-        return pointer.x > rect.x && pointer.x < rect.x + rect.width && pointer.y > rect.y &&
-            pointer.y < rect.y + rect.height;
+        return pointer.x > rect.getCornerX() && pointer.x < rect.getEndX() && pointer.y > rect.getCornerY() &&
+            pointer.y < rect.getEndY();
     }
 
     return isHit;
