@@ -39,7 +39,7 @@ var App = (function ($) {
             sceneServices.loop = $.installLoop(stages, events);
 
             var timer = new $.CallbackTimer();
-            events.subscribe($.Event.TICK_MOVE, timer.update.bind(timer));
+            events.subscribe($.Event.TICK_START, timer.update.bind(timer));
             sceneServices.timer = timer;
 
             sceneServices.sceneStorage = {};

@@ -400,7 +400,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             y: elem.y,
                             time: 0
                         };
-                        moveWithKeyFrames(drawable, currentFrame, animations.position, isLoop, isInitialDelay,
+                        moveWithKeyFrames(drawable, currentFrame, animations.position.slice(), isLoop, isInitialDelay,
                             animationTiming, customXFn, undefined, callback ? callback.register() : undefined);
                     }
                     if (animations.opacity) {
@@ -408,7 +408,8 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             opacity: elem.alpha,
                             time: 0
                         };
-                        fadeWithKeyFrames(drawable, currentOpacityFrame, animations.opacity, isLoop, isInitialDelay,
+                        fadeWithKeyFrames(drawable, currentOpacityFrame, animations.opacity.slice(), isLoop,
+                            isInitialDelay,
                             animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.scale) {
@@ -416,7 +417,8 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             scale: elem.scale,
                             time: 0
                         };
-                        scaleWithKeyFrames(drawable, currentScaleFrame, animations.scale, isLoop, isInitialDelay,
+                        scaleWithKeyFrames(drawable, currentScaleFrame, animations.scale.slice(), isLoop,
+                            isInitialDelay,
                             animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.rotation) {
@@ -424,7 +426,8 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             rotation: elem.rotation,
                             time: 0
                         };
-                        rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation, isLoop, isInitialDelay,
+                        rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation.slice(), isLoop,
+                            isInitialDelay,
                             animationTiming, callback ? callback.register() : undefined);
                     }
                 }
@@ -440,7 +443,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             y: elem.mask.y,
                             time: 0
                         };
-                        moveWithKeyFrames(mask, currentMaskFrame, animations.position, isLoop, isInitialDelay,
+                        moveWithKeyFrames(mask, currentMaskFrame, animations.position.slice(), isLoop, isInitialDelay,
                             animationTiming, customMaskXFn, undefined, callback ? callback.register() : undefined);
                     }
                     if (animations.scale) {
@@ -448,7 +451,8 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             scale: elem.mask.scale,
                             time: 0
                         };
-                        scaleWithKeyFrames(mask, currentMaskScaleFrame, animations.scale, isLoop, isInitialDelay,
+                        scaleWithKeyFrames(mask, currentMaskScaleFrame, animations.scale.slice(), isLoop,
+                            isInitialDelay,
                             animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.rotation) {
@@ -456,7 +460,8 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             rotation: elem.mask.rotation,
                             time: 0
                         };
-                        rotateWithKeyFrames(mask, currentMaskRotationFrame, animations.rotation, isLoop, isInitialDelay,
+                        rotateWithKeyFrames(mask, currentMaskRotationFrame, animations.rotation.slice(), isLoop,
+                            isInitialDelay,
                             animationTiming, callback ? callback.register() : undefined);
                     }
                 }
