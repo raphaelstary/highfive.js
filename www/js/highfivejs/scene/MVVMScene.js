@@ -778,9 +778,9 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
 
         var itIsOver = false;
 
-        function nextScene() {
+        function endScene() {
             if (itIsOver)
-                return;
+                return false;
             itIsOver = true;
 
             if (self.viewModel.preDestroy)
@@ -792,11 +792,35 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
             self.events.unsubscribe(tapListenerId);
             //self.events.unsubscribe(frameListenerId);
 
+            return true;
+        }
+
+        function nextScene() {
+            if (!endScene())
+                return;
+
             next();
+        }
+
+        function restartScene() {
+            if (!endScene())
+                return;
+
+            self.show(next);
+        }
+
+        function stopScene() {
+            if (!endScene())
+                return;
+
+            // resume callback
+            return self.show.bind(self, next);
         }
 
         // dependency injection for globals inside your view model
         this.viewModel.nextScene = nextScene;
+        this.viewModel.restartScene = restartScene;
+        this.viewModel.stopScene = stopScene;
         //this.viewModel.sceneRect = sceneRect;
 
         this.events.subscribe(Event.PAUSE, function () {
