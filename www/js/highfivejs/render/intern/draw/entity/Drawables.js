@@ -24,7 +24,7 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
 
     function createRectangle(seed, x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var rect = new Rectangle(width, height, color, filled, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + width + height + color + filled) + seed, x, y, rect, zIndex,
+        return new Drawable(generateHash(x.toString() + y + width + height + color) + seed, x, y, rect, zIndex,
             alpha, rotation, scale);
     }
 
@@ -34,7 +34,7 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
 
     function createCircle(seed, x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var circle = new Circle(radius, color, filled, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + radius + color + filled) + seed, x, y, circle, zIndex,
+        return new Drawable(generateHash(x.toString() + y + radius + color) + seed, x, y, circle, zIndex,
             alpha, rotation, scale);
     }
 
@@ -47,7 +47,7 @@ var Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circ
     function createEquilateralTriangle(seed, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation,
         scale) {
         var triangle = new EquilateralTriangle(angle, radius, color, filled, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + angle + radius + color + filled) + seed, x, y, triangle,
+        return new Drawable(generateHash(x.toString() + y + angle + radius + color) + seed, x, y, triangle,
             zIndex, alpha, rotation, scale);
     }
 

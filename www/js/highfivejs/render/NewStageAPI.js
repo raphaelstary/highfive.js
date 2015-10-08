@@ -13,30 +13,65 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         this.collisions = {};
     }
 
+    /**
+     * creates a new image drawable
+     *
+     * @param imgName
+     * @return Drawable
+     */
     NewStageAPI.prototype.createImage = function (imgName) {
         return addImageServiceMethods(addServiceMethods(this.stage.drawFresh(0, 0, imgName), this), this);
     };
 
+    /**
+     * creates a new text drawable
+     *
+     * @param text
+     * @return Drawable
+     */
     NewStageAPI.prototype.createText = function (text) {
         var drawable = this.stage.drawText(0, 0, text, 60, 'Arial', 'black');
         return addTextServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    /**
+     * creates a new rectangle drawable
+     *
+     * @param filled default false
+     * @return Drawable
+     */
     NewStageAPI.prototype.createRectangle = function (filled) {
         var drawable = this.stage.drawRectangle(0, 0, 100, 100, 'black', filled);
         return addRectangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    /**
+     * creates a new circle drawable
+     *
+     * @param filled default false
+     * @return Drawable
+     */
     NewStageAPI.prototype.createCircle = function (filled) {
         var drawable = this.stage.drawCircle(0, 0, 100, 'black', filled);
         return addCircleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    /**
+     * creates a new line drawable
+     *
+     * @return Drawable
+     */
     NewStageAPI.prototype.createLine = function () {
         var drawable = this.stage.drawLine(0, 0, 100, 'black');
         return addLineServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    /**
+     * creates a new triangle drawable
+     *
+     * @param filled default false
+     * @return Drawable
+     */
     NewStageAPI.prototype.createEqTriangle = function (filled) {
         var drawable = this.stage.drawEqTriangle(0, 0, 0, 100, 'black', filled);
         return addEqTriangleServiceMethods(addServiceMethods(drawable, this), this);
