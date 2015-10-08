@@ -366,7 +366,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                     elem.tags.some(function (tag) {
                         var foundSmth = tag.time !== undefined;
                         if (foundSmth)
-                            animationTiming = tag.time;
+                            animationTiming = parseInt(tag.time);
                         return foundSmth;
                     });
                     var isLoop = true;
@@ -409,8 +409,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             time: 0
                         };
                         fadeWithKeyFrames(drawable, currentOpacityFrame, animations.opacity.slice(), isLoop,
-                            isInitialDelay,
-                            animationTiming, callback ? callback.register() : undefined);
+                            isInitialDelay, animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.scale) {
                         var currentScaleFrame = {
@@ -418,8 +417,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             time: 0
                         };
                         scaleWithKeyFrames(drawable, currentScaleFrame, animations.scale.slice(), isLoop,
-                            isInitialDelay,
-                            animationTiming, callback ? callback.register() : undefined);
+                            isInitialDelay, animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.rotation) {
                         var currentRotationFrame = {
@@ -427,8 +425,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             time: 0
                         };
                         rotateWithKeyFrames(drawable, currentRotationFrame, animations.rotation.slice(), isLoop,
-                            isInitialDelay,
-                            animationTiming, callback ? callback.register() : undefined);
+                            isInitialDelay, animationTiming, callback ? callback.register() : undefined);
                     }
                 }
 
@@ -452,8 +449,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             time: 0
                         };
                         scaleWithKeyFrames(mask, currentMaskScaleFrame, animations.scale.slice(), isLoop,
-                            isInitialDelay,
-                            animationTiming, callback ? callback.register() : undefined);
+                            isInitialDelay, animationTiming, callback ? callback.register() : undefined);
                     }
                     if (animations.rotation) {
                         var currentMaskRotationFrame = {
@@ -461,8 +457,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             time: 0
                         };
                         rotateWithKeyFrames(mask, currentMaskRotationFrame, animations.rotation.slice(), isLoop,
-                            isInitialDelay,
-                            animationTiming, callback ? callback.register() : undefined);
+                            isInitialDelay, animationTiming, callback ? callback.register() : undefined);
                     }
                 }
 
@@ -506,8 +501,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             } else if (loop) {
 
                                 if (timing) {
-                                    var duration = (timing - frame.time) * 2 - 1;
-                                    self.timer.doLater(function () {
+                                    var restart = function () {
                                         if (itIsOver)
                                             return;
                                         if (initialDelay) {
@@ -519,7 +513,14 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                                             fadeWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay,
                                                 timing);
                                         }
-                                    }, duration);
+                                    };
+
+                                    var duration = (timing - frame.time) * 2 - 1;
+                                    //if (duration < 1) {
+                                    //    restart();
+                                    //} else {
+                                    self.timer.doLater(restart, duration);
+                                    //}
                                 } else {
                                     if (initialDelay) {
                                         drawable.setAlpha(currentFrame.opacity);
@@ -577,8 +578,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                                 move(frames.shift(), frame);
                             } else if (loop) {
                                 if (timing) {
-                                    var duration = (timing - frame.time) * 2 - 2;
-                                    self.timer.doLater(function () {
+                                    var restart = function () {
                                         if (itIsOver)
                                             return;
                                         if (initialDelay) {
@@ -590,7 +590,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                                             rotateWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay,
                                                 timing);
                                         }
-                                    }, duration);
+                                    };
+                                    var duration = (timing - frame.time) * 2 - 2;
+                                    if (duration < 1) {
+                                        restart();
+                                    } else {
+                                        self.timer.doLater(restart, duration);
+                                    }
                                 } else {
                                     if (initialDelay) {
                                         drawable.setRotation(currentFrame.rotation);
@@ -649,8 +655,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             } else if (loop) {
 
                                 if (timing) {
-                                    var duration = (timing - frame.time) * 2 - 2;
-                                    self.timer.doLater(function () {
+                                    var restart = function () {
                                         if (itIsOver)
                                             return;
                                         if (initialDelay) {
@@ -663,7 +668,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                                                 timing);
                                         }
 
-                                    }, duration);
+                                    };
+                                    var duration = (timing - frame.time) * 2 - 2;
+                                    if (duration < 1) {
+                                        restart();
+                                    } else {
+                                        self.timer.doLater(restart, duration);
+                                    }
                                 } else {
                                     if (initialDelay) {
                                         drawable.setScale(currentFrame.scale);
@@ -727,8 +738,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             } else if (loop) {
 
                                 if (timing) {
-                                    var duration = (timing - frame.time) * 2 - 2;
-                                    self.timer.doLater(function () {
+                                    var restart = function () {
 
                                         if (itIsOver)
                                             return;
@@ -748,7 +758,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                                             moveWithKeyFrames(drawable, initialFrame, framesCopy, loop, initialDelay,
                                                 timing, customXFn, customYFn);
                                         }
-                                    }, duration);
+                                    };
+                                    var duration = (timing - frame.time) * 2 - 2;
+                                    if (duration < 1) {
+                                        restart();
+                                    } else {
+                                        self.timer.doLater(restart, duration);
+                                    }
                                 } else {
                                     var x;
                                     var y;
