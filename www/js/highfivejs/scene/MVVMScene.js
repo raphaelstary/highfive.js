@@ -4,7 +4,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
     function MVVMScene(model, view, viewModel, parentSceneRect, anchorXFn, anchorYFn) {
         this.services = model;
 
-        this.stage = model.newStage;
+        this.stage = model.stage;
         this.sceneStorage = model.sceneStorage;
         this.messages = model.messages;
         this.timer = model.timer;
