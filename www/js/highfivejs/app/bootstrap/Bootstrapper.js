@@ -68,7 +68,7 @@ var Bootstrapper = (function ($) {
             device: device,
             scaledScreen: screen.scaledScreen
         };
-        return new $.App(globalServices, myResources, getLegacyStage, getStage);
+        return new $.App(globalServices, myResources, getStage, getLegacyStage);
     }
 
     function useAtlasesRendering() {

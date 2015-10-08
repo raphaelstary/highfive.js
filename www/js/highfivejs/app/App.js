@@ -1,16 +1,15 @@
 var App = (function ($) {
     "use strict";
 
-    function App(services, myResources, getLegacyStage, getStage) {
+    function App(services, myResources, getStage, getLegacyStage) {
         this.services = services;
         this.resources = myResources;
-        this.getStage = getLegacyStage;
-        this.getNewStage = getStage;
+        this.getLegacyStage = getLegacyStage;
+        this.getStage = getStage;
     }
 
     App.prototype.start = function () {
         // show loading screen, load binary resources
-
         var resourceLoader = new $.ResourceLoader();
         var initialScreen = new $.SimpleLoadingScreen(this.services.screen.getContext('2d'));
 
@@ -27,14 +26,18 @@ var App = (function ($) {
 
             var sceneServices = self.resources.process();
 
-            sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.device,
-                events);
-            var stages = [sceneServices.stage];
-            if (self.getNewStage) {
-                sceneServices.newStage = self.getNewStage(self.services.screen, sceneServices.gfxCache,
+            var stages = [];
+            if (self.getLegacyStage) {
+                sceneServices.legacyStage = self.getLegacyStage(self.services.screen, sceneServices.gfxCache,
                     self.services.device, events);
-                if (sceneServices.newStage)
-                    stages.unshift(sceneServices.newStage);
+                if (sceneServices.legacyStage)
+                    stages.push(sceneServices.legacyStage);
+            }
+            if (self.getStage) {
+                sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.device,
+                    events);
+                if (sceneServices.stage)
+                    stages.unshift(sceneServices.stage);
             }
             sceneServices.loop = $.installLoop(stages, events);
 
