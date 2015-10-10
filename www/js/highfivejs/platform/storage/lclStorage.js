@@ -15,6 +15,9 @@ var lclStorage = (function (window) {
             },
             clear: function () {
                 this.dict = {};
+            },
+            removeItem: function (id) {
+                delete this.dict[id];
             }
         }
     }
