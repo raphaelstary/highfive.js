@@ -266,6 +266,10 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             y).setWidth(xFn(elem.width)).setHeight(yFn(elem.height)).setColor('#fff');
                         drawable.hide();
 
+                        if (elem.viewId) {
+                            this.viewModel[elem.viewId] = drawable;
+                        }
+
                         drawables.push(drawable);
                         var tap = {
                             rectangle: drawable
@@ -322,6 +326,11 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                     drawable = this.stage.createRectangle().setPosition(xFn(elem.input.x),
                         yFn(elem.input.y)).setWidth(xFn(elem.input.width)).setHeight(yFn(elem.input.height)).setColor('#fff');
                     drawable.hide();
+
+                    if (elem.input.viewId) {
+                        this.viewModel[elem.input.viewId] = drawable;
+                    }
+
                     taps.push({
                         rectangle: drawable,
                         up: hasBtnUp ? this.viewModel[btnUpFnName].bind(this.viewModel) : undefined,
@@ -339,6 +348,10 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                         drawable.setZIndex(elem.zIndex + 1);
                     drawables.push(drawable);
 
+                    if (elem.text.viewId) {
+                        this.viewModel[elem.text.viewId] = drawable;
+                    }
+
                     if (btnTxtKey) {
                         self.messages.add(drawable, drawable.data, self.viewName, btnTxtKey);
                     }
@@ -351,12 +364,20 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                             drawable.setZIndex(elem.zIndex);
                         drawables.push(drawable);
 
+                        if (elem.background.viewId) {
+                            this.viewModel[elem.background.viewId] = drawable;
+                        }
+
                     } else if (elem.background.type == 'rectangle') {
                         drawable = this.stage.createRectangle(elem.background.filled).setPosition(xFn(elem.background.x),
                             yFn(elem.background.y)).setWidth(xFn(elem.background.width)).setHeight(yFn(elem.background.height)).setColor(elem.background.color).setAlpha(elem.background.alpha).setRotation(elem.background.rotation).setScale(elem.background.scale);
                         if (elem.zIndex != undefined && elem.zIndex != 3)
                             drawable.setZIndex(elem.zIndex);
                         drawables.push(drawable);
+
+                        if (elem.background.viewId) {
+                            this.viewModel[elem.background.viewId] = drawable;
+                        }
                     }
 
                 }
