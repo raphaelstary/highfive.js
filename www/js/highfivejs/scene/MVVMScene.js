@@ -1,7 +1,7 @@
 var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
     "use strict";
 
-    function MVVMScene(model, view, viewModel, parentSceneRect, anchorXFn, anchorYFn) {
+    function MVVMScene(model, view, viewModel, viewName, parentSceneRect, anchorXFn, anchorYFn) {
         this.services = model;
 
         this.stage = model.stage;
@@ -15,6 +15,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
 
         this.view = view;
         this.viewModel = viewModel;
+        this.viewName = viewName;
 
         // sub scene
         this.parentSceneRect = parentSceneRect;
@@ -199,10 +200,17 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
 
                 } else if (elem.type == 'text') {
 
-                    drawable = this.stage.createText(elem.msg).setPosition(x,
+                    var txtKey = getTagValue('txt')(elem.tags);
+                    var msg = txtKey ? self.messages.get(self.viewName, txtKey) : elem.msg;
+
+                    drawable = this.stage.createText(msg).setPosition(x,
                         y).setSize(txtSize(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
                     if (elem.zIndex != undefined && elem.zIndex != 3)
                         drawable.setZIndex(elem.zIndex);
+
+                    if (txtKey) {
+                        self.messages.add(drawable, drawable.data, self.viewName, txtKey);
+                    }
 
                     drawables.push(drawable);
                     if (elem.viewId) {
@@ -322,11 +330,18 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                     });
                     drawables.push(drawable);
 
-                    drawable = this.stage.createText(elem.text.msg).setPosition(xFn(elem.text.x),
+                    var btnTxtKey = getTagValue('txt')(elem.text.tags);
+                    var btnMsg = btnTxtKey ? self.messages.get(self.viewName, btnTxtKey) : elem.text.msg;
+
+                    drawable = this.stage.createText(btnMsg).setPosition(xFn(elem.text.x),
                         yFn(elem.text.y)).setSize(txtSize(elem.text.size)).setFont(elem.text.font).setColor(elem.text.color).setRotation(elem.text.rotation).setAlpha(elem.text.alpha).setScale(elem.text.scale);
                     if (elem.zIndex + 1 != 3)
                         drawable.setZIndex(elem.zIndex + 1);
                     drawables.push(drawable);
+
+                    if (btnTxtKey) {
+                        self.messages.add(drawable, drawable.data, self.viewName, btnTxtKey);
+                    }
 
                     if (elem.background.type == 'image') {
                         var bgName = elem.background.filename.substring(0, elem.background.filename.lastIndexOf('.'));
