@@ -10,7 +10,9 @@
 </head>
 <body>
 
-<script src="js/highfivejs/lib/howler.js"></script>
+<script src="js/mygame/core/installNamespace.js"></script>
+
+<script src="js/highfivejs/installNamespace.js"></script>
 
 <script src="js/highfivejs/utils/iterateEntries.js"></script>
 <script src="js/highfivejs/utils/iterateSomeEntries.js"></script>
@@ -22,8 +24,6 @@
 <script src="js/highfivejs/platform/Stats.js"></script>
 <script src="js/highfivejs/screen/getDevicePixelRatio.js"></script>
 <script src="js/highfivejs/app/Event.js"></script>
-
-<script src="js/highfivejs/net/resolveAtlasPaths.js"></script>
 
 <script src="js/highfivejs/audio/SoundFilesManager.js"></script>
 <script src="js/highfivejs/audio/SoundSpriteManager.js"></script>
@@ -92,6 +92,8 @@
 <script src="js/highfivejs/render/intern/draw/entity/ImageWrapper.js"></script>
 <script src="js/highfivejs/render/intern/draw/entity/TextWrapper.js"></script>
 <script src="js/highfivejs/render/intern/draw/entity/Rectangle.js"></script>
+<script src="js/highfivejs/render/intern/draw/entity/Quadrilateral.js"></script>
+<script src="js/highfivejs/render/intern/draw/entity/ABLine.js"></script>
 <script src="js/highfivejs/render/intern/draw/entity/Circle.js"></script>
 <script src="js/highfivejs/render/intern/draw/entity/EquilateralTriangle.js"></script>
 <script src="js/highfivejs/render/intern/draw/entity/DrawableLine.js"></script>
@@ -120,6 +122,8 @@
 <script src="js/highfivejs/render/intern/motion/Motions.js"></script>
 
 <script src="js/highfivejs/render/intern/draw/wrapText.js"></script>
+<script src="js/highfivejs/render/intern/draw/renderQuadrilateral.js"></script>
+<script src="js/highfivejs/render/intern/draw/renderABLine.js"></script>
 <script src="js/highfivejs/render/intern/draw/renderPolygon.js"></script>
 <script src="js/highfivejs/render/intern/draw/renderEqTriangle.js"></script>
 <script src="js/highfivejs/render/intern/draw/renderImage.js"></script>
@@ -154,24 +158,31 @@
 <script src="js/highfivejs/analytics/bootstrap/installHolmes.js"></script>
 
 <script src="js/highfivejs/analyticsutils/sendSystemEvent.js"></script>
+<script src="js/highfivejs/game/Grid.js"></script>
+<script src="js/highfivejs/game/GridHelper.js"></script>
+<script src="js/highfivejs/game/GridViewHelper.js"></script>
+<script src="js/highfivejs/utils/calcCantorPairing.js"></script>
+<script src="js/highfivejs/utils/checkAndSet30fps.js"></script>
+<script src="js/highfivejs/utils/ValueChecker.js"></script>
+<script src="js/highfivejs/net/ResourceLoader.js"></script>
 
 <!--my scenes start-->
 
 <!--my scenes end-->
 
-<script src="js/myscenes/installMyScenes.js"></script>
 <script src="js/highfivejs/app/GameLoop.js"></script>
 <script src="js/highfivejs/app/bootstrap/installLoop.js"></script>
 <script src="js/highfivejs/render/bootstrap/StageFactory.js"></script>
 <script src="js/highfivejs/render/bootstrap/AtlasResourceHelper.js"></script>
 <script src="js/highfivejs/render/bootstrap/ImageResourceHelper.js"></script>
-<script src="js/MyGameResources.js"></script>
+
+<script src="js/mygame/core/MyGameResources.js"></script>
+
 <script src="js/highfivejs/screen/ResizeHandler.js"></script>
 <script src="js/highfivejs/screen/SimpleLoadingScreen.js"></script>
 <script src="js/highfivejs/screen/OrientationHandler.js"></script>
 <script src="js/highfivejs/screen/VisibilityHandler.js"></script>
 <script src="js/highfivejs/screen/FullScreenHandler.js"></script>
-<script src="js/highfivejs/net/ResourceLoader.js"></script>
 <script src="js/highfivejs/platform/bootstrap/installCanvas.js"></script>
 <script src="js/highfivejs/screen/bootstrap/installResize.js"></script>
 <script src="js/highfivejs/screen/bootstrap/installOrientation.js"></script>
@@ -183,6 +194,7 @@
 <script src="js/highfivejs/app/EventBus.js"></script>
 <script src="js/highfivejs/app/App.js"></script>
 <script src="js/highfivejs/app/bootstrap/Bootstrapper.js"></script>
+
 <script src="js/main.js"></script>
 </body>
 </html>
