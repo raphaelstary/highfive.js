@@ -1,4 +1,4 @@
-var installMyScenes = (function (SceneManager) {
+G.installMyScenes = (function (SceneManager) {
     "use strict";
 
     function installMyScenes(sceneServices) {
@@ -10,4 +10,4 @@ var installMyScenes = (function (SceneManager) {
     }
 
     return installMyScenes;
-})(SceneManager);
+})(H5.SceneManager);
