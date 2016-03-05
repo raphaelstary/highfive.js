@@ -1,4 +1,4 @@
-var GamePadHandler = (function (GamePad, navigator, Event) {
+H5.GamePadHandler = (function (GamePad, navigator, Event) {
     "use strict";
 
     function GamePadHandler(events) {
@@ -44,4 +44,4 @@ var GamePadHandler = (function (GamePad, navigator, Event) {
 
     return GamePadHandler;
 
-})(GamePad, navigator, Event);
+})(H5.GamePad, navigator, H5.Event);

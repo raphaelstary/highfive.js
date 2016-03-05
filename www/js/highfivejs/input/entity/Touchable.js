@@ -1,4 +1,4 @@
-var Touchable = (function () {
+H5.Touchable = (function () {
     "use strict";
 
     function Touchable(id, x, y, width, height) {

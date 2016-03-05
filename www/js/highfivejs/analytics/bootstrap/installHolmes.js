@@ -1,4 +1,4 @@
-var installHolmes = (function (Event, HolmesConnector, window) {
+H5.installHolmes = (function (Event, HolmesConnector, window) {
     "use strict";
 
     function installHolmes(url, tenantCode, appKey, events) {
@@ -27,4 +27,4 @@ var installHolmes = (function (Event, HolmesConnector, window) {
     }
 
     return installHolmes;
-})(Event, HolmesConnector, window);
+})(H5.Event, H5.HolmesConnector, window);

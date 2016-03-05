@@ -1,4 +1,4 @@
-var HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage) {
+H5.HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage) {
     "use strict";
 
     function HolmesConnector(url, tenantCode, appKeyCode) {
@@ -53,4 +53,4 @@ var HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage)
     };
 
     return HolmesConnector;
-})(loadString, JSON, XMLHttpRequest, lclStorage);
+})(H5.loadString, JSON, XMLHttpRequest, H5.lclStorage);

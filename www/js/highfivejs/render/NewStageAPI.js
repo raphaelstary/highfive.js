@@ -1,4 +1,4 @@
-var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
+H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     "use strict";
 
     function NewStageAPI(stage, gfx, resizer, width, height, timer) {
@@ -45,6 +45,16 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         return addRectangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    NewStageAPI.prototype.createQuadrilateral = function (filled) {
+        var drawable = this.stage.drawQuadrilateral(0, 0, 0, 100, 100, 100, 100, 0, 'black', filled);
+        return addQuadrilateralServiceMethods(drawable, this);
+    };
+
+    NewStageAPI.prototype.createABLine = function () {
+        var drawable = this.stage.drawABLine(0, 0, 0, 100, 'black');
+        return addABLineServiceMethods(drawable, this);
+    };
+
     /**
      * creates a new circle drawable
      *
@@ -87,10 +97,11 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.setMask = Setter.setMask.bind(undefined, drawable);
 
         drawable.moveTo = EntityServices.moveTo.bind(undefined, self.stage, self.resizer, self.screen, drawable);
-        drawable.show = EntityServices.show.bind(undefined, self.stage, drawable);
+        drawable.moveFrom = EntityServices.moveFrom.bind(undefined, self.stage, self.resizer, self.screen, drawable);
+        drawable.addToStage = EntityServices.show.bind(undefined, self.stage, drawable);
         drawable.hide = EntityServices.hide.bind(undefined, self.stage, drawable);
         drawable.remove = EntityServices.remove.bind(EntityServices, self.stage, self.resizer, drawable);
-        drawable.unmask = EntityServices.unmask.bind(undefined, self.stage, self.resizer, drawable);
+        drawable.unmask = EntityServices.unmask.bind(EntityServices, self.stage, self.resizer, drawable);
         drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
         drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
         drawable.setCallback = function (callback) {
@@ -137,6 +148,83 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
             self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
+
+        return drawable;
+    }
+
+    function addQuadrilateralServiceMethods(drawable, self) {
+        // base stuff
+        drawable.setAlpha = Setter.setAlpha.bind(undefined, drawable);
+        drawable.setRotation = Setter.setRotation.bind(undefined, drawable);
+        drawable.setScale = Setter.setScale.bind(undefined, drawable);
+        drawable.setZIndex = self.stage.changeZIndex.bind(self.stage, drawable);
+        drawable.setMask = Setter.setMask.bind(undefined, drawable);
+
+        drawable.addToStage = EntityServices.show.bind(undefined, self.stage, drawable);
+        drawable.removeFromStage = EntityServices.hide.bind(undefined, self.stage, drawable);
+        drawable.remove = EntityServices.remove.bind(EntityServices, self.stage, self.resizer, drawable);
+        drawable.unmask = EntityServices.unmask.bind(EntityServices, self.stage, self.resizer, drawable);
+        drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
+        drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
+
+        drawable.rotateTo = EntityServices.rotateTo.bind(undefined, self.stage, drawable);
+        drawable.rotationPattern = EntityServices.rotationPattern.bind(undefined, self.stage, drawable);
+        drawable.scaleTo = EntityServices.scaleTo.bind(undefined, self.stage, drawable);
+        drawable.scalePattern = EntityServices.scalePattern.bind(undefined, self.stage, drawable);
+        drawable.opacityTo = EntityServices.opacityTo.bind(undefined, self.stage, drawable);
+        drawable.opacityPattern = EntityServices.opacityPattern.bind(undefined, self.stage, drawable);
+
+        // quad stuff
+        drawable.setColor = Setter.setColor.bind(undefined, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
+        drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
+        //drawable.setQuadPosition = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position'), self.screen, drawable);
+        drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'), self.screen, drawable, 'a');
+        drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'), self.screen, drawable, 'b');
+        drawable.setC = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_c'), self.screen, drawable, 'c');
+        drawable.setD = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_d'), self.screen, drawable, 'd');
+
+        drawable.moveATo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'a');
+        drawable.moveBTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'b');
+        drawable.moveCTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'c');
+        drawable.moveDTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'd');
+
+        return drawable;
+    }
+
+    function addABLineServiceMethods(drawable, self) {
+        // base stuff
+        drawable.setAlpha = Setter.setAlpha.bind(undefined, drawable);
+        drawable.setRotation = Setter.setRotation.bind(undefined, drawable);
+        drawable.setScale = Setter.setScale.bind(undefined, drawable);
+        drawable.setZIndex = self.stage.changeZIndex.bind(self.stage, drawable);
+        drawable.setMask = Setter.setMask.bind(undefined, drawable);
+
+        drawable.addToStage = EntityServices.show.bind(undefined, self.stage, drawable);
+        drawable.removeFromStage = EntityServices.hide.bind(undefined, self.stage, drawable);
+        drawable.remove = EntityServices.remove.bind(EntityServices, self.stage, self.resizer, drawable);
+        drawable.unmask = EntityServices.unmask.bind(EntityServices, self.stage, self.resizer, drawable);
+        drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
+        drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
+
+        drawable.rotateTo = EntityServices.rotateTo.bind(undefined, self.stage, drawable);
+        drawable.rotationPattern = EntityServices.rotationPattern.bind(undefined, self.stage, drawable);
+        drawable.scaleTo = EntityServices.scaleTo.bind(undefined, self.stage, drawable);
+        drawable.scalePattern = EntityServices.scalePattern.bind(undefined, self.stage, drawable);
+        drawable.opacityTo = EntityServices.opacityTo.bind(undefined, self.stage, drawable);
+        drawable.opacityPattern = EntityServices.opacityPattern.bind(undefined, self.stage, drawable);
+
+        // quad stuff
+        drawable.setColor = Setter.setColor.bind(undefined, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
+
+        drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'), self.screen, drawable, 'a');
+        drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'), self.screen, drawable, 'b');
+
+        drawable.moveATo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'a');
+        drawable.moveBTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'b');
 
         return drawable;
     }
@@ -208,4 +296,4 @@ var NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     };
 
     return NewStageAPI;
-})(Setter, iterateEntries, EntityServices);
+})(H5.Setter, H5.iterateEntries, H5.EntityServices);

@@ -1,4 +1,4 @@
-var Key = {
+H5.Key = {
     UP: 38,
     DOWN: 40,
     LEFT: 37,

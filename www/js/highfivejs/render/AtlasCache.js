@@ -1,4 +1,4 @@
-var AtlasCache = (function (SubImage, Math, iterateEntries) {
+H5.AtlasCache = (function (SubImage, Math, iterateEntries) {
     "use strict";
 
     function AtlasCache(width, height, defaultScreenHeight) {
@@ -48,4 +48,4 @@ var AtlasCache = (function (SubImage, Math, iterateEntries) {
     };
 
     return AtlasCache;
-})(SubImage, Math, iterateEntries);
+})(H5.SubImage, Math, H5.iterateEntries);

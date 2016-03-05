@@ -1,4 +1,4 @@
-var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
+H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON) {
     "use strict";
 
     var ResourceType = {
@@ -11,9 +11,15 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
     function ResourceLoader() {
         this.resources = [];
         this.resourcesLoaded = 0;
+        this.__counter = 0;
     }
 
+    ResourceLoader.prototype.getCount = function () {
+        return this.__counter;
+    };
+
     ResourceLoader.prototype.addImage = function (imgSrc) {
+        this.__counter++;
         var img = new Image();
         this.resources.push({
             type: ResourceType.IMAGE,
@@ -24,12 +30,14 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
         return img;
     };
 
-    ResourceLoader.prototype.addJSON = function (jsonSrc) {
+    ResourceLoader.prototype.addJSON = function (jsonSrc, payload) {
+        this.__counter++;
         var jsonObject = {};
         this.resources.push({
             type: ResourceType.JSON,
             file: jsonObject,
-            src: jsonSrc
+            src: jsonSrc,
+            payload: payload
         });
 
         return jsonObject;
@@ -39,6 +47,7 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
         if (!URL)
             return;
 
+        this.__counter++;
         var font = {};
         this.resources.push({
             type: ResourceType.FONT,
@@ -119,4 +128,4 @@ var ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL) {
     };
 
     return ResourceLoader;
-})(Blob, window.WebKitBlobBuilder, Image, Object, window.URL || window.webkitURL);
+})(Blob, window.WebKitBlobBuilder, Image, Object, window.URL || window.webkitURL, JSON);

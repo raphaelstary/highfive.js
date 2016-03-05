@@ -1,4 +1,4 @@
-var WiiUGamePad = (function () {
+H5.WiiUGamePad = (function () {
     "use strict";
 
     function WiiUGamePad(gamepad, state) {

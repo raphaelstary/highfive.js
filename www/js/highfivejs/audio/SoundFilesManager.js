@@ -1,4 +1,4 @@
-var SoundFilesManager = (function (Howl) {
+H5.SoundFilesManager = (function (Howl) {
     "use strict";
 
     function SoundFilesManager() {
@@ -28,4 +28,4 @@ var SoundFilesManager = (function (Howl) {
     };
 
     return SoundFilesManager;
-})(Howl);
+})(function(){});

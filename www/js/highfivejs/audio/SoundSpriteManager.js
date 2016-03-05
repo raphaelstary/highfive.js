@@ -1,4 +1,4 @@
-var SoundSpriteManager = (function (Howl) {
+H5.SoundSpriteManager = (function (Howl) {
     "use strict";
 
     function SoundSpriteManager() {
@@ -14,4 +14,4 @@ var SoundSpriteManager = (function (Howl) {
     };
 
     return SoundSpriteManager;
-})(Howl);
+})(function(){});

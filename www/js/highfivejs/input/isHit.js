@@ -1,4 +1,4 @@
-var isHit = (function () {
+H5.isHit = (function () {
     "use strict";
 
     function isHit(pointer, rect) {

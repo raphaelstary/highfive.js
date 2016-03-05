@@ -1,4 +1,4 @@
-var loadObject = (function (localStorage, JSON) {
+H5.loadObject = (function (localStorage, JSON) {
     "use strict";
 
     function loadObject(key) {
@@ -10,4 +10,4 @@ var loadObject = (function (localStorage, JSON) {
     }
 
     return loadObject;
-})(lclStorage, JSON);
+})(H5.lclStorage, JSON);

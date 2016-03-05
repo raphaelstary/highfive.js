@@ -1,4 +1,4 @@
-var loadInteger = (function (localStorage, parseInt) {
+H5.loadInteger = (function (localStorage, parseInt) {
     "use strict";
 
     function loadInteger(key) {
@@ -9,4 +9,4 @@ var loadInteger = (function (localStorage, parseInt) {
     }
 
     return loadInteger;
-})(lclStorage, parseInt);
+})(H5.lclStorage, parseInt);

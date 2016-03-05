@@ -1,4 +1,4 @@
-var sendSystemEvent = (function (Event, location, appName, appVersion) {
+H5.sendSystemEvent = (function (Event, location, appName, appVersion) {
     "use strict";
 
     function sendSystemEvent(device, messages, events) {
@@ -25,4 +25,4 @@ var sendSystemEvent = (function (Event, location, appName, appVersion) {
     }
 
     return sendSystemEvent;
-})(Event, window.location, window.appName, window.appVersion);
+})(H5.Event, window.location, window.appName, window.appVersion);

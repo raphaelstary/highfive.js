@@ -1,4 +1,4 @@
-var UniversalTranslator = (function (defaultLanguage, Repository) {
+H5.UniversalTranslator = (function (defaultLanguage, Repository) {
     "use strict";
 
     function UniversalTranslator(locales) {
@@ -47,4 +47,4 @@ var UniversalTranslator = (function (defaultLanguage, Repository) {
     };
 
     return UniversalTranslator;
-})(window.navigator.language || window.navigator.userLanguage, Repository);
+})(window.navigator.language || window.navigator.userLanguage, H5.Repository);

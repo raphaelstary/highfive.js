@@ -1,4 +1,4 @@
-var PointerHandler = (function (Event, Object, Math) {
+H5.PointerHandler = (function (Event, Object, Math) {
     "use strict";
 
     function PointerHandler(events, device) {
@@ -43,8 +43,8 @@ var PointerHandler = (function (Event, Object, Math) {
         event.preventDefault();
         var current = this.activePointers[event.pointerId];
         if (current) {
-            current.x = event.x;
-            current.y = event.y;
+            current.x = event.clientX;
+            current.y = event.clientY;
             current.changed = true;
             current.type = Pointer.UP;
             this.changed = true;
@@ -84,8 +84,8 @@ var PointerHandler = (function (Event, Object, Math) {
         event.preventDefault();
         var current = this.activePointers['mouse'];
         if (current) {
-            current.x = event.x;
-            current.y = event.y;
+            current.x = event.clientX;
+            current.y = event.clientY;
             current.changed = true;
             current.type = Pointer.UP;
             this.changed = true;
@@ -174,4 +174,4 @@ var PointerHandler = (function (Event, Object, Math) {
     };
 
     return PointerHandler;
-})(Event, Object, Math);
+})(H5.Event, Object, Math);

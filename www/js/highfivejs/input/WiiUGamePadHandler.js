@@ -1,4 +1,4 @@
-var WiiUGamePadHandler = (function () {
+H5.WiiUGamePadHandler = (function () {
     "use strict";
 
     function WiiUGamePadHandler(events, gamePad, remotes) {

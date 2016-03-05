@@ -1,4 +1,4 @@
-var OuyaGamePad = (function () {
+H5.OuyaGamePad = (function () {
     "use strict";
 
     function OuyaGamePad(index) {

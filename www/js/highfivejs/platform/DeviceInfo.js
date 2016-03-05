@@ -1,9 +1,13 @@
-var DeviceInfo = (function (window, Math) {
+H5.DeviceInfo = (function (window, Math) {
     "use strict";
 
     function DeviceInfo(userAgent, width, height, devicePixelRatio, screenWidth, screenHeight) {
         this.userAgent = userAgent;
         this.isFirefox = /firefox/i.test(userAgent);
+        this.isIE10 = /MSIE 10/i.test(userAgent);
+        this.isWin7 = /Windows NT 6.1/i.test(userAgent);
+        this.isIE = /trident/i.test(userAgent);
+        this.isEdge = /edge/i.test(userAgent);
         this.isWiiU = 'wiiu' in window;
         this.isMobile = /mobile/i.test(userAgent);
         this.width = Math.floor(width * devicePixelRatio);

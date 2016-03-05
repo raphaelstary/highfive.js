@@ -1,4 +1,4 @@
-var installGamePad = (function (window, GamePadHandler, Event, WiiUGamePadHandler, WiiUGamePad, WiiURemote, isOuya,
+H5.installGamePad = (function (window, GamePadHandler, Event, WiiUGamePadHandler, WiiUGamePad, WiiURemote, isOuya,
     OuyaGamePadHandler) {
     "use strict";
 
@@ -27,4 +27,5 @@ var installGamePad = (function (window, GamePadHandler, Event, WiiUGamePadHandle
     }
 
     return installGamePad;
-})(window, GamePadHandler, Event, WiiUGamePadHandler, WiiUGamePad, WiiURemote, false, OuyaGamePadHandler);
+})(window, H5.GamePadHandler, H5.Event, H5.WiiUGamePadHandler, H5.WiiUGamePad, H5.WiiURemote, false,
+    H5.OuyaGamePadHandler);

@@ -1,4 +1,4 @@
-var installLoop = (function (GameLoop, Event) {
+H5.installLoop = (function (GameLoop, Event) {
     "use strict";
 
     function installLoop(stages, events) {
@@ -20,4 +20,4 @@ var installLoop = (function (GameLoop, Event) {
     }
 
     return installLoop;
-})(GameLoop, Event);
+})(H5.GameLoop, H5.Event);

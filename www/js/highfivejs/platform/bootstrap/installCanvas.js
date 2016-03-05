@@ -1,4 +1,4 @@
-var installCanvas = (function (document, Event, Math) {
+H5.installCanvas = (function (document, Event, Math) {
     "use strict";
 
     function installCanvas(events, device, width, height, pixelRatio, pixelWidth, pixelHeight) {
@@ -62,4 +62,4 @@ var installCanvas = (function (document, Event, Math) {
     }
 
     return installCanvas;
-})(window.document, Event, Math);
+})(window.document, H5.Event, Math);

@@ -1,4 +1,4 @@
-var TapManager = (function (isHit, iterateSomeEntries, iterateEntries) {
+H5.TapManager = (function (isHit, iterateSomeEntries, iterateEntries) {
     "use strict";
 
     function TapManager() {
@@ -55,4 +55,4 @@ var TapManager = (function (isHit, iterateSomeEntries, iterateEntries) {
     };
 
     return TapManager;
-})(isHit, iterateSomeEntries, iterateEntries);
+})(H5.isHit, H5.iterateSomeEntries, H5.iterateEntries);

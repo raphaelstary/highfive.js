@@ -1,4 +1,4 @@
-var loadBoolean = (function (localStorage) {
+H5.loadBoolean = (function (localStorage) {
     "use strict";
 
     function loadBoolean(key) {
@@ -6,4 +6,4 @@ var loadBoolean = (function (localStorage) {
     }
 
     return loadBoolean;
-})(lclStorage);
+})(H5.lclStorage);

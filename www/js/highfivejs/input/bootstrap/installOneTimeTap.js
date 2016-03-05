@@ -1,4 +1,4 @@
-var installOneTimeTap = (function (window) {
+H5.installOneTimeTap = (function (window) {
     "use strict";
 
     function installOneTimeTap(element, callback) {

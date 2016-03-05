@@ -1,4 +1,4 @@
-var requestAnimFrame = (function (window) {
+H5.requestAnimFrame = (function (window) {
     "use strict";
 
     return (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame ||

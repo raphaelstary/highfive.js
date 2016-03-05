@@ -1,4 +1,4 @@
-var EventBus = (function (iterateSomeEntries, Object) {
+H5.EventBus = (function (iterateSomeEntries, Object) {
     "use strict";
 
     function EventBus() {
@@ -69,4 +69,4 @@ var EventBus = (function (iterateSomeEntries, Object) {
     };
 
     return EventBus;
-})(iterateSomeEntries, Object);
+})(H5.iterateSomeEntries, Object);

@@ -1,4 +1,4 @@
-var WiiURemote = (function () {
+H5.WiiURemote = (function () {
     "use strict";
 
     function WiiURemote(index, remote) {

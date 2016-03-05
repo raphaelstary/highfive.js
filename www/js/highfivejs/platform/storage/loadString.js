@@ -1,4 +1,4 @@
-var loadString = (function (localStorage) {
+H5.loadString = (function (localStorage) {
     "use strict";
 
     function loadString(key) {
@@ -9,4 +9,4 @@ var loadString = (function (localStorage) {
     }
 
     return loadString;
-})(lclStorage);
+})(H5.lclStorage);

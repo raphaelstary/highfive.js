@@ -1,14 +1,25 @@
-var installKeyBoard = (function (window, KeyHandler, Event) {
+H5.installKeyBoard = (function (window, KeyHandler, Event) {
     "use strict";
 
     function installKeyBoard(events) {
         var keyHandler = new KeyHandler(events);
-        window.addEventListener('keydown', keyHandler.keyDown.bind(keyHandler));
-        window.addEventListener('keyup', keyHandler.keyUp.bind(keyHandler));
+        function keyDown(event) {
+            keyHandler.keyDown(event);
+        }
+        function keyUp(event) {
+            keyHandler.keyUp(event);
+        }
+        window.addEventListener('keydown', keyDown);
+        window.addEventListener('keyup', keyUp);
         events.subscribe(Event.TICK_INPUT, keyHandler.update.bind(keyHandler));
 
-        return keyHandler;
+        function removeEventListener() {
+            window.removeEventListener('keydown', keyDown);
+            window.removeEventListener('keyup', keyUp);
+        }
+
+        return removeEventListener;
     }
 
     return installKeyBoard;
-})(window, KeyHandler, Event);
+})(window, H5.KeyHandler, H5.Event);

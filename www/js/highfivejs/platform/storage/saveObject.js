@@ -1,4 +1,4 @@
-var saveObject = (function (localStorage, JSON) {
+H5.saveObject = (function (localStorage, JSON) {
     "use strict";
 
     function saveObject(key, object) {
@@ -6,4 +6,4 @@ var saveObject = (function (localStorage, JSON) {
     }
 
     return saveObject;
-})(lclStorage, JSON);
+})(H5.lclStorage, JSON);

@@ -1,4 +1,4 @@
-var Event = {
+H5.Event = {
     // system events
     RESIZE: 'resize',
     SCREEN_ORIENTATION: 'orientation',

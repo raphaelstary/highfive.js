@@ -1,4 +1,4 @@
-var ImageCache = (function (ImageWrapper, iterateEntries) {
+H5.ImageCache = (function (ImageWrapper, iterateEntries) {
     "use strict";
 
     function ImageCache(width, height, defaultScreenHeight) {
@@ -23,4 +23,4 @@ var ImageCache = (function (ImageWrapper, iterateEntries) {
     };
 
     return ImageCache;
-})(ImageWrapper, iterateEntries);
+})(H5.ImageWrapper, H5.iterateEntries);

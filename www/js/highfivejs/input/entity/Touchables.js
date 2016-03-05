@@ -1,4 +1,4 @@
-var Touchables = (function (Touchable) {
+H5.Touchables = (function (Touchable) {
     "use strict";
 
     var TOUCHABLE = "_touch";
@@ -11,4 +11,4 @@ var Touchables = (function (Touchable) {
     return {
         get: createNew
     };
-})(Touchable);
+})(H5.Touchable);

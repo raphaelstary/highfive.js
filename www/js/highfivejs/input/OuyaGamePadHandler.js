@@ -1,4 +1,4 @@
-var OuyaGamePadHandler = (function (OuyaGamePad, Event, Object) {
+H5.OuyaGamePadHandler = (function (OuyaGamePad, Event, Object) {
     "use strict";
 
     function OuyaGamePadHandler(events) {
@@ -133,4 +133,4 @@ var OuyaGamePadHandler = (function (OuyaGamePad, Event, Object) {
     };
 
     return OuyaGamePadHandler;
-})(OuyaGamePad, Event, Object);
+})(H5.OuyaGamePad, H5.Event, H5.Object);

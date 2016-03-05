@@ -1,4 +1,4 @@
-var lclStorage = (function (window) {
+H5.lclStorage = (function (window) {
     "use strict";
 
     var lclStorage;

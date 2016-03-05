@@ -1,4 +1,4 @@
-var KeyHandler = (function (Event) {
+H5.KeyHandler = (function (Event) {
     "use strict";
 
     function KeyHandler(events) {
@@ -27,4 +27,4 @@ var KeyHandler = (function (Event) {
     };
 
     return KeyHandler;
-})(Event);
+})(H5.Event);

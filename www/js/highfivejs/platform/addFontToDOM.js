@@ -1,4 +1,4 @@
-var addFontToDOM = (function (document) {
+H5.addFontToDOM = (function (document) {
     "use strict";
 
     return function (fonts) {

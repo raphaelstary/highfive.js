@@ -1,10 +1,22 @@
-var installPointer = (function (PointerHandler, Event, window) {
+H5.installPointer = (function (PointerHandler, Event, window) {
     "use strict";
 
     function installPointer(events, device, canvas) {
         var pointerHandler = new PointerHandler(events, device);
 
-        if (window.PointerEvent) {
+        if (device.isWin7 && device.isIE10) {
+            if ('ontouchstart' in window) {
+                canvas.addEventListener('touchstart', pointerHandler.touchStart.bind(pointerHandler));
+                canvas.addEventListener('touchmove', pointerHandler.touchMove.bind(pointerHandler));
+                canvas.addEventListener('touchend', pointerHandler.touchEnd.bind(pointerHandler));
+                canvas.addEventListener('touchcancel', pointerHandler.touchCancel.bind(pointerHandler));
+            }
+            canvas.addEventListener('mousedown', pointerHandler.mouseDown.bind(pointerHandler));
+            canvas.addEventListener('mousemove', pointerHandler.mouseMove.bind(pointerHandler));
+            canvas.addEventListener('mouseup', pointerHandler.mouseUp.bind(pointerHandler));
+            canvas.addEventListener('mouseout', pointerHandler.mouseCancel.bind(pointerHandler));
+
+        } else if (window.PointerEvent) {
 
             canvas.addEventListener('pointerdown', pointerHandler.pointerDown.bind(pointerHandler));
             canvas.addEventListener('pointermove', pointerHandler.pointerMove.bind(pointerHandler));
@@ -38,4 +50,4 @@ var installPointer = (function (PointerHandler, Event, window) {
     }
 
     return installPointer;
-})(PointerHandler, Event, window);
+})(H5.PointerHandler, H5.Event, window);

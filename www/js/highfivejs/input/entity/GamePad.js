@@ -1,4 +1,4 @@
-var GamePad = (function (navigator) {
+H5.GamePad = (function (navigator) {
     "use strict";
 
     var Button = {
