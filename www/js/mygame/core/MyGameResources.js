@@ -1,4 +1,4 @@
-var MyGameResources = (function () {
+G.MyGameResources = (function () {
     "use strict";
 
     // your files
@@ -6,7 +6,7 @@ var MyGameResources = (function () {
     function registerFiles(resourceLoader) {
         // add your files to the resource loader for downloading
 
-        return 0; // number of registered files
+        return resourceLoader.getCount(); // number of registered files
     }
 
     function processFiles() {
