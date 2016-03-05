@@ -1,4 +1,4 @@
-var Width = (function (calcScreenConst) {
+H5.Width = (function (calcScreenConst) {
     "use strict";
 
     return {
@@ -26,4 +26,4 @@ var Width = (function (calcScreenConst) {
             };
         }
     };
-})(calcScreenConst);
+})(H5.calcScreenConst);

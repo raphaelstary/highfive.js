@@ -1,4 +1,4 @@
-var changeCoords = (function () {
+H5.changeCoords = (function () {
     "use strict";
 
     function changeCoords(drawable, x, y) {

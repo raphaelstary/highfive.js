@@ -1,4 +1,4 @@
-var Sprites = (function (Sprite) {
+H5.Sprites = (function (Sprite) {
     "use strict";
 
     function createNew(gfxCache, imgPath, numberOfFrames, loop) {
@@ -17,4 +17,4 @@ var Sprites = (function (Sprite) {
     return {
         get: createNew
     };
-})(Sprite);
+})(H5.Sprite);

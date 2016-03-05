@@ -1,4 +1,4 @@
-var LinePath = (function () {
+H5.LinePath = (function () {
     "use strict";
 
     function LinePath(startX, startY, endX, endY, vectorX, vectorY, unitVectorX, unitVectorY, length) {

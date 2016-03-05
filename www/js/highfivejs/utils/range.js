@@ -1,4 +1,4 @@
-var range = (function (Math) {
+H5.range = (function (Math) {
     "use strict";
 
     function range(min, max) {

@@ -1,4 +1,4 @@
-var SpriteTimer = (function () {
+H5.SpriteTimer = (function () {
     "use strict";
 
     function SpriteTimer(spriteAnimations, timer) {

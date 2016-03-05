@@ -1,4 +1,4 @@
-var renderCircle = (function (Math) {
+H5.renderCircle = (function (Math) {
     "use strict";
 
     function renderCircle(ctx, drawable) {

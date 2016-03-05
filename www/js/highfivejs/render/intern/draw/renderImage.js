@@ -1,4 +1,4 @@
-var renderImage = (function () {
+H5.renderImage = (function () {
     "use strict";
 
     function renderImage(ctx, drawable) {

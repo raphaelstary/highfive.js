@@ -1,4 +1,4 @@
-var Rectangle = (function () {
+H5.Rectangle = (function () {
     "use strict";
 
     function Rectangle(width, height, color, filled, lineWidth) {

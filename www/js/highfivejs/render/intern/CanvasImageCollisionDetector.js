@@ -1,4 +1,4 @@
-var CanvasImageCollisionDetector = (function (document) {
+H5.CanvasImageCollisionDetector = (function (document) {
     "use strict";
 
     function CanvasImageCollisionDetector(baseDrawable) {

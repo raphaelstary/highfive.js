@@ -1,4 +1,4 @@
-var getDevicePixelRatio = (function (window) {
+H5.getDevicePixelRatio = (function (window) {
     "use strict";
 
     var calculatedDevicePixelRatio;

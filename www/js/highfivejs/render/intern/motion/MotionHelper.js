@@ -1,4 +1,4 @@
-var MotionHelper = (function () {
+H5.MotionHelper = (function () {
     "use strict";
 
     function MotionHelper(motions) {

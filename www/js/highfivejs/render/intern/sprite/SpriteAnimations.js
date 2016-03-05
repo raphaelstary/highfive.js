@@ -1,4 +1,4 @@
-var SpriteAnimations = (function (Object, iterateEntries) {
+H5.SpriteAnimations = (function (Object, iterateEntries) {
     "use strict";
 
     function SpriteAnimations() {
@@ -88,4 +88,4 @@ var SpriteAnimations = (function (Object, iterateEntries) {
     };
 
     return SpriteAnimations;
-})(Object, iterateEntries);
+})(Object, H5.iterateEntries);

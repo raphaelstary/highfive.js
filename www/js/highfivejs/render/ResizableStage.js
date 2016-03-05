@@ -1,4 +1,4 @@
-var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, inheritMethods, TextWrapper,
+H5.ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, inheritMethods, TextWrapper,
     iterateEntries, Object, changeRectangle, changeMask, Rectangle, Vectors) {
     "use strict";
 
@@ -601,5 +601,5 @@ var ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, i
     };
 
     return ResizableStage;
-})(changeCoords, changePath, CanvasImageCollisionDetector, inheritMethods, TextWrapper, iterateEntries, Object,
-    changeRectangle, changeMask, Rectangle, Vectors);
+})(H5.changeCoords, H5.changePath, H5.CanvasImageCollisionDetector, H5.inheritMethods, H5.TextWrapper,
+    H5.iterateEntries, Object, H5.changeRectangle, H5.changeMask, H5.Rectangle, H5.Vectors);

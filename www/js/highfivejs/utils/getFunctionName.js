@@ -1,4 +1,4 @@
-var getFunctionName = (function () {
+H5.getFunctionName = (function () {
     "use strict";
 
     function getFunctionName(fn) {

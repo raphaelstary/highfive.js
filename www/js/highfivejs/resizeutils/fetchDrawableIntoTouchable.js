@@ -1,4 +1,4 @@
-var fetchDrawableIntoTouchable = (function (changeTouchable) {
+H5.fetchDrawableIntoTouchable = (function (changeTouchable) {
     "use strict";
 
     function fetchDrawableIntoTouchable(touchable, drawable) {
@@ -7,4 +7,4 @@ var fetchDrawableIntoTouchable = (function (changeTouchable) {
     }
 
     return fetchDrawableIntoTouchable;
-})(changeTouchable);
+})(H5.changeTouchable);

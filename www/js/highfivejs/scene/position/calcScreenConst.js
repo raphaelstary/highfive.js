@@ -1,4 +1,4 @@
-var calcScreenConst = (function (Math) {
+H5.calcScreenConst = (function (Math) {
     "use strict";
 
     function calcScreenConst(domain, denominator, numerator) {

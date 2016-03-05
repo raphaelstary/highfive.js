@@ -1,4 +1,4 @@
-var calcCirclePoint = (function (Vectors) {
+H5.calcCirclePoint = (function (Vectors) {
     "use strict";
 
     function calcCirclePoint(time, circle) {
@@ -9,4 +9,4 @@ var calcCirclePoint = (function (Vectors) {
     }
 
     return calcCirclePoint;
-})(Vectors);
+})(H5.Vectors);

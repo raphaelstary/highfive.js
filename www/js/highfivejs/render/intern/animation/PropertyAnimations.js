@@ -1,4 +1,4 @@
-var PropertyAnimations = (function (Animations) {
+H5.PropertyAnimations = (function (Animations) {
     "use strict";
 
     function PropertyAnimations(animations, animationHelper) {
@@ -65,4 +65,4 @@ var PropertyAnimations = (function (Animations) {
     };
 
     return PropertyAnimations;
-})(Animations);
+})(H5.Animations);

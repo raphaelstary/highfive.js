@@ -1,4 +1,4 @@
-var Setter = (function (changeCoords) {
+H5.Setter = (function (changeCoords) {
     "use strict";
 
     return {
@@ -38,6 +38,43 @@ var Setter = (function (changeCoords) {
 
             addToResizer(drawable, function (width, height) {
                 changeCoords(drawable, xFn(width, height), yFn(height, width));
+            }, resizeDependencies);
+
+            return drawable;
+        },
+
+        setQuadPosition: function (addToResizer, screen, drawable, property, xFn, yFn, resizeDependencies) {
+            drawable.data[property + 'x'] = xFn(screen.width, screen.height);
+            drawable.data[property + 'y'] = yFn(screen.height, screen.width);
+
+            addToResizer(drawable, function (width, height) {
+                drawable.data[property + 'x'] = xFn(width, height);
+                drawable.data[property + 'y'] = yFn(height, width);
+            }, resizeDependencies);
+
+            return drawable;
+        },
+
+        setQuadTotal: function (addToResizer, screen, drawable, a_xFn, a_yFn, b_xFn, b_yFn, c_xFn, c_yFn, d_xFn,
+            d_yFn, resizeDependencies) {
+            drawable.data.ax = a_xFn(screen.width, screen.height);
+            drawable.data.ay = a_yFn(screen.height, screen.width);
+            drawable.data.bx = b_xFn(screen.width, screen.height);
+            drawable.data.by = b_yFn(screen.height, screen.width);
+            drawable.data.cx = c_xFn(screen.width, screen.height);
+            drawable.data.cy = c_yFn(screen.height, screen.width);
+            drawable.data.dx = d_xFn(screen.width, screen.height);
+            drawable.data.dy = d_yFn(screen.height, screen.width);
+
+            addToResizer(drawable, function (width, height) {
+                drawable.data.ax = a_xFn(width, height);
+                drawable.data.ay = a_yFn(height, width);
+                drawable.data.bx = b_xFn(width, height);
+                drawable.data.by = b_yFn(height, width);
+                drawable.data.cx = c_xFn(width, height);
+                drawable.data.cy = c_yFn(height, width);
+                drawable.data.dx = d_xFn(width, height);
+                drawable.data.dy = d_yFn(height, width);
             }, resizeDependencies);
 
             return drawable;
@@ -135,4 +172,4 @@ var Setter = (function (changeCoords) {
             drawable.mask = drawableShapeMask;
         }
     };
-})(changeCoords);
+})(H5.changeCoords);

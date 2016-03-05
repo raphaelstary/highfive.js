@@ -1,4 +1,4 @@
-var Font = (function (calcScreenConst) {
+H5.Font = (function (calcScreenConst) {
     "use strict";
 
     return {
@@ -35,4 +35,4 @@ var Font = (function (calcScreenConst) {
             };
         }
     };
-})(calcScreenConst);
+})(H5.calcScreenConst);

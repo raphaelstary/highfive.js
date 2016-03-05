@@ -1,4 +1,4 @@
-var EquilateralTriangle = (function () {
+H5.EquilateralTriangle = (function () {
     "use strict";
 
     function EquilateralTriangle(angle, radius, color, filled, lineWidth) {

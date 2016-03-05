@@ -1,4 +1,4 @@
-var FullScreenHandler = (function (Event) {
+H5.FullScreenHandler = (function (Event) {
     "use strict";
 
     function FullScreenHandler(controller, events) {
@@ -11,4 +11,4 @@ var FullScreenHandler = (function (Event) {
     };
 
     return FullScreenHandler;
-})(Event);
+})(H5.Event);

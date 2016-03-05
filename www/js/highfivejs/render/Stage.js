@@ -1,4 +1,4 @@
-var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
+H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     "use strict";
 
     function Stage(gfxCache, motions, motionTimer, motionHelper, spriteAnimations, spriteTimer, animations,
@@ -43,6 +43,16 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
             scale);
     };
 
+    Stage.prototype.getDrawableQuadrilateral = function (ax, ay, bx, by, cx, cy, dx, dy, color, filled, lineWidth,
+        zIndex, alpha, rotation, scale) {
+        return Drawables.getQuad(++this._id, ax, ay, bx, by, cx, cy, dx, dy, color, filled, lineWidth, zIndex, alpha,
+            rotation, scale);
+    };
+
+    Stage.prototype.getDrawableABLine = function (ax, ay, bx, by, color, lineWidth, zIndex, alpha, rotation, scale) {
+        return Drawables.getABLine(++this._id, ax, ay, bx, by, color, lineWidth, zIndex, alpha, rotation, scale);
+    };
+
     Stage.prototype.getSprite = function (imgPathName, numberOfFrames, loop) {
         return Sprites.get(this.gfxCache, imgPathName, numberOfFrames, loop);
     };
@@ -56,7 +66,8 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.changeZIndex = function (drawable, newZIndex) {
-        this.renderer.changeZIndex(drawable, newZIndex);
+        if (drawable.zIndex != newZIndex)
+            this.renderer.changeZIndex(drawable, newZIndex);
         return drawable;
     };
 
@@ -163,6 +174,10 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.motions.animate(drawable, path, callback);
     };
 
+    Stage.prototype.moveQuad = function (property, drawable, path, callback) {
+        this.motions.animateQuad(property, drawable, path, callback);
+    };
+
     Stage.prototype.moveCircular = function (drawable, x, y, radius, startAngle, endAngle, speed, spacingFn, loop,
         callback) {
 
@@ -216,6 +231,22 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         scale) {
         var drawable = this.getDrawableRectangle(x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation,
             scale);
+        this.draw(drawable);
+
+        return drawable;
+    };
+
+    Stage.prototype.drawQuadrilateral = function (ax, ay, bx, by, cx, cy, dx, dy, color, filled, lineWidth, zIndex,
+        alpha, rotation, scale) {
+        var drawable = this.getDrawableQuadrilateral(ax, ay, bx, by, cx, cy, dx, dy, color, filled, lineWidth, zIndex,
+            alpha, rotation, scale);
+        this.draw(drawable);
+
+        return drawable;
+    };
+
+    Stage.prototype.drawABLine = function (ax, ay, bx, by, color, lineWidth, zIndex, alpha, rotation, scale) {
+        var drawable = this.getDrawableABLine(ax, ay, bx, by, color, lineWidth, zIndex, alpha, rotation, scale);
         this.draw(drawable);
 
         return drawable;
@@ -361,4 +392,4 @@ var Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     return Stage;
-})(Sprites, Drawables, Paths, Animations, Math);
+})(H5.Sprites, H5.Drawables, H5.Paths, H5.Animations, Math);

@@ -1,4 +1,4 @@
-var measureText = (function (document) {
+H5.measureText = (function (document) {
     "use strict";
 
     var canvas = document.createElement('canvas');

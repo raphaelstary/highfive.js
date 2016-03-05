@@ -1,4 +1,4 @@
-var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine) {
+H5.Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine) {
     "use strict";
 
     function Drawable(id, x, y, data, zIndex, alpha, rotation, scale) {
@@ -106,4 +106,4 @@ var Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper
     };
 
     return Drawable;
-})(Math, measureText, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine);
+})(Math, H5.measureText, H5.TextWrapper, H5.SubImage, H5.ImageWrapper, H5.Circle, H5.DrawableLine);

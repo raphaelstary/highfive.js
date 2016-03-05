@@ -1,4 +1,4 @@
-var AnimationHelper = (function () {
+H5.AnimationHelper = (function () {
     "use strict";
 
     // high level animation methods

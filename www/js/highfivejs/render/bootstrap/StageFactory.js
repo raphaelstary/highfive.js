@@ -1,4 +1,4 @@
-var StageFactory = (function ($) {
+H5.StageFactory = (function ($) {
     "use strict";
 
     function createAtlasRenderer(screen) {
@@ -8,6 +8,8 @@ var StageFactory = (function ($) {
         renderer.registerRenderer($.Rectangle.prototype, $.renderRectangle);
         renderer.registerRenderer($.Circle.prototype, $.renderCircle);
         renderer.registerRenderer($.DrawableLine.prototype, $.renderLine);
+        renderer.registerRenderer($.Quadrilateral.prototype, $.renderQuadrilateral);
+        renderer.registerRenderer($.ABLine.prototype, $.renderABLine);
         return renderer;
     }
 
@@ -18,6 +20,8 @@ var StageFactory = (function ($) {
         renderer.registerRenderer($.Rectangle.prototype, $.renderRectangle);
         renderer.registerRenderer($.Circle.prototype, $.renderCircle);
         renderer.registerRenderer($.DrawableLine.prototype, $.renderLine);
+        renderer.registerRenderer($.Quadrilateral.prototype, $.renderQuadrilateral);
+        renderer.registerRenderer($.ABLine.prototype, $.renderABLine);
         return renderer;
     }
 
@@ -46,7 +50,24 @@ var StageFactory = (function ($) {
 
     function createResponsive(gfxCache, renderer, device, events) {
         var repoKeys = [
-            'position', 'width', 'height', 'size', 'length', 'lineWidth', 'lineHeight', 'lineLength', 'path', 'radius'
+            'position',
+            'position_a',
+            'position_b',
+            'position_c',
+            'position_d',
+            'width',
+            'height',
+            'size',
+            'length',
+            'lineWidth',
+            'lineHeight',
+            'lineLength',
+            'path',
+            'path_a',
+            'path_b',
+            'path_c',
+            'path_d',
+            'radius'
         ];
         var legacyStage = createLegacy(gfxCache, renderer);
         var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
@@ -78,35 +99,39 @@ var StageFactory = (function ($) {
         }
     };
 })({
-    Renderer: Renderer,
-    renderImage: renderImage,
-    renderText: renderText,
-    renderAtlas: renderAtlas,
-    SubImage: SubImage,
-    TextWrapper: TextWrapper,
-    ImageWrapper: ImageWrapper,
-    Stage: Stage,
-    MotionHelper: MotionHelper,
-    MotionTimer: MotionTimer,
-    Motions: Motions,
-    SpriteTimer: SpriteTimer,
-    SpriteAnimations: SpriteAnimations,
-    PropertyAnimations: PropertyAnimations,
-    BasicAnimationHelper: AnimationHelper,
-    BasicAnimationTimer: AnimationTimer,
-    BasicAnimations: BasicAnimations,
-    ResizableStage: ResizableStage,
-    NewStageAPI: NewStageAPI,
-    Repository: Repository,
-    KeyRepository: KeyRepository,
-    Touchables: Touchables,
-    fetchDrawableIntoTouchable: fetchDrawableIntoTouchable,
-    CallbackTimer: CallbackTimer,
-    Rectangle: Rectangle,
-    renderRectangle: renderRectangle,
-    Circle: Circle,
-    renderCircle: renderCircle,
-    DrawableLine: DrawableLine,
-    renderLine: renderLine,
-    Event: Event
+    Renderer: H5.Renderer,
+    renderImage: H5.renderImage,
+    renderText: H5.renderText,
+    renderAtlas: H5.renderAtlas,
+    SubImage: H5.SubImage,
+    TextWrapper: H5.TextWrapper,
+    ImageWrapper: H5.ImageWrapper,
+    Stage: H5.Stage,
+    MotionHelper: H5.MotionHelper,
+    MotionTimer: H5.MotionTimer,
+    Motions: H5.Motions,
+    SpriteTimer: H5.SpriteTimer,
+    SpriteAnimations: H5.SpriteAnimations,
+    PropertyAnimations: H5.PropertyAnimations,
+    BasicAnimationHelper: H5.AnimationHelper,
+    BasicAnimationTimer: H5.AnimationTimer,
+    BasicAnimations: H5.BasicAnimations,
+    ResizableStage: H5.ResizableStage,
+    NewStageAPI: H5.NewStageAPI,
+    Repository: H5.Repository,
+    KeyRepository: H5.KeyRepository,
+    Touchables: H5.Touchables,
+    fetchDrawableIntoTouchable: H5.fetchDrawableIntoTouchable,
+    CallbackTimer: H5.CallbackTimer,
+    Rectangle: H5.Rectangle,
+    renderRectangle: H5.renderRectangle,
+    Circle: H5.Circle,
+    renderCircle: H5.renderCircle,
+    DrawableLine: H5.DrawableLine,
+    renderLine: H5.renderLine,
+    Event: H5.Event,
+    renderQuadrilateral: H5.renderQuadrilateral,
+    Quadrilateral: H5.Quadrilateral,
+    renderABLine: H5.renderABLine,
+    ABLine: H5.ABLine
 });

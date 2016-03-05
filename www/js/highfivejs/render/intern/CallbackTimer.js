@@ -1,4 +1,4 @@
-var CallbackTimer = (function () {
+H5.CallbackTimer = (function () {
     "use strict";
 
     function CallbackTimer() {

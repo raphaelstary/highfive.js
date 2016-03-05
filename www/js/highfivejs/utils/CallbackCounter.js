@@ -1,4 +1,4 @@
-var CallbackCounter = (function () {
+H5.CallbackCounter = (function () {
     "use strict";
 
     function CallbackCounter(callback) {

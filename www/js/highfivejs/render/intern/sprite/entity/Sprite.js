@@ -1,4 +1,4 @@
-var Sprite = (function () {
+H5.Sprite = (function () {
     "use strict";
 
     function Sprite(frames, loop) {

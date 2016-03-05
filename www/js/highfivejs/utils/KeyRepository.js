@@ -1,4 +1,4 @@
-var KeyRepository = (function (Object) {
+H5.KeyRepository = (function (Object) {
     "use strict";
 
     function KeyRepository(keysInOrderToCall) {

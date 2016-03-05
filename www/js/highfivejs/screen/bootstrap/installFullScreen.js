@@ -1,4 +1,4 @@
-var installFullScreen = (function (document, FullScreenController, FullScreenHandler) {
+H5.installFullScreen = (function (document, FullScreenController, FullScreenHandler) {
     "use strict";
 
     function installFullScreen(screenElement, events) {
@@ -15,4 +15,4 @@ var installFullScreen = (function (document, FullScreenController, FullScreenHan
     }
 
     return installFullScreen;
-})(window.document, FullScreenController, FullScreenHandler);
+})(window.document, H5.FullScreenController, H5.FullScreenHandler);

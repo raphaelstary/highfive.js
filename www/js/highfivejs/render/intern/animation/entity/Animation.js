@@ -1,4 +1,4 @@
-var Animation = (function () {
+H5.Animation = (function () {
     "use strict";
 
     function Animation(startValue, endValue, valueRangeLength, duration, timingFn, loop) {

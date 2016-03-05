@@ -1,4 +1,4 @@
-var zero = (function () {
+H5.zero = (function () {
     "use strict";
 
     function zero() {

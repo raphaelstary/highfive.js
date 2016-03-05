@@ -1,4 +1,4 @@
-var SceneManager = (function () {
+H5.SceneManager = (function () {
     "use strict";
 
     function SceneManager() {

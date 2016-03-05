@@ -1,4 +1,4 @@
-var calcLinePoint = (function () {
+H5.calcLinePoint = (function () {
     "use strict";
 
     function calcLinePoint(time, line) {

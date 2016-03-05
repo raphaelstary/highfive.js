@@ -1,4 +1,4 @@
-var OrientationHandler = (function (window, Orientation, screen, Event) {
+H5.OrientationHandler = (function (window, Orientation, screen, Event) {
     "use strict";
 
     function OrientationHandler(events) {
@@ -52,4 +52,4 @@ var OrientationHandler = (function (window, Orientation, screen, Event) {
     };
 
     return OrientationHandler;
-})(window, Orientation, window.screen, Event);
+})(window, H5.Orientation, window.screen, H5.Event);

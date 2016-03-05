@@ -1,4 +1,4 @@
-var Animations = (function (Animation, Math) {
+H5.Animations = (function (Animation, Math) {
     "use strict";
 
     function createNew(startValue, endValue, speed, spacingFn, loop) {
@@ -12,4 +12,4 @@ var Animations = (function (Animation, Math) {
     return {
         get: createNew
     };
-})(Animation, Math);
+})(H5.Animation, Math);

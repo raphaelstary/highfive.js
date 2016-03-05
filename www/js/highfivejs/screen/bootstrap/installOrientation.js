@@ -1,4 +1,4 @@
-var installOrientation = (function (window, screen, OrientationHandler, Event) {
+H5.installOrientation = (function (window, screen, OrientationHandler, Event) {
     "use strict";
 
     function installOrientation(events, device) {
@@ -30,4 +30,4 @@ var installOrientation = (function (window, screen, OrientationHandler, Event) {
     }
 
     return installOrientation;
-})(window, window.screen, OrientationHandler, Event);
+})(window, window.screen, H5.OrientationHandler, H5.Event);

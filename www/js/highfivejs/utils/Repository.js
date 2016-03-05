@@ -1,4 +1,4 @@
-var Repository = (function (Object) {
+H5.Repository = (function (Object) {
     "use strict";
 
     function Repository() {

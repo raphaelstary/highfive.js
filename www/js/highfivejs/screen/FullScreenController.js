@@ -1,4 +1,4 @@
-var FullScreenController = (function (document, navigator) {
+H5.FullScreenController = (function (document, navigator) {
     "use strict";
 
     function FullScreenController(screen) {

@@ -1,4 +1,4 @@
-var inheritMethods = (function (Object) {
+H5.inheritMethods = (function (Object) {
     "use strict";
 
     function inheritMethods(source, target, targetPrototype) {

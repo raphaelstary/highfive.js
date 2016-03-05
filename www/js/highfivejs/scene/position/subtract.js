@@ -1,4 +1,4 @@
-var subtract = (function () {
+H5.subtract = (function () {
     "use strict";
 
     function subtract(fn1, fn2) {

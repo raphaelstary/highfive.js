@@ -1,4 +1,4 @@
-var MotionTimer = (function () {
+H5.MotionTimer = (function () {
     "use strict";
 
     function MotionTimer(motions, timer) {

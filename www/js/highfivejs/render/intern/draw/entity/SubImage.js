@@ -1,4 +1,4 @@
-var SubImage = (function () {
+H5.SubImage = (function () {
     "use strict";
 
     function SubImage(x, y, width, height, offSetX, offSetY, trimmedWidth, trimmedHeight, scaledOffSetX, scaledOffSetY,

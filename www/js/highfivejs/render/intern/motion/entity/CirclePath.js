@@ -1,4 +1,4 @@
-var CirclePath = (function () {
+H5.CirclePath = (function () {
     "use strict";
 
     function CirclePath(x, y, radius, startAngle, endAngle) {

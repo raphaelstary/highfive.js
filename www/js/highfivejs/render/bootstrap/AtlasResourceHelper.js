@@ -1,11 +1,10 @@
-var AtlasResourceHelper = (function (AtlasCache, resolveAtlasPaths, screenWidth, screenHeight, getDevicePixelRatio,
-    Math) {
+H5.AtlasResourceHelper = (function (AtlasCache, screenWidth, screenHeight, getDevicePixelRatio, Math) {
     "use strict";
 
     var defaultSize;
     var pixelRatio = getDevicePixelRatio();
 
-    function registerAtlases(resourceLoader, atlases, isMobile) {
+    function registerAtlases(resourceLoader, atlases, isMobile, resolveAtlasPaths) {
         var info = resolveAtlasPaths(Math.floor(screenWidth * pixelRatio), Math.floor(screenHeight * pixelRatio),
             isMobile);
         defaultSize = info.defaultSize;
@@ -28,4 +27,4 @@ var AtlasResourceHelper = (function (AtlasCache, resolveAtlasPaths, screenWidth,
         register: registerAtlases,
         process: processAtlases
     };
-})(AtlasCache, resolveAtlasPaths, window.screen.availWidth, window.screen.availHeight, getDevicePixelRatio, Math);
+})(H5.AtlasCache, window.screen.availWidth, window.screen.availHeight, H5.getDevicePixelRatio, Math);

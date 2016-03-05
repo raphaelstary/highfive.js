@@ -1,4 +1,4 @@
-var Paths = (function (Math, LinePath, CirclePath, BezierCurvePath, Vectors, Animations) {
+H5.Paths = (function (Math, LinePath, CirclePath, BezierCurvePath, Vectors, Animations) {
     "use strict";
 
     function createLine(startX, startY, endX, endY, speed, spacingFn, loop) {
@@ -32,4 +32,4 @@ var Paths = (function (Math, LinePath, CirclePath, BezierCurvePath, Vectors, Ani
         getCurve: createNewBezierCurvePath,
         getCircle: createCircle
     };
-})(Math, LinePath, CirclePath, BezierCurvePath, Vectors, Animations);
+})(Math, H5.LinePath, H5.CirclePath, H5.BezierCurvePath, H5.Vectors, H5.Animations);

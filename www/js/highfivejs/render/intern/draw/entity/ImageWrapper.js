@@ -1,4 +1,4 @@
-var ImageWrapper = (function () {
+H5.ImageWrapper = (function () {
     "use strict";
 
     function ImageWrapper(img, width, height, scale) {

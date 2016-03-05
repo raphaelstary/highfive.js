@@ -1,4 +1,4 @@
-var wrap = (function () {
+H5.wrap = (function () {
     "use strict";
 
     function wrap(value_OrObject, optionalObjectKey) {

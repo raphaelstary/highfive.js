@@ -1,4 +1,4 @@
-var ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Math) {
+H5.ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Math) {
     "use strict";
 
     var GFX_FOLDER = 'gfx/';
@@ -40,4 +40,4 @@ var ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Ma
         register: registerImages,
         process: processImages
     };
-})(ImageCache, Object, getDevicePixelRatio, Math);
+})(H5.ImageCache, Object, H5.getDevicePixelRatio, Math);

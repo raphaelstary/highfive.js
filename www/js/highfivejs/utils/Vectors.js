@@ -1,4 +1,4 @@
-var Vectors = (function (Math) {
+H5.Vectors = (function (Math) {
     "use strict";
 
     return {

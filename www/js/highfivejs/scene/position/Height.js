@@ -1,4 +1,4 @@
-var Height = (function (calcScreenConst) {
+H5.Height = (function (calcScreenConst) {
     "use strict";
 
     return {
@@ -47,4 +47,4 @@ var Height = (function (calcScreenConst) {
             };
         }
     };
-})(calcScreenConst);
+})(H5.calcScreenConst);

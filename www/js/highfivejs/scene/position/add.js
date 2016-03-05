@@ -1,4 +1,4 @@
-var add = (function () {
+H5.add = (function () {
     "use strict";
 
     function add(fn1, fn2) {

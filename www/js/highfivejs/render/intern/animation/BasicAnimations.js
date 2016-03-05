@@ -1,4 +1,4 @@
-var BasicAnimations = (function (Object, iterateEntries) {
+H5.BasicAnimations = (function (Object, iterateEntries) {
     "use strict";
 
     function BasicAnimations() {
@@ -111,4 +111,4 @@ var BasicAnimations = (function (Object, iterateEntries) {
     };
 
     return BasicAnimations;
-})(Object, iterateEntries);
+})(Object, H5.iterateEntries);

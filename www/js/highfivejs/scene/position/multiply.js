@@ -1,4 +1,4 @@
-var multiply = (function () {
+H5.multiply = (function () {
     "use strict";
 
     function multiply(fn, factor) {

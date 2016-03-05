@@ -1,4 +1,4 @@
-var RectangleMask = (function () {
+H5.RectangleMask = (function () {
     "use strict";
 
     function RectangleMask(x, y, width, height) {

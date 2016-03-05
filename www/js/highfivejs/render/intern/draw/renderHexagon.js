@@ -1,4 +1,4 @@
-var renderHexagon = (function (renderPolygon, Math) {
+H5.renderHexagon = (function (renderPolygon) {
     "use strict";
 
     function renderHexagon(ctx, drawable) {
@@ -6,4 +6,4 @@ var renderHexagon = (function (renderPolygon, Math) {
     }
 
     return renderHexagon;
-})(renderPolygon, Math);
+})(H5.renderPolygon);

@@ -1,4 +1,4 @@
-var AnimationTimer = (function () {
+H5.AnimationTimer = (function () {
     "use strict";
 
     function AnimationTimer(animations, timer) {

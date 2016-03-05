@@ -1,4 +1,4 @@
-var iterateEntries = (function (Object) {
+H5.iterateEntries = (function (Object) {
     "use strict";
 
     function iterateEntries(dictionary, callback, self) {

@@ -1,4 +1,4 @@
-var changeMask = (function () {
+H5.changeMask = (function () {
     "use strict";
 
     function changeMask(mask, a_x, a_y, b_x, b_y) {

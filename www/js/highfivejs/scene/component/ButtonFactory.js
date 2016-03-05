@@ -1,4 +1,4 @@
-var ButtonFactory = (function (Math, Width) {
+H5.ButtonFactory = (function (Math, Width) {
     "use strict";
 
     function ButtonFactory(stage, input, timer, font, playSoundCallback, primaryColor, primaryTextColor,
@@ -149,4 +149,4 @@ var ButtonFactory = (function (Math, Width) {
     };
 
     return ButtonFactory;
-})(Math, Width);
+})(Math, H5.Width);

@@ -1,4 +1,4 @@
-var Transition = (function (Math) {
+H5.Transition = (function (Math) {
     "use strict";
 
     function linearTweening(currentTime, startValue, changeInValue, duration) {

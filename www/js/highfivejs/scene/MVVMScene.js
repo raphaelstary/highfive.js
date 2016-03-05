@@ -1,4 +1,5 @@
-var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
+H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreenConst, add, multiply, subtract,
+    CallbackCounter) {
     "use strict";
 
     function MVVMScene(model, view, viewModel, viewName, parentSceneRect, anchorXFn, anchorYFn) {
@@ -49,7 +50,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                 taps.some(function (tap) {
                     if (isHit(pointer, tap.rectangle)) {
                         if (tap.up)
-                            tap.up();
+                            tap.up(pointer);
                         return true;
                     }
                     return false;
@@ -58,7 +59,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                 taps.some(function (tap) {
                     if (isHit(pointer, tap.rectangle)) {
                         if (tap.down)
-                            tap.down();
+                            tap.down(pointer);
                         return true;
                     }
                     return false;
@@ -102,7 +103,10 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                 var relativeElemPosition = function (width, height) {
                     return calcScreenConst(subSceneHeight(height, width), sceneRect.height, size);
                 };
-                return add(subSceneCornerY, relativeElemPosition);
+                //return add(subSceneCornerY, relativeElemPosition);
+                return function (width, height) {
+                    return calcScreenConst(height, self.parentSceneRect.height, size);
+                };
             }
 
             return function (width, height) {
@@ -146,6 +150,18 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
             });
         }
 
+        function hasAnchorTag_left(tags) {
+            return tags.some(function (tag) {
+                return tag.anchor == 'widthHalf';
+            });
+        }
+
+        function hasAnchorTag_right(tags) {
+            return tags.some(function (tag) {
+                return tag.anchor == 'widthHalf';
+            });
+        }
+
         function getXPositionRelativeToSize_anchorWithHalf(sceneRect, relativeToSize_elemHeight, x) {
             if (self.anchorXFn && self.parentSceneRect) {
                 var subSceneWidth = Width.get(self.parentSceneRect.width, sceneRect.width);
@@ -157,12 +173,22 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                         (self.parentSceneRect.width / 2 / (x - sceneRect.width / 2) / relativeToSize_elemHeight) *
                         yFn(relativeToSize_elemHeight)(height));
                 };
-                return add(subSceneCornerX, relativeElemPosition);
+                //return add(subSceneCornerX, relativeElemPosition);
+                return function (width, height) {
+                    return Math.floor(width / 2 + ((x - self.parentSceneRect.width / 2) / relativeToSize_elemHeight) *
+                        yFn(relativeToSize_elemHeight)(height));
+                };
             }
 
             return function (width, height) {
                 return Math.floor(width / 2 +
                     ((x - sceneRect.width / 2) / relativeToSize_elemHeight) * yFn(relativeToSize_elemHeight)(height));
+            };
+        }
+
+        function getXPositionRelativeToSize_anchorLeft(relativeToSize_elemHeight, x) {
+            return function (width, height) {
+                return Math.floor(width / 2 + (x / relativeToSize_elemHeight) * yFn(relativeToSize_elemHeight)(height));
             };
         }
 
@@ -180,8 +206,13 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                 var isRelativeToSize_widthHalf = elem.tags && hasPositionTag_relativeToSize(elem.tags);
                 //&& hasAnchorTag_widthHalf(elem.tags);
                 if (isRelativeToSize_widthHalf) {
+                    //if (hasAnchorTag_left(elem.tags)) {
+                    //    x = getXPositionRelativeToSize_anchorLeft(elem.height, elem.x);
+                    //
+                    //} else {
                     // very specific use case
                     x = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.height, elem.x);
+                    //}
                 }
 
                 var drawable;
@@ -200,7 +231,7 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
 
                 } else if (elem.type == 'text') {
 
-                    var txtKey = getTagValue('txt')(elem.tags);
+                    var txtKey = elem.tags ? getTagValue('txt')(elem.tags) : undefined;
                     var msg = txtKey ? self.messages.get(self.viewName, txtKey) : elem.msg;
 
                     drawable = this.stage.createText(msg).setPosition(x,
@@ -265,6 +296,16 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
                         drawable = this.stage.createRectangle().setPosition(x,
                             y).setWidth(xFn(elem.width)).setHeight(yFn(elem.height)).setColor('#fff');
                         drawable.hide();
+
+                        drawable.removeInput = function () {
+                            taps.some(function (tap, index, array) {
+                                if (tap.rectangle.id == this.id) {
+                                    array.splice(index, 1);
+                                    return true;
+                                }
+                                return false;
+                            }, this);
+                        };
 
                         if (elem.viewId) {
                             this.viewModel[elem.viewId] = drawable;
@@ -393,6 +434,19 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
 
                     var mask = this.stage.createRectangle().setPosition(maskX,
                         maskY).setWidth(xFn(elem.mask.width)).setHeight(yFn(elem.mask.height)).setRotation(elem.mask.rotation);
+                    if (self.parentSceneRect) {
+                        var maskWidth = function (maskWidth) {
+                            return function (width, height) {
+                                return calcScreenConst(width, self.parentSceneRect.width, maskWidth);
+                            }
+                        };
+                        var maskHeight = function (maskHeight) {
+                            return function (height, width) {
+                                return calcScreenConst(height, self.parentSceneRect.height, maskHeight);
+                            }
+                        };
+                        mask.setWidth(maskWidth(elem.mask.width)).setHeight(maskHeight(elem.mask.height));
+                    }
                     drawable.setMask(mask);
                 }
 
@@ -830,9 +884,6 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
             }, this);
         }, this);
 
-        if (this.viewModel.postConstruct)
-            this.viewModel.postConstruct();
-
         var itIsOver = false;
 
         function endScene() {
@@ -874,10 +925,24 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
             return self.show.bind(self, next);
         }
 
+        function pauseScene() {
+            paused = true;
+            if (self.viewModel.prePause)
+                self.viewModel.prePause();
+        }
+
+        function resumeScene() {
+            paused = false;
+            if (self.viewModel.postResume)
+                self.viewModel.postResume();
+        }
+
         // dependency injection for globals inside your view model
         this.viewModel.nextScene = nextScene;
         this.viewModel.restartScene = restartScene;
         this.viewModel.stopScene = stopScene;
+        this.viewModel.pauseScene = pauseScene;
+        this.viewModel.resumeScene = resumeScene;
         //this.viewModel.sceneRect = sceneRect;
 
         this.events.subscribe(Event.PAUSE, function () {
@@ -887,7 +952,11 @@ var MVVMScene = (function (iterateEntries, Width, Height, Event, Math) {
         this.events.subscribe(Event.RESUME, function () {
             paused = false;
         });
+
+        if (this.viewModel.postConstruct)
+            this.viewModel.postConstruct();
     };
 
     return MVVMScene;
-})(iterateEntries, Width, Height, Event, Math);
+})(H5.iterateEntries, H5.Width, H5.Height, H5.Event, Math, H5.calcScreenConst, H5.add, H5.multiply, H5.subtract,
+    H5.CallbackCounter);

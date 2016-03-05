@@ -1,4 +1,4 @@
-var OrientationLock = (function (screen) {
+H5.OrientationLock = (function (screen) {
     "use strict";
 
     function lock(orientation) {

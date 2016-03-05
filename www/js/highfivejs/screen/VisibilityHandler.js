@@ -1,4 +1,4 @@
-var VisibilityHandler = (function (document, Event) {
+H5.VisibilityHandler = (function (document, Event) {
     "use strict";
 
     function VisibilityHandler(events) {
@@ -15,4 +15,4 @@ var VisibilityHandler = (function (document, Event) {
     };
 
     return VisibilityHandler;
-})(window.document, Event);
+})(window.document, H5.Event);

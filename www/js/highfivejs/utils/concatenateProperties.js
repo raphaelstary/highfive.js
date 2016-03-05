@@ -1,4 +1,4 @@
-var concatenateProperties = (function (Object) {
+H5.concatenateProperties = (function (Object) {
     "use strict";
 
     function concatenateProperties(source, target) {

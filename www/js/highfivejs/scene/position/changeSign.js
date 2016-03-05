@@ -1,4 +1,4 @@
-var changeSign = (function () {
+H5.changeSign = (function () {
     "use strict";
 
     function changeSign(fn) {

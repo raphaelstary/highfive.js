@@ -1,4 +1,4 @@
-var renderPolygon = (function (Math) {
+H5.renderPolygon = (function (Math) {
     "use strict";
 
     function renderPolygon(ctx, x, y, polygon, sides, scale) {

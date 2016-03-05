@@ -1,7 +1,7 @@
-var wrapText = (function () {
+H5.wrapText = (function (Math) {
     "use strict";
 
-    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    function wrapText(context, text, x, y, maxWidth, lineHeight, drawable) {
         var words = text.split(' ');
         var line = '';
 
@@ -23,6 +23,8 @@ var wrapText = (function () {
         var totalHeight = readyLines.length * lineHeight / 2;
         var newStartY = y - Math.floor(totalHeight / 2);
 
+        context.font = Math.floor(drawable.data.size * drawable.scale) + 'px ' + drawable.data.fontFamily;
+
         for (var i = 0; i < readyLines.length; i++) {
             context.fillText(readyLines[i], x, newStartY);
             newStartY += lineHeight;
@@ -30,4 +32,4 @@ var wrapText = (function () {
     }
 
     return wrapText;
-})();
+})(Math);

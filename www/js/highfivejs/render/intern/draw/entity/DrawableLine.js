@@ -1,4 +1,4 @@
-var DrawableLine = (function () {
+H5.DrawableLine = (function () {
     "use strict";
 
     function DrawableLine(length, color, lineWidth) {

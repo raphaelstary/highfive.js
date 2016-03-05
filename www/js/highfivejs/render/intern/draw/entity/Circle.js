@@ -1,4 +1,4 @@
-var Circle = (function () {
+H5.Circle = (function () {
     "use strict";
 
     function Circle(radius, color, filled, lineWidth) {

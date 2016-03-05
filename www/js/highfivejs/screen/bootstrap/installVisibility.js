@@ -1,4 +1,4 @@
-var installVisibility = (function (VisibilityHandler, document, Event) {
+H5.installVisibility = (function (VisibilityHandler, document, Event) {
     "use strict";
 
     function installVisibility(events, device) {
@@ -18,4 +18,4 @@ var installVisibility = (function (VisibilityHandler, document, Event) {
     }
 
     return installVisibility;
-})(VisibilityHandler, window.document, Event);
+})(H5.VisibilityHandler, window.document, H5.Event);

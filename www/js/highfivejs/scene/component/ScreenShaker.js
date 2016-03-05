@@ -1,4 +1,4 @@
-var ScreenShaker = (function (Math, Object, calcScreenConst) {
+H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
     "use strict";
 
     function ScreenShaker(device) {
@@ -178,4 +178,4 @@ var ScreenShaker = (function (Math, Object, calcScreenConst) {
     };
 
     return ScreenShaker;
-})(Math, Object, calcScreenConst);
+})(Math, Object, H5.calcScreenConst);

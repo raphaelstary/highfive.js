@@ -1,4 +1,4 @@
-var renderCurve = (function () {
+H5.renderCurve = (function () {
     "use strict";
 
     function renderCurve(ctx, drawable) {

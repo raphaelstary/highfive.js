@@ -1,4 +1,4 @@
-var renderEqTriangle = (function (renderPolygon) {
+H5.renderEqTriangle = (function (renderPolygon) {
     "use strict";
 
     function renderEqTriangle(ctx, drawable) {
@@ -6,4 +6,4 @@ var renderEqTriangle = (function (renderPolygon) {
     }
 
     return renderEqTriangle;
-})(renderPolygon);
+})(H5.renderPolygon);

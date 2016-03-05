@@ -1,4 +1,4 @@
-var changeRectangle = (function () {
+H5.changeRectangle = (function () {
     "use strict";
 
     function changeRectangle(rectangle, width, height, lineWidth) {

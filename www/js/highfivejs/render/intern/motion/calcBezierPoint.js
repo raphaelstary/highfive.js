@@ -1,4 +1,4 @@
-var calcBezierPoint = (function () {
+H5.calcBezierPoint = (function () {
     "use strict";
 
     function calcBezierPoint(time, curve) {

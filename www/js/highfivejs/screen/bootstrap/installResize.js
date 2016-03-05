@@ -1,4 +1,4 @@
-var installResize = (function (window, ResizeHandler, Event) {
+H5.installResize = (function (window, ResizeHandler, Event) {
     "use strict";
 
     function installResize(events, device) {
@@ -23,4 +23,4 @@ var installResize = (function (window, ResizeHandler, Event) {
     }
 
     return installResize;
-})(window, ResizeHandler, Event);
+})(window, H5.ResizeHandler, H5.Event);

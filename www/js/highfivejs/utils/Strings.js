@@ -1,4 +1,4 @@
-var Strings = (function () {
+H5.Strings = (function () {
     "use strict";
 
     return {
