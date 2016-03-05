@@ -1,8 +1,8 @@
 H5.installCanvas = (function (document, Event, Math) {
     "use strict";
 
-    function installCanvas(events, device, width, height, pixelRatio, pixelWidth, pixelHeight) {
-        var canvas = document.createElement('canvas');
+    function installCanvas(events, device, optionalCanvas, width, height, pixelRatio, pixelWidth, pixelHeight) {
+        var canvas = optionalCanvas || document.createElement('canvas');
 
         if (pixelWidth && pixelHeight) {
             canvas.width = pixelWidth;
@@ -53,7 +53,9 @@ H5.installCanvas = (function (document, Event, Math) {
             canvas.width = width;
             canvas.height = height;
         }
-        document.body.appendChild(canvas);
+
+        if (!optionalCanvas)
+            document.body.appendChild(canvas);
 
         return {
             screen: canvas,
