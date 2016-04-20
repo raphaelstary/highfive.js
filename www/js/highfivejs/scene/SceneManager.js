@@ -20,6 +20,10 @@ H5.SceneManager = (function () {
 
         var scene = this.scenes.shift();
 
+        if (!scene) {
+            throw 'No scenes configured';
+        }
+
         if (!scene.oneTime) {
             this.temp.push(scene);
         }
