@@ -25,7 +25,7 @@ H5.Bootstrapper = (function ($) {
     var events;
     var device;
     var removeKeyListener;
-    var isResponsive = false;
+    // var isResponsive = false;
     var useAtlases = false;
 
     var noOneDidAnInit = true;
@@ -38,7 +38,7 @@ H5.Bootstrapper = (function ($) {
 
         events = new $.EventBus();
         device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio(), $.screenWidth, $.screenHeight);
-        isResponsive = false;
+        // isResponsive = false;
         useAtlases = false;
     }
 
@@ -63,22 +63,22 @@ H5.Bootstrapper = (function ($) {
         }
 
         var getStage;
-        if (isResponsive && useAtlases) {
+        if (useAtlases) {
             getStage = $.StageFactory.getResponsiveAtlasStage;
-        } else if (isResponsive) {
+        } else {
             getStage = $.StageFactory.getResponsiveImageStage;
         }
 
-        var getLegacyStage;
-        if (isResponsive && useAtlases) {
-            getLegacyStage = $.StageFactory.getResponsiveAtlasLegacyStage;
-        } else if (isResponsive) {
-            getLegacyStage = $.StageFactory.getResponsiveImageLegacyStage;
-        } else if (useAtlases) {
-            getLegacyStage = $.StageFactory.getAtlasLegacyStage;
-        } else {
-            getLegacyStage = $.StageFactory.getImageLegacyStage;
-        }
+        // var getLegacyStage;
+        // if (isResponsive && useAtlases) {
+        //     getLegacyStage = $.StageFactory.getResponsiveAtlasLegacyStage;
+        // } else if (isResponsive) {
+        //     getLegacyStage = $.StageFactory.getResponsiveImageLegacyStage;
+        // } else if (useAtlases) {
+        //     getLegacyStage = $.StageFactory.getAtlasLegacyStage;
+        // } else {
+        //     getLegacyStage = $.StageFactory.getImageLegacyStage;
+        // }
         var globalServices = {
             screen: screen.screen,
             events: events,
@@ -141,7 +141,7 @@ H5.Bootstrapper = (function ($) {
             initBootstrap();
 
         $.installResize(events, device);
-        isResponsive = true;
+        // isResponsive = true;
         return Bootstrapper;
     }
 
