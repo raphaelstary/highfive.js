@@ -1,12 +1,12 @@
 H5.App = (function ($) {
     "use strict";
 
-    function App(services, myResources, installMyScenes, getStage, removeKeyHandler, getLegacyStage) {
+    function App(services, myResources, installMyScenes, getStage, removeKeyHandler) {
         this.services = services;
         this.removeKeyHandler = removeKeyHandler;
         this.resources = myResources;
         this.installMyScenes = installMyScenes;
-        this.getLegacyStage = getLegacyStage;
+        // this.getLegacyStage = getLegacyStage;
         this.getStage = getStage;
     }
 

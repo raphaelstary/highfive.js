@@ -89,7 +89,7 @@ H5.Bootstrapper = (function ($) {
 
         noOneDidAnInit = true;
 
-        return new $.App(globalServices, myResources, installMyScenes, getStage, removeKeyListener, getLegacyStage);
+        return new $.App(globalServices, myResources, installMyScenes, getStage, removeKeyListener);
     }
 
     function useAtlasesRendering() {
