@@ -1,4 +1,4 @@
-G.installMyScenes = (function (SceneManager) {
+G.installMyScenes = (function (SceneManager, Width, Height) {
     "use strict";
 
     function installMyScenes(sceneServices) {
@@ -6,8 +6,13 @@ G.installMyScenes = (function (SceneManager) {
 
         var sceneManager = new SceneManager();
 
+        sceneManager.add(function (next) {
+            var stage = sceneServices.stage;
+            stage.createText('Hello World :)').setPosition(Width.HALF, Height.HALF);
+        });
+
         return sceneManager;
     }
 
     return installMyScenes;
-})(H5.SceneManager);
+})(H5.SceneManager, H5.Width, H5.Height);
