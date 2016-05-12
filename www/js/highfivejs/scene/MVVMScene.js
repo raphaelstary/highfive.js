@@ -287,7 +287,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     }
 
                 } else if (elem.type == 'rectangle') {
-                    var isInput = elem.tags.some(function (tag) {
+                    var isInput = !elem.tags ? false : elem.tags.some(function (tag) {
                         return tag == 'input';
                     });
                     if (isInput) {
