@@ -270,6 +270,22 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         this.viewModel[elem.viewId] = drawable;
                     }
 
+                } else if (elem.type == 'circle') {
+                    drawable = this.stage.createCircle(elem.filled).setPosition(x,
+                        y).setRadius(txtSize(elem.radius)).setColor(elem.color);
+
+                    drawable.setLineWidth(txtSize(elem.lineWidth));
+                    drawable.setAlpha(elem.alpha);
+
+                    if (elem.zIndex != undefined && elem.zIndex != 3)
+                        drawable.setZIndex(elem.zIndex);
+
+                    drawables.push(drawable);
+
+                    if (elem.viewId) {
+                        this.viewModel[elem.viewId] = drawable;
+                    }
+
                 } else if (elem.type == 'rectangle') {
                     var isInput = elem.tags.some(function (tag) {
                         return tag == 'input';
