@@ -9,7 +9,7 @@ H5.renderText = (function (wrapText, Math) {
             ctx.textAlign = 'center';
         }
         ctx.fillStyle = drawable.data.color;
-        ctx.font = drawable.data.size + 'px ' + drawable.data.fontFamily;
+        ctx.font = drawable.data.fontStyle + ' ' + drawable.data.size + 'px ' + drawable.data.fontFamily;
 
         var txtIsToLong = drawable.data.maxLineLength &&
             ctx.measureText(drawable.data.msg).width > drawable.data.maxLineLength;
@@ -17,7 +17,8 @@ H5.renderText = (function (wrapText, Math) {
             wrapText(ctx, drawable.data.msg, drawable.x, drawable.y, drawable.data.maxLineLength,
                 drawable.data.lineHeight, drawable);
         } else {
-            ctx.font = Math.floor(drawable.data.size * drawable.scale) + 'px ' + drawable.data.fontFamily;
+            ctx.font = drawable.data.fontStyle + ' ' +  Math.floor(drawable.data.size * drawable.scale) + 'px ' 
+                + drawable.data.fontFamily;
             ctx.fillText(drawable.data.msg, drawable.x, drawable.y);
         }
     }

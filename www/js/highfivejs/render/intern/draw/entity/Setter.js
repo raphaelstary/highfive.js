@@ -32,6 +32,11 @@ H5.Setter = (function (changeCoords) {
             return drawable;
         },
 
+        setTextStyle: function (drawable, style) {
+            drawable.data.fontStyle = style;
+            return drawable;
+        },
+
         setPosition: function (addToResizer, screen, drawable, xFn, yFn, resizeDependencies) {
             drawable.x = xFn(screen.width, screen.height);
             drawable.y = yFn(screen.height, screen.width);

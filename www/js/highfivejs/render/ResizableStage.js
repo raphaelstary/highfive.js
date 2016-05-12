@@ -59,10 +59,10 @@ H5.ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, in
     };
 
     ResizableStage.prototype.drawText = function (xFn, yFn, text, sizeFn, font, color, zIndex, resizeDependencies,
-        rotation, alpha, maxLineLengthFn, lineHeightFn, scale) {
+        rotation, alpha, fontStyle, maxLineLengthFn, lineHeightFn, scale) {
 
         var drawable = this.stage.drawText(xFn(this.width, this.height), yFn(this.height, this.width), text,
-            sizeFn(this.width, this.height), font, color, zIndex, rotation, alpha,
+            sizeFn(this.width, this.height), font, color, zIndex, rotation, alpha, fontStyle,
             maxLineLengthFn ? maxLineLengthFn(this.width, this.height) : undefined,
             lineHeightFn ? lineHeightFn(this.height, this.width) : undefined, scale);
 
@@ -79,9 +79,9 @@ H5.ResizableStage = (function (changeCoords, changePath, PxCollisionDetector, in
     };
 
     ResizableStage.prototype.drawTextWithInput = function (xFn, yFn, text, sizeFn, font, color, zIndex,
-        resizeDependencies, alpha, rotation, maxLineLengthFn, lineHeightFn, scale) {
+        resizeDependencies, alpha, rotation, fontStyle, maxLineLengthFn, lineHeightFn, scale) {
         var drawable = this.stage.getDrawableText(xFn(this.width, this.height), yFn(this.height, this.width), zIndex,
-            text, sizeFn(this.width, this.height), font, color, rotation, alpha,
+            text, sizeFn(this.width, this.height), font, color, rotation, alpha, fontStyle,
             maxLineLengthFn ? maxLineLengthFn(this.width, this.height) : undefined,
             lineHeightFn ? lineHeightFn(this.height, this.width) : undefined, scale);
         this.stage.draw(drawable);

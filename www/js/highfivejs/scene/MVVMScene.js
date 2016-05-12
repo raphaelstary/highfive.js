@@ -236,6 +236,12 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
 
                     drawable = this.stage.createText(msg).setPosition(x,
                         y).setSize(txtSize(elem.size)).setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha).setScale(elem.scale);
+                    if (elem.fontStyle && elem.fontStyle.trim().toLowerCase() != 'regular'
+                        && elem.fontStyle.trim().toLowerCase() != 'normal') {
+                        var style = elem.fontStyle.trim().toLowerCase();
+                        drawable.setStyle(style == 'light' ? 'lighter' : style);
+                    }
+
                     if (elem.zIndex != undefined && elem.zIndex != 3)
                         drawable.setZIndex(elem.zIndex);
 

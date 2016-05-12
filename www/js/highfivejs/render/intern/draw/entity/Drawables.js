@@ -8,9 +8,9 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
         return new Drawable(imgPathName + seed, x, y, gfx, zIndex, alpha, rotation, scale);
     }
 
-    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength, lineHeight,
-        scale) {
-        var txt = new TextWrapper(msg, size, fontFamily, color, maxLineLength, lineHeight);
+    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, maxLineLength,
+                           lineHeight, scale) {
+        var txt = new TextWrapper(msg, size, fontFamily, color, fontStyle, maxLineLength, lineHeight);
 
         return new Drawable(generateHash(x.toString() + y + msg + size) + seed, x, y, txt, zIndex, alpha, rotation,
             scale);

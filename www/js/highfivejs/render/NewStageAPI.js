@@ -128,6 +128,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     function addTextServiceMethods(drawable, self) {
         drawable.setText = Setter.setTextMessage.bind(undefined, drawable);
         drawable.setFont = Setter.setTextFont.bind(undefined, drawable);
+        drawable.setStyle = Setter.setTextStyle.bind(undefined, drawable);
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
         drawable.setSize = Setter.setTextSize.bind(undefined, self.resizer.add.bind(self.resizer, 'size'), self.screen,
             drawable);

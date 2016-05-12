@@ -31,10 +31,10 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         return Drawables.getGraphic(this.gfxCache, ++this._id, x, y, imgPathName, zIndex, alpha, rotation, scale);
     };
 
-    Stage.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha,
+    Stage.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
         maxLineLength, lineHeight, scale) {
-        return Drawables.getTxt(++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength,
-            lineHeight, scale);
+        return Drawables.getTxt(++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, 
+            maxLineLength, lineHeight, scale);
     };
 
     Stage.prototype.getDrawableRectangle = function (x, y, width, height, color, filled, lineWidth, zIndex, alpha,
@@ -124,9 +124,9 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.moveFreshText = function (x, y, msg, size, fontFamily, color, endX, endY, speed, spacing, loop,
-        callback, zIndex, alpha, rotation, maxLineLength, lineHeight) {
-        var drawable = this.getDrawableText(x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, maxLineLength,
-            lineHeight);
+        callback, zIndex, alpha, rotation, fontStyle, maxLineLength, lineHeight) {
+        var drawable = this.getDrawableText(x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, 
+            maxLineLength, lineHeight);
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
         this.move(drawable, path, callback);
@@ -218,10 +218,10 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.renderer.add(drawable);
     };
 
-    Stage.prototype.drawText = function (x, y, text, size, font, color, zIndex, rotation, alpha, maxLineLength,
-        lineHeight, scale) {
-        var drawable = this.getDrawableText(x, y, zIndex, text, size, font, color, rotation, alpha, maxLineLength,
-            lineHeight, scale);
+    Stage.prototype.drawText = function (x, y, text, size, font, color, zIndex, rotation, alpha, fontStyle, 
+                                         maxLineLength, lineHeight, scale) {
+        var drawable = this.getDrawableText(x, y, zIndex, text, size, font, color, rotation, alpha, fontStyle, 
+            maxLineLength, lineHeight, scale);
         this.draw(drawable);
 
         return drawable;
