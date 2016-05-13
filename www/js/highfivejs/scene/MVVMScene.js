@@ -929,11 +929,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             return true;
         }
 
-        function nextScene() {
+        function nextScene(customParam) {
             if (!endScene())
                 return;
 
-            next();
+            next(customParam);
         }
 
         function restartScene() {
