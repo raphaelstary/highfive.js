@@ -242,6 +242,10 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         drawable.setStyle(style == 'light' ? 'lighter' : style);
                     }
 
+                    var baseLine = elem.tags ? getTagValue('baseLine')(elem.tags) : false;
+                    if (baseLine)
+                        drawable.data.baseLine = baseLine;
+
                     if (elem.zIndex != undefined && elem.zIndex != 3)
                         drawable.setZIndex(elem.zIndex);
 
