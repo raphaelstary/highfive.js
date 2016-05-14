@@ -47,13 +47,13 @@ H5.SimpleLoadingScreen = (function (Math) {
     };
 
     SimpleLoadingScreen.prototype._initialRendering = function () {
-        this.screenCtx.fillStyle = '#6286a2';
+        this.screenCtx.fillStyle = 'grey';
         this.screenCtx.fillRect(0, 0, this.screenCtx.canvas.clientWidth, this.screenCtx.canvas.clientHeight);
         this.screenCtx.strokeStyle = 'white';
         this.screenCtx.strokeRect(this.startBarX, this.startBarY, this.barWidth, this.barHeight);
 
         this.screenCtx.fillStyle = 'white';
-        this.screenCtx.font = 'italic 40pt Calibri';
+        this.screenCtx.font = 'italic 40pt sans-serif';
         this.screenCtx.textAlign = 'center';
 
         this.screenCtx.fillText(this.txt, this.centerX, this.startBarY + this.barHeight + 40);
