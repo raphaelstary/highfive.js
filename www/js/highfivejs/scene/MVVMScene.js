@@ -933,7 +933,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             if (!endScene())
                 return;
 
-            next(customParam);
+            if (next)
+                next(customParam);
         }
 
         function restartScene() {
