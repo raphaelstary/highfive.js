@@ -114,6 +114,26 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             };
         }
 
+        function widthFn(width) {
+            if (self.parentSceneRect) {
+                return function (screenWidth) {
+                    var subSceneWidth = calcScreenConst(screenWidth, self.parentSceneRect.width, sceneRect.width);
+                    return calcScreenConst(subSceneWidth, sceneRect.height, width);
+                }
+            }
+            return Width.get(sceneRect.width, width);
+        }
+
+        function heightFn(height) {
+            if (self.parentSceneRect) {
+                return function (screenHeight) {
+                    var subSceneHeight = calcScreenConst(screenHeight, self.parentSceneRect.height, sceneRect.height);
+                    return calcScreenConst(subSceneHeight, sceneRect.height, height);
+                }
+            }
+            return Height.get(sceneRect.height, height);
+        }
+
         function hasTag(name, value) { // todo use instead of all other crap
             return function (tags) {
                 return tags.some(function (tag) {
@@ -320,8 +340,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         });
 
                         drawable = this.stage.createRectangle().setPosition(x,
-                            y).setWidth(xFn(elem.width)).setHeight(yFn(elem.height)).setColor('#fff');
-                        drawable.hide();
+                            y).setWidth(widthFn(elem.width)).setHeight(heightFn(elem.height)).setColor('blue');
+                        drawable.setZIndex(11);
+                        // drawable.hide();
 
                         drawable.removeInput = function () {
                             taps.some(function (tap, index, array) {
@@ -355,7 +376,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     } else {
 
                         drawable = this.stage.createRectangle(elem.filled).setPosition(x,
-                            y).setWidth(xFn(elem.width)).setHeight(yFn(elem.height)).setColor(elem.color).setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
+                            y).setWidth(widthFn(elem.width)).setHeight(heightFn(elem.height)).setColor(elem.color).setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
                         if (elem.zIndex != undefined && elem.zIndex != 3)
                             drawable.setZIndex(elem.zIndex);
 
