@@ -342,7 +342,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         drawable = this.stage.createRectangle().setPosition(x,
                             y).setWidth(widthFn(elem.width)).setHeight(heightFn(elem.height)).setColor('blue');
                         drawable.setZIndex(11);
-                        // drawable.hide();
+                        drawable.hide();
 
                         drawable.removeInput = function () {
                             taps.some(function (tap, index, array) {
