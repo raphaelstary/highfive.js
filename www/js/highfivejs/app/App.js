@@ -1,4 +1,4 @@
-H5.App = (function ($) {
+H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenateProperties, CallbackTimer, Event) {
     "use strict";
 
     function App(services, myResources, installMyScenes, getStage, removeKeyHandler) {
@@ -78,19 +78,4 @@ H5.App = (function ($) {
 
     return App;
 
-})({
-    ResourceLoader: H5.ResourceLoader,
-    SimpleLoadingScreen: H5.SimpleLoadingScreen,
-    installLoop: H5.installLoop,
-    concatenateProperties: H5.concatenateProperties,
-    CallbackTimer: H5.CallbackTimer,
-    Event: H5.Event,
-    window: window,
-    MVVMScene: H5.MVVMScene,
-    LoadingScreen: G.LoadingScreen,
-    Constants: G.Constants,
-    AtlasCache: H5.AtlasCache,
-    getDevicePixelRatio: H5.getDevicePixelRatio,
-    Math: Math,
-    G: G
-});
+})(H5.ResourceLoader, H5.SimpleLoadingScreen, H5.installLoop, H5.concatenateProperties, H5.CallbackTimer, H5.Event);
