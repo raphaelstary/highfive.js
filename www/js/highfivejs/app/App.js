@@ -13,13 +13,13 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
     App.prototype.start = function (gameInfo, callback) {
 
         // show loading screen, load binary resources
-        var resourceLoader = new $.ResourceLoader();
-        var initialScreen = new $.SimpleLoadingScreen(this.services.screen.getContext('2d'));
+        var resourceLoader = new ResourceLoader();
+        var initialScreen = new SimpleLoadingScreen(this.services.screen.getContext('2d'));
 
         var filesCount = this.resources.create(resourceLoader);
         var events = this.services.events;
         resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
-        var initScreenId = events.subscribe($.Event.RESIZE, initialScreen.resize.bind(initialScreen));
+        var initScreenId = events.subscribe(Event.RESIZE, initialScreen.resize.bind(initialScreen));
 
         initialScreen.showNew(filesCount);
 
@@ -42,10 +42,10 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
                 if (sceneServices.stage)
                     stages.unshift(sceneServices.stage);
             }
-            sceneServices.loop = self.loop = $.installLoop(stages, events);
+            sceneServices.loop = self.loop = installLoop(stages, events);
 
-            var timer = new $.CallbackTimer();
-            events.subscribe($.Event.TICK_START, timer.update.bind(timer));
+            var timer = new CallbackTimer();
+            events.subscribe(Event.TICK_START, timer.update.bind(timer));
             sceneServices.timer = timer;
 
             sceneServices.sceneStorage = {};
@@ -59,7 +59,7 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
                     callback();
             };
 
-            $.concatenateProperties(self.services, sceneServices);
+            concatenateProperties(self.services, sceneServices);
 
             self.scenes = self.installMyScenes(sceneServices);
             self.__run();
