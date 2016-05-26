@@ -41,8 +41,24 @@ H5.GridHelper = (function (Math, calcCantorPairing) {
         return this.__getTile(u + 1, v);
     };
 
-    GridHelper.prototype.__getTile = function (u, v) {
-        var type = this.grid.get(u, v);
+    GridHelper.prototype.getBackgroundBottomNeighbor = function (u, v) {
+        return this.__getTile(u, v + 1, true);
+    };
+
+    GridHelper.prototype.getBackgroundTopNeighbor = function (u, v) {
+        return this.__getTile(u, v - 1, true);
+    };
+
+    GridHelper.prototype.getBackgroundLeftNeighbor = function (u, v) {
+        return this.__getTile(u - 1, v, true);
+    };
+
+    GridHelper.prototype.getBackgroundRightNeighbor = function (u, v) {
+        return this.__getTile(u + 1, v, true);
+    };
+
+    GridHelper.prototype.__getTile = function (u, v, isBackground) {
+        var type = !isBackground ? this.grid.get(u, v) : this.grid.getBackground(u, v);
         if (type !== undefined)
             return {
                 u: u,
