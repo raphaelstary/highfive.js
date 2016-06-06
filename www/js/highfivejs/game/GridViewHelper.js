@@ -1,4 +1,4 @@
-H5.GridViewHelper = (function (Height, Math) {
+H5.GridViewHelper = (function (Height, Math, add) {
     "use strict";
 
     function GridViewHelper(stage, device, xTilesCount, yTilesCount, topOffset, bottomOffset) {
@@ -61,12 +61,22 @@ H5.GridViewHelper = (function (Height, Math) {
         };
     };
 
-    GridViewHelper.prototype.create = function (u, v, name, defaultTileHeight) {
-        return this.createBackground(u, v, name, 5, defaultTileHeight);
+    GridViewHelper.prototype.create = function (u, v, name, defaultTileHeight, xOffset, yOffset, dependencies) {
+        return this.createBackground(u, v, name, 5, defaultTileHeight, xOffset, yOffset, dependencies);
     };
 
-    GridViewHelper.prototype.createBackground = function (u, v, name, zIndex, defaultTileHeight) {
-        var drawable = this.stage.createImage(name).setPosition(this.__getX(u), this.__getY(v));
+    GridViewHelper.prototype.createBackground = function (u, v, name, zIndex, defaultTileHeight, xOffset, yOffset,
+        dependencies) {
+        var drawable = this.stage.createImage(name);
+        if (xOffset && yOffset) {
+            drawable.setPosition(add(this.__getX(u), xOffset), add(this.__getY(v), yOffset), dependencies);
+        } else if (xOffset) {
+            drawable.setPosition(add(this.__getX(u), xOffset), this.__getY(v), dependencies);
+        } else if (yOffset) {
+            drawable.setPosition(this.__getX(u), add(this.__getY(v), yOffset), dependencies);
+        } else {
+            drawable.setPosition(this.__getX(u), this.__getY(v), dependencies);
+        }
         if (zIndex !== 3)
             drawable.setZIndex(zIndex);
         if (defaultTileHeight) {
@@ -103,8 +113,17 @@ H5.GridViewHelper = (function (Height, Math) {
         return this.createRect(u, v, color).setZIndex(zIndex);
     };
 
-    GridViewHelper.prototype.move = function (drawable, u, v, speed, callback) {
-        return drawable.moveTo(this.__getX(u), this.__getY(v)).setDuration(speed).setCallback(callback);
+    GridViewHelper.prototype.move = function (drawable, u, v, speed, callback, xOffset, yOffset, dependencies) {
+        if (xOffset && yOffset)
+            return drawable.moveTo(add(this.__getX(u), xOffset), add(this.__getY(v), yOffset), dependencies)
+                .setDuration(speed).setCallback(callback);
+        if (xOffset)
+            return drawable.moveTo(add(this.__getX(u), xOffset), this.__getY(v), dependencies).setDuration(speed)
+                .setCallback(callback);
+        if (yOffset)
+            return drawable.moveTo(this.__getX(u), add(this.__getY(v), yOffset), dependencies).setDuration(speed)
+                .setCallback(callback);
+        return drawable.moveTo(this.__getX(u), this.__getY(v), dependencies).setDuration(speed).setCallback(callback);
     };
 
     GridViewHelper.prototype.__edgeLength = function (height) {
@@ -145,4 +164,4 @@ H5.GridViewHelper = (function (Height, Math) {
     };
 
     return GridViewHelper;
-})(H5.Height, Math);
+})(H5.Height, Math, H5.add);
