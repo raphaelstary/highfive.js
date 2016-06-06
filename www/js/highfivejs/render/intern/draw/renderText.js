@@ -3,7 +3,7 @@ H5.renderText = (function (wrapText, Math) {
 
     function renderText(ctx, drawable) {
         if (drawable.data.baseLine) {
-            ctx.textBaseline = drawable.data.baseline;
+            ctx.textBaseline = drawable.data.baseLine;
         } else {
             ctx.textBaseline = 'middle';   
         }

@@ -112,6 +112,14 @@ H5.Setter = (function (changeCoords) {
             return drawable;
         },
 
+        setTextBaseLine: function (drawable, baseLineValue) {
+            drawable.data.baseLine = baseLineValue;
+        },
+
+        setTextAlign: function (drawable, alignValue) {
+            drawable.data.align = alignValue;
+        },
+
         setLength: function (addToResizer, screen, drawable, lengthFn, resizeDependencies) {
             drawable.data.length = lengthFn(screen.width, screen.height);
             addToResizer(drawable, function (width, height) {

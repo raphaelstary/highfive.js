@@ -264,7 +264,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
 
                     var baseLine = elem.tags ? getTagValue('baseLine')(elem.tags) : false;
                     if (baseLine)
-                        drawable.data.baseLine = baseLine;
+                        drawable.setBaseLine(baseLine);
+
+                    var align = elem.tags ? getTagValue('align')(elem.tags) : false;
+                    if (align)
+                        drawable.setAlign(align);
 
                     if (elem.zIndex != undefined && elem.zIndex != 3)
                         drawable.setZIndex(elem.zIndex);

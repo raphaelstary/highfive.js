@@ -136,6 +136,8 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
             self.resizer.add.bind(self.resizer, 'lineLength'), self.screen, drawable);
         drawable.setLineHeight = Setter.setTextLineHeight.bind(undefined,
             self.resizer.add.bind(self.resizer, 'lineHeight'), self.screen, drawable);
+        drawable.setBaseLine = Setter.setTextBaseLine.bind(undefined, drawable);
+        drawable.setAlign = Setter.setTextAlign.bind(undefined, drawable);
 
         return drawable;
     }
