@@ -1,10 +1,8 @@
 H5.GridHelper = (function (Math, calcCantorPairing) {
     "use strict";
 
-    function GridHelper(grid, xTiles, yTiles) {
+    function GridHelper(grid) {
         this.grid = grid;
-        this.xTiles = xTiles;
-        this.yTiles = yTiles;
     }
 
     GridHelper.prototype.getNeighbors = function (u, v) {
