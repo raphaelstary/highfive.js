@@ -1,4 +1,4 @@
-H5.GridHelper = (function (Math, calcCantorPairing) {
+H5.GridHelper = (function (Math, calcCantorPairing, Strings) {
     "use strict";
 
     function GridHelper(grid) {
@@ -174,5 +174,37 @@ H5.GridHelper = (function (Math, calcCantorPairing) {
         return objectA.u === objectB.u && objectA.v === objectB.v && objectA.type === objectB.type;
     };
 
+    GridHelper.prototype.getTiles = function (tileName, isBackground) {
+        var tiles = [];
+
+        for (var y = 0; y < this.grid.yTiles; y++) {
+            for (var x = 0; x < this.grid.xTiles; x++) {
+                var tile = !isBackground ? this.grid.get(x, y) : this.grid.getBackground(x, y);
+                if (tile && Strings.startsWidth(tile, tileName))
+                    tiles.push({
+                        u: x,
+                        v: y,
+                        type: tile
+                    });
+            }
+        }
+
+        return tiles;
+    };
+
+    GridHelper.prototype.getTile = function (tileName, isBackground) {
+        for (var y = 0; y < this.grid.yTiles; y++) {
+            for (var x = 0; x < this.grid.xTiles; x++) {
+                var tile = !isBackground ? this.grid.get(x, y) : this.grid.getBackground(x, y);
+                if (tile && Strings.startsWidth(tile, tileName))
+                    return {
+                        u: x,
+                        v: y,
+                        type: tile
+                    };
+            }
+        }
+    };
+
     return GridHelper;
-})(Math, H5.calcCantorPairing);
+})(Math, H5.calcCantorPairing, H5.Strings);
