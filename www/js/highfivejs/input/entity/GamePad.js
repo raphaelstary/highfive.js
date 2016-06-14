@@ -93,6 +93,22 @@ H5.GamePad = (function (navigator) {
         return this.__isButtonPressed(Button.START);
     };
 
+    GamePad.prototype.isDPadUpPressed = function () {
+        return this.__isButtonPressed(Button.D_PAD_UP);
+    };
+
+    GamePad.prototype.isDPadRightPressed = function () {
+        return this.__isButtonPressed(Button.D_PAD_RIGHT);
+    };
+
+    GamePad.prototype.isDPadDownPressed = function () {
+        return this.__isButtonPressed(Button.D_PAD_DOWN);
+    };
+
+    GamePad.prototype.isDPadLeftPressed = function () {
+        return this.__isButtonPressed(Button.D_PAD_LEFT);
+    };
+
     GamePad.prototype.__isButtonPressed = function (button) {
         return this.buttons[button].pressed;
     };
