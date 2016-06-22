@@ -1,7 +1,7 @@
-H5.DeviceInfo = (function (window, Math) {
+H5.Device = (function (window, Math) {
     "use strict";
 
-    function DeviceInfo(userAgent, width, height, devicePixelRatio, screenWidth, screenHeight) {
+    function Device(userAgent, width, height, devicePixelRatio, screenWidth, screenHeight) {
         this.userAgent = userAgent;
         this.isFirefox = /firefox/i.test(userAgent);
         this.isIE10 = /MSIE 10/i.test(userAgent);
@@ -19,5 +19,5 @@ H5.DeviceInfo = (function (window, Math) {
         this.devicePixelRatio = devicePixelRatio;
     }
 
-    return DeviceInfo;
+    return Device;
 })(window, Math);

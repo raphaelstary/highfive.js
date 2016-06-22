@@ -37,7 +37,7 @@ H5.Bootstrapper = (function ($) {
         usePointer = false;
 
         events = new $.EventBus();
-        device = new $.DeviceInfo($.userAgent, $.width, $.height, $.getDevicePixelRatio(), $.screenWidth, $.screenHeight);
+        device = new $.Device($.userAgent, $.width, $.height, $.getDevicePixelRatio(), $.screenWidth, $.screenHeight);
         // isResponsive = false;
         useAtlases = false;
     }
@@ -191,7 +191,7 @@ H5.Bootstrapper = (function ($) {
     installAnalytics: H5.installHolmes,
     App: H5.App,
     EventBus: H5.EventBus,
-    DeviceInfo: H5.DeviceInfo,
+    Device: H5.Device,
     width: window.innerWidth,
     height: window.innerHeight,
     screenWidth: window.screen.availWidth,

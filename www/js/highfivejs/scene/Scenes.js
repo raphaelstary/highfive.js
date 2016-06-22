@@ -1,19 +1,19 @@
-H5.SceneManager = (function () {
+H5.Scenes = (function () {
     "use strict";
 
-    function SceneManager() {
+    function Scenes() {
         this.scenes = [];
         this.temp = [];
     }
 
-    SceneManager.prototype.add = function (sceneFn, oneTime) {
+    Scenes.prototype.add = function (sceneFn, oneTime) {
         this.scenes.push({
             sceneFn: sceneFn,
             oneTime: oneTime == null ? false : oneTime
         });
     };
 
-    SceneManager.prototype.next = function () {
+    Scenes.prototype.next = function () {
         if (this.scenes.length === 0 && this.temp.length > 0) {
             this.rewind();
         }
@@ -31,10 +31,10 @@ H5.SceneManager = (function () {
         scene.sceneFn(this.next.bind(this));
     };
 
-    SceneManager.prototype.rewind = function () {
+    Scenes.prototype.rewind = function () {
         this.scenes = this.temp;
         this.temp = [];
     };
 
-    return SceneManager;
+    return Scenes;
 })();
