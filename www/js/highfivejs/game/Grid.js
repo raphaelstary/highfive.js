@@ -40,6 +40,25 @@ H5.Grid = (function () {
                 return this.backgroundMap[v][u];
             };
         }
+
+        if (level.events) {
+            this.eventsMap = [];
+            var events = level.events;
+            for (y = 0; y < events.length; y++) {
+                levelRow = events[y];
+                row = [];
+                for (x = 0; x < levelRow.length; x++) {
+                    row.push(levelRow[x]);
+                }
+                this.eventsMap.push(row);
+            }
+
+            this.getEvent = function (u, v) {
+                if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles)
+                    return;
+                return this.eventsMap[v][u];
+            };
+        }
     };
 
     Grid.prototype.reload = function (level) {
