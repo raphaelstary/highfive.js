@@ -995,6 +995,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         this.viewModel.stopScene = stopScene;
         this.viewModel.pauseScene = pauseScene;
         this.viewModel.resumeScene = resumeScene;
+        this.viewModel.drawables = drawables;
         //this.viewModel.sceneRect = sceneRect;
 
         this.events.subscribe(Event.PAUSE, function () {
