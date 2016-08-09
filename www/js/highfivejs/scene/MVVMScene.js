@@ -954,6 +954,15 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             return true;
         }
 
+        /**
+         * @class ViewModel
+         * @property nextScene
+         * @property restartScene
+         * @property stopScene
+         * @property pauseScene
+         * @property resumeScene
+         */
+
         function nextScene(customParam) {
             if (!endScene())
                 return;
