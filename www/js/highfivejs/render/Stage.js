@@ -33,7 +33,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
 
     Stage.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
         maxLineLength, lineHeight, scale) {
-        return Drawables.getTxt(++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, 
+        return Drawables.getTxt(++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
             maxLineLength, lineHeight, scale);
     };
 
@@ -125,7 +125,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
 
     Stage.prototype.moveFreshText = function (x, y, msg, size, fontFamily, color, endX, endY, speed, spacing, loop,
         callback, zIndex, alpha, rotation, fontStyle, maxLineLength, lineHeight) {
-        var drawable = this.getDrawableText(x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, 
+        var drawable = this.getDrawableText(x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
             maxLineLength, lineHeight);
         var path = this.getPath(x, y, endX, endY, speed, spacing, loop);
 
@@ -218,9 +218,9 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.renderer.add(drawable);
     };
 
-    Stage.prototype.drawText = function (x, y, text, size, font, color, zIndex, rotation, alpha, fontStyle, 
-                                         maxLineLength, lineHeight, scale) {
-        var drawable = this.getDrawableText(x, y, zIndex, text, size, font, color, rotation, alpha, fontStyle, 
+    Stage.prototype.drawText = function (x, y, text, size, font, color, zIndex, rotation, alpha, fontStyle,
+        maxLineLength, lineHeight, scale) {
+        var drawable = this.getDrawableText(x, y, zIndex, text, size, font, color, rotation, alpha, fontStyle,
             maxLineLength, lineHeight, scale);
         this.draw(drawable);
 
@@ -268,6 +268,14 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     Stage.prototype.drawEqTriangle = function (x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation,
         scale) {
         var drawable = Drawables.getEqTriangle(++this._id, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha,
+            rotation, scale);
+        this.draw(drawable);
+        return drawable;
+    };
+
+    Stage.prototype.drawHexagon = function (x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation,
+        scale) {
+        var drawable = Drawables.getHexagon(++this._id, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha,
             rotation, scale);
         this.draw(drawable);
         return drawable;

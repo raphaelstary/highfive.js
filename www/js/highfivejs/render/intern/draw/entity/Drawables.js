@@ -1,5 +1,5 @@
 H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine, EquilateralTriangle,
-    Quadrilateral, ABLine) {
+    Quadrilateral, ABLine, Hexagon) {
     "use strict";
 
     function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
@@ -9,11 +9,11 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
     }
 
     function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, maxLineLength,
-                           lineHeight, scale) {
+        lineHeight, scale) {
         var txt = new TextWrapper(msg, size, fontFamily, color, fontStyle, maxLineLength, lineHeight);
 
-        return new Drawable(generateHash(x.toString() + y + msg + size) + seed, x, y, txt, zIndex, alpha, rotation,
-            scale);
+        return new Drawable(generateHash(x.toString() + y + msg + size) +
+            seed, x, y, txt, zIndex, alpha, rotation, scale);
     }
 
     function generateHash(s) {
@@ -25,8 +25,8 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
 
     function createRectangle(seed, x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var rect = new Rectangle(width, height, color, filled, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + width + height + color) + seed, x, y, rect, zIndex,
-            alpha, rotation, scale);
+        return new Drawable(generateHash(x.toString() + y + width + height + color) +
+            seed, x, y, rect, zIndex, alpha, rotation, scale);
     }
 
     function createQuadrilateral(seed, ax, ay, bx, by, cx, cy, dx, dy, color, filled, lineWidth, zIndex, alpha,
@@ -38,8 +38,8 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
 
     function createABLine(seed, ax, ay, bx, by, color, lineWidth, zIndex, alpha, rotation, scale) {
         var line = new ABLine(ax, ay, bx, by, color, lineWidth);
-        return new Drawable(generateHash(ay.toString(), bx, by + color) + seed, 0, 0, line, zIndex, alpha, rotation,
-            scale);
+        return new Drawable(generateHash(ay.toString(), bx, by + color) +
+            seed, 0, 0, line, zIndex, alpha, rotation, scale);
     }
 
     function createClippingMask(x, y, width, height) {
@@ -48,21 +48,27 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
 
     function createCircle(seed, x, y, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
         var circle = new Circle(radius, color, filled, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + radius + color) + seed, x, y, circle, zIndex,
-            alpha, rotation, scale);
+        return new Drawable(generateHash(x.toString() + y + radius + color) +
+            seed, x, y, circle, zIndex, alpha, rotation, scale);
     }
 
     function createLine(seed, x, y, length, color, lineWidth, zIndex, alpha, rotation, scale) {
         var line = new DrawableLine(length, color, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + length + color) + seed, x, y, line, zIndex, alpha, rotation,
-            scale);
+        return new Drawable(generateHash(x.toString() + y + length + color) +
+            seed, x, y, line, zIndex, alpha, rotation, scale);
     }
 
     function createEquilateralTriangle(seed, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation,
         scale) {
         var triangle = new EquilateralTriangle(angle, radius, color, filled, lineWidth);
-        return new Drawable(generateHash(x.toString() + y + angle + radius + color) + seed, x, y, triangle,
-            zIndex, alpha, rotation, scale);
+        return new Drawable(generateHash(x.toString() + y + angle + radius + color) +
+            seed, x, y, triangle, zIndex, alpha, rotation, scale);
+    }
+
+    function createHexagon(seed, x, y, angle, radius, color, filled, lineWidth, zIndex, alpha, rotation, scale) {
+        var hex = new Hexagon(angle, radius, color, filled, lineWidth);
+        return new Drawable(generateHash(x.toString() + y + angle + radius + color) +
+            seed, x, y, hex, zIndex, alpha, rotation, scale);
     }
 
     return {
@@ -73,8 +79,9 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
         getCircle: createCircle,
         getLine: createLine,
         getEqTriangle: createEquilateralTriangle,
+        getHexagon: createHexagon,
         getQuad: createQuadrilateral,
         getABLine: createABLine
     };
 })(H5.Drawable, H5.TextWrapper, H5.Rectangle, H5.RectangleMask, H5.Circle, H5.DrawableLine, H5.EquilateralTriangle,
-    H5.Quadrilateral, H5.ABLine);
+    H5.Quadrilateral, H5.ABLine, H5.Hexagon);

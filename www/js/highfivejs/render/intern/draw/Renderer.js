@@ -1,6 +1,6 @@
 H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle,
     renderRectangle, DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle,
-    renderEqTriangle, Quadrilateral, renderQuadrilateral, ABLine, renderABLine) {
+    renderEqTriangle, Quadrilateral, renderQuadrilateral, ABLine, renderABLine, Hexagon, renderHexagon) {
     "use strict";
 
     function Renderer(screen) {
@@ -131,6 +131,8 @@ H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, T
                     renderQuadrilateral(self.ctx, drawable);
                 } else if (drawable.data instanceof ABLine) {
                     renderABLine(self.ctx, drawable);
+                } else if (drawable.data instanceof Hexagon) {
+                    renderHexagon(self.ctx, drawable);
                 }
 
                 self.ctx.restore();
@@ -150,4 +152,5 @@ H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, T
     return Renderer;
 })(Object, Math, H5.getFunctionName, H5.SubImage, H5.renderAtlas, H5.TextWrapper, H5.renderText, H5.Rectangle,
     H5.renderRectangle, H5.DrawableLine, H5.renderLine, H5.Circle, H5.renderCircle, H5.ImageWrapper, H5.renderImage,
-    H5.EquilateralTriangle, H5.renderEqTriangle, H5.Quadrilateral, H5.renderQuadrilateral, H5.ABLine, H5.renderABLine);
+    H5.EquilateralTriangle, H5.renderEqTriangle, H5.Quadrilateral, H5.renderQuadrilateral, H5.ABLine, H5.renderABLine,
+    H5.Hexagon, H5.renderHexagon);

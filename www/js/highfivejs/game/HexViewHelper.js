@@ -1,71 +1,53 @@
-H5.HexViewHelper = (function (Height, Math) {
+H5.HexViewHelper = (function (Width, Math) {
     "use strict";
 
-    function HexViewHelper(stage, device, xTilesCount, yTilesCount, topOffset, bottomOffset) {
+    function HexViewHelper(stage, xTilesCount, yTilesCount) {
         this.stage = stage;
-        this.device = device;
         this.xTiles = xTilesCount;
         this.yTiles = yTilesCount;
-        this.topOffset = topOffset;
-        this.bottomOffset = bottomOffset;
     }
 
-    HexViewHelper.prototype.__hexHeight = function (height) {
-        if (this.bottomOffset) {
-            return Height.get(this.yTiles)(height - (this.__getTopOffset(height) + this.bottomOffset(height)));
-        } else if (this.topOffset) {
-            return Height.get(this.yTiles)(height - this.__getTopOffset(height));
-        } else {
-            return Height.get(this.yTiles)(height);
-        }
+    var POINTY_TOPPED_ANGLE = Math.PI / 6;
+
+    /**
+     * get side length t - also known as size
+     * @param width
+     * @returns {number}
+     */
+    HexViewHelper.prototype.getSize = function (width) {
+        return this.getWidth(width) / Math.sqrt(3);
     };
 
-    HexViewHelper.prototype.__narrowWidth = function (height) {
-        return this.__hexHeight(height) / Math.sqrt(3) * 2;
+    HexViewHelper.prototype.getWidth = function (width) {
+        return Width.get(this.xTiles + 0.5)(width);
     };
 
-    HexViewHelper.prototype.getHeightFn = function () {
+    HexViewHelper.prototype.getWidthHalf = function (width) {
+        return Math.floor(this.getWidth(width) / 2);
+    };
+
+    HexViewHelper.prototype.getXFn = function (u, v) {
         return (function (self) {
-            return function (width, height) {
-                return self.__hexHeight(height);
-            }
+            return function (width) {
+                return Math.floor(self.getSize(width) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + self.getWidthHalf(width));
+            };
         })(this);
     };
 
-    HexViewHelper.prototype.getPosition = function (u, v) {
-        return {
-            x: this.__getX(u)(this.device.width, this.device.height),
-            y: this.__getY(u, v)(this.device.height)
-        };
+    HexViewHelper.prototype.getYFn = function (v) {
+        return (function (self) {
+            return function (height, width) {
+                return Math.floor(self.getSize(width) * 3 / 2 * v + self.getSize(width));
+            };
+        })(this);
     };
 
-    HexViewHelper.prototype.__getX = function (u) {
-        var self = this;
-        return function (width, height) {
-            var narrowWidth = self.__narrowWidth(height);
-            return narrowWidth * u + self.__xOffset(width, narrowWidth);
-        };
-    };
-
-    HexViewHelper.prototype.__getY = function (u, v) {
-        var self = this;
-        return function (height) {
-            return Math.floor(self.__hexHeight(height) * (u * 0.5 + v) + self.__getTopOffset(height));
-        };
-    };
-
-    HexViewHelper.prototype.__getTopOffset = function (height) {
-        return this.topOffset(height);
-    };
-
-    HexViewHelper.prototype.__xOffset = function (width, narrowWidth) {
-        var tilesHalf = Math.floor(this.xTiles / 2);
-        var gridWidth = tilesHalf * narrowWidth + tilesHalf * narrowWidth / 2;
-        if (this.xTiles % 2 != 0)
-            gridWidth += narrowWidth;
-
-        return Math.floor(width / 2 - gridWidth / 2 + narrowWidth / 2);
+    HexViewHelper.prototype.create = function (u, v) {
+        return this.stage.createHexagon()
+            .setPosition(this.getXFn(u, v), this.getYFn(v))
+            .setRadius(this.getSize.bind(this))
+            .setAngle(POINTY_TOPPED_ANGLE);
     };
 
     return HexViewHelper;
-})(H5.Height, Math);
+})(H5.Width, Math);

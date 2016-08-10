@@ -87,6 +87,11 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         return addEqTriangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
+    NewStageAPI.prototype.createHexagon = function (filled) {
+        var drawable = this.stage.drawHexagon(0, 0, 0, 100, 'black', filled);
+        return addHexagonServiceMethods(addServiceMethods(drawable, this), this);
+    };
+
     function addServiceMethods(drawable, self) {
         drawable.setPosition = Setter.setPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position'),
             self.screen, drawable);
@@ -254,6 +259,18 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     }
 
     function addEqTriangleServiceMethods(drawable, self) {
+        drawable.setColor = Setter.setColor.bind(undefined, drawable);
+        drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
+            self.screen, drawable);
+        drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
+        drawable.setRadius = Setter.setRadius.bind(undefined, self.resizer.add.bind(self.resizer, 'radius'),
+            self.screen, drawable);
+        drawable.setAngle = Setter.setAngle.bind(undefined, drawable);
+
+        return drawable;
+    }
+
+    function addHexagonServiceMethods(drawable, self) {
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
             self.screen, drawable);
