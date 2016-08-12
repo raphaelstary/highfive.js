@@ -1,12 +1,13 @@
 H5.HexViewHelper = (function (Width, Math) {
     "use strict";
 
-    function HexViewHelper(stage, xTilesCount, yTilesCount, xOffset, yOffset) {
+    function HexViewHelper(stage, xTilesCount, yTilesCount, topOffset, bottomOffset, adjustCenter) {
         this.stage = stage;
         this.xTiles = xTilesCount;
         this.yTiles = yTilesCount;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
+        this.topOffset = topOffset;
+        this.bottomOffset = bottomOffset;
+        this.adjustCenter = adjustCenter;
     }
 
     var POINTY_TOPPED_ANGLE = Math.PI / 6;
@@ -14,21 +15,36 @@ H5.HexViewHelper = (function (Width, Math) {
     /**
      * get side length t - also known as size
      * @param width
+     * @param height
      * @returns {number}
      */
-    HexViewHelper.prototype.getSize = function (width) {
-        return this.getWidth(width) / Math.sqrt(3);
+    HexViewHelper.prototype.getSize = function (width, height) {
+        return this.getWidth(width, height) / Math.sqrt(3);
     };
 
-    HexViewHelper.prototype.getWidth = function (width) {
-        return Width.get(this.xTiles + 0.5)(width - this.xOffset(width));
+    HexViewHelper.prototype.getWidth = function (width, height) {
+        var calcWidth = Width.get(this.xTiles + 0.5)(width);
+
+        var sqrt3 = Math.sqrt(3);
+        var tCount = this.yTiles * 2;
+        var totalHeight = calcWidth / sqrt3 * tCount;
+        if (totalHeight * 0.9 > height)
+            return Math.floor(height / tCount * sqrt3);
+        return calcWidth;
     };
 
     HexViewHelper.prototype.getXFn = function (u, v) {
         return (function (self) {
-            return function (width) {
-                return Math.floor(self.getSize(width) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + self.getWidth(width) / 2 +
-                    self.xOffset(width));
+            return function (width, height) {
+                var calcWidth = self.getWidth(width, height);
+                var xOffset = 0;
+                var totalWidth = calcWidth * self.xTiles;
+                if (totalWidth < width)
+                    xOffset = (width - totalWidth) / 2;
+                if (self.adjustCenter)
+                    return Math.floor(self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset);
+                return Math.floor(
+                    self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset + calcWidth / 2);
             };
         })(this);
     };
@@ -36,7 +52,12 @@ H5.HexViewHelper = (function (Width, Math) {
     HexViewHelper.prototype.getYFn = function (v) {
         return (function (self) {
             return function (height, width) {
-                return Math.floor(self.getSize(width) * 3 / 2 * v + self.getSize(width) + self.yOffset(height));
+                var size = self.getSize(width, height);
+                var yOffset = 0;
+                var totalHeight = size * self.yTiles * 2;
+                if (totalHeight < height)
+                    yOffset = (height - totalHeight) / 2;
+                return Math.floor(size * 3 / 2 * v + size + self.topOffset(height) / 2 + yOffset);
             };
         })(this);
     };
