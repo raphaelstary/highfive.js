@@ -126,6 +126,10 @@ H5.GridViewHelper = (function (Height, Math, add) {
         return drawable.moveTo(this.__getX(u), this.__getY(v), dependencies).setDuration(speed).setCallback(callback);
     };
 
+    GridViewHelper.prototype.setPosition = function (drawable, u, v, dependencies) {
+        return drawable.setPosition(this.__getX(u), this.__getY(v), dependencies);
+    };
+
     GridViewHelper.prototype.__edgeLength = function (height) {
         if (this.bottomOffset) {
             return Height.get(this.yTiles)(height - (this.__getTopOffset(height) + this.bottomOffset(height)));

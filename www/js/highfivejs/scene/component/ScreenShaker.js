@@ -96,7 +96,7 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
                     var item = self.shaker[key];
                     if (self.time == 0 || item._startValueX == undefined) {
                         item._startValueX = item.x;
-                        //                            item._startValueY = item.y;
+                        item._startValueY = item.y;
                         self.lastOffSetY = 0;
                     }
                     if (offSetX != 0) {
@@ -124,8 +124,11 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
                     delete item._startValueX;
 
                     if (self.bigShaking) {
-                        item.y = item.y - self.lastOffSetY;
+                        // item.y = item.y - self.lastOffSetY;
                         self.lastOffSetY = 0;
+
+                        item.y = item._startValueY;
+                        delete item._startValueY;
                     }
                 });
 
