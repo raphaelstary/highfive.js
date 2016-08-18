@@ -9,8 +9,6 @@ H5.FixRezGridViewHelper = (function (Height, Math, wrap) {
         this.yTiles = yTilesCount;
         this.topOffset = topOffset;
         this.bottomOffset = bottomOffset;
-
-        this.baseScale = 1;
     }
 
     FixRezGridViewHelper.prototype.getCoordinates = function (x, y) {
@@ -21,28 +19,6 @@ H5.FixRezGridViewHelper = (function (Height, Math, wrap) {
         };
     };
 
-    FixRezGridViewHelper.prototype.getCoordinatesWithScale = function (x, y, scale) {
-        var length = this.getEdgeLength();
-        var u = Math.floor((x - this.__xOffset(length) + length / 2) / length);
-        var v = Math.floor((y - this.topOffset) / length);
-
-        function isHit(x, y, cornerX, endX, cornerY, endY) {
-            return x > cornerX && x < endX && y > cornerY && y < endY;
-        }
-
-        var position = this.getPosition(u, v);
-        var lengthHalfScaled = Math.floor(length / 2 * scale);
-
-        if (isHit(x, y, position.x - lengthHalfScaled, position.x + lengthHalfScaled, position.y - lengthHalfScaled,
-                position.y + lengthHalfScaled)) {
-            return {
-                u: u,
-                v: v
-            };
-        }
-        return false;
-    };
-
     FixRezGridViewHelper.prototype.getPosition = function (u, v) {
         return {
             x: this.getX(u),
@@ -50,12 +26,11 @@ H5.FixRezGridViewHelper = (function (Height, Math, wrap) {
         };
     };
 
-    FixRezGridViewHelper.prototype.create = function (u, v, name, defaultTileHeight, xOffset, yOffset) {
-        return this.createBackground(u, v, name, 5, defaultTileHeight, xOffset, yOffset);
+    FixRezGridViewHelper.prototype.create = function (u, v, name, xOffset, yOffset) {
+        return this.createBackground(u, v, name, 5, xOffset, yOffset);
     };
 
-    FixRezGridViewHelper.prototype.createBackground = function (u, v, name, zIndex, defaultTileHeight, xOffset,
-        yOffset) {
+    FixRezGridViewHelper.prototype.createBackground = function (u, v, name, zIndex, xOffset, yOffset) {
         var drawable = this.stage.createImage(name);
         if (xOffset && yOffset) {
             drawable.setPosition(wrap(this.getX(u) + xOffset), wrap(this.getY(v) + yOffset));
@@ -68,19 +43,8 @@ H5.FixRezGridViewHelper = (function (Height, Math, wrap) {
         }
         if (zIndex !== 3)
             drawable.setZIndex(zIndex);
-        if (defaultTileHeight) {
-            var scaleFactor = drawable.data.height / defaultTileHeight;
-            drawable.scale = this.__calcBaseScale(drawable.getHeight()) * scaleFactor;
-        } else {
-            drawable.scale = this.__calcBaseScale(drawable.getHeight());
-        }
 
         return drawable;
-    };
-
-    FixRezGridViewHelper.prototype.__calcBaseScale = function (drawableHeight) {
-        var length = this.getEdgeLength();
-        return length / drawableHeight;
     };
 
     FixRezGridViewHelper.prototype.createRect = function (u, v, color) {
