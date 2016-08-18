@@ -23,8 +23,16 @@ H5.AtlasResourceHelper = (function (AtlasCache, screenWidth, screenHeight, getDe
         return gfxCache;
     }
 
+    function lowRezProcess(atlases, width, height) {
+        var gfxCache = new AtlasCache(width, height, defaultSize);
+        gfxCache.init(atlases);
+
+        return gfxCache;
+    }
+
     return {
         register: registerAtlases,
-        process: processAtlases
+        process: processAtlases,
+        processLowRez: lowRezProcess
     };
 })(H5.AtlasCache, window.screen.availWidth, window.screen.availHeight, H5.getDevicePixelRatio, Math);

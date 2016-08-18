@@ -10,7 +10,7 @@ H5.installCanvas = (function (document, Event, Math) {
 
             canvas.style['display'] = 'none';
 
-            var scale = Math.floor(width / pixelWidth);
+            var scale = width / pixelWidth;
             var scaledWidth = pixelWidth * scale;
             var scaledHeight = pixelHeight * scale;
             device.screenScale = scale;
@@ -31,7 +31,7 @@ H5.installCanvas = (function (document, Event, Math) {
             document.body.appendChild(scaledCanvas);
 
             events.subscribe(Event.RESIZE, function (event) {
-                var scale = Math.floor(event.width / pixelWidth);
+                var scale = event.width / pixelWidth;
                 scaledWidth = pixelWidth * scale;
                 scaledHeight = pixelHeight * scale;
                 scaledCanvas.width = scaledWidth;
