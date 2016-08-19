@@ -14,7 +14,6 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
 
         this.time = 0;
         this.duration = is30fps ? 30 : 60;
-        this.lastOffSetY = 0;
 
         this.__150 = calcScreenConst(this.device.height, 480, 150);
         this.__50 = calcScreenConst(this.device.height, 480, 50);
@@ -23,24 +22,23 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
     };
 
     ScreenShaker.prototype.startBigShake = function () {
-        var self = this;
         if (this.shaking) {
             if (this.smallShaking) {
                 this.smallShaking = false;
             }
 
             Object.keys(this.shaker).forEach(function (key) {
-                var item = self.shaker[key];
-                if (item._startValueX != undefined)
+                var item = this.shaker[key];
+                if (item._startValueX !== undefined)
                     item.x = item._startValueX;
-            });
+            }, this);
 
             if (this.bigShaking) {
                 Object.keys(this.shaker).forEach(function (key) {
-                    var item = self.shaker[key];
-                    item.y = item.y - self.lastOffSetY;
-                });
-                this.lastOffSetY = 0;
+                    var item = this.shaker[key];
+                    if (item._startValueY !== undefined)
+                        item.y = item._startValueY;
+                }, this);
             }
         }
 
@@ -50,16 +48,15 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
     };
 
     ScreenShaker.prototype.startSmallShake = function () {
-        var self = this;
         if (this.shaking) {
             if (this.bigShaking) {
                 return;
             }
             Object.keys(this.shaker).forEach(function (key) {
-                var item = self.shaker[key];
-                if (item._startValueX != undefined)
+                var item = this.shaker[key];
+                if (item._startValueX !== undefined)
                     item.x = item._startValueX;
-            });
+            }, this);
         }
 
         this.shaking = true;
@@ -69,22 +66,21 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
 
     ScreenShaker.prototype.update = function () {
         if (this.shaking) {
-            var self = this;
             if (this.smallShaking) {
                 var offSet = elasticOutShake(this.time, this.duration, this.__25, this.__5);
 
                 Object.keys(this.shaker).forEach(function (key) {
-                    var item = self.shaker[key];
-                    if (self.time == 0 || item._startValueX == undefined) {
+                    var item = this.shaker[key];
+                    if (this.time === 0 || item._startValueX === undefined) {
                         item._startValueX = item.x;
                     }
 
-                    if (offSet != 0) {
+                    if (offSet !== 0) {
                         item.x = item._startValueX + offSet;
                     } else {
                         item.x = item._startValueX;
                     }
-                });
+                }, this);
 
             } else if (this.bigShaking) {
                 var amplitude = this.__150;
@@ -93,24 +89,22 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
                 var offSetY = elasticOutShake(this.time, this.duration, amplitude, period);
 
                 Object.keys(this.shaker).forEach(function (key) {
-                    var item = self.shaker[key];
-                    if (self.time == 0 || item._startValueX == undefined) {
+                    var item = this.shaker[key];
+                    if (this.time === 0 || item._startValueX === undefined) {
                         item._startValueX = item.x;
                         item._startValueY = item.y;
-                        self.lastOffSetY = 0;
                     }
-                    if (offSetX != 0) {
+                    if (offSetX !== 0) {
                         item.x = item._startValueX + offSetX;
                     } else {
                         item.x = item._startValueX;
                     }
-                    if (offSetY != 0) {
-                        item.y = (item.y - self.lastOffSetY) + offSetY;
+                    if (offSetY !== 0) {
+                        item.y = item._startValueY + offSetY;
                     } else {
-                        item.y = (item.y - self.lastOffSetY);
+                        item.y = item._startValueY;
                     }
-                });
-                this.lastOffSetY = offSetY;
+                }, this);
             }
 
             this.time++;
@@ -119,18 +113,15 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
                 this.shaking = false;
 
                 Object.keys(this.shaker).forEach(function (key) {
-                    var item = self.shaker[key];
+                    var item = this.shaker[key];
                     item.x = item._startValueX;
                     delete item._startValueX;
 
-                    if (self.bigShaking) {
-                        // item.y = item.y - self.lastOffSetY;
-                        self.lastOffSetY = 0;
-
+                    if (this.bigShaking) {
                         item.y = item._startValueY;
                         delete item._startValueY;
                     }
-                });
+                }, this);
 
                 this.smallShaking = false;
                 this.bigShaking = false;
@@ -139,7 +130,7 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
     };
 
     function elasticOutShake(currentTime, duration, amplitude, period) {
-        if (currentTime == 0 || (currentTime /= duration) == 1) {
+        if (currentTime === 0 || (currentTime /= duration) === 1) {
             return 0;
         }
 
