@@ -50,6 +50,12 @@ H5.Bootstrapper = (function ($) {
             $.installCanvas(events, device, optionalCanvas, $.width, $.height, $.getDevicePixelRatio(), lowRezWidth,
                 lowRezHeight) : $.installCanvas(events, device, optionalCanvas, $.width, $.height, $.getDevicePixelRatio());
 
+        if (useLowRez) {
+            device.width = lowRezWidth;
+            device.height = lowRezHeight;
+            device.isLowRez = true;
+        }
+
         if (useFullScreen) {
             var fs = $.installFullScreen(useLowRez ? screen.scaledScreen : screen.screen, events);
             device.requestFullScreen = fs.request.bind(fs);

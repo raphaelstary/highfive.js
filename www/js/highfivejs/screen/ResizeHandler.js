@@ -1,8 +1,9 @@
 H5.ResizeHandler = (function (getDevicePixelRatio, Event, Math) {
     "use strict";
 
-    function ResizeHandler(events) {
+    function ResizeHandler(events, device) {
         this.events = events;
+        this.device = device;
     }
 
     ResizeHandler.prototype.handleResize = function (event) {
@@ -11,13 +12,23 @@ H5.ResizeHandler = (function (getDevicePixelRatio, Event, Math) {
 
         var pixelRatio = getDevicePixelRatio();
 
-        this.events.fire(Event.RESIZE, {
-            width: Math.floor(width * pixelRatio),
-            height: Math.floor(height * pixelRatio),
-            cssWidth: width,
-            cssHeight: height,
-            devicePixelRatio: pixelRatio
-        });
+        if (!this.device.isLowRez) {
+            this.events.fire(Event.RESIZE, {
+                width: Math.floor(width * pixelRatio),
+                height: Math.floor(height * pixelRatio),
+                cssWidth: width,
+                cssHeight: height,
+                devicePixelRatio: pixelRatio
+            });
+        } else {
+            this.events.fire(Event.RESIZE, {
+                width: this.device.width,
+                height: this.device.height,
+                cssWidth: width,
+                cssHeight: height,
+                devicePixelRatio: pixelRatio
+            });
+        }
     };
 
     return ResizeHandler;

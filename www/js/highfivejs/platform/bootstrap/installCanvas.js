@@ -10,7 +10,7 @@ H5.installCanvas = (function (document, Event, Math) {
 
             canvas.style['display'] = 'none';
 
-            var scale = width / pixelWidth;
+            var scale = height / pixelHeight;
             var scaledWidth = pixelWidth * scale;
             var scaledHeight = pixelHeight * scale;
             device.screenScale = scale;
@@ -31,12 +31,26 @@ H5.installCanvas = (function (document, Event, Math) {
             document.body.appendChild(scaledCanvas);
 
             events.subscribe(Event.RESIZE, function (event) {
-                var scale = event.width / pixelWidth;
+                // var realScreenWidth = Math.floor(event.cssWidth * event.devicePixelRatio);
+                var realScreenHeight = Math.floor(event.cssHeight * event.devicePixelRatio);
+
+                var scale = realScreenHeight / pixelHeight;
                 scaledWidth = pixelWidth * scale;
                 scaledHeight = pixelHeight * scale;
                 scaledCanvas.width = scaledWidth;
                 scaledCanvas.height = scaledHeight;
                 device.screenScale = scale;
+
+                var context = scaledCanvas.getContext('2d');
+                if ('imageSmoothingEnabled' in context) {
+                    context.imageSmoothingEnabled = false;
+                } else if ('mozImageSmoothingEnabled' in context) {
+                    context.mozImageSmoothingEnabled = false;
+                } else if ('webkitImageSmoothingEnabled' in context) {
+                    context.webkitImageSmoothingEnabled = false;
+                } else if ('msImageSmoothingEnabled' in context) {
+                    context.msImageSmoothingEnabled = false;
+                }
             });
 
             events.subscribe(Event.TICK_END, function () {

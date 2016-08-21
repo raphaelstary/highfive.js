@@ -73,7 +73,8 @@ H5.StageFactory = (function ($) {
         var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
             new $.CallbackTimer());
 
-        events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
+        if (!device.isLowRez)
+            events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
 
         return stage;
     }
