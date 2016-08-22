@@ -1,10 +1,10 @@
 H5.FixRezGridViewHelper = (function (Math, wrap) {
     "use strict";
 
-    function FixRezGridViewHelper(stage, xTilesCount, yTilesCount, edgeLength, topOffset, bottomOffset) {
+    function FixRezGridViewHelper(stage, xTilesCount, yTilesCount, width, height, edgeLength, topOffset, bottomOffset) {
         this.stage = stage;
-        this.width = xTilesCount * edgeLength;
-        this.height = yTilesCount * edgeLength;
+        this.width = width;
+        this.height = height;
         this.xTiles = xTilesCount;
         this.yTiles = yTilesCount;
         this.edgeLength = edgeLength;
