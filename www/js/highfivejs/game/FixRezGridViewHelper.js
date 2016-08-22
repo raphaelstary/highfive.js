@@ -77,7 +77,7 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
     };
 
     FixRezGridViewHelper.prototype.__xOffset = function () {
-        return Math.floor((this.width - this.edgeLength * this.xTiles + this.edgeLength) / 2);
+        return Math.floor((this.width - this.edgeLength * this.xTiles + this.edgeLength) * 0.95);
     };
 
     FixRezGridViewHelper.prototype.getX = function (u) {
