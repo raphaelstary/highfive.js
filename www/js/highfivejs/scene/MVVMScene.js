@@ -24,7 +24,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         this.anchorYFn = anchorYFn;
     }
 
-    MVVMScene.prototype.show = function (next) {
+    MVVMScene.prototype.show = function (next, customParam) {
         var self = this;
         var drawables = [];
         var taps = [];
@@ -1016,7 +1016,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         });
 
         if (this.viewModel.postConstruct)
-            this.viewModel.postConstruct();
+            this.viewModel.postConstruct(customParam);
     };
 
     return MVVMScene;

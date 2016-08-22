@@ -13,7 +13,7 @@ H5.Scenes = (function () {
         });
     };
 
-    Scenes.prototype.next = function () {
+    Scenes.prototype.next = function (customParam) {
         if (this.scenes.length === 0 && this.temp.length > 0) {
             this.rewind();
         }
@@ -28,7 +28,7 @@ H5.Scenes = (function () {
             this.temp.push(scene);
         }
 
-        scene.sceneFn(this.next.bind(this));
+        scene.sceneFn(this.next.bind(this), customParam);
     };
 
     Scenes.prototype.rewind = function () {
