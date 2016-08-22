@@ -12,9 +12,10 @@ H5.FixRezScreenShaker = (function (Math, Object) {
         this.bigShaking = false;
 
         this.time = 0;
-        this.duration = is30fps ? 30 : 60;
+        this.duration = 30;
 
         this.__150 = 150;
+        this.__75 = 75;
         this.__50 = 50;
         this.__25 = 25;
         this.__5 = 5;
@@ -84,7 +85,7 @@ H5.FixRezScreenShaker = (function (Math, Object) {
             } else if (this.bigShaking) {
                 var amplitude = this.__150;
                 var period = this.__5;
-                var offSetX = elasticOutShake(this.time, this.duration, amplitude - this.__50, period + this.__5);
+                var offSetX = elasticOutShake(this.time, this.duration, amplitude - this.__25, period + this.__5);
                 var offSetY = elasticOutShake(this.time, this.duration, amplitude, period);
 
                 Object.keys(this.shaker).forEach(function (key) {
