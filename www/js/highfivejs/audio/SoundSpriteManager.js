@@ -3,6 +3,7 @@ H5.SoundSpriteManager = (function (Howl) {
 
     function SoundSpriteManager() {
         this.sounds = null;
+        this.isMute = false;
     }
 
     SoundSpriteManager.prototype.load = function (info) {
@@ -35,6 +36,16 @@ H5.SoundSpriteManager = (function (Howl) {
 
     SoundSpriteManager.prototype.isPlaying = function (id) {
         return this.sounds.playing(id);
+    };
+
+    SoundSpriteManager.prototype.muteAll = function () {
+        this.isMute = true;
+        this.sounds.mute(true);
+    };
+
+    SoundSpriteManager.prototype.unmuteAll = function () {
+        this.isMute = false;
+        this.sounds.mute(false);
     };
 
     return SoundSpriteManager;
