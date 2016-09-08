@@ -384,6 +384,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         if (elem.zIndex != undefined && elem.zIndex != 3)
                             drawable.setZIndex(elem.zIndex);
 
+                        if (elem.lineWidth !== undefined)
+                            drawable.setLineWidth(txtSize(elem.lineWidth));
+                        if (elem.lineDash !== undefined)
+                            drawable.setLineDash(txtSize(elem.lineDash));
+
                         drawables.push(drawable);
 
                         if (elem.viewId) {

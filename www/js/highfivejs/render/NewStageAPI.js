@@ -155,6 +155,8 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
             self.screen, drawable);
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
             self.screen, drawable);
+        drawable.setLineDash = Setter.setLineDash.bind(undefined, self.resizer.add.bind(self.resizer, 'lineDash'),
+            self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
 
         return drawable;

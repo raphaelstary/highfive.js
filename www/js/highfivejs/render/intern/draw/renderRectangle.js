@@ -20,6 +20,10 @@ H5.renderRectangle = (function () {
                 Math.floor(drawable.__getWidth()), drawable.getHeight());
 
         } else {
+            if (drawable.data.lineDash !== undefined) {
+                ctx.setLineDash([drawable.data.lineDash]);
+            }
+
             ctx.strokeStyle = drawable.data.color;
             if (drawable.data.lineWidth)
                 ctx.lineWidth = drawable.data.lineWidth;

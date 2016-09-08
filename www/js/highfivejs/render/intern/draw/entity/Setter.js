@@ -156,6 +156,15 @@ H5.Setter = (function (changeCoords) {
             return drawable;
         },
 
+        setLineDash: function (addToResizer, screen, drawable, lineDashFn, resizeDependencies) {
+            drawable.data.lineDash = lineDashFn(screen.width, screen.height);
+            addToResizer(drawable, function (width, height) {
+                drawable.data.lineDash = lineDashFn(width, height);
+            }, resizeDependencies);
+
+            return drawable;
+        },
+
         setFilled: function (drawable, filled) {
             drawable.data.filled = filled;
             return drawable;
