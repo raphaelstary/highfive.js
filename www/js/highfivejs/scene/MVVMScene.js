@@ -386,8 +386,14 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
 
                         if (elem.lineWidth !== undefined)
                             drawable.setLineWidth(txtSize(elem.lineWidth));
-                        if (elem.lineDash !== undefined)
-                            drawable.setLineDash(txtSize(elem.lineDash));
+                        if (elem.lineWidth !== undefined && elem.lineDash !== undefined) {
+                            var dashSet = [
+                                txtSize(elem.lineDash[0] * elem.lineWidth), txtSize(elem.lineDash[1] * elem.lineWidth)
+                            ];
+                            drawable.setLineDash(dashSet);
+                        } else if (elem.lineDash !== undefined) {
+                            drawable.setLineDash([txtSize(elem.lineDash[0]), txtSize(elem.lineDash[1])]);
+                        }
 
                         drawables.push(drawable);
 

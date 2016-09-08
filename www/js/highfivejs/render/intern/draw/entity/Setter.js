@@ -60,8 +60,8 @@ H5.Setter = (function (changeCoords) {
             return drawable;
         },
 
-        setQuadTotal: function (addToResizer, screen, drawable, a_xFn, a_yFn, b_xFn, b_yFn, c_xFn, c_yFn, d_xFn,
-            d_yFn, resizeDependencies) {
+        setQuadTotal: function (addToResizer, screen, drawable, a_xFn, a_yFn, b_xFn, b_yFn, c_xFn, c_yFn, d_xFn, d_yFn,
+            resizeDependencies) {
             drawable.data.ax = a_xFn(screen.width, screen.height);
             drawable.data.ay = a_yFn(screen.height, screen.width);
             drawable.data.bx = b_xFn(screen.width, screen.height);
@@ -156,10 +156,13 @@ H5.Setter = (function (changeCoords) {
             return drawable;
         },
 
-        setLineDash: function (addToResizer, screen, drawable, lineDashFn, resizeDependencies) {
-            drawable.data.lineDash = lineDashFn(screen.width, screen.height);
+        setLineDash: function (addToResizer, screen, drawable, lineDashSet, resizeDependencies) {
+            drawable.data.lineDash = [
+                lineDashSet[0](screen.width, screen.height), lineDashSet[1](screen.width, screen.height)
+            ];
             addToResizer(drawable, function (width, height) {
-                drawable.data.lineDash = lineDashFn(width, height);
+                drawable.data.lineDash[0] = lineDashSet[0](width, height);
+                drawable.data.lineDash[1] = lineDashSet[1](width, height);
             }, resizeDependencies);
 
             return drawable;

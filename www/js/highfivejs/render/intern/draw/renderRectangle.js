@@ -21,7 +21,7 @@ H5.renderRectangle = (function () {
 
         } else {
             if (drawable.data.lineDash !== undefined) {
-                ctx.setLineDash([drawable.data.lineDash]);
+                ctx.setLineDash(drawable.data.lineDash);
             }
 
             ctx.strokeStyle = drawable.data.color;
