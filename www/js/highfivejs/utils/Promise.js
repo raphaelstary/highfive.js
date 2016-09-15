@@ -5,8 +5,8 @@ H5.Promise = (function () {
         this.isFulfilled = false;
     }
 
-    Promise.prototype.then = function (callback) {
-        this.__callback = callback;
+    Promise.prototype.then = function (callback, self) {
+        this.__callback = callback.bind(self);
 
         if (this.isFulfilled)
             callback(this.__arg);
