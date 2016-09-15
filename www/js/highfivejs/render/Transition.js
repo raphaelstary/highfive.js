@@ -117,6 +117,26 @@ H5.Transition = (function (Math) {
         }
     }
 
+    function easeInBack(currentTime, startValue, changeInValue, duration) {
+        return changeInValue * (currentTime /= duration) * currentTime * ((1.70158 + 1) * currentTime - 1.70158) +
+            startValue;
+    }
+
+    function easeOutBack(currentTime, startValue, changeInValue, duration) {
+        return changeInValue *
+            ((currentTime = currentTime / duration - 1) * currentTime * ((1.70158 + 1) * currentTime + 1.70158) + 1) +
+            startValue;
+    }
+
+    function easeInOutBack(currentTime, startValue, changeInValue, duration) {
+        var s = 1.70158;
+        if ((currentTime /= duration / 2) < 1)
+            return changeInValue / 2 * (currentTime * currentTime * (((s *= (1.525)) + 1) * currentTime - s)) +
+                startValue;
+        return changeInValue / 2 * ((currentTime -= 2) * currentTime * (((s *= (1.525)) + 1) * currentTime + s) + 2) +
+            startValue;
+    }
+
     return {
         LINEAR: linearTweening,
 
@@ -138,6 +158,10 @@ H5.Transition = (function (Math) {
         EASE_IN_SIN: sinusoidalEasingIn,
         EASE_OUT_SIN: sinusoidalEasingOut,
         EASE_OUT_IN_SIN: sinusoidalEasingOutAndIn,
-        EASE_IN_OUT_SIN: sinusoidalEasingInAndOut
+        EASE_IN_OUT_SIN: sinusoidalEasingInAndOut,
+
+        EASE_IN_BACK: easeInBack,
+        EASE_OUT_BACK: easeOutBack,
+        EASE_IN_OUT_BACK: easeInOutBack
     };
 })(Math);
