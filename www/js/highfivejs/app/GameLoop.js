@@ -33,8 +33,10 @@ H5.GameLoop = (function (requestAnimationFrame, Event) {
             this.events.fireSync(Event.TICK_MOVE);
 
         // collision phase
-        if (this.isCollision)
+        if (this.isCollision) {
             this.events.fireSync(Event.TICK_COLLISION);
+            this.events.fireSync(Event.TICK_POST_COLLISION);
+        }
 
         // pre draw phase
         this.events.fireSync(Event.TICK_CAMERA);
