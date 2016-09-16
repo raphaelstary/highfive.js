@@ -39,12 +39,12 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
         }
     };
 
-    EventBus.prototype.subscribe = function (eventName, callback) {
+    EventBus.prototype.subscribe = function (eventName, callback, self) {
         if (!this.dict[eventName])
             this.dict[eventName] = {};
 
         var id = this.idGenerator++;
-        this.dict[eventName][id] = callback;
+        this.dict[eventName][id] = self ? callback.bind(self) : callback;
         return id;
     };
 

@@ -109,9 +109,9 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.unmask = EntityServices.unmask.bind(EntityServices, self.stage, self.resizer, drawable);
         drawable.pause = EntityServices.pause.bind(undefined, self.stage, drawable);
         drawable.play = EntityServices.play.bind(undefined, self.stage, drawable);
-        drawable.setCallback = function (callback) {
+        drawable.setCallback = function (callback, self) {
             // for sprite animations
-            drawable.__callback = callback;
+            drawable.__callback = self ? callback.bind(self) : callback;
             return drawable;
         };
         drawable.animate = EntityServices.sprite.bind(undefined, self.stage, drawable);

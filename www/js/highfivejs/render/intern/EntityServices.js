@@ -16,8 +16,8 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
         return animation;
     }
 
-    function callback(animation, callback) {
-        animation.__callback = callback;
+    function callback(animation, callback, self) {
+        animation.__callback = self ? callback.bind(self) : callback;
         return animation;
     }
 

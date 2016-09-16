@@ -23,11 +23,11 @@ H5.CallbackTimer = (function () {
         }
     };
 
-    CallbackTimer.prototype.doLater = function (callback, duration) {
+    CallbackTimer.prototype.doLater = function (callback, duration, self) {
         this.todos.push({
             duration: duration,
             time: 0,
-            callback: callback
+            callback: self ? callback.bind(self) : callback
         });
     };
 
