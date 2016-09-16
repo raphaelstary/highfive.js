@@ -6,10 +6,10 @@ H5.Promise = (function () {
     }
 
     Promise.prototype.then = function (callback, self) {
-        this.__callback = callback.bind(self);
+        this.__callback = self ? callback.bind(self) : callback;
 
         if (this.isFulfilled)
-            callback(this.__arg);
+            this.__callback(this.__arg);
     };
 
     Promise.prototype.resolve = function (arg) {
