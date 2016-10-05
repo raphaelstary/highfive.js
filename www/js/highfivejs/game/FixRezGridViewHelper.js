@@ -1,7 +1,7 @@
 H5.FixRezGridViewHelper = (function (Math, wrap) {
     "use strict";
 
-    function FixRezGridViewHelper(stage, xTilesCount, yTilesCount, width, height, edgeLength, topOffset, bottomOffset) {
+    function FixRezGridViewHelper(stage, xTilesCount, yTilesCount, width, height, edgeLength, topOffset) {
         this.stage = stage;
         this.width = width;
         this.height = height;
@@ -9,7 +9,6 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
         this.yTiles = yTilesCount;
         this.edgeLength = edgeLength;
         this.topOffset = topOffset;
-        this.bottomOffset = bottomOffset;
     }
 
     FixRezGridViewHelper.prototype.getCoordinates = function (x, y) {
