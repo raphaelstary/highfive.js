@@ -66,7 +66,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.changeZIndex = function (drawable, newZIndex) {
-        if (drawable.zIndex != newZIndex)
+        if (newZIndex !== undefined && drawable.zIndex != newZIndex)
             this.renderer.changeZIndex(drawable, newZIndex);
         return drawable;
     };
