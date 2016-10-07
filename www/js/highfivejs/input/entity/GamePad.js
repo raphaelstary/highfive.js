@@ -81,6 +81,14 @@ H5.GamePad = (function (navigator) {
         return this.__isButtonPressed(Button.B);
     };
 
+    GamePad.prototype.isXPressed = function () {
+        return this.__isButtonPressed(Button.X);
+    };
+
+    GamePad.prototype.isYPressed = function () {
+        return this.__isButtonPressed(Button.Y);
+    };
+
     GamePad.prototype.isRightBumperPressed = function () {
         return this.__isButtonPressed(Button.RIGHT_BUMPER);
     };
