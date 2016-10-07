@@ -27,6 +27,7 @@ H5.GameLoop = (function (requestAnimationFrame, Event) {
 
         // input phase
         this.events.fireSync(Event.TICK_INPUT);
+        this.events.fireSync(Event.TICK_POST_INPUT);
 
         // move phase
         if (this.isMove)

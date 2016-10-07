@@ -11,6 +11,7 @@ H5.Event = {
 
     TICK_START: 'tick_start',
     TICK_INPUT: 'tick_input',
+    TICK_POST_INPUT: 'tick_post_input',
     TICK_MOVE: 'tick_move',
     TICK_COLLISION: 'tick_collision',
     TICK_POST_COLLISION: 'tick_post_collision',
