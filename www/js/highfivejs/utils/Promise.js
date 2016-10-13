@@ -8,8 +8,16 @@ H5.Promise = (function () {
     Promise.prototype.then = function (callback, self) {
         this.__callback = self ? callback.bind(self) : callback;
 
-        if (this.isFulfilled)
-            this.__callback(this.__arg);
+        var next = this.__next = new Promise();
+
+        if (this.isFulfilled) {
+            var promise = this.__callback(this.__arg);
+            if (promise instanceof Promise)
+                promise.then(next.resolve.bind(next));
+            next.resolve();
+        }
+
+        return next;
     };
 
     Promise.prototype.resolve = function (arg) {
@@ -19,7 +27,10 @@ H5.Promise = (function () {
         this.isFulfilled = true;
 
         if (this.__callback) {
-            this.__callback(arg);
+            var promise = this.__callback(arg);
+            if (promise instanceof Promise)
+                promise.then(this.__next.resolve.bind(this.__next));
+            this.__next.resolve();
         } else {
             this.__arg = arg;
         }
