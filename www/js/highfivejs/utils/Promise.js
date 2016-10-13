@@ -12,9 +12,11 @@ H5.Promise = (function () {
 
         if (this.isFulfilled) {
             var promise = this.__callback(this.__arg);
-            if (promise instanceof Promise)
+            if (promise instanceof Promise) {
                 promise.then(next.resolve.bind(next));
-            next.resolve();
+            } else {
+                next.resolve();
+            }
         }
 
         return next;
@@ -28,9 +30,11 @@ H5.Promise = (function () {
 
         if (this.__callback) {
             var promise = this.__callback(arg);
-            if (promise instanceof Promise)
+            if (promise instanceof Promise) {
                 promise.then(this.__next.resolve.bind(this.__next));
-            this.__next.resolve();
+            } else {
+                this.__next.resolve();
+            }
         } else {
             this.__arg = arg;
         }
