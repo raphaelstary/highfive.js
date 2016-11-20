@@ -43,54 +43,54 @@ H5.GamePad = (function (navigator, Button, Axis) {
     };
 
     GamePad.prototype.isRightTriggerPressed = function () {
-        return this.isButtonPressed(Button.RIGHT_TRIGGER);
+        return this.isPressed(Button.RIGHT_TRIGGER);
     };
 
     GamePad.prototype.isAPressed = function () {
-        return this.isButtonPressed(Button.A);
+        return this.isPressed(Button.A);
     };
 
     GamePad.prototype.isBPressed = function () {
-        return this.isButtonPressed(Button.B);
+        return this.isPressed(Button.B);
     };
 
     GamePad.prototype.isXPressed = function () {
-        return this.isButtonPressed(Button.X);
+        return this.isPressed(Button.X);
     };
 
     GamePad.prototype.isYPressed = function () {
-        return this.isButtonPressed(Button.Y);
+        return this.isPressed(Button.Y);
     };
 
     GamePad.prototype.isRightBumperPressed = function () {
-        return this.isButtonPressed(Button.RIGHT_BUMPER);
+        return this.isPressed(Button.RIGHT_BUMPER);
     };
 
     GamePad.prototype.isLeftBumperPressed = function () {
-        return this.isButtonPressed(Button.LEFT_BUMPER);
+        return this.isPressed(Button.LEFT_BUMPER);
     };
 
     GamePad.prototype.isStartPressed = function () {
-        return this.isButtonPressed(Button.START);
+        return this.isPressed(Button.START);
     };
 
     GamePad.prototype.isDPadUpPressed = function () {
-        return this.isButtonPressed(Button.D_PAD_UP);
+        return this.isPressed(Button.D_PAD_UP);
     };
 
     GamePad.prototype.isDPadRightPressed = function () {
-        return this.isButtonPressed(Button.D_PAD_RIGHT);
+        return this.isPressed(Button.D_PAD_RIGHT);
     };
 
     GamePad.prototype.isDPadDownPressed = function () {
-        return this.isButtonPressed(Button.D_PAD_DOWN);
+        return this.isPressed(Button.D_PAD_DOWN);
     };
 
     GamePad.prototype.isDPadLeftPressed = function () {
-        return this.isButtonPressed(Button.D_PAD_LEFT);
+        return this.isPressed(Button.D_PAD_LEFT);
     };
 
-    GamePad.prototype.isButtonPressed = function (button) {
+    GamePad.prototype.isPressed = function (button) {
         return this.buttons[button].pressed;
     };
 
