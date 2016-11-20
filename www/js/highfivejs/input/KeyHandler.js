@@ -3,7 +3,11 @@ H5.KeyHandler = (function (Event) {
 
     function KeyHandler(events) {
         this.events = events;
-        this.pressedKeys = {};
+        this.pressedKeys = {
+            isPressed: function (code) {
+                return this[code];
+            }
+        };
         this.changed = false;
     }
 
