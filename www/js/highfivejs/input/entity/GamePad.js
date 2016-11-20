@@ -1,32 +1,5 @@
-H5.GamePad = (function (navigator) {
+H5.GamePad = (function (navigator, Button, Axis) {
     "use strict";
-
-    var Button = {
-        A: 0,
-        B: 1,
-        X: 2,
-        Y: 3,
-        LEFT_BUMPER: 4,
-        RIGHT_BUMPER: 5,
-        LEFT_TRIGGER: 6,
-        RIGHT_TRIGGER: 7,
-        BACK: 8,
-        START: 9,
-        LEFT_STICK: 10,
-        RIGHT_STICK: 11,
-        D_PAD_UP: 12,
-        D_PAD_DOWN: 13,
-        D_PAD_LEFT: 14,
-        D_PAD_RIGHT: 15,
-        GUIDE: 16
-    };
-
-    var Axis = {
-        LEFT_STICK_X: 0,
-        LEFT_STICK_Y: 1,
-        RIGHT_STICK_X: 2,
-        RIGHT_STICK_Y: 3
-    };
 
     function GamePad(index) {
         this.index = index;
@@ -70,56 +43,56 @@ H5.GamePad = (function (navigator) {
     };
 
     GamePad.prototype.isRightTriggerPressed = function () {
-        return this.__isButtonPressed(Button.RIGHT_TRIGGER);
+        return this.isButtonPressed(Button.RIGHT_TRIGGER);
     };
 
     GamePad.prototype.isAPressed = function () {
-        return this.__isButtonPressed(Button.A);
+        return this.isButtonPressed(Button.A);
     };
 
     GamePad.prototype.isBPressed = function () {
-        return this.__isButtonPressed(Button.B);
+        return this.isButtonPressed(Button.B);
     };
 
     GamePad.prototype.isXPressed = function () {
-        return this.__isButtonPressed(Button.X);
+        return this.isButtonPressed(Button.X);
     };
 
     GamePad.prototype.isYPressed = function () {
-        return this.__isButtonPressed(Button.Y);
+        return this.isButtonPressed(Button.Y);
     };
 
     GamePad.prototype.isRightBumperPressed = function () {
-        return this.__isButtonPressed(Button.RIGHT_BUMPER);
+        return this.isButtonPressed(Button.RIGHT_BUMPER);
     };
 
     GamePad.prototype.isLeftBumperPressed = function () {
-        return this.__isButtonPressed(Button.LEFT_BUMPER);
+        return this.isButtonPressed(Button.LEFT_BUMPER);
     };
 
     GamePad.prototype.isStartPressed = function () {
-        return this.__isButtonPressed(Button.START);
+        return this.isButtonPressed(Button.START);
     };
 
     GamePad.prototype.isDPadUpPressed = function () {
-        return this.__isButtonPressed(Button.D_PAD_UP);
+        return this.isButtonPressed(Button.D_PAD_UP);
     };
 
     GamePad.prototype.isDPadRightPressed = function () {
-        return this.__isButtonPressed(Button.D_PAD_RIGHT);
+        return this.isButtonPressed(Button.D_PAD_RIGHT);
     };
 
     GamePad.prototype.isDPadDownPressed = function () {
-        return this.__isButtonPressed(Button.D_PAD_DOWN);
+        return this.isButtonPressed(Button.D_PAD_DOWN);
     };
 
     GamePad.prototype.isDPadLeftPressed = function () {
-        return this.__isButtonPressed(Button.D_PAD_LEFT);
+        return this.isButtonPressed(Button.D_PAD_LEFT);
     };
 
-    GamePad.prototype.__isButtonPressed = function (button) {
+    GamePad.prototype.isButtonPressed = function (button) {
         return this.buttons[button].pressed;
     };
 
     return GamePad;
-})(navigator);
+})(navigator, H5.GamePadButton, H5.GamePadAxis);
