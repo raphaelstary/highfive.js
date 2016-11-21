@@ -33,6 +33,8 @@ H5.PlayerControls = (function (Event, Array) {
                         } else {
                             command.or = [command.or, keyCode];
                         }
+
+                        return this;
                     },
                     onDown: function (callback, self) {
                         if (self) {
@@ -40,6 +42,8 @@ H5.PlayerControls = (function (Event, Array) {
                         } else {
                             command.onDown = callback;
                         }
+
+                        return this;
                     },
                     onUp: function (callback, self) {
                         if (self) {
@@ -47,9 +51,13 @@ H5.PlayerControls = (function (Event, Array) {
                         } else {
                             command.onUp = callback;
                         }
+
+                        return this;
                     },
                     remove: function () {
                         commands.splice(commands.indexOf(command), 1);
+
+                        return this;
                     }
                 }
             },
@@ -83,10 +91,14 @@ H5.PlayerControls = (function (Event, Array) {
                     events.unsubscribe(eventId);
                     unsubscribe = undefined;
                 };
+
+                return this;
             },
 
             cancel: function () {
                 if (unsubscribe) unsubscribe();
+
+                return this;
             }
         }
     }
