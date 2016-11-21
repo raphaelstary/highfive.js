@@ -122,6 +122,10 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
 
             return addServiceMethods(path);
         },
+        setShow: function (drawable, value) {
+            drawable.show = value;
+            return drawable;
+        },
         show: function (stage, drawable) {
             stage.draw(drawable);
             return drawable;

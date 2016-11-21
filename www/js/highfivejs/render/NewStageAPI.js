@@ -103,6 +103,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
 
         drawable.moveTo = EntityServices.moveTo.bind(undefined, self.stage, self.resizer, self.screen, drawable);
         drawable.moveFrom = EntityServices.moveFrom.bind(undefined, self.stage, self.resizer, self.screen, drawable);
+        drawable.setShow = EntityServices.setShow.bind(undefined, drawable);
         drawable.addToStage = EntityServices.show.bind(undefined, self.stage, drawable);
         drawable.hide = EntityServices.hide.bind(undefined, self.stage, drawable);
         drawable.remove = EntityServices.remove.bind(EntityServices, self.stage, self.resizer, drawable);
