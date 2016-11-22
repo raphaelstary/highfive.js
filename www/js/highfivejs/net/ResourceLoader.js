@@ -87,7 +87,7 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
                 elem.file.src = elem.src;
 
             } else if (elem.type === ResourceType.AUDIO) {
-                elem.file.addEventListener('loadeddata', function () {
+                elem.file.addEventListener('canplaythrough', function () {
                     self.onResourceLoad();
                 });
                 elem.file.src = elem.src;
