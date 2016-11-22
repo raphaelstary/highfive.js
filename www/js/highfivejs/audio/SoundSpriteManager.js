@@ -49,4 +49,5 @@ H5.SoundSpriteManager = (function (Howl) {
     };
 
     return SoundSpriteManager;
-})(Howl);
+})(function () {
+});
