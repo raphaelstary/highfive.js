@@ -1,11 +1,12 @@
-H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON) {
+H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audio) {
     "use strict";
 
     var ResourceType = {
         IMAGE: 0,
         SOUND: 1,
         JSON: 2,
-        FONT: 3
+        FONT: 3,
+        AUDIO: 4
     };
 
     function ResourceLoader() {
@@ -28,6 +29,18 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON) {
         });
 
         return img;
+    };
+
+    ResourceLoader.prototype.addAudio = function (audioSrc) {
+        this.__counter++;
+        var audio = new Audio();
+        this.resources.push({
+            type: ResourceType.AUDIO,
+            file: audio,
+            src: audioSrc
+        });
+
+        return audio;
     };
 
     ResourceLoader.prototype.addJSON = function (jsonSrc, payload) {
@@ -72,6 +85,13 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON) {
                     self.onResourceLoad();
                 };
                 elem.file.src = elem.src;
+
+            } else if (elem.type === ResourceType.AUDIO) {
+                elem.file.addEventListener('loadeddata', function () {
+                    self.onResourceLoad();
+                });
+                elem.file.src = elem.src;
+                elem.file.load();
 
             } else if (elem.type === ResourceType.JSON) {
                 var xhr = new XMLHttpRequest();
@@ -128,4 +148,4 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON) {
     };
 
     return ResourceLoader;
-})(Blob, window.WebKitBlobBuilder, Image, Object, window.URL || window.webkitURL, JSON);
+})(Blob, window.WebKitBlobBuilder, Image, Object, window.URL || window.webkitURL, JSON, Audio);
