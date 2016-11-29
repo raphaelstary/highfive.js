@@ -63,6 +63,22 @@ H5.PlayerControls = (function (Event, Array) {
             },
 
             register: function (events) {
+                var setupEventId = events.subscribe(event, function (inputType) {
+                    commands.forEach(function (command) {
+                        if (command.or && command.or instanceof Array) {
+                            command.isPressed = inputType.isPressed(command.code) || command.or.some(function (code) {
+                                    return inputType.isPressed(code);
+                                });
+                        } else if (command.or) {
+                            command.isPressed = inputType.isPressed(command.code) || inputType.isPressed(command.or);
+                        } else {
+                            command.isPressed = inputType.isPressed(command.code);
+                        }
+                    });
+
+                    events.unsubscribe(setupEventId);
+                });
+
                 var eventId = events.subscribe(event, function (inputType) {
                     commands.forEach(function (command) {
                         var isPressed;
