@@ -1,8 +1,127 @@
-H5.PlayerControls = (function (Event, Array) {
+H5.PlayerControls = (function (Event, Array, Math, Vectors) {
     "use strict";
 
+    var Action = {
+        LEFT: 'left',
+        NOTHING: 'nothing',
+        RIGHT: 'right',
+        UP: 'up',
+        DOWN: 'down'
+    };
+
+    function getAxisAction(xAxisValue, yAxisValue, deadZone) {
+        var yAxis = yAxisValue;
+        if (yAxis > -deadZone && yAxis < deadZone) yAxis = 0;
+
+        var xAxis = xAxisValue;
+        if (xAxis > -deadZone && xAxis < deadZone) xAxis = 0;
+
+        if (xAxis != 0 && yAxis != 0) {
+            var angle = Vectors.getAngle(xAxis, yAxis);
+
+            if (angle < 0) {
+                if (angle < -Math.PI * 3 / 4) {
+                    return Action.LEFT;
+                } else if (angle < -Math.PI / 4) {
+                    return Action.UP;
+                }
+                return Action.RIGHT;
+            }
+            if (angle > Math.PI * 3 / 4) {
+                return Action.LEFT;
+            } else if (angle > Math.PI / 4) {
+                return Action.DOWN;
+            }
+            return Action.RIGHT;
+
+        } else if (yAxis != 0) {
+            if (yAxis > 0)
+                return Action.DOWN;
+            return Action.UP;
+        } else if (xAxis != 0) {
+            if (xAxis > 0)
+                return Action.RIGHT;
+            return Action.LEFT;
+        }
+        return Action.NOTHING;
+    }
+
+    function getStickFunction(store) {
+        function getRegisterCallbackFunction(name) {
+            return function (callback, self) {
+                if (self) {
+                    store[name] = callback.bind(self);
+                } else {
+                    store[name] = callback;
+                }
+                return this;
+            };
+        }
+
+        return function (deadZone) {
+            store.deadZone = deadZone || 0.1;
+            store.lastAction = Action.NOTHING;
+            return {
+                onStickUp: getRegisterCallbackFunction('up'),
+                onStickRight: getRegisterCallbackFunction('right'),
+                onStickDown: getRegisterCallbackFunction('down'),
+                onStickLeft: getRegisterCallbackFunction('left'),
+                onStickNeutral: getRegisterCallbackFunction('neutral')
+            };
+        };
+    }
+
+    function updateStick(store, xAxis, yAxis) {
+        var action = getAxisAction(xAxis, yAxis, store.deadZone);
+        if (action != store.lastAction) {
+            store.lastAction = action;
+            if (action == Action.LEFT) {
+                if (store.left) store.left();
+            } else if (action == Action.UP) {
+                if (store.up) store.up();
+            } else if (action == Action.RIGHT) {
+                if (store.right) store.right();
+            } else if (action == Action.DOWN) {
+                if (store.down) store.down();
+            } else {
+                if (store.neutral) store.neutral();
+            }
+        }
+    }
+
     function createGamePadControls() {
-        return createControls(Event.GAME_PAD);
+        var directionsLeft = {};
+        var directionsRight = {};
+        var unsubscribe;
+
+        var gamePad = createControls(Event.GAME_PAD);
+
+        gamePad.addLeftStick = getStickFunction(directionsLeft);
+        gamePad.addRightStick = getStickFunction(directionsRight);
+
+        gamePad.basicRegister = gamePad.register;
+        gamePad.basicCancel = gamePad.cancel;
+        gamePad.register = function (events) {
+            this.basicRegister(events);
+
+            var axisListener = events.subscribe(Event.GAME_PAD, function (gamePad) {
+                updateStick(directionsLeft, gamePad.getLeftStickXAxis(), gamePad.getLeftStickYAxis());
+                updateStick(directionsRight, gamePad.getRightStickXAxis(), gamePad.getRightStickYAxis());
+            });
+
+            unsubscribe = function () {
+                events.unsubscribe(axisListener);
+                unsubscribe = undefined;
+            };
+
+            return this;
+        };
+        gamePad.cancel = function () {
+            this.basicCancel();
+            if (unsubscribe) unsubscribe();
+            return this;
+        };
+        return gamePad;
     }
 
     function createKeyBoardControls() {
@@ -123,4 +242,4 @@ H5.PlayerControls = (function (Event, Array) {
         getGamePad: createGamePadControls,
         getKeyBoard: createKeyBoardControls
     }
-})(H5.Event, Array);
+})(H5.Event, Array, Math, H5.Vectors);
