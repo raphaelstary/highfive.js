@@ -1,19 +1,19 @@
-H5.Scenes = (function () {
+H5.SceneList = (function () {
     "use strict";
 
-    function Scenes() {
+    function SceneList() {
         this.scenes = [];
         this.temp = [];
     }
 
-    Scenes.prototype.add = function (sceneFn, oneTime) {
+    SceneList.prototype.add = function (sceneFn, oneTime) {
         this.scenes.push({
             sceneFn: sceneFn,
             oneTime: oneTime == null ? false : oneTime
         });
     };
 
-    Scenes.prototype.next = function (customParam) {
+    SceneList.prototype.next = function (customParam) {
         if (this.scenes.length === 0 && this.temp.length > 0) {
             this.rewind();
         }
@@ -31,10 +31,10 @@ H5.Scenes = (function () {
         scene.sceneFn(this.next.bind(this), customParam);
     };
 
-    Scenes.prototype.rewind = function () {
+    SceneList.prototype.rewind = function () {
         this.scenes = this.temp;
         this.temp = [];
     };
 
-    return Scenes;
+    return SceneList;
 })();

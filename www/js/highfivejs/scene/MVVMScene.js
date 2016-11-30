@@ -974,12 +974,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
          * @property resumeScene
          */
 
-        function nextScene(customParam) {
+        function nextScene(key, customParam) {
             if (!endScene())
                 return;
 
-            if (next)
-                next(customParam);
+            if (next) next(key, customParam);
         }
 
         function restartScene() {

@@ -1,11 +1,11 @@
 H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenateProperties, CallbackTimer, Event) {
     "use strict";
 
-    function App(services, myResources, installMyScenes, getStage, removeKeyHandler) {
+    function App(services, myResources, runMyScenes, getStage, removeKeyHandler) {
         this.services = services;
         this.removeKeyHandler = removeKeyHandler;
         this.resources = myResources;
-        this.installMyScenes = installMyScenes;
+        this.runMyScenes = runMyScenes;
         // this.getLegacyStage = getLegacyStage;
         this.getStage = getStage;
     }
@@ -61,15 +61,10 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
 
             concatenateProperties(self.services, sceneServices);
 
-            self.scenes = self.installMyScenes(sceneServices);
-            self.__run();
+            self.runMyScenes(sceneServices);
         };
 
         resourceLoader.load();
-    };
-
-    App.prototype.__run = function () {
-        this.scenes.next();
     };
 
     App.prototype.stop = function () {
