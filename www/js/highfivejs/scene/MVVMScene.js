@@ -985,7 +985,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             if (!endScene())
                 return;
 
-            self.show(next);
+            self.show(next, customParam);
         }
 
         function stopScene() {
@@ -993,7 +993,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                 return;
 
             // resume callback
-            return self.show.bind(self, next);
+            return self.show.bind(self, next, customParam);
         }
 
         function pauseScene() {
