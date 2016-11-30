@@ -62,11 +62,11 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             store.deadZone = deadZone || 0.1;
             store.lastAction = Action.NOTHING;
             return {
-                onStickUp: getRegisterCallbackFunction('up'),
-                onStickRight: getRegisterCallbackFunction('right'),
-                onStickDown: getRegisterCallbackFunction('down'),
-                onStickLeft: getRegisterCallbackFunction('left'),
-                onStickNeutral: getRegisterCallbackFunction('neutral')
+                onDirectionUp: getRegisterCallbackFunction('up'),
+                onDirectionRight: getRegisterCallbackFunction('right'),
+                onDirectionDown: getRegisterCallbackFunction('down'),
+                onDirectionLeft: getRegisterCallbackFunction('left'),
+                onDirectionNeutral: getRegisterCallbackFunction('neutral')
             };
         };
     }
