@@ -6,9 +6,13 @@ H5.GamePad = (function (navigator, Button, Axis) {
         this.lastUpdate = 0;
     }
 
-    GamePad.prototype.update = function () {
-        var gamepads = navigator.getGamepads ? navigator.getGamepads() :
+    GamePad.prototype.getGamePads = function () {
+        return navigator.getGamepads ? navigator.getGamepads() :
             (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+    };
+
+    GamePad.prototype.update = function () {
+        var gamepads = this.getGamePads();
         var pad = gamepads[this.index];
 
         if (!pad) {
