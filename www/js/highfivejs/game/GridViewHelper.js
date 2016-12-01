@@ -77,8 +77,7 @@ H5.GridViewHelper = (function (Height, Math, add) {
         } else {
             drawable.setPosition(this.__getX(u), this.__getY(v), dependencies);
         }
-        if (zIndex !== 3)
-            drawable.setZIndex(zIndex);
+        if (zIndex !== 3) drawable.setZIndex(zIndex);
         if (defaultTileHeight) {
             var scaleFactor = drawable.data.height / defaultTileHeight;
             drawable.scale = this.__calcBaseScale(drawable.getHeight()) * scaleFactor;
@@ -160,7 +159,9 @@ H5.GridViewHelper = (function (Height, Math, add) {
     };
 
     GridViewHelper.prototype.__getTopOffset = function (height) {
-        return this.topOffset(height);
+        if (this.topOffset)
+            return this.topOffset(height);
+        return 0;
     };
 
     GridViewHelper.prototype.getBaseScale = function () {
