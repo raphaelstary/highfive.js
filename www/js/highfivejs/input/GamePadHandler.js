@@ -44,4 +44,4 @@ H5.GamePadHandler = (function (GamePad, navigator, Event) {
 
     return GamePadHandler;
 
-})(H5.GamePad, navigator, H5.Event);
+})(H5.GamePad, window.navigator, H5.Event);

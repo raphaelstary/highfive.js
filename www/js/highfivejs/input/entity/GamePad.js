@@ -99,4 +99,4 @@ H5.GamePad = (function (navigator, Button, Axis) {
     };
 
     return GamePad;
-})(navigator, H5.GamePadButton, H5.GamePadAxis);
+})(window.navigator, H5.GamePadButton, H5.GamePadAxis);
