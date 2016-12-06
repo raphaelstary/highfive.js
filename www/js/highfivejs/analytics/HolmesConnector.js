@@ -1,4 +1,4 @@
-H5.HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage) {
+H5.HolmesConnector = (function (Persistence, JSON, XMLHttpRequest, localStorage) {
     "use strict";
 
     function HolmesConnector(url, tenantCode, appKeyCode) {
@@ -14,7 +14,7 @@ H5.HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage) 
     var CLIENT_ID = '-client_id';
 
     HolmesConnector.prototype.register = function () {
-        var clientId = loadString(this.appKeyCode + CLIENT_ID);
+        var clientId = Persistence.loadString(this.appKeyCode + CLIENT_ID);
         if (clientId) {
             this.clientId = clientId;
             return;
@@ -38,8 +38,10 @@ H5.HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage) 
             id: this.clientId,
             tenant: this.tenantCode
         };
-        for (var key in data)
+        for (var key in data) {
+            //noinspection JSUnfilteredForInLoop
             payload[key] = data[key];
+        }
 
         this.__request(Method.EVENT, payload);
     };
@@ -53,4 +55,4 @@ H5.HolmesConnector = (function (loadString, JSON, XMLHttpRequest, localStorage) 
     };
 
     return HolmesConnector;
-})(H5.loadString, JSON, XMLHttpRequest, H5.lclStorage);
+})(H5.Persistence, JSON, XMLHttpRequest, H5.lclStorage);
