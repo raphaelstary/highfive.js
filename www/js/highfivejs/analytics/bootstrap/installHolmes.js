@@ -10,7 +10,10 @@ H5.installHolmes = (function (Event, HolmesConnector, window) {
                 url: url,
                 line: lineNumber,
                 column: columnNumber,
-                error: error
+                error: {
+                    message: error.message,
+                    stack: error.stack
+                }
             });
 
             if (gOldOnError) {

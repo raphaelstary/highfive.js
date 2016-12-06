@@ -48,7 +48,7 @@ H5.sendSystemEvent = (function (Event, location, geolocation, Promise, GamePad, 
         }
     }
 
-    function getPayload(device, messages, appName, appVersion) {
+    function getPayload(device, messages, appName, appVersion, appPlatform) {
         return {
             type: 'system',
             width: device.width,
@@ -66,22 +66,23 @@ H5.sendSystemEvent = (function (Event, location, geolocation, Promise, GamePad, 
             location: location.href,
             gamePadInfo: collectGamePadInfo(),
             app: appName,
-            version: appVersion
+            version: appVersion,
+            platform: appPlatform
         };
     }
 
-    function sendSystemEvent(appName, appVersion, device, messages, events, usePosition) {
+    function sendSystemEvent(appName, appVersion, appPlatform, device, messages, events, usePosition) {
 
         if (usePosition) {
             collectPositionInfo().then(function (positionInfo) {
 
-                var payload = getPayload(device, messages, appName, appVersion);
+                var payload = getPayload(device, messages, appName, appVersion, appPlatform);
                 payload.positionInfo = positionInfo;
 
                 events.fire(Event.ANALYTICS, payload);
             });
         } else {
-            events.fire(Event.ANALYTICS, getPayload(device, messages, appName, appVersion));
+            events.fire(Event.ANALYTICS, getPayload(device, messages, appName, appVersion, appPlatform));
         }
     }
 
