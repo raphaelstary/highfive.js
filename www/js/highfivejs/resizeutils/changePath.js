@@ -1,4 +1,4 @@
-H5.changePath = (function (Math, BezierCurvePath, LinePath, Vectors, CirclePath) {
+H5.changePath = (function (BezierCurvePath, LinePath, Vectors, CirclePath) {
     "use strict";
 
     function changePath(path, startX_or_x, startY_or_y, endX_or_radius, endY, p1_x, p1_y, p2_x, p2_y) {
@@ -37,4 +37,4 @@ H5.changePath = (function (Math, BezierCurvePath, LinePath, Vectors, CirclePath)
     }
 
     return changePath;
-})(Math, H5.BezierCurvePath, H5.LinePath, H5.Vectors, H5.CirclePath);
+})(H5.BezierCurvePath, H5.LinePath, H5.Vectors, H5.CirclePath);
