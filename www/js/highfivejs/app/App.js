@@ -10,7 +10,7 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
         this.getStage = getStage;
     }
 
-    App.prototype.start = function (gameInfo, callback) {
+    App.prototype.start = function (appInfo, callback) {
 
         // show loading screen, load binary resources
         var resourceLoader = new ResourceLoader();
@@ -60,6 +60,7 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
             };
 
             concatenateProperties(self.services, sceneServices);
+            sceneServices.info = appInfo;
 
             self.runMyScenes(sceneServices);
         };

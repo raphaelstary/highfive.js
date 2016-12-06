@@ -1,4 +1,4 @@
-H5.sendSystemEvent = (function (Event, location, appName, appVersion, geolocation, Promise, GamePad) {
+H5.sendSystemEvent = (function (Event, location, geolocation, Promise, GamePad) {
     "use strict";
 
     function collectPositionInfo() {
@@ -38,7 +38,7 @@ H5.sendSystemEvent = (function (Event, location, appName, appVersion, geolocatio
         }
     }
 
-    function sendSystemEvent(device, messages, events) {
+    function sendSystemEvent(appName, appVersion, device, messages, events) {
 
         collectPositionInfo().then(function (positionInfo) {
 
@@ -69,4 +69,4 @@ H5.sendSystemEvent = (function (Event, location, appName, appVersion, geolocatio
     }
 
     return sendSystemEvent;
-})(H5.Event, window.location, window.appName, window.appVersion, window.navigator.geolocation, H5.Promise, H5.GamePad);
+})(H5.Event, window.location, window.navigator.geolocation, H5.Promise, H5.GamePad);
