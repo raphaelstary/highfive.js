@@ -1,7 +1,6 @@
 "use strict";
 
-var WWW_BUILT = 'www-built',
-    WWW = 'www',
+var WWW_BUILT = '../../target', WWW = '../www',
     INDEX = 'index.html',
     MANIFEST = 'manifest.json',
     GFX = 'gfx',
