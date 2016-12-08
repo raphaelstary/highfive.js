@@ -52,7 +52,7 @@ function buildTheProject() {
             cpdir(WWW + '/' + SFX, WWW_BUILT + '/' + SFX);
 
             mkdir(ATV_BUILT, function () {
-                writeFile(ATV_BUILT, INDEX_JS, data);
+                writeFile(ATV_BUILT, INDEX_JS, minifiedJS);
                 cpdir(WWW + '/' + GFX, ATV_BUILT + '/' + GFX);
                 cpdir(WWW + '/' + DATA, ATV_BUILT + '/' + DATA);
                 cpdir(WWW + '/' + SFX, ATV_BUILT + '/' + SFX);
