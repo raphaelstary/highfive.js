@@ -1,18 +1,21 @@
 "use strict";
 
 var WWW_BUILT = '../../target';
+var ATV_BUILT = '../../target-atv';
 var WWW = '../www';
 var INDEX = 'index.html';
 var GFX = 'gfx';
 var DATA = 'data';
 var SFX = 'sfx';
 var MIN_JS = 'min.js';
+var INDEX_JS = 'index.js';
 var MIN_CSS = 'min.css';
 
 var UglifyJS = require("uglify-js");
 var UglifyCSS = require('uglifycss');
 var cheerio = require('cheerio');
 var fs = require('fs');
+var fsExtra = require('fs-extra');
 var minifyJSON = require("node-json-minify");
 var Minimize = require('minimize');
 var minimize = new Minimize();
@@ -24,6 +27,12 @@ function buildTheProject() {
         if (error) {
             return console.log('error reading index file: ' + error);
         }
+
+        console.log('rm -rf ' + WWW_BUILT);
+        fsExtra.removeSync(WWW_BUILT);
+
+        console.log('rm -rf ' + ATV_BUILT);
+        fsExtra.removeSync(ATV_BUILT);
 
         mkdir(WWW_BUILT, function () {
 
@@ -41,6 +50,13 @@ function buildTheProject() {
             cpdir(WWW + '/' + GFX, WWW_BUILT + '/' + GFX);
             cpdir(WWW + '/' + DATA, WWW_BUILT + '/' + DATA);
             cpdir(WWW + '/' + SFX, WWW_BUILT + '/' + SFX);
+
+            mkdir(ATV_BUILT, function () {
+                writeFile(ATV_BUILT, INDEX_JS, data);
+                cpdir(WWW + '/' + GFX, ATV_BUILT + '/' + GFX);
+                cpdir(WWW + '/' + DATA, ATV_BUILT + '/' + DATA);
+                cpdir(WWW + '/' + SFX, ATV_BUILT + '/' + SFX);
+            });
         });
     });
 }
