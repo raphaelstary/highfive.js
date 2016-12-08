@@ -1,21 +1,21 @@
 "use strict";
 
-var WWW_BUILT = '../../target', WWW = '../www',
-    INDEX = 'index.html',
-    MANIFEST = 'manifest.json',
-    GFX = 'gfx',
-    DATA = 'data',
-    SFX = 'sfx',
-    MIN_JS = 'min.js',
-    MIN_CSS = 'min.css';
+var WWW_BUILT = '../../target';
+var WWW = '../www';
+var INDEX = 'index.html';
+var GFX = 'gfx';
+var DATA = 'data';
+var SFX = 'sfx';
+var MIN_JS = 'min.js';
+var MIN_CSS = 'min.css';
 
-var UglifyJS = require("uglify-js"),
-    UglifyCSS = require('uglifycss'),
-    cheerio = require('cheerio'),
-    fs = require('fs'),
-    minifyJSON = require("node-json-minify"),
-    Minimize = require('minimize'),
-    minimize = new Minimize();
+var UglifyJS = require("uglify-js");
+var UglifyCSS = require('uglifycss');
+var cheerio = require('cheerio');
+var fs = require('fs');
+var minifyJSON = require("node-json-minify");
+var Minimize = require('minimize');
+var minimize = new Minimize();
 
 buildTheProject();
 
@@ -36,16 +36,11 @@ function buildTheProject() {
             writeCssFile(minifiedCSS);
 
             var newIndex = updateSources($);
-            minifyHtml(newIndex,
-                writeIndexFile);
+            minifyHtml(newIndex, writeIndexFile);
 
             cpdir(WWW + '/' + GFX, WWW_BUILT + '/' + GFX);
             cpdir(WWW + '/' + DATA, WWW_BUILT + '/' + DATA);
             cpdir(WWW + '/' + SFX, WWW_BUILT + '/' + SFX);
-
-            minifyJSONFile(WWW, MANIFEST,
-                writeFile.bind(null, WWW_BUILT, MANIFEST)
-            );
         });
     });
 }
@@ -102,9 +97,7 @@ function cpDirFiles(srcPath, destPath) {
                 return;
 
             if (isJSON(file)) {
-                minifyJSONFile(srcPath, file,
-                    writeFile.bind(null, destPath, file)
-                );
+                minifyJSONFile(srcPath, file, writeFile.bind(null, destPath, file));
             } else {
                 cp(srcPath, file, destPath);
             }
@@ -157,8 +150,7 @@ function getAllJsFileNames($) {
 function getAllCssFileNames($) {
     var allCSS = [];
     $('link').each(function () {
-        if ($(this).attr('rel') == 'stylesheet')
-            allCSS.push(WWW + '/' + $(this).attr('href'));
+        if ($(this).attr('rel') == 'stylesheet') allCSS.push(WWW + '/' + $(this).attr('href'));
     });
     return allCSS;
 }
@@ -170,7 +162,7 @@ function minifyJS($) {
     var minified = UglifyJS.minify(allScripts).code;
 
     console.log('success task: minify JS');
-    return  minified;
+    return minified;
 }
 
 function minifyCSS($) {
@@ -180,7 +172,7 @@ function minifyCSS($) {
     var minified = UglifyCSS.processFiles(allCSS, {uglyComments: true});
 
     console.log('success task: minify CSS');
-    return  minified;
+    return minified;
 }
 
 function updateSources($) {
@@ -190,8 +182,7 @@ function updateSources($) {
     $('body').append('<script src="' + MIN_JS + '"></script>');
 
     $('link').each(function () {
-        if ($(this).attr('rel') == 'stylesheet')
-            $(this).remove();
+        if ($(this).attr('rel') == 'stylesheet') $(this).remove();
     });
 
     $('head').append('<link rel="stylesheet" href="' + MIN_CSS + '">');
@@ -199,5 +190,5 @@ function updateSources($) {
     var html = $.html();
 
     console.log("success task: update html sources");
-    return  html;
+    return html;
 }
