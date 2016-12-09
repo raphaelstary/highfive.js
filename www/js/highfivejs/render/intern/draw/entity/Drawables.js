@@ -1,5 +1,5 @@
 H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circle, DrawableLine, EquilateralTriangle,
-    Quadrilateral, ABLine, Hexagon) {
+    Quadrilateral, ABLine, Hexagon, measureText) {
     "use strict";
 
     function createNewGfx(gfxCache, seed, x, y, imgPathName, zIndex, alpha, rotation, scale) {
@@ -8,12 +8,14 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
         return new Drawable(imgPathName + seed, x, y, gfx, zIndex, alpha, rotation, scale);
     }
 
-    function createNewText(seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle, maxLineLength,
-        lineHeight, scale) {
+    function createNewText(ctx, seed, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
+        maxLineLength, lineHeight, scale) {
         var txt = new TextWrapper(msg, size, fontFamily, color, fontStyle, maxLineLength, lineHeight);
 
-        return new Drawable(generateHash(x.toString() + y + msg + size) +
+        var drawable = new Drawable(generateHash(x.toString() + y + msg + size) +
             seed, x, y, txt, zIndex, alpha, rotation, scale);
+        drawable.__measureText = measureText.bind(undefined, ctx);
+        return drawable;
     }
 
     function generateHash(s) {
@@ -84,4 +86,4 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
         getABLine: createABLine
     };
 })(H5.Drawable, H5.TextWrapper, H5.Rectangle, H5.RectangleMask, H5.Circle, H5.DrawableLine, H5.EquilateralTriangle,
-    H5.Quadrilateral, H5.ABLine, H5.Hexagon);
+    H5.Quadrilateral, H5.ABLine, H5.Hexagon, H5.measureText);

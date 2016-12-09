@@ -1,10 +1,7 @@
-H5.measureText = (function (document) {
+H5.measureText = (function () {
     "use strict";
 
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-
-    function measureText(text) {
+    function measureText(ctx, text) {
 
         if (text.alpha || text.alpha === 0) {
             ctx.globalAlpha = text.alpha;
@@ -30,4 +27,4 @@ H5.measureText = (function (document) {
     }
 
     return measureText;
-})(window.document);
+})();

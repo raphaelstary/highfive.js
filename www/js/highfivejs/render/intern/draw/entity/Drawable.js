@@ -1,4 +1,4 @@
-H5.Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine) {
+H5.Drawable = (function (Math, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine) {
     "use strict";
 
     function Drawable(id, x, y, data, zIndex, alpha, rotation, scale) {
@@ -88,7 +88,7 @@ H5.Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper,
 
     Drawable.prototype.__getWidth = function () {
         if (this.data instanceof  TextWrapper) {
-            return measureText(this.data).width;
+            return this.__measureText(this.data).width;
         }
         if (this.data instanceof SubImage) {
             return this.data.scaledTrimmedWidth;
@@ -106,4 +106,4 @@ H5.Drawable = (function (Math, measureText, TextWrapper, SubImage, ImageWrapper,
     };
 
     return Drawable;
-})(Math, H5.measureText, H5.TextWrapper, H5.SubImage, H5.ImageWrapper, H5.Circle, H5.DrawableLine);
+})(Math, H5.TextWrapper, H5.SubImage, H5.ImageWrapper, H5.Circle, H5.DrawableLine);

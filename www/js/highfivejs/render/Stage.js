@@ -33,8 +33,8 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
 
     Stage.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
         maxLineLength, lineHeight, scale) {
-        return Drawables.getTxt(++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
-            maxLineLength, lineHeight, scale);
+        return Drawables.getTxt(this.renderer.ctx, ++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation,
+            alpha, fontStyle, maxLineLength, lineHeight, scale);
     };
 
     Stage.prototype.getDrawableRectangle = function (x, y, width, height, color, filled, lineWidth, zIndex, alpha,
