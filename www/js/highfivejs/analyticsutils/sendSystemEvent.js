@@ -1,10 +1,10 @@
-H5.sendSystemEvent = (function (Event, location, geolocation, Promise, GamePad, Date) {
+H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Date) {
     "use strict";
 
     function collectPositionInfo() {
         var promise = new Promise();
 
-        geolocation.getCurrentPosition(function (position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var info = {
                 accuracy: position.coords.accuracy,
                 altitude: position.coords.altitude,
@@ -87,4 +87,4 @@ H5.sendSystemEvent = (function (Event, location, geolocation, Promise, GamePad, 
     }
 
     return sendSystemEvent;
-})(H5.Event, window.location, window.navigator.geolocation, H5.Promise, H5.GamePad, Date);
+})(H5.Event, window.location, window.navigator, H5.Promise, H5.GamePad, Date);
