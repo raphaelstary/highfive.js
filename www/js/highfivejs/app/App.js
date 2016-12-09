@@ -10,22 +10,22 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
         this.getStage = getStage;
     }
 
-    App.prototype.start = function (appInfo, callback) {
+    App.prototype.start = function (appInfo, hideLoadingScreen, callback) {
 
         // show loading screen, load binary resources
         var resourceLoader = new ResourceLoader();
-        var initialScreen = new SimpleLoadingScreen(this.services.screen.getContext('2d'));
-
         var filesCount = this.resources.create(resourceLoader);
         var events = this.services.events;
-        resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
-        var initScreenId = events.subscribe(Event.RESIZE, initialScreen.resize.bind(initialScreen));
-
-        initialScreen.showNew(filesCount);
+        if (!hideLoadingScreen) {
+            var initialScreen = new SimpleLoadingScreen(this.services.screen.getContext('2d'));
+            resourceLoader.onProgress = initialScreen.showProgress.bind(initialScreen);
+            var initScreenId = events.subscribe(Event.RESIZE, initialScreen.resize.bind(initialScreen));
+            initialScreen.showNew(filesCount);
+        }
 
         var self = this;
         resourceLoader.onComplete = function () {
-            events.unsubscribe(initScreenId);
+            if (!hideLoadingScreen) events.unsubscribe(initScreenId);
 
             var sceneServices = self.resources.process();
 
@@ -39,8 +39,7 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
             if (self.getStage) {
                 sceneServices.stage = self.getStage(self.services.screen, sceneServices.gfxCache, self.services.device,
                     events);
-                if (sceneServices.stage)
-                    stages.unshift(sceneServices.stage);
+                if (sceneServices.stage) stages.unshift(sceneServices.stage);
             }
             sceneServices.loop = self.loop = installLoop(stages, events);
 
@@ -51,12 +50,9 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
             sceneServices.sceneStorage = {};
             sceneServices.sceneStorage.endCallback = function () {
                 self.stop();
-                if (self.removeKeyHandler)
-                    self.removeKeyHandler();
-                if (self.services.device.isFullScreen())
-                    self.services.device.exitFullScreen();
-                if (callback)
-                    callback();
+                if (self.removeKeyHandler) self.removeKeyHandler();
+                if (self.services.device.isFullScreen()) self.services.device.exitFullScreen();
+                if (callback) callback();
             };
 
             concatenateProperties(self.services, sceneServices);
