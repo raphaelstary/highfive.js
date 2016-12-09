@@ -25,6 +25,12 @@ H5.GamePad = (function (navigator, Button, Axis) {
             this.axes = pad.axes;
             this.lastUpdate = pad.timestamp;
 
+            this.mapping = pad.mapping;
+            this.connected = pad.connected;
+            this.id = pad.id;
+
+            this.profile = pad.profile; // non standard tvOS/iOS
+
             return true;
         }
         return false;
