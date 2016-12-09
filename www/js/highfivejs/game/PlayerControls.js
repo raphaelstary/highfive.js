@@ -132,8 +132,22 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
         var unsubscribe;
         var commands = [];
+        var conditions = [];
+        var negativeConditions = [];
 
         return {
+            setCondition: function (key, value) {
+                conditions.push({
+                    key: key,
+                    value: value
+                });
+            },
+            setNegativeCondition: function (key, value) {
+                negativeConditions.push({
+                    key: key,
+                    value: value
+                });
+            },
             add: function (keyCode) {
 
                 var command = {
@@ -182,7 +196,22 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             },
 
             register: function (events) {
+                function shouldIgnore(inputType) {
+                    var isNotMet = conditions.some(function (keyValuePair) {
+                        return inputType[keyValuePair.key] != keyValuePair.value;
+                    });
+                    if (isNotMet)
+                        return true;
+                    isNotMet = negativeConditions.some(function (keyValuePair) {
+                        return inputType[keyValuePair.key] == keyValuePair.value;
+                    });
+                    return isNotMet;
+                }
+
                 var setupEventId = events.subscribe(event, function (inputType) {
+                    if (shouldIgnore(inputType))
+                        return;
+
                     commands.forEach(function (command) {
                         if (command.or && command.or instanceof Array) {
                             command.isPressed = inputType.isPressed(command.code) || command.or.some(function (code) {
@@ -199,6 +228,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                 });
 
                 var eventId = events.subscribe(event, function (inputType) {
+                    if (shouldIgnore(inputType))
+                        return;
+
                     commands.forEach(function (command) {
                         var isPressed;
                         if (command.or && command.or instanceof Array) {
