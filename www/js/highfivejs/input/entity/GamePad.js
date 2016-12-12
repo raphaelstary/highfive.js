@@ -101,7 +101,8 @@ H5.GamePad = (function (navigator, Button, Axis) {
     };
 
     GamePad.prototype.isPressed = function (button) {
-        return this.buttons[button].pressed;
+        var btn = this.buttons[button];
+        return btn && btn.pressed;
     };
 
     return GamePad;
