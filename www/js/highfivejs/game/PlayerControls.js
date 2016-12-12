@@ -134,7 +134,7 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         return gamePad;
     }
 
-    function createTVOSRemoteControls() {
+    function createTvOSRemoteControls() {
         var gestures = {};
         var conditions = [];
         var negativeConditions = [];
@@ -414,7 +414,7 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
     return {
         getGamePad: createGamePadControls,
-        getTVOSRemote: createTVOSRemoteControls,
+        getTvOSRemote: createTvOSRemoteControls,
         getKeyBoard: createKeyBoardControls
     }
 })(H5.Event, Array, Math, H5.Vectors);
