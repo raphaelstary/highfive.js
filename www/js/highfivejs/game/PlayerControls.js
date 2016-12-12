@@ -47,27 +47,27 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
     }
 
     function getStickFunction(store) {
-        function getRegisterCallbackFunction(name) {
-            return function (callback, self) {
-                if (self) {
-                    store[name] = callback.bind(self);
-                } else {
-                    store[name] = callback;
-                }
-                return this;
-            };
-        }
-
         return function (deadZone) {
             store.deadZone = deadZone || 0.1;
             store.lastAction = Action.NOTHING;
             return {
-                onDirectionUp: getRegisterCallbackFunction('up'),
-                onDirectionRight: getRegisterCallbackFunction('right'),
-                onDirectionDown: getRegisterCallbackFunction('down'),
-                onDirectionLeft: getRegisterCallbackFunction('left'),
-                onDirectionNeutral: getRegisterCallbackFunction('neutral')
+                onDirectionUp: getRegisterCallbackFunction(store, 'up'),
+                onDirectionRight: getRegisterCallbackFunction(store, 'right'),
+                onDirectionDown: getRegisterCallbackFunction(store, 'down'),
+                onDirectionLeft: getRegisterCallbackFunction(store, 'left'),
+                onDirectionNeutral: getRegisterCallbackFunction(store, 'neutral')
             };
+        };
+    }
+
+    function getRegisterCallbackFunction(store, name) {
+        return function (callback, self) {
+            if (self) {
+                store[name] = callback.bind(self);
+            } else {
+                store[name] = callback;
+            }
+            return this;
         };
     }
 
@@ -92,6 +92,8 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
     function createGamePadControls() {
         var directionsLeft = {};
         var directionsRight = {};
+        var conditions = [];
+        var negativeConditions = [];
         var unsubscribe;
 
         var gamePad = createControls(Event.GAME_PAD);
@@ -105,6 +107,8 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             this.basicRegister(events);
 
             var axisListener = events.subscribe(Event.GAME_PAD, function (gamePad) {
+                if (shouldIgnore(conditions, negativeConditions, gamePad))
+                    return;
                 updateStick(directionsLeft, gamePad.getLeftStickXAxis(), gamePad.getLeftStickYAxis());
                 updateStick(directionsRight, gamePad.getRightStickXAxis(), gamePad.getRightStickYAxis());
             });
@@ -115,6 +119,103 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             };
 
             return this;
+        };
+        gamePad.__setCondition = function (condition) {
+            conditions.push(condition);
+        };
+        gamePad.__setNegativeCondition = function (negativeCondition) {
+            negativeConditions.push(negativeCondition);
+        };
+        gamePad.cancel = function () {
+            this.basicCancel();
+            if (unsubscribe) unsubscribe();
+            return this;
+        };
+        return gamePad;
+    }
+
+    function createTVOSRemoteControls() {
+        var gestures = {};
+        var conditions = [];
+        var negativeConditions = [];
+        var unsubscribe;
+
+        var gamePad = createControls(Event.GAME_PAD);
+        gamePad.setCondition('profile', 'microGamepad');
+
+        gamePad.onDirectionUp = getRegisterCallbackFunction(gestures, 'up');
+        gamePad.onDirectionRight = getRegisterCallbackFunction(gestures, 'right');
+        gamePad.onDirectionDown = getRegisterCallbackFunction(gestures, 'down');
+        gamePad.onDirectionLeft = getRegisterCallbackFunction(gestures, 'left');
+
+        gamePad.basicRegister = gamePad.register;
+        gamePad.basicCancel = gamePad.cancel;
+        gamePad.register = function (events) {
+            this.basicRegister(events);
+
+            var neutral = true;
+            var started = false;
+            var start = {
+                x: 0,
+                y: 0
+            };
+            var end = {
+                x: 0,
+                y: 0
+            };
+            var axisListener = events.subscribe(Event.GAME_PAD, function (gamePad) {
+                if (shouldIgnore(conditions, negativeConditions, gamePad))
+                    return;
+
+                neutral = !(gamePad.isDPadDownPressed() || gamePad.isDPadLeftPressed() || gamePad.isDPadUpPressed() ||
+                gamePad.isDPadRightPressed());
+
+                if (!neutral && !started) {
+                    // start gesture
+                    started = true;
+                    start.x = gamePad.getLeftStickXAxis();
+                    start.y = gamePad.getLeftStickYAxis();
+
+                } else if (!neutral && started) {
+                    // continue gesture
+                    end.x = gamePad.getLeftStickXAxis();
+                    end.y = gamePad.getLeftStickYAxis();
+
+                } else if (neutral && started) {
+                    // end gesture
+
+                    var swipe = interpretSwipe(start, end);
+                    if (swipe == Direction.DOWN) {
+                        if (gestures.down) gestures.down();
+                    } else if (swipe == Direction.LEFT) {
+                        if (gestures.left) gestures.left();
+                    } else if (swipe == Direction.UP) {
+                        if (gestures.up) gestures.up();
+                    } else if (swipe == Direction.RIGHT) {
+                        if (gestures.right) gestures.right();
+                    }
+
+                    // clean up
+                    started = false;
+                    start.x = 0;
+                    start.y = 0;
+                    end.x = 0;
+                    end.y = 0;
+                }
+            });
+
+            unsubscribe = function () {
+                events.unsubscribe(axisListener);
+                unsubscribe = undefined;
+            };
+
+            return this;
+        };
+        gamePad.__setCondition = function (condition) {
+            conditions.push(condition);
+        };
+        gamePad.__setNegativeCondition = function (negativeCondition) {
+            negativeConditions.push(negativeCondition);
         };
         gamePad.cancel = function () {
             this.basicCancel();
@@ -137,16 +238,20 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
         return {
             setCondition: function (key, value) {
-                conditions.push({
+                var condition = {
                     key: key,
                     value: value
-                });
+                };
+                if (this.__setCondition) this.__setCondition(condition);
+                conditions.push(condition);
             },
             setNegativeCondition: function (key, value) {
-                negativeConditions.push({
+                var negCondition = {
                     key: key,
                     value: value
-                });
+                };
+                if (this.__setNegativeCondition) this.__setNegativeCondition(negCondition);
+                negativeConditions.push(negCondition);
             },
             add: function (keyCode) {
 
@@ -196,20 +301,8 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             },
 
             register: function (events) {
-                function shouldIgnore(inputType) {
-                    var isNotMet = conditions.some(function (keyValuePair) {
-                        return inputType[keyValuePair.key] != keyValuePair.value;
-                    });
-                    if (isNotMet)
-                        return true;
-                    isNotMet = negativeConditions.some(function (keyValuePair) {
-                        return inputType[keyValuePair.key] == keyValuePair.value;
-                    });
-                    return isNotMet;
-                }
-
                 var setupEventId = events.subscribe(event, function (inputType) {
-                    if (shouldIgnore(inputType))
+                    if (shouldIgnore(conditions, negativeConditions, inputType))
                         return;
 
                     commands.forEach(function (command) {
@@ -228,7 +321,7 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                 });
 
                 var eventId = events.subscribe(event, function (inputType) {
-                    if (shouldIgnore(inputType))
+                    if (shouldIgnore(conditions, negativeConditions, inputType))
                         return;
 
                     commands.forEach(function (command) {
@@ -270,8 +363,58 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         }
     }
 
+    var Direction = {
+        LEFT: 'left',
+        RIGHT: 'right',
+        UP: 'up',
+        DOWN: 'down'
+    };
+
+    function interpretSwipe(start, end) {
+        var vector = Vectors.get(start.x, start.y, end.x, end.y);
+        if (Vectors.squaredMagnitude(vector.x, vector.y) < 0.25 * 0.25) {
+            // case B: tap
+            return getDirection(end);
+
+        }
+        // case A: normal swipe
+        return getDirection(vector);
+    }
+
+    function getDirection(vector) {
+        var angle = Vectors.getAngle(vector.x, vector.y);
+
+        if (angle < 0) {
+            if (angle < -Math.PI * 3 / 4) {
+                return Direction.LEFT;
+            } else if (angle < -Math.PI / 4) {
+                return Direction.UP;
+            }
+            return Direction.RIGHT;
+        }
+        if (angle > Math.PI * 3 / 4) {
+            return Direction.LEFT;
+        } else if (angle > Math.PI / 4) {
+            return Direction.DOWN;
+        }
+        return Direction.RIGHT;
+    }
+
+    function shouldIgnore(conditions, negativeConditions, inputType) {
+        var isNotMet = conditions.some(function (keyValuePair) {
+            return inputType[keyValuePair.key] != keyValuePair.value;
+        });
+        if (isNotMet)
+            return true;
+        isNotMet = negativeConditions.some(function (keyValuePair) {
+            return inputType[keyValuePair.key] == keyValuePair.value;
+        });
+        return isNotMet;
+    }
+
     return {
         getGamePad: createGamePadControls,
+        getTVOSRemote: createTVOSRemoteControls,
         getKeyBoard: createKeyBoardControls
     }
 })(H5.Event, Array, Math, H5.Vectors);
