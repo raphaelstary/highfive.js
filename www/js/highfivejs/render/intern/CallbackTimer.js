@@ -31,6 +31,10 @@ H5.CallbackTimer = (function () {
         });
     };
 
+    CallbackTimer.prototype.nextTick = function (callback, self) {
+        this.doLater(callback, -1, self);
+    };
+
     CallbackTimer.prototype.pause = function () {
         if (this.paused) {
             this.paused.push.apply(this.paused, this.todos.splice(0, this.todos.length));
