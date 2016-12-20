@@ -39,6 +39,10 @@ H5.Grid = (function () {
                     return;
                 return this.backgroundMap[v][u];
             };
+
+            this.setBackground = function (u, v, load) {
+                this.backgroundMap[v][u] = load;
+            };
         }
 
         if (level.events) {
