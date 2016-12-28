@@ -27,5 +27,20 @@ H5.HtmlAudioManager = (function (iterateEntries) {
         });
     };
 
+    HtmlAudioManager.prototype.onEnded = function (audio, fn, self, once) {
+        function extendedCallback() {
+            if (once) {
+                audio.removeEventListener('ended', extendedCallback);
+            }
+            if (self) {
+                fn.call(self);
+            } else {
+                fn();
+            }
+        }
+
+        audio.addEventListener('ended', extendedCallback);
+    };
+
     return HtmlAudioManager;
 })(H5.iterateEntries);
