@@ -2,7 +2,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     "use strict";
 
     function Stage(gfxCache, motions, motionTimer, motionHelper, spriteAnimations, spriteTimer, animations,
-        animationHelper, animationTimer, propertyAnimations, renderer, timer) {
+        animationHelper, animationTimer, propertyAnimations, renderer, timer, audioAnimations) {
         this.gfxCache = gfxCache;
         this.motions = motions;
         this.motionTimer = motionTimer;
@@ -15,6 +15,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.propertyAnimations = propertyAnimations;
         this.renderer = renderer;
         this.timer = timer;
+        this.audioAnimations = audioAnimations;
 
         this._id = 0;
     }
@@ -390,6 +391,10 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.motions.playAll();
         this.animations.playAll();
         this.spriteAnimations.playAll();
+    };
+
+    Stage.prototype.animateVolume = function (audio, value, duration, easing, loop, callback) {
+        return this.audioAnimations.animateVolume(audio, value, duration, easing, loop, callback);
     };
 
     return Stage;

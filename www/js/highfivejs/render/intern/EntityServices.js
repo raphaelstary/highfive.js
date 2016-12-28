@@ -199,6 +199,13 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
             stage.animate(drawable, sprite, enhancedCallBack);
 
             return drawable;
+        },
+        volumeTo: function (stage, audio, volume) {
+            var enhancedCallBack = function () {
+                if (animation.__callback) animation.__callback();
+            };
+            var animation = stage.animateVolume(audio, volume, 120, Transition.LINEAR, false, enhancedCallBack);
+            return addServiceMethods(animation);
         }
     };
 })(H5.Transition, H5.changePath, H5.changeCoords);

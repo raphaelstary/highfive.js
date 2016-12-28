@@ -33,10 +33,10 @@ H5.StageFactory = (function ($) {
         var animationHelper = new $.BasicAnimationHelper(animations);
         var timer = new $.CallbackTimer();
 
+        var audioAnimations = new $.AudioAnimations(animations);
+
         return new $.Stage(gfxCache, motions, new $.MotionTimer(motions, timer), new $.MotionHelper(motions),
-            spriteAnimations, new $.SpriteTimer(spriteAnimations, timer), animations, animationHelper,
-            new $.BasicAnimationTimer(animations, timer), new $.PropertyAnimations(animations, animationHelper),
-            renderer, timer);
+            spriteAnimations, new $.SpriteTimer(spriteAnimations, timer), animations, animationHelper, new $.BasicAnimationTimer(animations, timer), new $.PropertyAnimations(animations, animationHelper), renderer, timer, audioAnimations);
     }
 
     function createResponsiveLegacy(gfxCache, renderer, device, events) {
@@ -134,5 +134,6 @@ H5.StageFactory = (function ($) {
     renderQuadrilateral: H5.renderQuadrilateral,
     Quadrilateral: H5.Quadrilateral,
     renderABLine: H5.renderABLine,
-    ABLine: H5.ABLine
+    ABLine: H5.ABLine,
+    AudioAnimations: H5.AudioAnimations
 });

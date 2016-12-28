@@ -318,5 +318,9 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         this.stage.pauseAll();
     };
 
+    NewStageAPI.prototype.audioVolumeTo = function (audio, volume) {
+        return EntityServices.volumeTo(this.stage, audio, volume);
+    };
+
     return NewStageAPI;
 })(H5.Setter, H5.iterateEntries, H5.EntityServices);
