@@ -122,7 +122,10 @@ H5.HtmlAudioSprite = (function (Array) {
                 return self.stage.audioVolumeTo(currentTrack.element, value);
             },
             setCallback: callback.bind(undefined, currentSound),
-            setLoop: loop.bind(undefined, currentSound)
+            setLoop: loop.bind(undefined, currentSound),
+            hasEnded: function () {
+                return currentSound.ended;
+            }
         }
     };
 
