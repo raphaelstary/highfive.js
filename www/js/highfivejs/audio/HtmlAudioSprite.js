@@ -25,6 +25,8 @@ H5.HtmlAudioSprite = (function (Array) {
         } else {
             this.tracks = [new AudioTrack(audioElementOrElements)];
         }
+
+        this.masterVolume = 1;
     }
 
     HtmlAudioSprite.prototype.setStage = function (stage) {
@@ -58,15 +60,18 @@ H5.HtmlAudioSprite = (function (Array) {
 
     HtmlAudioSprite.prototype.muteAll = function () {
         this.tracks.forEach(function (track) {
-            track.currentSound.volume = track.element.volume;
             track.element.volume = 0;
         });
     };
 
     HtmlAudioSprite.prototype.unmuteAll = function () {
         this.tracks.forEach(function (track) {
-            track.element.volume = track.currentSound.volume;
-        });
+            if (track.playing) {
+                track.element.volume = track.currentSound.volume;
+            } else {
+                track.element.volume = this.masterVolume;
+            }
+        }, this);
     };
 
     HtmlAudioSprite.prototype.pauseAll = function () {
@@ -81,10 +86,26 @@ H5.HtmlAudioSprite = (function (Array) {
         });
     };
 
-    HtmlAudioSprite.prototype.setMasterVolume = function (value) {
+    HtmlAudioSprite.prototype.stopAll = function () {
         this.tracks.forEach(function (track) {
+            if (track.playing) this.__stop(track);
+        }, this);
+    };
+
+    HtmlAudioSprite.prototype.setMasterVolume = function (value) {
+        this.masterVolume = value;
+        this.tracks.forEach(function (track) {
+            if (track.playing) track.currentSound.volume = value;
             track.element.volume = value;
         });
+    };
+
+    HtmlAudioSprite.prototype.masterVolumeTo = function (value) {
+        this.masterVolume = value;
+        return this.tracks.map(function (track) {
+            if (track.playing) track.currentSound.volume = value;
+            return this.stage.audioVolumeTo(track.element, value);
+        }, this);
     };
 
     HtmlAudioSprite.prototype.play = function (name) {
@@ -101,6 +122,7 @@ H5.HtmlAudioSprite = (function (Array) {
         }
 
         currentTrack.element.currentTime = spriteInfo.start;
+        currentTrack.element.volume = this.masterVolume;
         currentTrack.element.play();
         currentTrack.playing = true;
         currentTrack.currentInfo = spriteInfo;
@@ -119,30 +141,28 @@ H5.HtmlAudioSprite = (function (Array) {
                 if (currentSound.ended)
                     return;
 
+                currentSound.volume = value;
                 return self.stage.audioVolumeTo(currentTrack.element, value);
             },
-            setCallback: callback.bind(undefined, currentSound),
-            setLoop: loop.bind(undefined, currentSound),
+            setCallback: function (callback, self) {
+                currentSound.__callback = self ? callback.bind(self) : callback;
+                return this;
+            },
+            setLoop: function (loop) {
+                currentSound.loop = loop;
+                return this;
+            },
             setVolume: function (value) {
                 if (currentSound.ended)
                     return;
                 currentTrack.element.volume = currentSound.volume = value;
+                return this;
             },
             hasEnded: function () {
                 return currentSound.ended;
             }
         }
     };
-
-    function loop(soundNode, loop) {
-        soundNode.loop = loop;
-        return soundNode;
-    }
-
-    function callback(soundNode, callback, self) {
-        soundNode.__callback = self ? callback.bind(self) : callback;
-        return soundNode;
-    }
 
     return HtmlAudioSprite;
 })(Array);
