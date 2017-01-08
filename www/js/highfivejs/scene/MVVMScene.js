@@ -12,7 +12,6 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         this.device = model.device;
         this.loop = model.loop;
         this.events = model.events;
-        this.sounds = model.sounds;
 
         this.view = view;
         this.viewModel = viewModel;
