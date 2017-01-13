@@ -141,7 +141,6 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         var unsubscribe;
 
         var gamePad = createControls(Event.GAME_PAD);
-        gamePad.setCondition('profile', 'microGamepad');
 
         gamePad.onDirectionUp = getRegisterCallbackFunction(gestures, 'up');
         gamePad.onDirectionRight = getRegisterCallbackFunction(gestures, 'right');
@@ -222,6 +221,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             if (unsubscribe) unsubscribe();
             return this;
         };
+
+        gamePad.setCondition('profile', 'microGamepad');
+
         return gamePad;
     }
 
