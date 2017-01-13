@@ -108,6 +108,41 @@ H5.HtmlAudioSprite = (function (Array) {
         }, this);
     };
 
+    var animationMock = {
+        isAnimation: false,
+        setDuration: returnThis,
+        setSpacing: returnThis,
+        setLoop: returnThis,
+        setCallback: returnThis,
+        finish: returnThis
+    };
+
+    function returnThis() {
+        return this;
+    }
+
+    var audioMock = {
+        trackAvailable: false,
+        stop: function () {
+        },
+        volumeTo: function () {
+            return animationMock;
+        },
+        setCallback: function (callback, self) {
+            if (self) {
+                callback.call(self);
+            } else {
+                callback();
+            }
+            return this;
+        },
+        setLoop: returnThis,
+        setVolume: returnThis,
+        hasEnded: function () {
+            return true;
+        }
+    };
+
     HtmlAudioSprite.prototype.play = function (name) {
         var spriteInfo = this.info[name];
         var currentTrack;
@@ -118,7 +153,7 @@ H5.HtmlAudioSprite = (function (Array) {
 
         if (!currentTrack) {
             console.log('no audio track available');
-            return;
+            return audioMock;
         }
 
         currentTrack.element.currentTime = spriteInfo.start;
@@ -131,6 +166,7 @@ H5.HtmlAudioSprite = (function (Array) {
 
         var self = this;
         return {
+            trackAvailable: true,
             stop: function () {
                 if (currentSound.ended)
                     return;
@@ -139,7 +175,7 @@ H5.HtmlAudioSprite = (function (Array) {
             },
             volumeTo: function (value) {
                 if (currentSound.ended)
-                    return;
+                    return animationMock;
 
                 currentSound.volume = value;
                 return self.stage.audioVolumeTo(currentTrack.element, value);
@@ -154,7 +190,7 @@ H5.HtmlAudioSprite = (function (Array) {
             },
             setVolume: function (value) {
                 if (currentSound.ended)
-                    return;
+                    return this;
                 currentTrack.element.volume = currentSound.volume = value;
                 return this;
             },
