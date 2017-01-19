@@ -95,6 +95,8 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     function addServiceMethods(drawable, self) {
         drawable.setPosition = Setter.setPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position'),
             self.screen, drawable);
+        drawable.setAnchor = Setter.setAnchor.bind(undefined, self.resizer.add.bind(self.resizer, 'anchor'),
+            self.screen, drawable);
         drawable.setAlpha = Setter.setAlpha.bind(undefined, drawable);
         drawable.setRotation = Setter.setRotation.bind(undefined, drawable);
         drawable.setScale = Setter.setScale.bind(undefined, drawable);
@@ -190,16 +192,25 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
             self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
-        //drawable.setQuadPosition = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position'), self.screen, drawable);
-        drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'), self.screen, drawable, 'a');
-        drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'), self.screen, drawable, 'b');
-        drawable.setC = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_c'), self.screen, drawable, 'c');
-        drawable.setD = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_d'), self.screen, drawable, 'd');
+        //drawable.setQuadPosition = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer,
+        // 'position'), self.screen, drawable);
+        drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'),
+            self.screen, drawable, 'a');
+        drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'),
+            self.screen, drawable, 'b');
+        drawable.setC = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_c'),
+            self.screen, drawable, 'c');
+        drawable.setD = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_d'),
+            self.screen, drawable, 'd');
 
-        drawable.moveATo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'a');
-        drawable.moveBTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'b');
-        drawable.moveCTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'c');
-        drawable.moveDTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'd');
+        drawable.moveATo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable,
+            'a');
+        drawable.moveBTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable,
+            'b');
+        drawable.moveCTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable,
+            'c');
+        drawable.moveDTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable,
+            'd');
 
         return drawable;
     }
@@ -231,11 +242,15 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
             self.screen, drawable);
 
-        drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'), self.screen, drawable, 'a');
-        drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'), self.screen, drawable, 'b');
+        drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'),
+            self.screen, drawable, 'a');
+        drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'),
+            self.screen, drawable, 'b');
 
-        drawable.moveATo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'a');
-        drawable.moveBTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable, 'b');
+        drawable.moveATo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable,
+            'a');
+        drawable.moveBTo = EntityServices.moveQuadTo.bind(undefined, self.stage, self.resizer, self.screen, drawable,
+            'b');
 
         return drawable;
     }
@@ -297,8 +312,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     NewStageAPI.prototype.resize = function (event) {
         this.screen.width = event.width;
         this.screen.height = event.height;
-        if (this.gfx && this.gfx.resize)
-            this.gfx.resize(event);
+        if (this.gfx && this.gfx.resize) this.gfx.resize(event);
         this.stage.resize(event);
         this.resizer.call(event.width, event.height);
         iterateEntries(this.collisions, function (detector) {

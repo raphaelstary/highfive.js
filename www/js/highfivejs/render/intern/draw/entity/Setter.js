@@ -48,6 +48,18 @@ H5.Setter = (function (changeCoords) {
             return drawable;
         },
 
+        setAnchor: function (addToResizer, screen, drawable, xFn, yFn, resizeDependencies) {
+            drawable.anchorOffsetX = xFn(screen.width, screen.height);
+            drawable.anchorOffsetY = yFn(screen.height, screen.width);
+
+            addToResizer(drawable, function (width, height) {
+                drawable.anchorOffsetX = xFn(width, height);
+                drawable.anchorOffsetY = yFn(height, width);
+            }, resizeDependencies);
+
+            return drawable;
+        },
+
         setQuadPosition: function (addToResizer, screen, drawable, property, xFn, yFn, resizeDependencies) {
             drawable.data[property + 'x'] = xFn(screen.width, screen.height);
             drawable.data[property + 'y'] = yFn(screen.height, screen.width);
