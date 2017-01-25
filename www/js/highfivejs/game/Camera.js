@@ -16,22 +16,58 @@ H5.Camera = (function () {
 
         this.isPositionLocked = false;
         this.isShow = true;
+        this.__zoom = 1;
     }
 
-    Camera.prototype.calcScreenPosition = function (entity, drawable) {
-        var cornerX = this.viewPort.getCornerX();
-        var cornerY = this.viewPort.getCornerY();
-        if (entity.getEndX() < cornerX || entity.getCornerX() > this.viewPort.getEndX() || entity.getEndY() < cornerY ||
-            entity.getCornerY() > this.viewPort.getEndY()) {
+    Camera.prototype.calcScreenPosition = function (entity, drawable, ignoreScale, useDrawableScale) {
+        if (this.__zoom === 1) {
+            var cornerX = this.viewPort.getCornerX();
+            var cornerY = this.viewPort.getCornerY();
+            if (entity.getEndX() < cornerX || entity.getCornerX() > this.viewPort.getEndX() ||
+                entity.getEndY() < cornerY || entity.getCornerY() > this.viewPort.getEndY()) {
 
+                drawable.show = false;
+                return;
+            }
+
+            drawable.show = this.isShow;
+
+            drawable.x = entity.x - cornerX;
+            drawable.y = entity.y - cornerY;
+            if (!ignoreScale) drawable.scale = entity.scale;
+
+            return;
+        }
+
+        var widthHalf = this.viewPort.getWidthHalf() / this.__zoom;
+        var heightHalf = this.viewPort.getHeightHalf() / this.__zoom;
+        var left = this.viewPort.x - widthHalf;
+        var right = this.viewPort.x + widthHalf;
+        var top = this.viewPort.y - heightHalf;
+        var bottom = this.viewPort.y + heightHalf;
+
+        var entityRight = entity.getEndX();
+        var entityLeft = entity.getCornerX();
+        var entityBottom = entity.getEndY();
+        var entityTop = entity.getCornerY();
+
+        if (entityRight < left || entityLeft > right || entityBottom < top || entityTop > bottom) {
             drawable.show = false;
             return;
         }
 
         drawable.show = this.isShow;
 
-        drawable.x = entity.x - cornerX * this.viewPort.scale;
-        drawable.y = entity.y - cornerY * this.viewPort.scale;
+        drawable.x = (entity.x - left) * this.__zoom;
+        drawable.y = (entity.y - top) * this.__zoom;
+        if (useDrawableScale) {
+            if (drawable.currentScale === undefined) {
+                drawable.currentScale = drawable.scale;
+            }
+            drawable.scale = drawable.currentScale * this.__zoom;
+        } else {
+            drawable.scale = entity.scale * this.__zoom;
+        }
     };
 
     Camera.prototype.calcBulletsScreenPosition = function (entity, drawable) {
@@ -64,10 +100,14 @@ H5.Camera = (function () {
         this.viewPort.x = anchor.x;
         this.viewPort.y = anchor.y;
 
-        if (this.viewPort.x < this.minX) this.viewPort.x = this.minX;
-        if (this.viewPort.x > this.maxX) this.viewPort.x = this.maxX;
-        if (this.viewPort.y < this.minY) this.viewPort.y = this.minY;
-        if (this.viewPort.y > this.maxY) this.viewPort.y = this.maxY;
+        var minX = this.minX / this.__zoom;
+        var minY = this.minY / this.__zoom;
+        var maxX = this.__zoom !== 1 ? this.maxX + minX : this.maxX;
+        var maxY = this.__zoom !== 1 ? this.maxY + minY : this.maxY;
+        if (this.viewPort.x < minX) this.viewPort.x = minX;
+        if (this.viewPort.x > maxX) this.viewPort.x = maxX;
+        if (this.viewPort.y < minY) this.viewPort.y = minY;
+        if (this.viewPort.y > maxY) this.viewPort.y = maxY;
     };
 
     Camera.prototype.unlockPosition = function () {
@@ -84,6 +124,10 @@ H5.Camera = (function () {
 
     Camera.prototype.showDrawables = function () {
         this.isShow = true;
+    };
+
+    Camera.prototype.zoom = function (factor) {
+        this.__zoom = factor;
     };
 
     return Camera;
