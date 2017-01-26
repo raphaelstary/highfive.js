@@ -1,9 +1,18 @@
-H5.Promise = (function () {
+H5.Promise = (function (Array, CallbackCounter) {
     "use strict";
 
     function Promise() {
         this.isFulfilled = false;
     }
+
+    Promise.all = function (promises) {
+        var promise = new Promise();
+        var counter = new CallbackCounter(promise.resolve.bind(promise), promises.length);
+        promises.forEach(function (promise) {
+            promise.then(counter.register());
+        });
+        return promise;
+    };
 
     Promise.prototype.then = function (callback, self) {
         this.__callback = self ? callback.bind(self) : callback;
@@ -41,4 +50,4 @@ H5.Promise = (function () {
     };
 
     return Promise;
-})();
+})(Array, H5.CallbackCounter);
