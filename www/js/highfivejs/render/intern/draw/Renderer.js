@@ -9,7 +9,7 @@ H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, T
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
-        this.drawableDict = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+        this.drawableDict = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
         this.renderServices = {};
     }
 
