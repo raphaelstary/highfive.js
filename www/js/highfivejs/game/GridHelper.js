@@ -1,4 +1,4 @@
-H5.GridHelper = (function (Math, calcCantorPairing, Strings) {
+H5.GridHelper = (function (Math, calcCantorPairing, Strings, isNaN) {
     "use strict";
 
     function GridHelper(grid) {
@@ -8,17 +8,13 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings) {
     GridHelper.prototype.getNeighbors = function (u, v) {
         var neighbors = [];
         var bottom = this.getBottomNeighbor(u, v);
-        if (bottom)
-            neighbors.push(bottom);
+        if (bottom) neighbors.push(bottom);
         var right = this.getRightNeighbor(u, v);
-        if (right)
-            neighbors.push(right);
+        if (right) neighbors.push(right);
         var top = this.getTopNeighbor(u, v);
-        if (top)
-            neighbors.push(top);
+        if (top) neighbors.push(top);
         var left = this.getLeftNeighbor(u, v);
-        if (left)
-            neighbors.push(left);
+        if (left) neighbors.push(left);
 
         return neighbors;
     };
@@ -180,12 +176,25 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings) {
         for (var y = 0; y < this.grid.yTiles; y++) {
             for (var x = 0; x < this.grid.xTiles; x++) {
                 var tile = !isBackground ? this.grid.get(x, y) : this.grid.getBackground(x, y);
-                if (tile && Strings.startsWidth(tile, tileName))
-                    tiles.push({
-                        u: x,
-                        v: y,
-                        type: tile
-                    });
+                if (tile !== undefined) {
+                    if (isNaN(tile)) {
+                        if (Strings.startsWidth(tile, tileName)) {
+                            tiles.push({
+                                u: x,
+                                v: y,
+                                type: tile
+                            });
+                        }
+                    } else {
+                        if (tile === tileName) {
+                            tiles.push({
+                                u: x,
+                                v: y,
+                                type: tile
+                            });
+                        }
+                    }
+                }
             }
         }
 
@@ -207,4 +216,4 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings) {
     };
 
     return GridHelper;
-})(Math, H5.calcCantorPairing, H5.Strings);
+})(Math, H5.calcCantorPairing, H5.Strings, isNaN);
