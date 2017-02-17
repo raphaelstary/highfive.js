@@ -1,4 +1,4 @@
-H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Date) {
+H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Date, languageCode) {
     "use strict";
 
     function collectPositionInfo() {
@@ -48,7 +48,7 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Da
         }
     }
 
-    function getPayload(device, messages, appName, appVersion, appPlatform) {
+    function getPayload(device, appName, appVersion, appPlatform) {
         return {
             type: 'system',
             width: device.width,
@@ -60,7 +60,7 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Da
             devicePixelRatio: device.devicePixelRatio,
             mobile: device.isMobile,
             userAgent: device.userAgent,
-            language: messages.defaultLanguageCode,
+            language: languageCode,
             userTime: Date.now(),
             userTimeString: Date(),
             location: location.href,
@@ -71,20 +71,21 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Da
         };
     }
 
-    function sendSystemEvent(appName, appVersion, appPlatform, device, messages, events, usePosition) {
+    function sendSystemEvent(info, device, events, usePosition) {
 
         if (usePosition) {
             collectPositionInfo().then(function (positionInfo) {
 
-                var payload = getPayload(device, messages, appName, appVersion, appPlatform);
+                var payload = getPayload(device, info.name, info.version, info.platform);
                 payload.positionInfo = positionInfo;
 
                 events.fire(Event.ANALYTICS, payload);
             });
         } else {
-            events.fire(Event.ANALYTICS, getPayload(device, messages, appName, appVersion, appPlatform));
+            events.fire(Event.ANALYTICS, getPayload(device, info.name, info.version, info.platform));
         }
     }
 
     return sendSystemEvent;
-})(H5.Event, window.location, window.navigator, H5.Promise, H5.GamePad, Date);
+})(H5.Event, window.location, window.navigator, H5.Promise, H5.GamePad, Date,
+    window.navigator.language || window.navigator.userLanguage);

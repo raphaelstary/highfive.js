@@ -1,6 +1,6 @@
-H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, TextWrapper, renderText, Rectangle,
-    renderRectangle, DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle,
-    renderEqTriangle, Quadrilateral, renderQuadrilateral, ABLine, renderABLine, Hexagon, renderHexagon) {
+H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle,
+    DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle, renderEqTriangle,
+    Quadrilateral, renderQuadrilateral, ABLine, renderABLine, Hexagon, renderHexagon) {
     "use strict";
 
     function Renderer(screen) {
@@ -10,7 +10,6 @@ H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, T
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
         this.drawableDict = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
-        this.renderServices = {};
     }
 
     Renderer.prototype.resize = function (event) {
@@ -110,9 +109,6 @@ H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, T
 
                 self.ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);
 
-                // todo fixme: I don't work minified
-                //self.renderServices[Object.getPrototypeOf(drawable.data).constructor.name](self.ctx, drawable);
-                // i work minified:
                 if (drawable.data instanceof EquilateralTriangle) {
                     renderEqTriangle(self.ctx, drawable);
                 } else if (drawable.data instanceof SubImage) {
@@ -140,17 +136,8 @@ H5.Renderer = (function (Object, Math, getFunctionName, SubImage, renderAtlas, T
         }
     };
 
-    Renderer.prototype.registerRenderer = function (prototype, fn) {
-        if (prototype.constructor.name)
-            this.renderServices[prototype.constructor.name] = fn; else {
-            var functionName = getFunctionName(prototype.constructor);
-            this.renderServices[functionName] = fn;
-            prototype.constructor.name = functionName;
-        }
-    };
-
     return Renderer;
-})(Object, Math, H5.getFunctionName, H5.SubImage, H5.renderAtlas, H5.TextWrapper, H5.renderText, H5.Rectangle,
-    H5.renderRectangle, H5.DrawableLine, H5.renderLine, H5.Circle, H5.renderCircle, H5.ImageWrapper, H5.renderImage,
-    H5.EquilateralTriangle, H5.renderEqTriangle, H5.Quadrilateral, H5.renderQuadrilateral, H5.ABLine, H5.renderABLine,
-    H5.Hexagon, H5.renderHexagon);
+})(Object, Math, H5.SubImage, H5.renderAtlas, H5.TextWrapper, H5.renderText, H5.Rectangle, H5.renderRectangle,
+    H5.DrawableLine, H5.renderLine, H5.Circle, H5.renderCircle, H5.ImageWrapper, H5.renderImage, H5.EquilateralTriangle,
+    H5.renderEqTriangle, H5.Quadrilateral, H5.renderQuadrilateral, H5.ABLine, H5.renderABLine, H5.Hexagon,
+    H5.renderHexagon);

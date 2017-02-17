@@ -1,7 +1,7 @@
-H5.HtmlAudioSprite = (function (Array) {
+H5.HtmlAudioSprite = (function (Array, Transition) {
     "use strict";
 
-    function AudioTrack(audioElement) {
+    function HtmlAudioTrack(audioElement) {
         this.element = audioElement;
         this.playing = false;
 
@@ -9,29 +9,31 @@ H5.HtmlAudioSprite = (function (Array) {
         this.currentSound = undefined;
     }
 
-    function SoundNode() {
+    function AudioNode() {
+        this.started = false;
         this.ended = false;
         this.volume = 1;
+        this.mute = false;
         this.loop = false;
+        this.callback = undefined;
     }
 
-    function HtmlAudioSprite(info, audioElementOrElements) {
+    function HtmlAudioSprite(info, audioElementOrElements, timer, stage) {
         this.info = info;
 
         if (audioElementOrElements instanceof Array) {
             this.tracks = audioElementOrElements.map(function (audioElem) {
-                return new AudioTrack(audioElem);
+                return new HtmlAudioTrack(audioElem);
             });
         } else {
-            this.tracks = [new AudioTrack(audioElementOrElements)];
+            this.tracks = [new HtmlAudioTrack(audioElementOrElements)];
         }
+
+        this.timer = timer;
+        this.stage = stage;
 
         this.masterVolume = 1;
     }
-
-    HtmlAudioSprite.prototype.setStage = function (stage) {
-        this.stage = stage;
-    };
 
     HtmlAudioSprite.prototype.update = function () {
         this.tracks.forEach(function (track) {
@@ -43,7 +45,7 @@ H5.HtmlAudioSprite = (function (Array) {
 
             if (track.currentSound.loop) {
                 track.element.currentTime = track.currentInfo.start;
-                if (track.currentSound.__callback) track.currentSound.__callback();
+                if (track.currentSound.callback) track.currentSound.callback();
 
             } else {
                 this.__stop(track);
@@ -55,12 +57,15 @@ H5.HtmlAudioSprite = (function (Array) {
         track.element.pause();
         track.playing = false;
         track.currentSound.ended = true;
-        if (track.currentSound.__callback) track.currentSound.__callback();
+        if (track.currentSound.callback) track.currentSound.callback();
     };
 
     HtmlAudioSprite.prototype.muteAll = function () {
         this.tracks.forEach(function (track) {
             track.element.volume = 0;
+            if (track.currentSound) {
+                track.currentSound.mute = true;
+            }
         });
     };
 
@@ -68,6 +73,9 @@ H5.HtmlAudioSprite = (function (Array) {
         this.tracks.forEach(function (track) {
             if (track.playing) {
                 track.element.volume = track.currentSound.volume;
+                if (track.currentSound) {
+                    track.currentSound.mute = false;
+                }
             } else {
                 track.element.volume = this.masterVolume;
             }
@@ -100,12 +108,14 @@ H5.HtmlAudioSprite = (function (Array) {
         });
     };
 
-    HtmlAudioSprite.prototype.masterVolumeTo = function (value) {
+    HtmlAudioSprite.prototype.masterVolumeTo = function (value, duration, callback, self) {
         this.masterVolume = value;
-        return this.tracks.map(function (track) {
+        this.tracks.forEach(function (track) {
             if (track.playing) track.currentSound.volume = value;
-            return this.stage.audioVolumeTo(track.element, value);
+            this.stage.audioVolumeTo(track.element, value)
+                .setDuration(duration);
         }, this);
+        this.timer.doLater(callback, duration, self);
     };
 
     var animationMock = {
@@ -125,6 +135,8 @@ H5.HtmlAudioSprite = (function (Array) {
         trackAvailable: false,
         stop: function () {
         },
+        mute: returnThis,
+        unmute: returnThis,
         volumeTo: function () {
             return animationMock;
         },
@@ -144,44 +156,79 @@ H5.HtmlAudioSprite = (function (Array) {
     };
 
     HtmlAudioSprite.prototype.play = function (name) {
-        var spriteInfo = this.info[name];
+        var self = this;
         var currentTrack;
-        this.tracks.some(function (track) {
-            if (!track.playing) currentTrack = track;
-            return !track.playing;
-        });
 
-        if (!currentTrack) {
-            console.log('no audio track available');
-            return audioMock;
+        function startTrack() {
+
+            self.tracks.some(function (track) {
+                if (!track.playing) currentTrack = track;
+                return !track.playing;
+            });
+
+            if (!currentTrack) {
+                console.log('no audio track available');
+                return audioMock;
+            }
+
+            currentTrack.element.currentTime = spriteInfo.start;
+
+            if (currentSound.mute) {
+                currentTrack.element.volume = 0;
+            } else if (currentSound.volume !== 1) {
+                currentTrack.element.volume = currentSound.volume;
+            } else if (self.masterVolume !== 1) {
+                currentTrack.element.volume = self.masterVolume;
+            }
+
+            currentTrack.element.play();
+            currentTrack.playing = true;
+            currentTrack.currentInfo = spriteInfo;
+            currentTrack.currentSound = currentSound;
+
+            currentSound.started = true;
         }
 
-        currentTrack.element.currentTime = spriteInfo.start;
-        currentTrack.element.volume = this.masterVolume;
-        currentTrack.element.play();
-        currentTrack.playing = true;
-        currentTrack.currentInfo = spriteInfo;
-        var currentSound = new SoundNode();
-        currentTrack.currentSound = currentSound;
+        var spriteInfo = this.info[name];
+        var currentSound = new AudioNode();
 
-        var self = this;
         return {
             trackAvailable: true,
+            start: function () {
+                if (currentSound.started)
+                    return;
+                startTrack();
+            },
             stop: function () {
-                if (currentSound.ended)
+                if (currentSound.ended || !currentSound.started)
                     return;
 
                 self.__stop(currentTrack);
             },
-            volumeTo: function (value) {
-                if (currentSound.ended)
+            mute: function () {
+                currentSound.mute = true;
+                if (!currentSound.ended && currentSound.started) currentTrack.element.volume = 0;
+                return this;
+            },
+            unmute: function () {
+                currentSound.mute = false;
+                if (!currentSound.ended && currentSound.started) currentTrack.element.volume = currentSound.volume;
+                return this;
+            },
+            volumeTo: function (value, duration, callback, that) {
+                if (currentSound.ended || !currentSound.started)
                     return animationMock;
 
                 currentSound.volume = value;
-                return self.stage.audioVolumeTo(currentTrack.element, value);
+                self.stage.audioVolumeTo(currentTrack.element, value)
+                    .setDuration(duration)
+                    .setSpacing(Transition.EASE_OUT_EXPO)
+                    .setCallback(callback, that);
+
+                return this;
             },
             setCallback: function (callback, self) {
-                currentSound.__callback = self ? callback.bind(self) : callback;
+                currentSound.callback = self ? callback.bind(self) : callback;
                 return this;
             },
             setLoop: function (loop) {
@@ -189,7 +236,7 @@ H5.HtmlAudioSprite = (function (Array) {
                 return this;
             },
             setVolume: function (value) {
-                if (currentSound.ended)
+                if (currentSound.ended || !currentSound.started)
                     return this;
                 currentTrack.element.volume = currentSound.volume = value;
                 return this;
@@ -201,4 +248,4 @@ H5.HtmlAudioSprite = (function (Array) {
     };
 
     return HtmlAudioSprite;
-})(Array);
+})(Array, H5.Transition);

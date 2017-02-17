@@ -6,7 +6,8 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
         SOUND: 1,
         JSON: 2,
         FONT: 3,
-        AUDIO: 4
+        AUDIO: 4,
+        WEB_AUDIO: 5
     };
 
     function ResourceLoader() {
@@ -41,6 +42,19 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
         });
 
         return audio;
+    };
+
+    ResourceLoader.prototype.addWebAudio = function (audioSrc, audioCtx) {
+        this.__counter++;
+        var bufferWrapper = {};
+        this.resources.push({
+            type: ResourceType.WEB_AUDIO,
+            file: bufferWrapper,
+            src: audioSrc,
+            ctx: audioCtx
+        });
+
+        return bufferWrapper;
     };
 
     ResourceLoader.prototype.addJSON = function (jsonSrc, payload) {
@@ -95,7 +109,7 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
 
             } else if (elem.type === ResourceType.JSON) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", elem.src, true);
+                xhr.open('GET', elem.src, true);
 
                 xhr.onload = function () {
                     var json = JSON.parse(this.responseText);
@@ -109,8 +123,8 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
 
             } else if (elem.type === ResourceType.FONT) {
                 var xhrFont = new XMLHttpRequest();
-                xhrFont.open("GET", elem.src, true);
-                xhrFont.responseType = "arraybuffer";
+                xhrFont.open('GET', elem.src, true);
+                xhrFont.responseType = 'arraybuffer';
 
                 xhrFont.onload = function () {
 
@@ -120,7 +134,7 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
                         elem.file.blob = blobBuilder.getBlob();
 
                     } else if (Blob) {
-                        elem.file.blob = new Blob([xhrFont.response], {type: "application/font-woff"});
+                        elem.file.blob = new Blob([xhrFont.response], {type: 'application/font-woff'});
 
                     } else {
                         // todo error blobs are not supported
@@ -130,6 +144,21 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
                 };
 
                 xhrFont.send();
+
+            } else if (elem.type === ResourceType.WEB_AUDIO) {
+
+                var xhrAudio = new XMLHttpRequest();
+                xhrAudio.open('GET', elem.src, true);
+                xhrAudio.responseType = 'arraybuffer';
+
+                xhrAudio.onload = function () {
+                    var audioData = xhrAudio.response;
+                    elem.ctx.decodeAudioData(audioData, function (buffer) {
+                        elem.file.buffer = buffer;
+                        self.onResourceLoad();
+                    });
+                };
+                xhrAudio.send();
             }
         });
     };
@@ -137,13 +166,11 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
     ResourceLoader.prototype.onResourceLoad = function () {
         this.resourcesLoaded++;
         var onProgress = this.onProgress;
-        if (onProgress !== undefined && typeof onProgress === "function")
-            onProgress();
+        if (onProgress !== undefined && typeof onProgress === 'function') onProgress();
 
         if (this.resourcesLoaded === this.resources.length) {
             var onComplete = this.onComplete;
-            if (onComplete !== undefined && typeof onComplete === "function")
-                onComplete();
+            if (onComplete !== undefined && typeof onComplete === 'function') onComplete();
         }
     };
 

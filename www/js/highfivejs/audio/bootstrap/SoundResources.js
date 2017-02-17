@@ -1,21 +1,21 @@
 H5.SoundResources = (function (Object, HtmlAudioManager) {
     "use strict";
 
-    function SoundResources(resourceLoader, path, format) {
+    function SoundResources(resourceLoader, path, extension) {
         this.resourceLoader = resourceLoader;
         this.path = path || 'sfx/';
-        this.format = format || '.mp3';
+        this.extension = extension || '.mp3';
     }
 
-    SoundResources.prototype.createHtmlAudioSounds = function (soundNamesDict) {
-        var dictKeys = Object.keys(soundNamesDict);
+    SoundResources.prototype.createHtmlAudioSounds = function (soundNamesToPathsDict) {
+        var dictKeys = Object.keys(soundNamesToPathsDict);
 
         function toAudioFile(soundKey) {
-            return this.resourceLoader.addAudio(this.path + soundNamesDict[soundKey] + this.format);
+            return this.resourceLoader.addAudio(this.path + soundNamesToPathsDict[soundKey] + this.extension);
         }
 
         function filesToDict(soundDict, sound, index) {
-            soundDict[soundNamesDict[dictKeys[index]]] = sound;
+            soundDict[soundNamesToPathsDict[dictKeys[index]]] = sound;
             return soundDict;
         }
 

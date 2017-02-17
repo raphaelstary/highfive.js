@@ -3,22 +3,17 @@ G.MyGameResources = (function () {
 
     // your files
 
-    function registerFiles(resourceLoader) {
-        // add your files to the resource loader for downloading
-
-        return resourceLoader.getCount(); // number of registered files
+    function initLoadingFiles(resourceLoader) {
+        // add your files to the resource loader
     }
 
-    function processFiles() {
-        // process your downloaded files
-
-        return {
-            // services created with downloaded files
-        };
+    function processFiles(services) {
+        // process your downloaded files & maybe add them to the global scene services object
     }
 
     return {
-        create: registerFiles,
+        load: initLoadingFiles,
         process: processFiles
     };
+
 })();
