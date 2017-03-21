@@ -1,5 +1,5 @@
 H5.Camera = (function () {
-    "use strict";
+    'use strict';
 
     function Camera(viewPort, maxX, maxY) {
         this.viewPort = viewPort;
@@ -34,7 +34,9 @@ H5.Camera = (function () {
 
             drawable.x = entity.x - cornerX;
             drawable.y = entity.y - cornerY;
-            if (!ignoreScale) drawable.scale = entity.scale;
+            if (!ignoreScale) {
+                drawable.scale = entity.scale;
+            }
 
             return;
         }
@@ -94,8 +96,9 @@ H5.Camera = (function () {
     };
 
     Camera.prototype.move = function (anchor) {
-        if (this.isPositionLocked)
+        if (this.isPositionLocked) {
             return;
+        }
 
         this.viewPort.x = anchor.x;
         this.viewPort.y = anchor.y;
@@ -104,10 +107,18 @@ H5.Camera = (function () {
         var minY = this.minY / this.__zoom;
         var maxX = this.__zoom !== 1 ? this.maxX + minX : this.maxX;
         var maxY = this.__zoom !== 1 ? this.maxY + minY : this.maxY;
-        if (this.viewPort.x < minX) this.viewPort.x = minX;
-        if (this.viewPort.x > maxX) this.viewPort.x = maxX;
-        if (this.viewPort.y < minY) this.viewPort.y = minY;
-        if (this.viewPort.y > maxY) this.viewPort.y = maxY;
+        if (this.viewPort.x < minX) {
+            this.viewPort.x = minX;
+        }
+        if (this.viewPort.x > maxX) {
+            this.viewPort.x = maxX;
+        }
+        if (this.viewPort.y < minY) {
+            this.viewPort.y = minY;
+        }
+        if (this.viewPort.y > maxY) {
+            this.viewPort.y = maxY;
+        }
     };
 
     Camera.prototype.unlockPosition = function () {

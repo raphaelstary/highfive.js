@@ -1,5 +1,5 @@
 H5.CanvasImageCollisionDetector = (function (document) {
-    "use strict";
+    'use strict';
 
     function CanvasImageCollisionDetector(baseDrawable) {
         this.drawable = baseDrawable;
@@ -28,8 +28,9 @@ H5.CanvasImageCollisionDetector = (function (document) {
 
         var sourceWidth = x + drawable.getWidth();
         var sourceHeight = y + drawable.getHeight();
-        if (sourceWidth < 1 || sourceHeight < 1)
+        if (sourceWidth < 1 || sourceHeight < 1) {
             return false;
+        }
 
         var rawPixelData = this.ctx.getImageData(0, 0, sourceWidth, sourceHeight).data;
 

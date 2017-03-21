@@ -1,5 +1,5 @@
 H5.createAtlasPaths = (function () {
-    "use strict";
+    'use strict';
 
     function createAtlasPaths(baseName, gfxPath, dataPath, gfxFormat, dataFormat) {
 

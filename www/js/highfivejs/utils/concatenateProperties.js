@@ -1,5 +1,5 @@
 H5.concatenateProperties = (function (Object) {
-    "use strict";
+    'use strict';
 
     function concatenateProperties(source, target) {
         Object.keys(source).forEach(function (property) {

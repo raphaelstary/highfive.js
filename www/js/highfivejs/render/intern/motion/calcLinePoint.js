@@ -1,5 +1,5 @@
 H5.calcLinePoint = (function () {
-    "use strict";
+    'use strict';
 
     function calcLinePoint(time, line) {
         var x = line.startX + time * line.vectorX;
@@ -8,7 +8,7 @@ H5.calcLinePoint = (function () {
         return {
             x: x,
             y: y
-        }
+        };
     }
 
     return calcLinePoint;

@@ -1,5 +1,5 @@
 H5.changePath = (function (BezierCurvePath, LinePath, Vectors, CirclePath) {
-    "use strict";
+    'use strict';
 
     function changePath(path, startX_or_x, startY_or_y, endX_or_radius, endY, p1_x, p1_y, p2_x, p2_y) {
 
@@ -22,7 +22,7 @@ H5.changePath = (function (BezierCurvePath, LinePath, Vectors, CirclePath) {
         } else if (curve instanceof CirclePath) {
             curve.x = startX_or_x;
             curve.y = startY_or_y;
-            curve.radius = endX_or_radius
+            curve.radius = endX_or_radius;
 
         } else if (curve instanceof BezierCurvePath) {
             curve.pointA_x = startX_or_x;

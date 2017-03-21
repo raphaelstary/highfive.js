@@ -1,5 +1,5 @@
 H5.changeTouchable = (function () {
-    "use strict";
+    'use strict';
 
     function changeTouchable(touchable, x, y, width, height) {
         touchable.x = x;

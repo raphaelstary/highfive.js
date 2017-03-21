@@ -1,5 +1,5 @@
 H5.Circle = (function () {
-    "use strict";
+    'use strict';
 
     function Circle(radius, color, filled, lineWidth) {
         this.radius = radius;

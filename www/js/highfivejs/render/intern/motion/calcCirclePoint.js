@@ -1,5 +1,5 @@
 H5.calcCirclePoint = (function (Vectors) {
-    "use strict";
+    'use strict';
 
     function calcCirclePoint(time, circle) {
         return {
