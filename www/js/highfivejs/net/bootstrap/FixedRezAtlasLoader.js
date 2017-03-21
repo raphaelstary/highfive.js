@@ -1,5 +1,5 @@
 H5.FixedRezAtlasLoader = (function (AtlasResourceHelper, createAtlasPaths, Device, userAgent) {
-    "use strict";
+    'use strict';
 
     var fixedWidth;
     var fixedHeight;

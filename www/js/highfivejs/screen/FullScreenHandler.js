@@ -1,5 +1,5 @@
 H5.FullScreenHandler = (function (Event) {
-    "use strict";
+    'use strict';
 
     function FullScreenHandler(controller, events) {
         this.controller = controller;

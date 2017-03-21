@@ -1,5 +1,5 @@
 H5.FixRezGridViewHelper = (function (Math, wrap) {
-    "use strict";
+    'use strict';
 
     function FixRezGridViewHelper(stage, width, height, edgeLength, topOffset) {
         this.stage = stage;
@@ -40,8 +40,9 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
         } else {
             drawable.setPosition(wrap(this.getX(u)), wrap(this.getY(v)));
         }
-        if (zIndex !== 3)
+        if (zIndex !== 3) {
             drawable.setZIndex(zIndex);
+        }
 
         return drawable;
     };
@@ -59,15 +60,18 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
     };
 
     FixRezGridViewHelper.prototype.move = function (drawable, u, v, speed, callback, xOffset, yOffset) {
-        if (xOffset && yOffset)
+        if (xOffset && yOffset) {
             return drawable.moveTo(wrap(this.getX(u) + xOffset), wrap(this.getY(v) + yOffset))
                 .setDuration(speed).setCallback(callback);
-        if (xOffset)
+        }
+        if (xOffset) {
             return drawable.moveTo(wrap(this.getX(u) + xOffset), wrap(this.getY(v))).setDuration(speed)
                 .setCallback(callback);
-        if (yOffset)
+        }
+        if (yOffset) {
             return drawable.moveTo(wrap(this.getX(u)), wrap(this.getY(v) + yOffset)).setDuration(speed)
                 .setCallback(callback);
+        }
         return drawable.moveTo(wrap(this.getX(u)), wrap(this.getY(v))).setDuration(speed).setCallback(callback);
     };
 

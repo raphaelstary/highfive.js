@@ -1,5 +1,5 @@
 H5.FontLoader = (function (addFontToDOM, URL) {
-    "use strict";
+    'use strict';
 
     var font;
     var path;

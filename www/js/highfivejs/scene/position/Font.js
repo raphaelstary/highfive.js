@@ -1,5 +1,5 @@
 H5.Font = (function (calcScreenConst) {
-    "use strict";
+    'use strict';
 
     return {
         _5: function (width, height) {

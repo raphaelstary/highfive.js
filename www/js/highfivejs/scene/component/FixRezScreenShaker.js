@@ -1,12 +1,12 @@
 H5.FixRezScreenShaker = (function (Math, Object) {
-    "use strict";
+    'use strict';
 
     function FixRezScreenShaker() {
         this.shaker = {};
         this.__init();
     }
 
-    FixRezScreenShaker.prototype.__init = function (is30fps) {
+    FixRezScreenShaker.prototype.__init = function () {
         this.shaking = false;
         this.smallShaking = false;
         this.bigShaking = false;
@@ -15,7 +15,6 @@ H5.FixRezScreenShaker = (function (Math, Object) {
         this.duration = 30;
 
         this.__150 = 150;
-        this.__75 = 75;
         this.__50 = 50;
         this.__25 = 25;
         this.__5 = 5;
@@ -29,15 +28,17 @@ H5.FixRezScreenShaker = (function (Math, Object) {
 
             Object.keys(this.shaker).forEach(function (key) {
                 var item = this.shaker[key];
-                if (item._startValueX !== undefined)
+                if (item._startValueX !== undefined) {
                     item.x = item._startValueX;
+                }
             }, this);
 
             if (this.bigShaking) {
                 Object.keys(this.shaker).forEach(function (key) {
                     var item = this.shaker[key];
-                    if (item._startValueY !== undefined)
+                    if (item._startValueY !== undefined) {
                         item.y = item._startValueY;
+                    }
                 }, this);
             }
         }
@@ -54,8 +55,9 @@ H5.FixRezScreenShaker = (function (Math, Object) {
             }
             Object.keys(this.shaker).forEach(function (key) {
                 var item = this.shaker[key];
-                if (item._startValueX !== undefined)
+                if (item._startValueX !== undefined) {
                     item.x = item._startValueX;
+                }
             }, this);
         }
 

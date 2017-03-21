@@ -1,5 +1,5 @@
 H5.FullScreenController = (function (document, navigator) {
-    "use strict";
+    'use strict';
 
     function FullScreenController(screen) {
         this.screen = screen;

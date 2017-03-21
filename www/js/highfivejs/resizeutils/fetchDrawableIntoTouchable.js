@@ -1,5 +1,5 @@
 H5.fetchDrawableIntoTouchable = (function (changeTouchable) {
-    "use strict";
+    'use strict';
 
     function fetchDrawableIntoTouchable(touchable, drawable) {
         changeTouchable(touchable, drawable.getCornerX(), drawable.getCornerY(), drawable.getWidth(),
