@@ -1,5 +1,5 @@
 H5.EntityServices = (function (Transition, changePath, changeCoords) {
-    "use strict";
+    'use strict';
 
     function duration(animation, duration) {
         animation.duration = duration;
@@ -52,8 +52,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
-                if (path.__callback)
+                if (path.__callback) {
                     path.__callback();
+                }
             };
 
             stage.move(drawable, path, enhancedCallBack);
@@ -81,8 +82,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
-                if (path.__callback)
+                if (path.__callback) {
                     path.__callback();
+                }
             };
 
             stage.moveQuad(property, drawable, path, enhancedCallBack);
@@ -110,8 +112,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
-                if (path.__callback)
+                if (path.__callback) {
                     path.__callback();
+                }
             };
 
             stage.move(drawable, path, enhancedCallBack);
@@ -156,8 +159,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
         },
         rotateTo: function (stage, drawable, angle) {
             var enhancedCallBack = function () {
-                if (animation.__callback)
+                if (animation.__callback) {
                     animation.__callback();
+                }
             };
             var animation = stage.animateRotation(drawable, angle, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
@@ -168,8 +172,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
         },
         opacityTo: function (stage, drawable, alpha) {
             var enhancedCallBack = function () {
-                if (animation.__callback)
+                if (animation.__callback) {
                     animation.__callback();
+                }
             };
             var animation = stage.animateAlpha(drawable, alpha, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
@@ -180,8 +185,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
         },
         scaleTo: function (stage, drawable, scale) {
             var enhancedCallBack = function () {
-                if (animation.__callback)
+                if (animation.__callback) {
                     animation.__callback();
+                }
             };
             var animation = stage.animateScale(drawable, scale, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
@@ -193,8 +199,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
         sprite: function (stage, drawable, imgPathName, numberOfFrames, loop) {
             var sprite = stage.getSprite(imgPathName, numberOfFrames, loop);
             var enhancedCallBack = function () {
-                if (drawable.__callback)
+                if (drawable.__callback) {
                     drawable.__callback();
+                }
             };
             stage.animate(drawable, sprite, enhancedCallBack);
 
@@ -202,7 +209,9 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
         },
         volumeTo: function (stage, audio, volume) {
             var enhancedCallBack = function () {
-                if (animation.__callback) animation.__callback();
+                if (animation.__callback) {
+                    animation.__callback();
+                }
             };
             var animation = stage.animateVolume(audio, volume, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);

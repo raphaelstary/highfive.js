@@ -1,5 +1,5 @@
 H5.EqTriangleViewHelper = (function (Math, Transition, Width, EqTriangles) {
-    "use strict";
+    'use strict';
 
     function EqTriangleViewHelper(stage, timer, xTilesCount) {
         this.stage = stage;

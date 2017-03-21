@@ -1,5 +1,5 @@
 H5.EjectaFontLoader = (function (ejecta) {
-    "use strict";
+    'use strict';
 
     var font;
     return {

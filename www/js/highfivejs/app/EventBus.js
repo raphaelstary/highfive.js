@@ -1,5 +1,5 @@
 H5.EventBus = (function (iterateSomeEntries, Object) {
-    "use strict";
+    'use strict';
 
     function EventBus() {
         this.dict = {};
@@ -40,8 +40,9 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
     };
 
     EventBus.prototype.subscribe = function (eventName, callback, self) {
-        if (!this.dict[eventName])
+        if (!this.dict[eventName]) {
             this.dict[eventName] = {};
+        }
 
         var id = this.idGenerator++;
         this.dict[eventName][id] = self ? callback.bind(self) : callback;
@@ -64,8 +65,9 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
 
     EventBus.prototype.updateDeletes = function () {
         this.pendingDeletes.forEach(this.__delete.bind(this));
-        while (this.pendingDeletes.length > 0)
+        while (this.pendingDeletes.length > 0) {
             this.pendingDeletes.pop();
+        }
     };
 
     return EventBus;

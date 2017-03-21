@@ -1,5 +1,5 @@
 H5.EqTriangleGridHelper = (function (Math) {
-    "use strict";
+    'use strict';
 
     function EqTriangleGridHelper(grid, xTiles, yTiles) {
         this.grid = grid;
@@ -36,7 +36,7 @@ H5.EqTriangleGridHelper = (function (Math) {
                 x: -(Math.floor(lastY / 2) + 1),
                 y: lastY,
                 side: 'right'
-            }
+            };
         }
     };
 
@@ -54,7 +54,7 @@ H5.EqTriangleGridHelper = (function (Math) {
                 x: lastX - (Math.floor(lastY / 2) + 1),
                 y: lastY,
                 side: 'right'
-            }
+            };
         }
     };
 

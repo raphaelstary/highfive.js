@@ -1,5 +1,5 @@
 H5.EqTriangles = (function (Math) {
-    "use strict";
+    'use strict';
 
     /**
      * equilateral triangle formulas:

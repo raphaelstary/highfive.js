@@ -1,5 +1,5 @@
 H5.EqTriangleGrid = (function (Math) {
-    "use strict";
+    'use strict';
 
     function EqTriangleGrid(xTiles, yTiles) {
         this.xTiles = xTiles;
@@ -55,8 +55,9 @@ H5.EqTriangleGrid = (function (Math) {
     };
 
     EqTriangleGrid.prototype.get = function (u, v, side) {
-        if (v < 0 || v >= this.yTiles)
+        if (v < 0 || v >= this.yTiles) {
             return false;
+        }
         if (v % 2 == 0 && u < -Math.floor(v / 2)) {
             return false;
         } else if (v % 2 == 1 && side == 'right' && u < -(Math.floor(v / 2) + 1)) {
