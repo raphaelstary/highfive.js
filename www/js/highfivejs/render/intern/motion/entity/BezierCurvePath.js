@@ -1,5 +1,5 @@
 H5.BezierCurvePath = (function () {
-    "use strict";
+    'use strict';
 
     function BezierCurvePath(pointA_x, pointA_y, pointB_x, pointB_y, pointC_x, pointC_y, pointD_x, pointD_y) {
         this.pointA_x = pointA_x;

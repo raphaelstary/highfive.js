@@ -1,5 +1,5 @@
 H5.BasicAnimations = (function (Object, iterateEntries) {
-    "use strict";
+    'use strict';
 
     function BasicAnimations() {
         this.dict = {};
@@ -44,8 +44,9 @@ H5.BasicAnimations = (function (Object, iterateEntries) {
     BasicAnimations.prototype.update = function () {
         Object.keys(this.dict).forEach(function (key) {
             var list = this.dict[key];
-            if (!list)
-                return; // ie11 has null references after removing todo maybe change to pendingDeletes list?
+            if (!list) {
+                return;
+            }
 
             for (var i = list.length - 1; i >= 0; i--) {
                 var wrapper = list[i];

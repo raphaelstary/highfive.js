@@ -1,5 +1,5 @@
 H5.Bootstrapper = (function ($) {
-    "use strict";
+    'use strict';
 
     var Bootstrapper = {
         build: buildApp,
@@ -51,7 +51,9 @@ H5.Bootstrapper = (function ($) {
     }
 
     function buildApp(myResources, installMyScenes, optionalCanvas) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         var screen = useLowRez ?
             $.installCanvas(events, device, optionalCanvas, $.width, $.height, $.getDevicePixelRatio(), lowRezWidth,
@@ -91,7 +93,9 @@ H5.Bootstrapper = (function ($) {
     }
 
     function addLowResolutionRendering(width, height) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         lowRezWidth = width;
         lowRezHeight = height;
@@ -100,7 +104,9 @@ H5.Bootstrapper = (function ($) {
     }
 
     function addScreenOrientation() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         $.installOrientation(events, device);
         device.lockOrientation = $.OrientationLock.lock;
@@ -109,119 +115,153 @@ H5.Bootstrapper = (function ($) {
     }
 
     function addPageVisibility() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         $.installVisibility(events, device);
         return Bootstrapper;
     }
 
     function addFullScreen() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         useFullScreen = true;
         return Bootstrapper;
     }
 
     function addResize() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         $.installResize(events, device);
         return Bootstrapper;
     }
 
     function addKeyBoard() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         removeKeyListener = $.installKeyBoard(events);
         return Bootstrapper;
     }
 
     function addGamePad() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         $.installGamePad(events);
         return Bootstrapper;
     }
 
     function addPointer() {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         usePointer = true;
         return Bootstrapper;
     }
 
     function addAnalytics(url, tenantCode, appKeyCode) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
 
         $.installAnalytics(url, tenantCode, appKeyCode, events);
         return Bootstrapper;
     }
 
     function useAtlasRendering(registerPaths) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.AtlasLoader.register(registerPaths);
         resourceLoadingQueue.push($.AtlasLoader);
         return Bootstrapper;
     }
 
     function useEjectaFont(path) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.EjectaFontLoader.register(path);
         resourceLoadingQueue.push($.EjectaFontLoader);
         return Bootstrapper;
     }
 
     function useFixedRezAtlasRendering(width, height) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.FixedRezAtlasLoader.register(width, height);
         resourceLoadingQueue.push($.FixedRezAtlasLoader);
         return Bootstrapper;
     }
 
     function useFont(path, name) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.FontLoader.register(path, name);
         resourceLoadingQueue.push($.FontLoader);
         return Bootstrapper;
     }
 
     function useHtmlAudio(soundNamesToPathsDict, optionalPath, optionalExtension) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.HtmlAudioLoader.register(soundNamesToPathsDict, optionalPath, optionalExtension);
         resourceLoadingQueue.push($.HtmlAudioLoader);
         return Bootstrapper;
     }
 
     function useHtmlAudioSprite(musicInfoPath, musicPath, sfxInfoPath, sfxPath, sfxTrackCount) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.HtmlAudioSpriteLoader.register(musicInfoPath, musicPath, sfxInfoPath, sfxPath, sfxTrackCount);
         resourceLoadingQueue.push($.HtmlAudioSpriteLoader);
         return Bootstrapper;
     }
 
     function useImageRendering(notImplementedYet) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.ImageLoader.register(notImplementedYet);
         resourceLoadingQueue.push($.ImageLoader);
         return Bootstrapper;
     }
 
     function useLocales(path) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.LocalesLoader.register(path);
         resourceLoadingQueue.push($.LocalesLoader);
         return Bootstrapper;
     }
 
     function useH5Scenes(path) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.SceneLoader.register(path);
         resourceLoadingQueue.push($.SceneLoader);
         return Bootstrapper;
     }
 
     function useWebAudioSprite(musicInfoPath, musicPath, sfxInfoPath, sfxPath) {
-        if (noOneDidAnInit) initBootstrap();
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
         $.WebAudioSpriteLoader.register(musicInfoPath, musicPath, sfxInfoPath, sfxPath);
         resourceLoadingQueue.push($.WebAudioSpriteLoader);
         return Bootstrapper;
