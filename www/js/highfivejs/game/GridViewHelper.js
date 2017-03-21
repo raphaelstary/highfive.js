@@ -1,5 +1,5 @@
 H5.GridViewHelper = (function (Height, Math, add) {
-    "use strict";
+    'use strict';
 
     function GridViewHelper(stage, device, xTilesCount, yTilesCount, topOffset, bottomOffset) {
         this.stage = stage;
@@ -16,7 +16,7 @@ H5.GridViewHelper = (function (Height, Math, add) {
         return (function (self) {
             return function (width, height) {
                 return self.__edgeLength(height);
-            }
+            };
         })(this);
     };
 
@@ -77,7 +77,9 @@ H5.GridViewHelper = (function (Height, Math, add) {
         } else {
             drawable.setPosition(this.__getX(u), this.__getY(v), dependencies);
         }
-        if (zIndex !== 3) drawable.setZIndex(zIndex);
+        if (zIndex !== 3) {
+            drawable.setZIndex(zIndex);
+        }
         if (defaultTileHeight) {
             var scaleFactor = drawable.data.height / defaultTileHeight;
             drawable.scale = this.__calcBaseScale(drawable.getHeight()) * scaleFactor;
@@ -96,6 +98,7 @@ H5.GridViewHelper = (function (Height, Math, add) {
     GridViewHelper.prototype.createRect = function (u, v, color) {
         var self = this;
 
+        //noinspection JSUnusedLocalSymbols
         function getWidth(width, height) {
             return self.__edgeLength(height) - 1;
         }
@@ -113,15 +116,18 @@ H5.GridViewHelper = (function (Height, Math, add) {
     };
 
     GridViewHelper.prototype.move = function (drawable, u, v, speed, callback, xOffset, yOffset, dependencies) {
-        if (xOffset && yOffset)
+        if (xOffset && yOffset) {
             return drawable.moveTo(add(this.__getX(u), xOffset), add(this.__getY(v), yOffset), dependencies)
                 .setDuration(speed).setCallback(callback);
-        if (xOffset)
+        }
+        if (xOffset) {
             return drawable.moveTo(add(this.__getX(u), xOffset), this.__getY(v), dependencies).setDuration(speed)
                 .setCallback(callback);
-        if (yOffset)
+        }
+        if (yOffset) {
             return drawable.moveTo(this.__getX(u), add(this.__getY(v), yOffset), dependencies).setDuration(speed)
                 .setCallback(callback);
+        }
         return drawable.moveTo(this.__getX(u), this.__getY(v), dependencies).setDuration(speed).setCallback(callback);
     };
 
@@ -159,8 +165,9 @@ H5.GridViewHelper = (function (Height, Math, add) {
     };
 
     GridViewHelper.prototype.__getTopOffset = function (height) {
-        if (this.topOffset)
+        if (this.topOffset) {
             return this.topOffset(height);
+        }
         return 0;
     };
 

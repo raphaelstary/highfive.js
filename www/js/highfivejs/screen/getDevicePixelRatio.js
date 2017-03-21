@@ -1,5 +1,5 @@
 H5.getDevicePixelRatio = (function (window) {
-    "use strict";
+    'use strict';
 
     var calculatedDevicePixelRatio;
     if ('screen' in window) {
@@ -9,5 +9,5 @@ H5.getDevicePixelRatio = (function (window) {
 
     return function () {
         return devicePixelRatio;
-    }
+    };
 })(window);

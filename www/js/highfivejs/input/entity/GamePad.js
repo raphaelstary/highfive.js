@@ -1,5 +1,5 @@
 H5.GamePad = (function (navigator, Button, Axis) {
-    "use strict";
+    'use strict';
 
     function GamePad(index) {
         this.index = index;

@@ -1,5 +1,5 @@
 H5.Grid = (function () {
-    "use strict";
+    'use strict';
 
     function Grid(level) {
         this.__init(level);
@@ -35,8 +35,9 @@ H5.Grid = (function () {
             }
 
             this.getBackground = function (u, v) {
-                if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles)
+                if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles) {
                     return;
+                }
                 return this.backgroundMap[v][u];
             };
 
@@ -58,8 +59,9 @@ H5.Grid = (function () {
             }
 
             this.getEvent = function (u, v) {
-                if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles)
+                if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles) {
                     return;
+                }
                 return this.eventsMap[v][u];
             };
         }
@@ -70,8 +72,9 @@ H5.Grid = (function () {
     };
 
     Grid.prototype.get = function (u, v) {
-        if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles)
+        if (u < 0 || u >= this.xTiles || v < 0 || v >= this.__yTiles) {
             return;
+        }
         return this.map[v][u];
     };
 

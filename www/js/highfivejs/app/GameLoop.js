@@ -1,5 +1,5 @@
 H5.GameLoop = (function (requestAnimationFrame, Event) {
-    "use strict";
+    'use strict';
 
     // callback from animationFrame infrastructure. tick list of given periodic handlers
     function GameLoop(events) {
@@ -15,8 +15,9 @@ H5.GameLoop = (function (requestAnimationFrame, Event) {
     };
 
     GameLoop.prototype.run = function () {
-        if (this.__stop)
+        if (this.__stop) {
             return;
+        }
 
         requestAnimationFrame(this.run.bind(this));
 
@@ -30,8 +31,9 @@ H5.GameLoop = (function (requestAnimationFrame, Event) {
         this.events.fireSync(Event.TICK_POST_INPUT);
 
         // move phase
-        if (this.isMove)
+        if (this.isMove) {
             this.events.fireSync(Event.TICK_MOVE);
+        }
 
         // collision phase
         if (this.isCollision) {

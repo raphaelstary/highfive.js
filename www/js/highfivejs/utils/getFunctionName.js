@@ -1,5 +1,5 @@
 H5.getFunctionName = (function () {
-    "use strict";
+    'use strict';
 
     function getFunctionName(fn) {
         var fnString = fn.toString();

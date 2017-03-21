@@ -1,5 +1,5 @@
 H5.getStage = (function ($) {
-    "use strict";
+    'use strict';
 
     function createLegacy(gfxCache, renderer) {
 
@@ -11,7 +11,10 @@ H5.getStage = (function ($) {
 
         var audioAnimations = new $.AudioAnimations(animations);
 
-        return new $.Stage(gfxCache, motions, new $.MotionTimer(motions, timer), new $.MotionHelper(motions), spriteAnimations, new $.SpriteTimer(spriteAnimations, timer), animations, animationHelper, new $.BasicAnimationTimer(animations, timer), new $.PropertyAnimations(animations, animationHelper), renderer, timer, audioAnimations);
+        return new $.Stage(gfxCache, motions, new $.MotionTimer(motions, timer), new $.MotionHelper(motions),
+            spriteAnimations, new $.SpriteTimer(spriteAnimations, timer), animations, animationHelper,
+            new $.BasicAnimationTimer(animations, timer), new $.PropertyAnimations(animations, animationHelper),
+            renderer, timer, audioAnimations);
     }
 
     function createResponsive(gfxCache, renderer, device, events) {
@@ -36,9 +39,12 @@ H5.getStage = (function ($) {
             'radius'
         ];
         var legacyStage = createLegacy(gfxCache, renderer);
-        var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height, new $.CallbackTimer());
+        var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
+            new $.CallbackTimer());
 
-        if (!device.isLowRez) events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
+        if (!device.isLowRez) {
+            events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
+        }
 
         return stage;
     }
