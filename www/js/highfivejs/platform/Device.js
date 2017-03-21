@@ -1,5 +1,5 @@
 H5.Device = (function (window, Math) {
-    "use strict";
+    'use strict';
 
     function Device(userAgent, width, height, devicePixelRatio, screenWidth, screenHeight) {
         this.userAgent = userAgent;

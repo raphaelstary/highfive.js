@@ -1,5 +1,5 @@
 H5.Drawable = (function (Math, TextWrapper, SubImage, ImageWrapper, Circle, DrawableLine) {
-    "use strict";
+    'use strict';
 
     function Drawable(id, x, y, data, zIndex, alpha, rotation, scale) {
         this.id = id;
@@ -87,7 +87,7 @@ H5.Drawable = (function (Math, TextWrapper, SubImage, ImageWrapper, Circle, Draw
     };
 
     Drawable.prototype.__getWidth = function () {
-        if (this.data instanceof  TextWrapper) {
+        if (this.data instanceof TextWrapper) {
             return this.__measureText(this.data).width;
         }
         if (this.data instanceof SubImage) {
