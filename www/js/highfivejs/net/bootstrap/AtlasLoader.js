@@ -1,5 +1,5 @@
 H5.AtlasLoader = (function (AtlasResourceHelper, createAtlasPaths, Device, userAgent, width, height) {
-    "use strict";
+    'use strict';
 
     var atlasPaths;
     var atlases = [];

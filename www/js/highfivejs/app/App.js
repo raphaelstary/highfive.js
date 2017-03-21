@@ -1,6 +1,6 @@
 H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenateProperties, CallbackTimer, Event,
     getStage) {
-    "use strict";
+    'use strict';
 
     function App(services, resourcesLoadingQueue, runMyScenes, removeKeyHandler) {
         this.services = services;
@@ -28,12 +28,16 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
 
         var self = this;
         resourceLoader.onComplete = function () {
-            if (!hideLoadingScreen) events.unsubscribe(initScreenId);
+            if (!hideLoadingScreen) {
+                events.unsubscribe(initScreenId);
+            }
 
             var sceneServices = {};
 
             self.resourcesQueue.forEach(function (loader) {
-                if (loader.process) loader.process(sceneServices);
+                if (loader.process) {
+                    loader.process(sceneServices);
+                }
             });
 
             sceneServices.stage = getStage(self.services.screen, sceneServices.gfxCache, self.services.device, events);
@@ -46,16 +50,24 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
             sceneServices.sceneStorage = {};
             sceneServices.sceneStorage.endCallback = function () {
                 self.stop();
-                if (self.removeKeyHandler) self.removeKeyHandler();
-                if (self.services.device.isFullScreen()) self.services.device.exitFullScreen();
-                if (callback) callback();
+                if (self.removeKeyHandler) {
+                    self.removeKeyHandler();
+                }
+                if (self.services.device.isFullScreen()) {
+                    self.services.device.exitFullScreen();
+                }
+                if (callback) {
+                    callback();
+                }
             };
 
             concatenateProperties(self.services, sceneServices);
             sceneServices.info = appInfo;
 
             self.resourcesQueue.forEach(function (loader) {
-                if (loader.postProcess) loader.postProcess(sceneServices);
+                if (loader.postProcess) {
+                    loader.postProcess(sceneServices);
+                }
             });
 
             self.runMyScenes(sceneServices);

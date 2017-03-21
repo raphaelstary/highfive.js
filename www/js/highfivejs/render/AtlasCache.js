@@ -1,6 +1,7 @@
 H5.AtlasCache = (function (SubImage, Math, iterateEntries) {
-    "use strict";
+    'use strict';
 
+    //noinspection JSUnusedLocalSymbols
     function AtlasCache(width, height, defaultScreenHeight) {
         this.defaultScreenHeight = defaultScreenHeight || 3840;
         this.atlasDict = {};

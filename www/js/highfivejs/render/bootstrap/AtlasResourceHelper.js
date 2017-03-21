@@ -1,5 +1,5 @@
 H5.AtlasResourceHelper = (function (AtlasCache, screenWidth, screenHeight, getDevicePixelRatio, Math) {
-    "use strict";
+    'use strict';
 
     var defaultSize;
     var pixelRatio = getDevicePixelRatio();

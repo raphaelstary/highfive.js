@@ -1,5 +1,5 @@
 H5.AudioAnimations = (function (Animations, Math) {
-    "use strict";
+    'use strict';
 
     function AudioAnimations(animations) {
         this.animations = animations;

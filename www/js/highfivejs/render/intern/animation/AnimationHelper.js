@@ -1,5 +1,5 @@
 H5.AnimationHelper = (function () {
-    "use strict";
+    'use strict';
 
     // high level animation methods
     function AnimationHelper(animations) {

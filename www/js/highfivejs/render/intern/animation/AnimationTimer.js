@@ -1,5 +1,5 @@
 H5.AnimationTimer = (function () {
-    "use strict";
+    'use strict';
 
     function AnimationTimer(animations, timer) {
         this.animations = animations;
@@ -12,8 +12,9 @@ H5.AnimationTimer = (function () {
             self.animations.animate(drawableToAdd.drawable, drawableToAdd.setter, drawableToAdd.animation,
                 drawableToAdd.callback);
 
-            if (callback)
+            if (callback) {
                 callback();
+            }
         }, duration);
     };
 

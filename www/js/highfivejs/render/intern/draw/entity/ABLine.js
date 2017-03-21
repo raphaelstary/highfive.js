@@ -1,5 +1,5 @@
 H5.ABLine = (function () {
-    "use strict";
+    'use strict';
 
     function ABLine(ax, ay, bx, by, color, lineWidth) {
         this.ax = ax;
