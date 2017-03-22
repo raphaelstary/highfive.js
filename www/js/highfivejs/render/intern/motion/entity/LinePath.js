@@ -1,5 +1,5 @@
 H5.LinePath = (function () {
-    "use strict";
+    'use strict';
 
     function LinePath(startX, startY, endX, endY, vectorX, vectorY, unitVectorX, unitVectorY, length) {
         this.startX = startX;

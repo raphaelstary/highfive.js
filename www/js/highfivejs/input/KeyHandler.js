@@ -1,5 +1,5 @@
 H5.KeyHandler = (function (Event) {
-    "use strict";
+    'use strict';
 
     function KeyHandler(events) {
         this.events = events;
@@ -12,8 +12,9 @@ H5.KeyHandler = (function (Event) {
     }
 
     KeyHandler.prototype.keyDown = function (event) {
-        if (event.keyCode != 17 && event.keyCode != 82 && event.keyCode != 123)
+        if (event.keyCode != 17 && event.keyCode != 82 && event.keyCode != 123) {
             event.preventDefault();
+        }
         this.pressedKeys[event.keyCode] = true;
         this.changed = true;
     };

@@ -1,5 +1,5 @@
 H5.lclStorage = (function (window) {
-    "use strict";
+    'use strict';
 
     var lclStorage;
     try {
@@ -19,7 +19,7 @@ H5.lclStorage = (function (window) {
             removeItem: function (id) {
                 delete this.dict[id];
             }
-        }
+        };
     }
 
     return lclStorage;

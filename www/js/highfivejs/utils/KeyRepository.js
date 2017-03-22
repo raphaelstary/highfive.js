@@ -1,5 +1,5 @@
 H5.KeyRepository = (function (Object) {
-    "use strict";
+    'use strict';
 
     function KeyRepository(keysInOrderToCall) {
         this.keys = keysInOrderToCall;
@@ -55,8 +55,9 @@ H5.KeyRepository = (function (Object) {
                 var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
                 if (dependencyNotAlreadyCalled) {
                     var wrapper = self.dict[dependency.id];
-                    if (wrapper)
+                    if (wrapper) {
                         callWrapper(dependency.id, wrapper);
+                    }
                 }
             });
 

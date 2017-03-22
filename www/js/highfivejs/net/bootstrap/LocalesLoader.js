@@ -1,5 +1,5 @@
 H5.LocalesLoader = (function (UniversalTranslator) {
-    "use strict";
+    'use strict';
 
     var locales;
     var path;
