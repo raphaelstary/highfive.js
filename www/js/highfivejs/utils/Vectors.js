@@ -1,5 +1,5 @@
 H5.Vectors = (function (Math) {
-    "use strict";
+    'use strict';
 
     return {
         get: function (pointA_X, pointA_Y, pointB_X, pointB_Y) {
@@ -31,6 +31,7 @@ H5.Vectors = (function (Math) {
         },
 
         normalRight: function (x, y) {
+            //noinspection JSSuspiciousNameCombination
             return {
                 x: -y,
                 y: x
@@ -38,6 +39,7 @@ H5.Vectors = (function (Math) {
         },
 
         normalLeft: function (x, y) {
+            //noinspection JSSuspiciousNameCombination
             return {
                 x: y,
                 y: -x
@@ -78,7 +80,7 @@ H5.Vectors = (function (Math) {
             return {
                 x: a1_x + ua * (a2_x - a1_x),
                 y: a1_y + ua * (a2_y - a1_y)
-            }
+            };
         }
     };
 })(Math);

@@ -1,5 +1,5 @@
 H5.TextWrapper = (function () {
-    "use strict";
+    'use strict';
 
     function TextWrapper(msg, size, fontFamily, color, fontStyle, maxLineLength, lineHeight) {
         this.msg = msg;

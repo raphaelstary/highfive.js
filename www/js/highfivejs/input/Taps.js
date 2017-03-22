@@ -1,5 +1,5 @@
 H5.Taps = (function (isHit, iterateSomeEntries, iterateEntries) {
-    "use strict";
+    'use strict';
 
     function Taps() {
         this.elements = {};
@@ -7,8 +7,9 @@ H5.Taps = (function (isHit, iterateSomeEntries, iterateEntries) {
     }
 
     Taps.prototype.inputChanged = function (pointer) {
-        if (pointer.type == 'move' || pointer.type == 'up')
+        if (pointer.type == 'move' || pointer.type == 'up') {
             return;
+        }
         iterateSomeEntries(this.elements, function (elem) {
             if (isHit(pointer, elem.touchable)) {
                 elem.callback();
@@ -22,7 +23,7 @@ H5.Taps = (function (isHit, iterateSomeEntries, iterateEntries) {
         this.elements[touchable.id] = {
             touchable: touchable,
             callback: callback
-        }
+        };
     };
 
     Taps.prototype.remove = function (touchable) {

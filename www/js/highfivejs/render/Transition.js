@@ -1,30 +1,35 @@
 H5.Transition = (function (Math) {
-    "use strict";
+    'use strict';
 
     function linearTweening(currentTime, startValue, changeInValue, duration) {
         return changeInValue * currentTime / duration + startValue;
     }
 
     function exponentialEasingInAndOut(currentTime, startValue, changeInValue, duration) {
-        if (currentTime == 0)
+        if (currentTime == 0) {
             return startValue;
-        if (currentTime == duration)
+        }
+        if (currentTime == duration) {
             return startValue + changeInValue;
-        if ((currentTime /= duration / 2) < 1)
+        }
+        if ((currentTime /= duration / 2) < 1) {
             return changeInValue / 2 * Math.pow(2, 10 * (currentTime - 1)) + startValue;
+        }
 
         return changeInValue / 2 * (-Math.pow(2, -10 * --currentTime) + 2) + startValue;
     }
 
     function elasticEasingInAndOut(currentTime, startValue, changeInValue, duration) {
-        if (currentTime == 0)
+        if (currentTime == 0) {
             return startValue;
+        }
 
-        if ((currentTime /= duration) == 1)
+        if ((currentTime /= duration) == 1) {
             return startValue + changeInValue;
+        }
 
         var period = duration * .3, s = changeInValue < Math.abs(changeInValue) ? period / 4 :
-        period / (2 * Math.PI) * Math.asin(changeInValue / changeInValue);
+            period / (2 * Math.PI) * Math.asin(changeInValue / changeInValue);
 
         return changeInValue * Math.pow(2, -10 * currentTime) *
             Math.sin((currentTime * duration - s) * (2 * Math.PI) / period) + changeInValue + startValue;
@@ -87,8 +92,9 @@ H5.Transition = (function (Math) {
     }
 
     function sinusoidalEasingOutAndIn(currentTime, startValue, changeInValue, duration) {
-        if ((currentTime /= duration / 2) < 1) return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2) ) +
-            startValue;
+        if ((currentTime /= duration / 2) < 1) {
+            return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2) ) + startValue;
+        }
         return -changeInValue / 2 * (Math.cos(Math.PI * --currentTime / 2) - 2) + startValue;
     }
 
@@ -130,9 +136,10 @@ H5.Transition = (function (Math) {
 
     function easeInOutBack(currentTime, startValue, changeInValue, duration) {
         var s = 1.70158;
-        if ((currentTime /= duration / 2) < 1)
+        if ((currentTime /= duration / 2) < 1) {
             return changeInValue / 2 * (currentTime * currentTime * (((s *= (1.525)) + 1) * currentTime - s)) +
                 startValue;
+        }
         return changeInValue / 2 * ((currentTime -= 2) * currentTime * (((s *= (1.525)) + 1) * currentTime + s) + 2) +
             startValue;
     }

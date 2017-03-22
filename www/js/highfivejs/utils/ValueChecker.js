@@ -1,8 +1,8 @@
 H5.ValueChecker = (function (Math, isFinite) {
-    "use strict";
+    'use strict';
 
     function isInteger(value) {
-        return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+        return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
     }
 
     function isNoPositiveInteger(value) {

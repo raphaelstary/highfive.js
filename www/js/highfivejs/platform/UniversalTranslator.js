@@ -1,13 +1,14 @@
 H5.UniversalTranslator = (function (defaultLanguage, Repository) {
-    "use strict";
+    'use strict';
 
     function UniversalTranslator(locales) {
         this.locales = locales;
         this.defaultLanguageCode = defaultLanguage;
         this.language = defaultLanguage ? defaultLanguage.substring(0, 2) : 'en';
 
-        if (!this.locales[this.language])
+        if (!this.locales[this.language]) {
             this.language = 'en';
+        }
 
         this.repo = new Repository();
     }
@@ -23,7 +24,7 @@ H5.UniversalTranslator = (function (defaultLanguage, Repository) {
             languages.push({
                 language: language,
                 name: this.locales[language].display_name
-            })
+            });
         }, this);
         return languages;
     };

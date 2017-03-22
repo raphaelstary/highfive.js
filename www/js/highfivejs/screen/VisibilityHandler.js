@@ -1,5 +1,5 @@
 H5.VisibilityHandler = (function (document, Event) {
-    "use strict";
+    'use strict';
 
     function VisibilityHandler(events) {
         this.events = events;
