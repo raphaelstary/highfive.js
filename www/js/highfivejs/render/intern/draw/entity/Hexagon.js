@@ -1,5 +1,5 @@
 H5.Hexagon = (function () {
-    "use strict";
+    'use strict';
 
     function Hexagon(angle, radius, color, filled, lineWidth) {
         this.angle = angle;

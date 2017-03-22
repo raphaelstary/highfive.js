@@ -1,5 +1,5 @@
 H5.HtmlAudioSpriteLoader = (function (HtmlAudioSprite, installHtmlAudioSprite) {
-    "use strict";
+    'use strict';
 
     var musicInfoFilePath;
     var musicFilePath;

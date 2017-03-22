@@ -1,5 +1,5 @@
 H5.HexViewHelper = (function (Width, Math) {
-    "use strict";
+    'use strict';
 
     function HexViewHelper(stage, xTilesCount, yTilesCount, topOffset, bottomOffset, adjustCenter) {
         this.stage = stage;
@@ -28,8 +28,9 @@ H5.HexViewHelper = (function (Width, Math) {
         var sqrt3 = Math.sqrt(3);
         var tCount = this.yTiles * 2;
         var totalHeight = calcWidth / sqrt3 * tCount;
-        if (totalHeight * 0.9 > height)
+        if (totalHeight * 0.9 > height) {
             return Math.floor(height / tCount * sqrt3);
+        }
         return calcWidth;
     };
 
@@ -39,10 +40,12 @@ H5.HexViewHelper = (function (Width, Math) {
                 var calcWidth = self.getWidth(width, height);
                 var xOffset = 0;
                 var totalWidth = calcWidth * self.xTiles;
-                if (totalWidth < width)
+                if (totalWidth < width) {
                     xOffset = (width - totalWidth) / 2;
-                if (self.adjustCenter)
+                }
+                if (self.adjustCenter) {
                     return Math.floor(self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset);
+                }
                 return Math.floor(
                     self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset + calcWidth / 2);
             };
@@ -55,8 +58,9 @@ H5.HexViewHelper = (function (Width, Math) {
                 var size = self.getSize(width, height);
                 var yOffset = 0;
                 var totalHeight = size * self.yTiles * 2;
-                if (totalHeight < height)
+                if (totalHeight < height) {
                     yOffset = (height - totalHeight) / 2;
+                }
                 return Math.floor(size * 3 / 2 * v + size + self.topOffset(height) / 2 + yOffset);
             };
         })(this);

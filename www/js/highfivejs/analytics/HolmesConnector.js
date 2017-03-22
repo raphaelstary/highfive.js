@@ -1,5 +1,5 @@
 H5.HolmesConnector = (function (Persistence, JSON, XMLHttpRequest, localStorage) {
-    "use strict";
+    'use strict';
 
     function HolmesConnector(url, tenantCode, appKeyCode) {
         this.url = url;
@@ -31,8 +31,9 @@ H5.HolmesConnector = (function (Persistence, JSON, XMLHttpRequest, localStorage)
     };
 
     HolmesConnector.prototype.send = function (data) {
-        if (!this.clientId)
+        if (!this.clientId) {
             return;
+        }
 
         var payload = {
             id: this.clientId,
@@ -48,8 +49,8 @@ H5.HolmesConnector = (function (Persistence, JSON, XMLHttpRequest, localStorage)
 
     HolmesConnector.prototype.__request = function (method, payload, callback) {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", this.url + method);
-        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.open('POST', this.url + method);
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = callback;
         xhr.send(JSON.stringify(payload));
     };

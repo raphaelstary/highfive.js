@@ -1,5 +1,5 @@
 H5.HtmlAudioLoader = (function (SoundResources) {
-    "use strict";
+    'use strict';
 
     var sounds;
     var dict;

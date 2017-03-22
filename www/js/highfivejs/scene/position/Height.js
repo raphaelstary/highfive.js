@@ -1,16 +1,7 @@
 H5.Height = (function (calcScreenConst) {
-    "use strict";
+    'use strict';
 
     return {
-        _400: function (height) {
-            return calcScreenConst(height, 6, 5);
-        },
-        BOTTOM_RASTER: function (screenHeight) {
-            return calcScreenConst(screenHeight, 20, 19);
-        },
-        TOP_RASTER: function (screenHeight) {
-            return calcScreenConst(screenHeight, 20);
-        },
         FULL: function (height) {
             return height;
         },

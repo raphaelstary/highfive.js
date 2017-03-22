@@ -1,5 +1,5 @@
 H5.HtmlAudioManager = (function (iterateEntries) {
-    "use strict";
+    'use strict';
 
     function HtmlAudioManager(audioDict) {
         this.audioDict = audioDict;
