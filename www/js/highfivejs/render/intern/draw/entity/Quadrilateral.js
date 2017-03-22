@@ -1,5 +1,5 @@
 H5.Quadrilateral = (function () {
-    "use strict";
+    'use strict';
 
     function Quadrilateral(ax, ay, bx, by, cx, cy, dx, dy, color, filled, lineWidth) {
         this.ax = ax;

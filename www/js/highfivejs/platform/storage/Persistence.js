@@ -1,5 +1,5 @@
 H5.Persistence = (function (localStorage, parseInt, JSON) {
-    "use strict";
+    'use strict';
 
     function loadBoolean(key) {
         return localStorage.getItem(key) == 'true';
@@ -7,8 +7,9 @@ H5.Persistence = (function (localStorage, parseInt, JSON) {
 
     function loadInteger(key) {
         var value = localStorage.getItem(key);
-        if (value == null)
+        if (value == null) {
             return 0;
+        }
         return parseInt(value);
     }
 
@@ -22,8 +23,9 @@ H5.Persistence = (function (localStorage, parseInt, JSON) {
 
     function loadString(key) {
         var value = localStorage.getItem(key);
-        if (value == null)
+        if (value == null) {
             return '';
+        }
         return value;
     }
 
@@ -37,6 +39,6 @@ H5.Persistence = (function (localStorage, parseInt, JSON) {
         loadObject: loadObject,
         loadString: loadString,
         saveObject: saveObject
-    }
+    };
 
 })(H5.lclStorage, parseInt, JSON);

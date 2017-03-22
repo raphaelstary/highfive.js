@@ -1,5 +1,5 @@
 H5.Promise = (function (Array, CallbackCounter) {
-    "use strict";
+    'use strict';
 
     function Promise() {
         this.isFulfilled = false;
@@ -32,8 +32,9 @@ H5.Promise = (function (Array, CallbackCounter) {
     };
 
     Promise.prototype.resolve = function (arg) {
-        if (this.isFulfilled)
+        if (this.isFulfilled) {
             return;
+        }
 
         this.isFulfilled = true;
 

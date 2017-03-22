@@ -1,9 +1,10 @@
 H5.OrientationLock = (function (screen) {
-    "use strict";
+    'use strict';
 
     function lock(orientation) {
-        if (!screen)
+        if (!screen) {
             return false;
+        }
 
         if ('orientation' in screen && 'angle' in screen.orientation) {
             return screen.orientation.lock(orientation);
@@ -20,8 +21,9 @@ H5.OrientationLock = (function (screen) {
     }
 
     function unlock() {
-        if (!screen)
+        if (!screen) {
             return false;
+        }
 
         if ('orientation' in screen && 'angle' in screen.orientation) {
             return screen.orientation.unlock();

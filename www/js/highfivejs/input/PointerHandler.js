@@ -1,5 +1,5 @@
 H5.PointerHandler = (function (Event, Object, Math) {
-    "use strict";
+    'use strict';
 
     function PointerHandler(events, device) {
         this.events = events;
@@ -169,8 +169,10 @@ H5.PointerHandler = (function (Event, Object, Math) {
         this.pendingDeletes.forEach(function (pointer) {
             delete this.activePointers[pointer.id];
         }, this);
-        while (this.pendingDeletes.length > 0)
+
+        while (this.pendingDeletes.length > 0) {
             this.pendingDeletes.pop();
+        }
     };
 
     return PointerHandler;

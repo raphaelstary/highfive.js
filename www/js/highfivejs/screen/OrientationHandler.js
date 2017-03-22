@@ -1,5 +1,5 @@
 H5.OrientationHandler = (function (window, Orientation, screen, Event) {
-    "use strict";
+    'use strict';
 
     function OrientationHandler(events) {
         this.events = events;
@@ -44,8 +44,9 @@ H5.OrientationHandler = (function (window, Orientation, screen, Event) {
     };
 
     OrientationHandler.prototype.__fireEvent = function (currentOrientation) {
-        if (this.lastOrientation === currentOrientation)
+        if (this.lastOrientation === currentOrientation) {
             return;
+        }
 
         this.events.fire(Event.SCREEN_ORIENTATION, currentOrientation);
         this.lastOrientation = currentOrientation;

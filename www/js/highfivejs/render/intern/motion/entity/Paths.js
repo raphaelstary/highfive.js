@@ -1,5 +1,5 @@
 H5.Paths = (function (Math, LinePath, CirclePath, BezierCurvePath, Vectors, Animations) {
-    "use strict";
+    'use strict';
 
     function createLine(startX, startY, endX, endY, speed, spacingFn, loop) {
         var vector = Vectors.get(startX, startY, endX, endY);

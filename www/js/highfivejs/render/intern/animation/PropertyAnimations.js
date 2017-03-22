@@ -1,5 +1,5 @@
 H5.PropertyAnimations = (function (Animations) {
-    "use strict";
+    'use strict';
 
     function PropertyAnimations(animations, animationHelper) {
         this.animations = animations;

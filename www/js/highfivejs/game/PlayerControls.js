@@ -1,5 +1,5 @@
 H5.PlayerControls = (function (Event, Array, Math, Vectors) {
-    "use strict";
+    'use strict';
 
     var Action = {
         LEFT: 'left',
@@ -11,10 +11,14 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
     function getAxisAction(xAxisValue, yAxisValue, deadZone) {
         var yAxis = yAxisValue;
-        if (yAxis > -deadZone && yAxis < deadZone) yAxis = 0;
+        if (yAxis > -deadZone && yAxis < deadZone) {
+            yAxis = 0;
+        }
 
         var xAxis = xAxisValue;
-        if (xAxis > -deadZone && xAxis < deadZone) xAxis = 0;
+        if (xAxis > -deadZone && xAxis < deadZone) {
+            xAxis = 0;
+        }
 
         if (xAxis != 0 && yAxis != 0) {
             var angle = Vectors.getAngle(xAxis, yAxis);
@@ -35,12 +39,14 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             return Action.RIGHT;
 
         } else if (yAxis != 0) {
-            if (yAxis > 0)
+            if (yAxis > 0) {
                 return Action.DOWN;
+            }
             return Action.UP;
         } else if (xAxis != 0) {
-            if (xAxis > 0)
+            if (xAxis > 0) {
                 return Action.RIGHT;
+            }
             return Action.LEFT;
         }
         return Action.NOTHING;
@@ -76,15 +82,25 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         if (action != store.lastAction) {
             store.lastAction = action;
             if (action == Action.LEFT) {
-                if (store.left) store.left();
+                if (store.left) {
+                    store.left();
+                }
             } else if (action == Action.UP) {
-                if (store.up) store.up();
+                if (store.up) {
+                    store.up();
+                }
             } else if (action == Action.RIGHT) {
-                if (store.right) store.right();
+                if (store.right) {
+                    store.right();
+                }
             } else if (action == Action.DOWN) {
-                if (store.down) store.down();
+                if (store.down) {
+                    store.down();
+                }
             } else {
-                if (store.neutral) store.neutral();
+                if (store.neutral) {
+                    store.neutral();
+                }
             }
         }
     }
@@ -107,8 +123,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             this.basicRegister(events);
 
             var axisListener = events.subscribe(Event.GAME_PAD, function (gamePad) {
-                if (shouldIgnore(conditions, negativeConditions, gamePad))
+                if (shouldIgnore(conditions, negativeConditions, gamePad)) {
                     return;
+                }
                 updateStick(directionsLeft, gamePad.getLeftStickXAxis(), gamePad.getLeftStickYAxis());
                 updateStick(directionsRight, gamePad.getRightStickXAxis(), gamePad.getRightStickYAxis());
             });
@@ -128,7 +145,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         };
         gamePad.cancel = function () {
             this.basicCancel();
-            if (unsubscribe) unsubscribe();
+            if (unsubscribe) {
+                unsubscribe();
+            }
             return this;
         };
         return gamePad;
@@ -163,8 +182,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                 y: 0
             };
             var axisListener = events.subscribe(Event.GAME_PAD, function (gamePad) {
-                if (shouldIgnore(conditions, negativeConditions, gamePad))
+                if (shouldIgnore(conditions, negativeConditions, gamePad)) {
                     return;
+                }
 
                 neutral = !(gamePad.isDPadDownPressed() || gamePad.isDPadLeftPressed() || gamePad.isDPadUpPressed() ||
                 gamePad.isDPadRightPressed());
@@ -185,13 +205,21 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
                     var swipe = interpretSwipe(start, end);
                     if (swipe == Direction.DOWN) {
-                        if (gestures.down) gestures.down();
+                        if (gestures.down) {
+                            gestures.down();
+                        }
                     } else if (swipe == Direction.LEFT) {
-                        if (gestures.left) gestures.left();
+                        if (gestures.left) {
+                            gestures.left();
+                        }
                     } else if (swipe == Direction.UP) {
-                        if (gestures.up) gestures.up();
+                        if (gestures.up) {
+                            gestures.up();
+                        }
                     } else if (swipe == Direction.RIGHT) {
-                        if (gestures.right) gestures.right();
+                        if (gestures.right) {
+                            gestures.right();
+                        }
                     }
 
                     // clean up
@@ -218,7 +246,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         };
         gamePad.cancel = function () {
             this.basicCancel();
-            if (unsubscribe) unsubscribe();
+            if (unsubscribe) {
+                unsubscribe();
+            }
             return this;
         };
 
@@ -244,7 +274,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                     key: key,
                     value: value
                 };
-                if (this.__setCondition) this.__setCondition(condition);
+                if (this.__setCondition) {
+                    this.__setCondition(condition);
+                }
                 conditions.push(condition);
             },
             setNegativeCondition: function (key, value) {
@@ -252,7 +284,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                     key: key,
                     value: value
                 };
-                if (this.__setNegativeCondition) this.__setNegativeCondition(negCondition);
+                if (this.__setNegativeCondition) {
+                    this.__setNegativeCondition(negCondition);
+                }
                 negativeConditions.push(negCondition);
             },
             add: function (keyCode) {
@@ -299,13 +333,14 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
                         return this;
                     }
-                }
+                };
             },
 
             register: function (events) {
                 var setupEventId = events.subscribe(event, function (inputType) {
-                    if (shouldIgnore(conditions, negativeConditions, inputType))
+                    if (shouldIgnore(conditions, negativeConditions, inputType)) {
                         return;
+                    }
 
                     commands.forEach(function (command) {
                         if (command.or && command.or instanceof Array) {
@@ -323,8 +358,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                 });
 
                 var eventId = events.subscribe(event, function (inputType) {
-                    if (shouldIgnore(conditions, negativeConditions, inputType))
+                    if (shouldIgnore(conditions, negativeConditions, inputType)) {
                         return;
+                    }
 
                     commands.forEach(function (command) {
                         var isPressed;
@@ -340,11 +376,15 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
                         if (isPressed && !command.isPressed) {
                             command.isPressed = true;
-                            if (command.onDown) command.onDown();
+                            if (command.onDown) {
+                                command.onDown();
+                            }
 
                         } else if (!isPressed && command.isPressed) {
                             command.isPressed = false;
-                            if (command.onUp) command.onUp();
+                            if (command.onUp) {
+                                command.onUp();
+                            }
                         }
                     });
                 });
@@ -358,11 +398,13 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             },
 
             cancel: function () {
-                if (unsubscribe) unsubscribe();
+                if (unsubscribe) {
+                    unsubscribe();
+                }
 
                 return this;
             }
-        }
+        };
     }
 
     var Direction = {
@@ -406,8 +448,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         var isNotMet = conditions.some(function (keyValuePair) {
             return inputType[keyValuePair.key] != keyValuePair.value;
         });
-        if (isNotMet)
+        if (isNotMet) {
             return true;
+        }
         isNotMet = negativeConditions.some(function (keyValuePair) {
             return inputType[keyValuePair.key] == keyValuePair.value;
         });
@@ -418,5 +461,5 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         getGamePad: createGamePadControls,
         getTvOSRemote: createTvOSRemoteControls,
         getKeyBoard: createKeyBoardControls
-    }
+    };
 })(H5.Event, Array, Math, H5.Vectors);
