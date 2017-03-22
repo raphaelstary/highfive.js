@@ -1,5 +1,5 @@
 H5.RectangleMask = (function () {
-    "use strict";
+    'use strict';
 
     function RectangleMask(x, y, width, height) {
         this.x = x;

@@ -1,5 +1,5 @@
 H5.renderCurve = (function () {
-    "use strict";
+    'use strict';
 
     function renderCurve(ctx, drawable) {
         ctx.beginPath();

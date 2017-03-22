@@ -1,5 +1,5 @@
 H5.Repository = (function (Object) {
-    "use strict";
+    'use strict';
 
     function Repository() {
         this.dict = {};
@@ -36,8 +36,9 @@ H5.Repository = (function (Object) {
                     var dependencyNotAlreadyCalled = dependency && !alreadyCalledMap[dependency.id];
                     if (dependencyNotAlreadyCalled) {
                         var wrapper = self.dict[dependency.id];
-                        if (wrapper)
+                        if (wrapper) {
                             callItem(dependency.id, wrapper.fn, wrapper.dependencies);
+                        }
                     }
                 });
             }

@@ -1,5 +1,5 @@
 H5.renderAtlas = (function () {
-    "use strict";
+    'use strict';
 
     function renderAtlas(ctx, drawable) {
         if (drawable.compositeOperation) {

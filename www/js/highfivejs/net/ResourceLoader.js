@@ -1,5 +1,5 @@
 H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audio) {
-    "use strict";
+    'use strict';
 
     var ResourceType = {
         IMAGE: 0,
@@ -71,8 +71,9 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
     };
 
     ResourceLoader.prototype.addFont = function (fontSrc) {
-        if (!URL)
+        if (!URL) {
             return;
+        }
 
         this.__counter++;
         var font = {};
@@ -166,11 +167,15 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
     ResourceLoader.prototype.onResourceLoad = function () {
         this.resourcesLoaded++;
         var onProgress = this.onProgress;
-        if (onProgress !== undefined && typeof onProgress === 'function') onProgress();
+        if (onProgress !== undefined && typeof onProgress === 'function') {
+            onProgress();
+        }
 
         if (this.resourcesLoaded === this.resources.length) {
             var onComplete = this.onComplete;
-            if (onComplete !== undefined && typeof onComplete === 'function') onComplete();
+            if (onComplete !== undefined && typeof onComplete === 'function') {
+                onComplete();
+            }
         }
     };
 

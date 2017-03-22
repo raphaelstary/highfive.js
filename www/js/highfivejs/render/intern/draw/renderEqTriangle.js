@@ -1,5 +1,5 @@
 H5.renderEqTriangle = (function (renderPolygon) {
-    "use strict";
+    'use strict';
 
     function renderEqTriangle(ctx, drawable) {
         renderPolygon(ctx, drawable.x, drawable.y, drawable.data, 3, drawable.scale);

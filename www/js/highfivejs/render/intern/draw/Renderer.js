@@ -1,7 +1,7 @@
 H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle,
     DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle, renderEqTriangle,
     Quadrilateral, renderQuadrilateral, ABLine, renderABLine, Hexagon, renderHexagon) {
-    "use strict";
+    'use strict';
 
     function Renderer(screen) {
         this.screen = screen;
@@ -55,8 +55,9 @@ H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, rende
         function iterate(layer) {
             Object.keys(layer).forEach(function (key) {
                 var drawable = layer[key];
-                if (!drawable.show)
+                if (!drawable.show) {
                     return;
+                }
 
                 self.ctx.save();
 

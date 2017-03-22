@@ -1,5 +1,5 @@
 H5.Rectangle = (function () {
-    "use strict";
+    'use strict';
 
     function Rectangle(width, height, color, filled, lineWidth) {
         this.width = width;

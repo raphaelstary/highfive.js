@@ -1,11 +1,11 @@
 H5.renderText = (function (wrapText, Math) {
-    "use strict";
+    'use strict';
 
     function renderText(ctx, drawable) {
         if (drawable.data.baseLine) {
             ctx.textBaseline = drawable.data.baseLine;
         } else {
-            ctx.textBaseline = 'middle';   
+            ctx.textBaseline = 'middle';
         }
         if (drawable.data.align) {
             ctx.textAlign = drawable.data.align;
@@ -21,8 +21,8 @@ H5.renderText = (function (wrapText, Math) {
             wrapText(ctx, drawable.data.msg, drawable.x, drawable.y, drawable.data.maxLineLength,
                 drawable.data.lineHeight, drawable);
         } else {
-            ctx.font = drawable.data.fontStyle + ' ' +  Math.floor(drawable.data.size * drawable.scale) + 'px ' 
-                + drawable.data.fontFamily;
+            ctx.font = drawable.data.fontStyle + ' ' + Math.floor(drawable.data.size * drawable.scale) + 'px ' +
+                drawable.data.fontFamily;
             ctx.fillText(drawable.data.msg, drawable.x, drawable.y);
         }
     }

@@ -1,5 +1,5 @@
 H5.ResizeHandler = (function (getDevicePixelRatio, Event, Math) {
-    "use strict";
+    'use strict';
 
     function ResizeHandler(events, device) {
         this.events = events;

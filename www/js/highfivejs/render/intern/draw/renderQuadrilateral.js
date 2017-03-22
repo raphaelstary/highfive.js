@@ -1,5 +1,5 @@
 H5.renderQuadrilateral = (function () {
-    "use strict";
+    'use strict';
 
     function renderQuadrilateral(ctx, drawable) {
 

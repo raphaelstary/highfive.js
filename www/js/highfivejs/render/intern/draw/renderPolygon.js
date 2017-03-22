@@ -1,5 +1,5 @@
 H5.renderPolygon = (function (Math) {
-    "use strict";
+    'use strict';
 
     function renderPolygon(ctx, x, y, polygon, sides, scale) {
         var angle = (Math.PI * 2) / sides;
@@ -15,8 +15,9 @@ H5.renderPolygon = (function (Math) {
         ctx.translate(x, y);
         ctx.rotate(polygon.angle);
         ctx.moveTo(radius, 0);
-        for (var vertex = 1; vertex < sides; vertex++)
+        for (var vertex = 1; vertex < sides; vertex++) {
             ctx.lineTo(radius * Math.cos(angle * vertex), radius * Math.sin(angle * vertex));
+        }
 
         ctx.closePath();
 

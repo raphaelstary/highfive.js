@@ -1,5 +1,5 @@
 H5.renderHexagon = (function (renderPolygon) {
-    "use strict";
+    'use strict';
 
     function renderHexagon(ctx, drawable) {
         renderPolygon(ctx, drawable.x, drawable.y, drawable.data, 6);
