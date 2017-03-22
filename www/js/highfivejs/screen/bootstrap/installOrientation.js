@@ -1,5 +1,5 @@
 H5.installOrientation = (function (window, screen, OrientationHandler, Event) {
-    "use strict";
+    'use strict';
 
     function installOrientation(events, device) {
         var handler = new OrientationHandler(events);
@@ -10,17 +10,17 @@ H5.installOrientation = (function (window, screen, OrientationHandler, Event) {
 
         } else if (screen.orientation || screen.mozOrientation || screen.msOrientation) {
             handler.screenOrientation();
-            screen.addEventListener("orientationchange", handler.screenOrientation.bind(handler));
-            screen.addEventListener("MSOrientationChange", handler.screenOrientation.bind(handler));
-            screen.addEventListener("mozorientationchange", handler.screenOrientation.bind(handler));
+            screen.addEventListener('orientationchange', handler.screenOrientation.bind(handler));
+            screen.addEventListener('MSOrientationChange', handler.screenOrientation.bind(handler));
+            screen.addEventListener('mozorientationchange', handler.screenOrientation.bind(handler));
 
         } else if (window.orientation) {
             handler.windowOrientation();
-            window.addEventListener("orientationchange", handler.windowOrientation.bind(handler));
+            window.addEventListener('orientationchange', handler.windowOrientation.bind(handler));
 
         } else {
             handler.handleResize();
-            window.addEventListener("resize", handler.handleResize.bind(handler));
+            window.addEventListener('resize', handler.handleResize.bind(handler));
         }
         device.orientation = handler.lastOrientation;
 

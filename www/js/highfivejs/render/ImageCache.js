@@ -1,6 +1,7 @@
 H5.ImageCache = (function (ImageWrapper, iterateEntries) {
-    "use strict";
+    'use strict';
 
+    //noinspection JSUnusedLocalSymbols
     function ImageCache(width, height, defaultScreenHeight) {
         this.defaultScreenHeight = defaultScreenHeight || 3840;
         this.imgDict = {};

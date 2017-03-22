@@ -1,5 +1,5 @@
 H5.installLoop = (function (GameLoop, Event) {
-    "use strict";
+    'use strict';
 
     function installLoop(stage, events) {
 

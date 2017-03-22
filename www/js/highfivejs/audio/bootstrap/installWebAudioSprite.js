@@ -1,5 +1,5 @@
 H5.installWebAudioSprite = (function (Event) {
-    "use strict";
+    'use strict';
 
     function installHtmlAudioSprite(events, audioSprite) {
         events.subscribe(Event.PAGE_VISIBILITY, function (hidden) {

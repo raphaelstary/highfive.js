@@ -1,5 +1,5 @@
 H5.installHtmlAudioSprite = (function (Event) {
-    "use strict";
+    'use strict';
 
     function installHtmlAudioSprite(events, audioSprite) {
         events.subscribe(Event.TICK_MOVE, audioSprite.update.bind(audioSprite));

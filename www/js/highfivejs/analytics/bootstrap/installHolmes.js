@@ -1,5 +1,5 @@
 H5.installHolmes = (function (Event, HolmesConnector, window) {
-    "use strict";
+    'use strict';
 
     function installHolmes(url, tenantCode, appKey, events) {
         var gOldOnError = window.onerror;

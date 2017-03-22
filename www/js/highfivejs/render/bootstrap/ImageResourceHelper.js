@@ -1,5 +1,5 @@
 H5.ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Math) {
-    "use strict";
+    'use strict';
 
     var GFX_FOLDER = 'gfx/';
     var FILE_EXT = '.png';
@@ -30,7 +30,7 @@ H5.ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Mat
         var gfxCache = new ImageCache(Math.floor(width * pixelRatio), Math.floor(height * pixelRatio), defaultSize);
 
         Object.keys(images).forEach(function (key) {
-            gfxCache.add(key, images[key])
+            gfxCache.add(key, images[key]);
         });
 
         return gfxCache;

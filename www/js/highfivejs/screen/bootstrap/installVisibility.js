@@ -1,13 +1,13 @@
 H5.installVisibility = (function (VisibilityHandler, document, Event) {
-    "use strict";
+    'use strict';
 
     function installVisibility(events, device) {
         var handler = new VisibilityHandler(events);
 
         if (document.hidden !== undefined) {
-            document.addEventListener("visibilitychange", handler.handleVisibility.bind(handler));
+            document.addEventListener('visibilitychange', handler.handleVisibility.bind(handler));
         } else if (document.webkitHidden !== undefined) {
-            document.addEventListener("webkitvisibilitychange", handler.handleVisibility.bind(handler));
+            document.addEventListener('webkitvisibilitychange', handler.handleVisibility.bind(handler));
         } else {
             return;
         }

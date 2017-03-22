@@ -1,5 +1,5 @@
 H5.installOneTimeTap = (function (window) {
-    "use strict";
+    'use strict';
 
     function installOneTimeTap(element, callback) {
         if ('ontouchstart' in window) {

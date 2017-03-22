@@ -1,6 +1,7 @@
 H5.ImageLoader = (function () {
-    "use strict";
+    'use strict';
 
+    //noinspection JSUnusedLocalSymbols
     return {
         register: function (info) {
             throw 'not implemented';

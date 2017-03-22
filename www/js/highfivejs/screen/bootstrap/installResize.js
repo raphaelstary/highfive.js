@@ -1,5 +1,5 @@
 H5.installResize = (function (window, ResizeHandler, Event) {
-    "use strict";
+    'use strict';
 
     function installResize(events, device) {
         var resizeHandler = new ResizeHandler(events, device);

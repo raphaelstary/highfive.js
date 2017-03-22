@@ -1,5 +1,5 @@
 H5.installPointer = (function (PointerHandler, Event, window) {
-    "use strict";
+    'use strict';
 
     function installPointer(events, device, canvas) {
         var pointerHandler = new PointerHandler(events, device);

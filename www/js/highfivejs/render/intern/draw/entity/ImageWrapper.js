@@ -1,5 +1,5 @@
 H5.ImageWrapper = (function () {
-    "use strict";
+    'use strict';
 
     function ImageWrapper(img, width, height, scale) {
         this.img = img;
