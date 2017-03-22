@@ -1,6 +1,6 @@
 H5.Motions = (function (Math, LinePath, calcLinePoint, calcBezierPoint, Animations, inheritMethods, CirclePath,
     BezierCurvePath, calcCirclePoint) {
-    "use strict";
+    'use strict';
 
     function Motions(animations) {
         this.animations = animations;

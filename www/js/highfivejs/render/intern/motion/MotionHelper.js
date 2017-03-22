@@ -1,5 +1,5 @@
 H5.MotionHelper = (function () {
-    "use strict";
+    'use strict';
 
     function MotionHelper(motions) {
         this.motions = motions;

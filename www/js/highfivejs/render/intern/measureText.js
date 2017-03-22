@@ -1,5 +1,5 @@
 H5.measureText = (function () {
-    "use strict";
+    'use strict';
 
     function measureText(ctx, text) {
 

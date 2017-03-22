@@ -1,5 +1,5 @@
 H5.MotionTimer = (function () {
-    "use strict";
+    'use strict';
 
     function MotionTimer(motions, timer) {
         this.motions = motions;
@@ -11,8 +11,9 @@ H5.MotionTimer = (function () {
         this.timer.doLater(function () {
             self.motions.animate(drawableToAdd.drawable, drawableToAdd.path, drawableToAdd.callback);
 
-            if (callback)
+            if (callback) {
                 callback();
+            }
         }, duration);
     };
 

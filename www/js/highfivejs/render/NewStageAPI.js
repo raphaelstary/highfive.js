@@ -1,5 +1,5 @@
 H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
-    "use strict";
+    'use strict';
 
     function NewStageAPI(stage, gfx, resizer, width, height, timer) {
         this.stage = stage;
@@ -312,7 +312,9 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
     NewStageAPI.prototype.resize = function (event) {
         this.screen.width = event.width;
         this.screen.height = event.height;
-        if (this.gfx && this.gfx.resize) this.gfx.resize(event);
+        if (this.gfx && this.gfx.resize) {
+            this.gfx.resize(event);
+        }
         this.stage.resize(event);
         this.resizer.call(event.width, event.height);
         iterateEntries(this.collisions, function (detector) {
