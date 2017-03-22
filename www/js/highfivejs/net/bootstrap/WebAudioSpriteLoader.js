@@ -1,5 +1,5 @@
 H5.WebAudioSpriteLoader = (function (AudioContext, WebAudioSprite, installWebAudioSprite) {
-    "use strict";
+    'use strict';
 
     var audioCtx;
     var music;

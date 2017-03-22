@@ -1,5 +1,5 @@
 H5.wrap = (function () {
-    "use strict";
+    'use strict';
 
     function wrap(value_OrObject, optionalObjectKey) {
         if (optionalObjectKey) {

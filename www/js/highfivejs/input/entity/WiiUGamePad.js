@@ -1,5 +1,5 @@
 H5.WiiUGamePad = (function () {
-    "use strict";
+    'use strict';
 
     function WiiUGamePad(gamepad, state) {
         this.gamepad = gamepad;
@@ -12,7 +12,7 @@ H5.WiiUGamePad = (function () {
     };
 
     WiiUGamePad.prototype.__isButtonPressed = function (flag) {
-        return (this.state.hold & flag) ? true : false;
+        return this.state.hold & flag;
     };
 
     WiiUGamePad.prototype.isAPressed = function () {

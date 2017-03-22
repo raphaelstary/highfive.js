@@ -1,5 +1,5 @@
 H5.Width = (function (calcScreenConst) {
-    "use strict";
+    'use strict';
 
     return {
         FULL: function (width) {

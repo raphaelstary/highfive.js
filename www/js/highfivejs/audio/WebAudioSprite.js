@@ -1,5 +1,5 @@
 H5.WebAudioSprite = (function (iterateEntries) {
-    "use strict";
+    'use strict';
 
     function WebAudioSprite(info, buffer, audioContext, timer) {
         this.info = info;
@@ -23,13 +23,13 @@ H5.WebAudioSprite = (function (iterateEntries) {
 
     WebAudioSprite.prototype.pauseAll = function () {
         if (this.ctx.state === 'running') {
-            this.ctx.suspend()
+            this.ctx.suspend();
         }
     };
 
     WebAudioSprite.prototype.resumeAll = function () {
         if (this.ctx.state === 'suspended') {
-            this.ctx.resume()
+            this.ctx.resume();
         }
     };
 
@@ -88,13 +88,15 @@ H5.WebAudioSprite = (function (iterateEntries) {
         return {
             trackAvailable: true,
             start: function () {
-                if (currentAudio.started)
+                if (currentAudio.started) {
                     return;
+                }
                 startTrack();
             },
             stop: function () {
-                if (currentAudio.ended || !currentAudio.started)
+                if (currentAudio.ended || !currentAudio.started) {
                     return;
+                }
 
                 self.__stop(track);
             },
@@ -125,12 +127,14 @@ H5.WebAudioSprite = (function (iterateEntries) {
             hasEnded: function () {
                 return currentAudio.ended;
             }
-        }
+        };
     };
 
     WebAudioSprite.prototype.__ended = function (track) {
         track.node.ended = true;
-        if (track.node.callback) track.node.callback();
+        if (track.node.callback) {
+            track.node.callback();
+        }
         delete this.tracks[track.id];
     };
 
@@ -162,7 +166,9 @@ H5.WebAudioSprite = (function (iterateEntries) {
     WebAudioSprite.prototype.__volumeTo = function (value, duration, callback, self, track) {
         track.node.volume = value;
         track.gain.gain.exponentialRampToValueAtTime(value, this.ctx.currentTime + duration / this.frameRate);
-        if (callback) this.timer.doLater(callback, duration);
+        if (callback) {
+            this.timer.doLater(callback, duration);
+        }
     };
 
     function AudioNode() {

@@ -1,5 +1,5 @@
 H5.zero = (function () {
-    "use strict";
+    'use strict';
 
     function zero() {
         return 0;
