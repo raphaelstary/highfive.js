@@ -1,5 +1,5 @@
 H5.SpriteTimer = (function () {
-    "use strict";
+    'use strict';
 
     function SpriteTimer(spriteAnimations, timer) {
         this.spriteAnimations = spriteAnimations;
@@ -11,8 +11,9 @@ H5.SpriteTimer = (function () {
         this.timer.doLater(function () {
             self.spriteAnimations.animate(drawableToAdd.drawable, drawableToAdd.sprite, drawableToAdd.callback);
 
-            if (callback)
+            if (callback) {
                 callback();
+            }
         }, duration);
     };
 

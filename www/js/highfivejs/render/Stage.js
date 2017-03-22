@@ -1,5 +1,5 @@
 H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
-    "use strict";
+    'use strict';
 
     function Stage(gfxCache, motions, motionTimer, motionHelper, spriteAnimations, spriteTimer, animations,
         animationHelper, animationTimer, propertyAnimations, renderer, timer, audioAnimations) {
@@ -67,7 +67,9 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.changeZIndex = function (drawable, newZIndex) {
-        if (newZIndex !== undefined && drawable.zIndex != newZIndex) this.renderer.changeZIndex(drawable, newZIndex);
+        if (newZIndex !== undefined && drawable.zIndex != newZIndex) {
+            this.renderer.changeZIndex(drawable, newZIndex);
+        }
         return drawable;
     };
 
@@ -105,7 +107,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
                 if (callback) {
                     callback();
                 }
-            }
+            };
         }
         this.spriteTimer.animateLater(drawableToAdd, duration, extendedCallback);
     };
@@ -149,7 +151,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
             drawable: drawable,
             pathTo: pathTo,
             pathReturn: pathReturn
-        }
+        };
     };
 
     Stage.prototype.moveFreshLater = function (x, y, imgName, endX, endY, speed, spacing, delay, loop, callback,
@@ -202,7 +204,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
                 if (callback) {
                     callback();
                 }
-            }
+            };
         }
         this.motionTimer.moveLater(drawableToAdd, duration, extendedCallback);
     };
@@ -370,15 +372,27 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.pause = function (drawable) {
-        if (this.motions.has(drawable)) this.motions.pause(drawable);
-        if (this.animations.has(drawable)) this.animations.pause(drawable);
-        if (this.spriteAnimations.has(drawable)) this.spriteAnimations.pause(drawable);
+        if (this.motions.has(drawable)) {
+            this.motions.pause(drawable);
+        }
+        if (this.animations.has(drawable)) {
+            this.animations.pause(drawable);
+        }
+        if (this.spriteAnimations.has(drawable)) {
+            this.spriteAnimations.pause(drawable);
+        }
     };
 
     Stage.prototype.play = function (drawable) {
-        if (this.motions.has(drawable)) this.motions.play(drawable);
-        if (this.animations.has(drawable)) this.animations.play(drawable);
-        if (this.spriteAnimations.has(drawable)) this.spriteAnimations.play(drawable);
+        if (this.motions.has(drawable)) {
+            this.motions.play(drawable);
+        }
+        if (this.animations.has(drawable)) {
+            this.animations.play(drawable);
+        }
+        if (this.spriteAnimations.has(drawable)) {
+            this.spriteAnimations.play(drawable);
+        }
     };
 
     Stage.prototype.pauseAll = function () {

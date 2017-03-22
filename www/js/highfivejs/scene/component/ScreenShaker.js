@@ -1,5 +1,5 @@
 H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
-    "use strict";
+    'use strict';
 
     function ScreenShaker(device) {
         this.shaker = {};
@@ -29,15 +29,17 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
 
             Object.keys(this.shaker).forEach(function (key) {
                 var item = this.shaker[key];
-                if (item._startValueX !== undefined)
+                if (item._startValueX !== undefined) {
                     item.x = item._startValueX;
+                }
             }, this);
 
             if (this.bigShaking) {
                 Object.keys(this.shaker).forEach(function (key) {
                     var item = this.shaker[key];
-                    if (item._startValueY !== undefined)
+                    if (item._startValueY !== undefined) {
                         item.y = item._startValueY;
+                    }
                 }, this);
             }
         }
@@ -54,8 +56,9 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
             }
             Object.keys(this.shaker).forEach(function (key) {
                 var item = this.shaker[key];
-                if (item._startValueX !== undefined)
+                if (item._startValueX !== undefined) {
                     item.x = item._startValueX;
+                }
             }, this);
         }
 
@@ -134,8 +137,8 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
             return 0;
         }
 
-        return Math.floor(amplitude * Math.pow(2, -10 * currentTime) *
-            Math.sin((currentTime * duration) * (2 * Math.PI) / period));
+        return Math.floor(
+            amplitude * Math.pow(2, -10 * currentTime) * Math.sin((currentTime * duration) * (2 * Math.PI) / period));
     }
 
     ScreenShaker.prototype.add = function (drawable) {

@@ -1,5 +1,5 @@
 H5.SceneList = (function () {
-    "use strict";
+    'use strict';
 
     function SceneList() {
         this.scenes = [];

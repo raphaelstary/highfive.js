@@ -1,5 +1,5 @@
 H5.Stats = (function (Math, Date) {
-    "use strict";
+    'use strict';
     var startTime = Date.now(), previousTime = startTime;
     var ms = 0, msMin = Infinity, msMax = 0;
     var fps = 0, fpsMin = Infinity, fpsMax = 0;

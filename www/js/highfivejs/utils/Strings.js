@@ -1,5 +1,5 @@
 H5.Strings = (function () {
-    "use strict";
+    'use strict';
 
     return {
         startsWidth: function (actualString, searchString) {

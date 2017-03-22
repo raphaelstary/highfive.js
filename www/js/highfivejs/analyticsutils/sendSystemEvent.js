@@ -1,5 +1,5 @@
 H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Date, languageCode) {
-    "use strict";
+    'use strict';
 
     function collectPositionInfo() {
         var promise = new Promise();
@@ -45,7 +45,7 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Da
         return {
             connectedGamePads: connectedGamePads,
             gamePadInfo: padsInfo
-        }
+        };
     }
 
     function getPayload(device, appName, appVersion, appPlatform) {

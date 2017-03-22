@@ -1,5 +1,5 @@
 H5.SimpleLoadingScreen = (function (Math) {
-    "use strict";
+    'use strict';
 
     function SimpleLoadingScreen(screenCtx) {
         this.screenCtx = screenCtx;
@@ -10,7 +10,7 @@ H5.SimpleLoadingScreen = (function (Math) {
         this.barHeight = 0;
         this.progressCounter = 1;
         this.parts = 0;
-        this.txt = "LOADING";
+        this.txt = 'LOADING';
     }
 
     SimpleLoadingScreen.prototype.showNew = function (parts) {

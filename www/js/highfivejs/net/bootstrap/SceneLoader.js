@@ -1,5 +1,5 @@
 H5.SceneLoader = (function () {
-    "use strict";
+    'use strict';
 
     var scenes;
     var path;

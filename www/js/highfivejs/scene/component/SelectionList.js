@@ -1,5 +1,5 @@
 H5.SelectionList = (function () {
-    "use strict";
+    'use strict';
 
     function SelectionList() {
         this.options = [];
@@ -12,8 +12,12 @@ H5.SelectionList = (function () {
             callback: self ? callback.bind(self) : callback
         };
 
-        if (this.options.length == 0) this.selection = item.callback;
-        if (this.options.length != 0) drawable.setShow(false);
+        if (this.options.length == 0) {
+            this.selection = item.callback;
+        }
+        if (this.options.length != 0) {
+            drawable.setShow(false);
+        }
 
         this.options.push(item);
     };

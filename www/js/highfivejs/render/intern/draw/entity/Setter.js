@@ -1,5 +1,5 @@
 H5.Setter = (function (changeCoords) {
-    "use strict";
+    'use strict';
 
     return {
         setAlpha: function (drawable, alpha) {

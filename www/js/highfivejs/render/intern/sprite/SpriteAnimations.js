@@ -1,5 +1,5 @@
 H5.SpriteAnimations = (function (Object, iterateEntries) {
-    "use strict";
+    'use strict';
 
     function SpriteAnimations() {
         this.animationsDict = {};

@@ -1,5 +1,5 @@
 H5.SoundResources = (function (Object, HtmlAudioManager) {
-    "use strict";
+    'use strict';
 
     function SoundResources(resourceLoader, path, extension) {
         this.resourceLoader = resourceLoader;

@@ -1,5 +1,5 @@
 H5.SubImage = (function () {
-    "use strict";
+    'use strict';
 
     function SubImage(x, y, width, height, offSetX, offSetY, trimmedWidth, trimmedHeight, scaledOffSetX, scaledOffSetY,
         scaledTrimmedWidth, scaledTrimmedHeight, atlas) {

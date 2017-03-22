@@ -1,5 +1,5 @@
 H5.SceneMap = (function (Object) {
-    "use strict";
+    'use strict';
 
     function SceneMap() {
         this.scenes = {};
@@ -14,8 +14,9 @@ H5.SceneMap = (function (Object) {
         var sceneFn = this.scenes[name];
 
         if (!sceneFn) {
-            if (Object.keys(this.scenes).length < 1)
+            if (Object.keys(this.scenes).length < 1) {
                 throw 'No scenes configured';
+            }
             throw 'scene "' + name + '" not configured';
         }
 
