@@ -12,7 +12,6 @@ H5.Bootstrapper = (function ($) {
         lowRez: addLowResolutionRendering,
         visibility: addPageVisibility,
         analytics: addAnalytics,
-
         atlas: useAtlasRendering,
         ejectaFont: useEjectaFont,
         fixedRezAtlas: useFixedRezAtlasRendering,
@@ -288,7 +287,6 @@ H5.Bootstrapper = (function ($) {
     getDevicePixelRatio: H5.getDevicePixelRatio,
     OrientationLock: H5.OrientationLock,
     userAgent: window.navigator.userAgent,
-
     AtlasLoader: H5.AtlasLoader,
     EjectaFontLoader: H5.EjectaFontLoader,
     FixedRezAtlasLoader: H5.FixedRezAtlasLoader,
