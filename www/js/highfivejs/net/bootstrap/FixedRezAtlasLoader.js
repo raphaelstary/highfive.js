@@ -25,7 +25,7 @@ H5.FixedRezAtlasLoader = (function (AtlasResourceHelper, createAtlasPaths, Devic
         load: function (resourceLoader) {
             var isMobile = new Device(userAgent, 1, 1, 1).isMobile;
             AtlasResourceHelper.register(resourceLoader, atlases, isMobile,
-                createAtlasPaths(baseName, gfxPath, dataPath, gfxExt, dataExt).add(fixedHeight).getResolver());
+                createAtlasPaths(baseName, gfxPath, dataPath, gfxExt, dataExt).add().getResolver());
         },
         process: function (services) {
             services.gfxCache = AtlasResourceHelper.processFixedRez(atlases, fixedWidth, fixedHeight);
