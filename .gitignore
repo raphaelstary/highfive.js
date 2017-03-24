@@ -48,9 +48,11 @@ www-ghdeploy
 node_modules
 www/sandbox*
 www/gfx/test*
-atlas_*.png
-atlas_*.json
+www/audio
+atlas*.png
+atlas*.json
 audio.json
 audio.mp3
 audio.ogg
 scenes.json
+levels.json
