@@ -1,6 +1,4 @@
-H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, renderText, Rectangle, renderRectangle,
-    DrawableLine, renderLine, Circle, renderCircle, ImageWrapper, renderImage, EquilateralTriangle, renderEqTriangle,
-    Quadrilateral, renderQuadrilateral, ABLine, renderABLine, Hexagon, renderHexagon) {
+H5.Renderer = (function (Object, Math, $) {
     'use strict';
 
     function Renderer(screen) {
@@ -69,11 +67,11 @@ H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, rende
                     }
 
                     self.ctx.beginPath();
-                    if (drawable.mask.data instanceof Rectangle) {
+                    if (drawable.mask.data instanceof $.Rectangle) {
                         self.ctx.rect(drawable.mask.getCornerX() - 0.5, drawable.mask.getCornerY() - 0.5,
                             drawable.mask.getWidth(), drawable.mask.getHeight());
 
-                    } else if (drawable.mask.data instanceof Circle) {
+                    } else if (drawable.mask.data instanceof $.Circle) {
                         self.ctx.arc(drawable.mask.x, drawable.mask.y, drawable.mask.getWidthHalf(), 0, 2 * Math.PI);
 
                     }
@@ -110,26 +108,26 @@ H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, rende
 
                 self.ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);
 
-                if (drawable.data instanceof EquilateralTriangle) {
-                    renderEqTriangle(self.ctx, drawable);
-                } else if (drawable.data instanceof SubImage) {
-                    renderAtlas(self.ctx, drawable);
-                } else if (drawable.data instanceof TextWrapper) {
-                    renderText(self.ctx, drawable);
-                } else if (drawable.data instanceof Rectangle) {
-                    renderRectangle(self.ctx, drawable);
-                } else if (drawable.data instanceof DrawableLine) {
-                    renderLine(self.ctx, drawable);
-                } else if (drawable.data instanceof Circle) {
-                    renderCircle(self.ctx, drawable);
-                } else if (drawable.data instanceof ImageWrapper) {
-                    renderImage(self.ctx, drawable);
-                } else if (drawable.data instanceof Quadrilateral) {
-                    renderQuadrilateral(self.ctx, drawable);
-                } else if (drawable.data instanceof ABLine) {
-                    renderABLine(self.ctx, drawable);
-                } else if (drawable.data instanceof Hexagon) {
-                    renderHexagon(self.ctx, drawable);
+                if (drawable.data instanceof $.EquilateralTriangle) {
+                    $.renderEqTriangle(self.ctx, drawable);
+                } else if (drawable.data instanceof $.SubImage) {
+                    $.renderAtlas(self.ctx, drawable);
+                } else if (drawable.data instanceof $.TextWrapper) {
+                    $.renderText(self.ctx, drawable);
+                } else if (drawable.data instanceof $.Rectangle) {
+                    $.renderRectangle(self.ctx, drawable);
+                } else if (drawable.data instanceof $.DrawableLine) {
+                    $.renderLine(self.ctx, drawable);
+                } else if (drawable.data instanceof $.Circle) {
+                    $.renderCircle(self.ctx, drawable);
+                } else if (drawable.data instanceof $.ImageWrapper) {
+                    $.renderImage(self.ctx, drawable);
+                } else if (drawable.data instanceof $.Quadrilateral) {
+                    $.renderQuadrilateral(self.ctx, drawable);
+                } else if (drawable.data instanceof $.ABLine) {
+                    $.renderABLine(self.ctx, drawable);
+                } else if (drawable.data instanceof $.Hexagon) {
+                    $.renderHexagon(self.ctx, drawable);
                 }
 
                 self.ctx.restore();
@@ -138,7 +136,4 @@ H5.Renderer = (function (Object, Math, SubImage, renderAtlas, TextWrapper, rende
     };
 
     return Renderer;
-})(Object, Math, H5.SubImage, H5.renderAtlas, H5.TextWrapper, H5.renderText, H5.Rectangle, H5.renderRectangle,
-    H5.DrawableLine, H5.renderLine, H5.Circle, H5.renderCircle, H5.ImageWrapper, H5.renderImage, H5.EquilateralTriangle,
-    H5.renderEqTriangle, H5.Quadrilateral, H5.renderQuadrilateral, H5.ABLine, H5.renderABLine, H5.Hexagon,
-    H5.renderHexagon);
+})(Object, Math, H5);
