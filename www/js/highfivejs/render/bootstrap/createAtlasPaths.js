@@ -1,12 +1,22 @@
 H5.createAtlasPaths = (function () {
     'use strict';
 
-    function createAtlasPaths(baseName, gfxPath, dataPath, gfxFormat, dataFormat) {
+    var DEFAULT_ATLAS_NAME = 'atlas';
+    var DEFAULT_GFX_PATH = 'gfx/';
+    var DEFAULT_DATA_PATH = 'data/';
+    var DEFAULT_GFX_EXTENSION = '.png';
+    var DEFAULT_DATA_EXTENSION = '.json';
+
+    function createAtlasPaths(optionalBaseName, optionalGfxPath, optionalDataPath, optionalGfxExtension,
+        optionalDataExtension) {
 
         var atlases = [];
 
-        function getFileName(i) {
-            return (baseName || 'atlas') + '_' + i;
+        function getFileName(i, size) {
+            if (size) {
+                return (optionalBaseName || DEFAULT_ATLAS_NAME) + '_' + size + '_' + i;
+            }
+            return (optionalBaseName || DEFAULT_ATLAS_NAME) + '_' + i;
         }
 
         function getFileNames(size, count) {
@@ -42,8 +52,9 @@ H5.createAtlasPaths = (function () {
 
             names.forEach(function (name) {
                 aggregatedPaths.push({
-                    gfx: (gfxPath || 'gfx/') + name + (gfxFormat || '.png'),
-                    data: (dataPath || 'data/') + name + (dataFormat || '.json')
+                    gfx: (optionalGfxPath || DEFAULT_GFX_PATH) + name + (optionalGfxExtension || DEFAULT_GFX_EXTENSION),
+                    data: (optionalDataPath || DEFAULT_DATA_PATH) + name +
+                    (optionalDataExtension || DEFAULT_DATA_EXTENSION)
                 });
             });
 
@@ -51,11 +62,11 @@ H5.createAtlasPaths = (function () {
         }
 
         return {
-            add: function (size, count) {
+            add: function (size, optionalCount) {
 
                 atlases.push({
                     size: size,
-                    count: count || 1
+                    count: optionalCount || 1
                 });
 
                 return this;

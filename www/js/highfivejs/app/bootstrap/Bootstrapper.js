@@ -3,25 +3,39 @@ H5.Bootstrapper = (function ($) {
 
     var Bootstrapper = {
         build: buildApp,
-        responsive: addResize,
+
+        // controls - choose [0...n]
         keyBoard: addKeyBoard,
         gamePad: addGamePad,
-        orientation: addScreenOrientation,
-        fullScreen: addFullScreen,
         pointer: addPointer,
-        lowRez: addLowResolutionRendering,
+
+        // system-services / device-events - choose [0...n]
+        orientation: addScreenOrientation,
         visibility: addPageVisibility,
-        analytics: addAnalytics,
+        fullScreen: addFullScreen,
+
+        // rendering - choose [1]
         atlas: useAtlasRendering,
-        ejectaFont: useEjectaFont,
         fixedRezAtlas: useFixedRezAtlasRendering,
-        font: useFont,
-        htmlAudio: useHtmlAudio,
-        htmlAudioSprite: useHtmlAudioSprite,
         image: useImageRendering,
+
+        // screen (size) - choose [0...n]
+        responsive: addResize,
+        lowRez: addLowResolutionRendering,
+
+        // font - choose [0|1]
+        font: useFont,
+        ejectaFont: useEjectaFont,
+
+        // framework services - choose [0...n]
+        analytics: addAnalytics,
         locales: useLocales,
         scenes: useH5Scenes,
-        webAudioSprite: useWebAudioSprite
+
+        // audio - choose [0|1]
+        webAudioSprite: useWebAudioSprite,
+        htmlAudio: useHtmlAudio,
+        htmlAudioSprite: useHtmlAudioSprite
     };
 
     // dependencies on screen, therefore flags because you need a screen first (build: screen -> features: with screen)
@@ -194,11 +208,13 @@ H5.Bootstrapper = (function ($) {
         return Bootstrapper;
     }
 
-    function useFixedRezAtlasRendering(width, height) {
+    function useFixedRezAtlasRendering(width, height, optionalBaseName, optionalGfxPath, optionalDataPath,
+        optionalGfxExtension, optionalDataExtension) {
         if (noOneDidAnInit) {
             initBootstrap();
         }
-        $.FixedRezAtlasLoader.register(width, height);
+        $.FixedRezAtlasLoader.register(width, height, optionalBaseName, optionalGfxPath, optionalDataPath,
+            optionalGfxExtension, optionalDataExtension);
         resourceLoadingQueue.push($.FixedRezAtlasLoader);
         return Bootstrapper;
     }
