@@ -1,5 +1,5 @@
 (function (describe, beforeEach, it, expect, DecisionAI) {
-    "use strict";
+    'use strict';
 
     describe("DecisionAI", function () {
         var commands;

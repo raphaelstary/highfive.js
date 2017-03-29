@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var WWW_BUILT = '../../target';
 var ATV_BUILT = '../../target-atv';
