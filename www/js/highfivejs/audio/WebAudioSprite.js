@@ -167,7 +167,7 @@ H5.WebAudioSprite = (function (iterateEntries) {
         track.node.volume = value;
         track.gain.gain.exponentialRampToValueAtTime(value, this.ctx.currentTime + duration / this.frameRate);
         if (callback) {
-            this.timer.doLater(callback, duration);
+            this.timer.doLater(callback, duration, self);
         }
     };
 
