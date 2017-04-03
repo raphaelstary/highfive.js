@@ -79,7 +79,11 @@ H5.WebAudioSprite = (function (iterateEntries) {
                 gainNode.gain.value = self.masterVolume;
             }
 
-            source.start(0, spriteInfo.start, spriteInfo.end - spriteInfo.start);
+            if (currentAudio.loop) {
+                source.start(0, spriteInfo.start);
+            } else {
+                source.start(0, spriteInfo.start, spriteInfo.end - spriteInfo.start);
+            }
 
             currentAudio.started = true;
         }
@@ -89,16 +93,18 @@ H5.WebAudioSprite = (function (iterateEntries) {
             trackAvailable: true,
             start: function () {
                 if (currentAudio.started) {
-                    return;
+                    return this;
                 }
                 startTrack();
+                return this;
             },
             stop: function () {
                 if (currentAudio.ended || !currentAudio.started) {
-                    return;
+                    return this;
                 }
 
                 self.__stop(track);
+                return this;
             },
             mute: function () {
                 self.__mute(track);
