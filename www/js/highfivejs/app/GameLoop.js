@@ -67,4 +67,4 @@ H5.GameLoop = (function (requestAnimationFrame, Event) {
     };
 
     return GameLoop;
-})(H5.requestAnimFrame, H5.Event);
+})(window.requestAnimationFrame.bind(window), H5.Event);
