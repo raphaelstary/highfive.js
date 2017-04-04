@@ -1,4 +1,4 @@
-H5.GamePad = (function (navigator, Button, Axis) {
+H5.GamePad = (function (Button, Axis, getGamepads) {
     'use strict';
 
     function GamePad(index) {
@@ -6,13 +6,8 @@ H5.GamePad = (function (navigator, Button, Axis) {
         this.lastUpdate = 0;
     }
 
-    GamePad.prototype.getGamePads = function () {
-        return navigator.getGamepads ? navigator.getGamepads() :
-            (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
-    };
-
     GamePad.prototype.update = function () {
-        var gamepads = this.getGamePads();
+        var gamepads = getGamepads();
         var pad = gamepads[this.index];
 
         if (!pad) {
@@ -106,4 +101,4 @@ H5.GamePad = (function (navigator, Button, Axis) {
     };
 
     return GamePad;
-})(window.navigator, H5.GamePadButton, H5.GamePadAxis);
+})(H5.GamePadButton, H5.GamePadAxis, H5.getGamepads);

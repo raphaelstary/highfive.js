@@ -1,4 +1,4 @@
-H5.GamePadHandler = (function (GamePad, navigator, Event) {
+H5.GamePadHandler = (function (GamePad, Event, getGamepads) {
     'use strict';
 
     function GamePadHandler(events) {
@@ -10,9 +10,9 @@ H5.GamePadHandler = (function (GamePad, navigator, Event) {
         this.gamePads.push(new GamePad(event.gamepad.index));
     };
 
+    //todo rework
     GamePadHandler.prototype.detect = function () {
-        var pads = navigator.getGamepads ? navigator.getGamepads() :
-            (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+        var pads = getGamepads();
 
         for (var i = 0; i < pads.length; i++) {
             var probablePad = pads[i];
@@ -25,6 +25,7 @@ H5.GamePadHandler = (function (GamePad, navigator, Event) {
     };
 
     GamePadHandler.prototype.shouldDetect = function () {
+        //todo rework
         return this.gamePads.length < 1;
     };
 
@@ -33,6 +34,7 @@ H5.GamePadHandler = (function (GamePad, navigator, Event) {
     };
 
     GamePadHandler.prototype.update = function () {
+        // todo rework
         if (this.shouldDetect()) {
             this.detect();
         }
@@ -47,4 +49,4 @@ H5.GamePadHandler = (function (GamePad, navigator, Event) {
 
     return GamePadHandler;
 
-})(H5.GamePad, window.navigator, H5.Event);
+})(H5.GamePad, H5.Event, H5.getGamepads);

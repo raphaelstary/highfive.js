@@ -1,4 +1,4 @@
-H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Date, languageCode) {
+H5.sendSystemEvent = (function (Event, location, navigator, Promise, getGamepads, Date, languageCode) {
     'use strict';
 
     function collectPositionInfo() {
@@ -24,8 +24,7 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Da
     }
 
     function collectGamePadInfo() {
-        var gamePad = new GamePad();
-        var gamePads = gamePad.getGamePads();
+        var gamePads = getGamepads();
         var padsInfo = [];
         var connectedGamePads = 0;
         for (var i = 0; i < gamePads.length; i++) {
@@ -87,5 +86,5 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, GamePad, Da
     }
 
     return sendSystemEvent;
-})(H5.Event, window.location, window.navigator, H5.Promise, H5.GamePad, Date,
+})(H5.Event, window.location, window.navigator, H5.Promise, H5.getGamepads, Date,
     window.navigator.language || window.navigator.userLanguage);
