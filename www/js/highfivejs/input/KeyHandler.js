@@ -12,9 +12,7 @@ H5.KeyHandler = (function (Event) {
     }
 
     KeyHandler.prototype.keyDown = function (event) {
-        if (event.keyCode != 17 && event.keyCode != 82 && event.keyCode != 123) {
-            event.preventDefault();
-        }
+        event.preventDefault();
         this.pressedKeys[event.keyCode] = true;
         this.changed = true;
     };
