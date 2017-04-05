@@ -613,7 +613,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                 //        frame.opacity);
                                 //}
 
-                                self.timer.doLater(continueMove, duration);
+                                self.timer.in(duration, continueMove);
                             }
                         } else {
                             //if (lastFrame.time != currentFrameNumber % timing) {
@@ -655,7 +655,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     //if (duration < 1) {
                                     //    restart();
                                     //} else {
-                                    self.timer.doLater(restart, duration);
+                                    self.timer.in(duration, restart);
                                     //}
                                 } else {
                                     if (initialDelay) {
@@ -695,7 +695,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                 //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
                                 //        frame.rotation);
                                 //}
-                                self.timer.doLater(continueMove, duration);
+                                self.timer.in(duration, continueMove);
                             }
                         } else {
                             //if (lastFrame.time != currentFrameNumber % timing) {
@@ -735,7 +735,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     if (duration < 1) {
                                         restart();
                                     } else {
-                                        self.timer.doLater(restart, duration);
+                                        self.timer.in(duration, restart);
                                     }
                                 } else {
                                     if (initialDelay) {
@@ -775,7 +775,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                 //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
                                 //        frame.scale);
                                 //}
-                                self.timer.doLater(continueMove, duration);
+                                self.timer.in(duration, continueMove);
                             }
                         } else {
                             //if (lastFrame.time != currentFrameNumber % timing) {
@@ -817,7 +817,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     if (duration < 1) {
                                         restart();
                                     } else {
-                                        self.timer.doLater(restart, duration);
+                                        self.timer.in(duration, restart);
                                     }
                                 } else {
                                     if (initialDelay) {
@@ -858,7 +858,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                 //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
                                 //        frame.x + " " + frame.y);
                                 //}
-                                self.timer.doLater(continueMove, duration);
+                                self.timer.in(duration, continueMove);
                             }
                         } else {
                             var x = customXFn ? customXFn(frame.x) : xFn(frame.x);
@@ -911,7 +911,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     if (duration < 1) {
                                         restart();
                                     } else {
-                                        self.timer.doLater(restart, duration);
+                                        self.timer.in(duration, restart);
                                     }
                                 } else {
                                     var x;

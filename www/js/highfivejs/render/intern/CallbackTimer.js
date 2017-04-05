@@ -26,15 +26,19 @@ H5.CallbackTimer = (function () {
     };
 
     CallbackTimer.prototype.doLater = function (callback, duration, self) {
+        this.in(duration, callback, self);
+    };
+
+    CallbackTimer.prototype.in = function (ticks, callback, self) {
         this.todos.push({
-            duration: duration,
+            duration: ticks,
             time: 0,
             callback: self ? callback.bind(self) : callback
         });
     };
 
     CallbackTimer.prototype.nextTick = function (callback, self) {
-        this.doLater(callback, -1, self);
+        this.in(-1, callback, self);
     };
 
     CallbackTimer.prototype.pause = function () {

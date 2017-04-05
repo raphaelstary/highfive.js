@@ -8,13 +8,13 @@ H5.SpriteTimer = (function () {
 
     SpriteTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
         var self = this;
-        this.timer.doLater(function () {
+        this.timer.in(duration, function () {
             self.spriteAnimations.animate(drawableToAdd.drawable, drawableToAdd.sprite, drawableToAdd.callback);
 
             if (callback) {
                 callback();
             }
-        }, duration);
+        });
     };
 
     return SpriteTimer;

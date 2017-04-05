@@ -8,14 +8,14 @@ H5.AnimationTimer = (function () {
 
     AnimationTimer.prototype.animateLater = function (drawableToAdd, duration, callback) {
         var self = this;
-        this.timer.doLater(function () {
+        this.timer.in(duration, function () {
             self.animations.animate(drawableToAdd.drawable, drawableToAdd.setter, drawableToAdd.animation,
                 drawableToAdd.callback);
 
             if (callback) {
                 callback();
             }
-        }, duration);
+        });
     };
 
     return AnimationTimer;

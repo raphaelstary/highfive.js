@@ -45,7 +45,7 @@ H5.WebAudioSprite = (function (iterateEntries) {
     WebAudioSprite.prototype.masterVolumeTo = function (value, duration, callback, self) {
         this.masterVolume = value;
         iterateEntries(this.tracks, this.__volumeTo.bind(this, value, duration, null, null));
-        this.timer.doLater(callback, duration, self);
+        this.timer.in(duration, callback, self);
     };
 
     WebAudioSprite.prototype.play = function (name) {
@@ -173,7 +173,7 @@ H5.WebAudioSprite = (function (iterateEntries) {
         track.node.volume = value;
         track.gain.gain.exponentialRampToValueAtTime(value, this.ctx.currentTime + duration / this.frameRate);
         if (callback) {
-            this.timer.doLater(callback, duration, self);
+            this.timer.in(duration, callback, self);
         }
     };
 

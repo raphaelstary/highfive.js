@@ -131,7 +131,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             this.stage.audioVolumeTo(track.element, value)
                 .setDuration(duration);
         }, this);
-        this.timer.doLater(callback, duration, self);
+        this.timer.in(duration, callback, self);
     };
 
     var animationMock = {

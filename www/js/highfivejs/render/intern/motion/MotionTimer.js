@@ -8,13 +8,13 @@ H5.MotionTimer = (function () {
 
     MotionTimer.prototype.moveLater = function (drawableToAdd, duration, callback) {
         var self = this;
-        this.timer.doLater(function () {
+        this.timer.in(duration, function () {
             self.motions.animate(drawableToAdd.drawable, drawableToAdd.path, drawableToAdd.callback);
 
             if (callback) {
                 callback();
             }
-        }, duration);
+        });
     };
 
     return MotionTimer;
