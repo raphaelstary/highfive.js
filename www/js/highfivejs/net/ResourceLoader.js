@@ -1,4 +1,4 @@
-H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audio) {
+H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
     'use strict';
 
     var ResourceType = {
@@ -71,10 +71,6 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
     };
 
     ResourceLoader.prototype.addFont = function (fontSrc) {
-        if (!URL) {
-            return;
-        }
-
         this.__counter++;
         var font = {};
         this.resources.push({
@@ -129,16 +125,10 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
 
                 xhrFont.onload = function () {
 
-                    if (BlobBuilder) {
-                        var blobBuilder = new BlobBuilder();
-                        blobBuilder.append(xhrFont.response);
-                        elem.file.blob = blobBuilder.getBlob();
-
-                    } else if (Blob) {
+                    if (Blob) {
                         elem.file.blob = new Blob([xhrFont.response], {type: 'application/font-woff'});
-
                     } else {
-                        // todo error blobs are not supported
+                        console.log('error: Blob constructing not supported');
                     }
 
                     self.onResourceLoad();
@@ -180,4 +170,4 @@ H5.ResourceLoader = (function (Blob, BlobBuilder, Image, Object, URL, JSON, Audi
     };
 
     return ResourceLoader;
-})(Blob, window.WebKitBlobBuilder, Image, Object, window.URL || window.webkitURL, JSON, Audio);
+})(Blob, Image, Object, JSON, Audio);

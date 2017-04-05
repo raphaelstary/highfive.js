@@ -23,4 +23,4 @@ H5.FontLoader = (function (addFontToDOM, URL) {
             }
         }
     };
-})(H5.addFontToDOM, window.URL || window.webkitURL);
+})(H5.addFontToDOM, window.URL);
