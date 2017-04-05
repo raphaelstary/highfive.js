@@ -30,7 +30,7 @@ H5.GamePadHandler = (function (GamePad, Event, getGamepads) {
     };
 
     GamePadHandler.prototype.disconnect = function (event) {
-
+        //todo implement
     };
 
     GamePadHandler.prototype.update = function () {
@@ -39,12 +39,12 @@ H5.GamePadHandler = (function (GamePad, Event, getGamepads) {
             this.detect();
         }
 
-        var self = this;
+        var gamePads = getGamepads();
         this.gamePads.forEach(function (gamePad) {
-            if (gamePad.update()) {
-                self.events.fireSync(Event.GAME_PAD, gamePad);
+            if (gamePad.update(gamePads)) {
+                this.events.fireSync(Event.GAME_PAD, gamePad);
             }
-        });
+        }, this);
     };
 
     return GamePadHandler;

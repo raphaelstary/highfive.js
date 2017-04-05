@@ -1,4 +1,4 @@
-H5.GamePad = (function (Button, Axis, getGamepads) {
+H5.GamePad = (function (Button, Axis) {
     'use strict';
 
     function GamePad(index) {
@@ -6,12 +6,11 @@ H5.GamePad = (function (Button, Axis, getGamepads) {
         this.lastUpdate = 0;
     }
 
-    GamePad.prototype.update = function () {
-        var gamepads = getGamepads();
+    GamePad.prototype.update = function (gamepads) {
         var pad = gamepads[this.index];
 
         if (!pad) {
-            // todo fire exception
+            console.log('error: gamepad + ' + this.index + ' + not found');
             return;
         }
 
@@ -101,4 +100,4 @@ H5.GamePad = (function (Button, Axis, getGamepads) {
     };
 
     return GamePad;
-})(H5.GamePadButton, H5.GamePadAxis, H5.getGamepads);
+})(H5.GamePadButton, H5.GamePadAxis);
