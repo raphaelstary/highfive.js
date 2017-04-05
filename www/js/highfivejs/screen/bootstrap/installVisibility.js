@@ -6,8 +6,6 @@ H5.installVisibility = (function (VisibilityHandler, document, Event) {
 
         if (document.hidden !== undefined) {
             document.addEventListener('visibilitychange', handler.handleVisibility.bind(handler));
-        } else if (document.webkitHidden !== undefined) {
-            document.addEventListener('webkitvisibilitychange', handler.handleVisibility.bind(handler));
         } else {
             return;
         }

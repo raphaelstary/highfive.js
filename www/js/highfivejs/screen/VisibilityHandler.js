@@ -3,11 +3,11 @@ H5.VisibilityHandler = (function (document, Event) {
 
     function VisibilityHandler(events) {
         this.events = events;
-        this.lastState = document.hidden !== undefined ? document.hidden : document.webkitHidden;
+        this.lastState = document.hidden;
     }
 
     VisibilityHandler.prototype.handleVisibility = function () {
-        var hidden = document.hidden !== undefined ? document.hidden : document.webkitHidden;
+        var hidden = document.hidden;
         if (this.lastState !== hidden) {
             this.events.fireSync(Event.PAGE_VISIBILITY, hidden);
             this.lastState = hidden;
