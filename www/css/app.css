@@ -7,11 +7,9 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-    -ms-touch-action: none;
     touch-action: none;
 }
 
 canvas {
-    -ms-touch-action: none;
     touch-action: none;
 }
