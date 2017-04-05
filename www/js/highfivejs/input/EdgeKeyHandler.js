@@ -66,6 +66,8 @@ H5.EdgeKeyHandler = (function (Event, Date, Object) {
                 this.lastChange = delayedEvent.time = this.lastUpdate + 1;
                 this.currentKeys[delayedEvent.code] = delayedEvent;
             }
+
+            this.events.fireSync(Event.KEY_BOARD, new Keyboard(this.currentKeys));
         }
     };
 
