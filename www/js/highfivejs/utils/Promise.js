@@ -1,54 +1,68 @@
-H5.Promise = (function (Array, CallbackCounter) {
+H5.Promise = (function (CallbackCounter) {
     'use strict';
 
-    function Promise() {
-        this.isFulfilled = false;
+    function Promise(executor) {
+        this.__isFulfilled = false;
+
+        if (executor) {
+            executor(this.__resolve.bind(this));
+        }
     }
+
+    Promise.resolve = function (value) {
+        return new Promise(function (resolve) {
+            resolve(value);
+        });
+    };
 
     Promise.all = function (promises) {
         var promise = new Promise();
-        var counter = new CallbackCounter(promise.resolve.bind(promise), promises.length);
+        var counter = new CallbackCounter(promise.__resolve.bind(promise), promises.length);
         promises.forEach(function (promise) {
             promise.then(counter.register());
         });
         return promise;
     };
 
-    Promise.prototype.then = function (callback, self) {
-        this.__callback = self ? callback.bind(self) : callback;
+    Promise.race = function (iterable) {
+        // todo implement
+    };
 
-        var next = this.__next = new Promise();
+    Promise.prototype.then = function (callback) {
+        this.__callback = callback;
 
-        if (this.isFulfilled) {
-            var promise = this.__callback(this.__arg);
+        this.__next = new Promise();
+
+        if (this.__isFulfilled) {
+            var promise = this.__callback(this.__argument);
             if (promise instanceof Promise) {
-                promise.then(next.resolve.bind(next));
+                promise.then(this.__next.__resolve.bind(this.__next));
             } else {
-                next.resolve();
+                this.__next.__resolve();
             }
         }
 
-        return next;
+        return this.__next;
     };
 
-    Promise.prototype.resolve = function (arg) {
-        if (this.isFulfilled) {
+    Promise.prototype.__resolve = function (argument) {
+        if (this.__isFulfilled) {
             return;
         }
 
-        this.isFulfilled = true;
+        this.__isFulfilled = true;
 
         if (this.__callback) {
-            var promise = this.__callback(arg);
+            var promise = this.__callback(argument);
             if (promise instanceof Promise) {
-                promise.then(this.__next.resolve.bind(this.__next));
+                promise.then(this.__next.__resolve.bind(this.__next));
             } else {
-                this.__next.resolve();
+                this.__next.__resolve();
             }
         } else {
-            this.__arg = arg;
+            this.__argument = argument;
         }
     };
 
     return Promise;
-})(Array, H5.CallbackCounter);
+})(H5.CallbackCounter);

@@ -2,25 +2,23 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, getGamepads
     'use strict';
 
     function collectPositionInfo() {
-        var promise = new Promise();
-
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var info = {
-                accuracy: position.coords.accuracy,
-                altitude: position.coords.altitude,
-                altitudeAccuracy: position.coords.altitudeAccuracy,
-                heading: position.coords.heading,
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                speed: position.coords.speed,
-                timestamp: position.timestamp
-            };
-            promise.resolve(info);
-        }, function (error) {
-            promise.resolve(error);
-        }, {enableHighAccuracy: false});
-
-        return promise;
+        return new Promise(function (resolve) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var info = {
+                    accuracy: position.coords.accuracy,
+                    altitude: position.coords.altitude,
+                    altitudeAccuracy: position.coords.altitudeAccuracy,
+                    heading: position.coords.heading,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    speed: position.coords.speed,
+                    timestamp: position.timestamp
+                };
+                resolve(info);
+            }, function (error) {
+                resolve(error);
+            }, {enableHighAccuracy: false});
+        });
     }
 
     function collectGamePadInfo() {
