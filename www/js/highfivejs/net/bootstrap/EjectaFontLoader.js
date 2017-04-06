@@ -1,4 +1,4 @@
-H5.EjectaFontLoader = (function (ejecta, H5) {
+H5.EjectaFontLoader = (function ($, H5) {
     'use strict';
 
     var font;
@@ -8,9 +8,9 @@ H5.EjectaFontLoader = (function (ejecta, H5) {
             H5.TV_FONT = name;
         },
         load: function () {
-            ejecta.loadFont(font);
+            $.ejecta.loadFont(font);
         },
         process: function (services) {
         }
     };
-})(window.ejecta, H5);
+})(window, H5);
