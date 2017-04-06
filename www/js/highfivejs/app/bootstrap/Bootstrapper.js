@@ -159,7 +159,7 @@ H5.Bootstrapper = (function ($) {
             initBootstrap();
         }
 
-        removeKeyListener = $.installKeyBoard(events, device);
+        removeKeyListener = $.installKeyBoard(events);
         return Bootstrapper;
     }
 

@@ -1,8 +1,8 @@
-H5.installKeyBoard = (function (window, KeyHandler, Event, EdgeKeyHandler) {
+H5.installKeyBoard = (function (window, KeyHandler, Event) {
     'use strict';
 
-    function installKeyBoard(events, device) {
-        var keyHandler = device.isEdge ? new EdgeKeyHandler(events) : new KeyHandler(events);
+    function installKeyBoard(events) {
+        var keyHandler = new KeyHandler(events);
 
         function keyDown(event) {
             keyHandler.keyDown(event);
@@ -25,4 +25,4 @@ H5.installKeyBoard = (function (window, KeyHandler, Event, EdgeKeyHandler) {
     }
 
     return installKeyBoard;
-})(window, H5.KeyHandler, H5.Event, H5.EdgeKeyHandler);
+})(window, H5.KeyHandler, H5.Event);
