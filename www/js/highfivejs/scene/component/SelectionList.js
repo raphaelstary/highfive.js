@@ -25,7 +25,9 @@ H5.SelectionList = (function () {
     SelectionList.prototype.previous = function () {
         var newSelection = this.options.pop();
         newSelection.selection.show = true;
-        this.options[0].selection.show = false;
+        if (this.options[0]) {
+            this.options[0].selection.show = false;
+        }
         this.options.unshift(newSelection);
 
         this.selection = newSelection.callback;
@@ -33,8 +35,8 @@ H5.SelectionList = (function () {
 
     SelectionList.prototype.next = function () {
         this.options.push(this.options.shift());
-        this.options[0].selection.show = true;
         this.options[this.options.length - 1].selection.show = false;
+        this.options[0].selection.show = true;
 
         this.selection = this.options[0].callback;
     };
