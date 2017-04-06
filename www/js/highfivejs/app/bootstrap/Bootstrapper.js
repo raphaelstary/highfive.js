@@ -199,11 +199,11 @@ H5.Bootstrapper = (function ($) {
         return Bootstrapper;
     }
 
-    function useEjectaFont(path) {
+    function useEjectaFont(path, name) {
         if (noOneDidAnInit) {
             initBootstrap();
         }
-        $.EjectaFontLoader.register(path);
+        $.EjectaFontLoader.register(path, name);
         resourceLoadingQueue.push($.EjectaFontLoader);
         return Bootstrapper;
     }
