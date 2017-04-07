@@ -24,7 +24,7 @@ H5.AtlasResourceHelper = (function (AtlasCache, screenWidth, screenHeight, getDe
     }
 
     function fixedRezProcess(atlases, width, height) {
-        var gfxCache = new AtlasCache(width, height, defaultSize);
+        var gfxCache = new AtlasCache(width, height, height);
         gfxCache.init(atlases);
 
         return gfxCache;
