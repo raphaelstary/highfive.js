@@ -214,16 +214,18 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             trackAvailable: true,
             start: function () {
                 if (currentSound.started) {
-                    return;
+                    return this;
                 }
                 startTrack();
+                return this;
             },
             stop: function () {
                 if (currentSound.ended || !currentSound.started) {
-                    return;
+                    return this;
                 }
 
                 self.__stop(currentTrack);
+                return this;
             },
             mute: function () {
                 currentSound.mute = true;
