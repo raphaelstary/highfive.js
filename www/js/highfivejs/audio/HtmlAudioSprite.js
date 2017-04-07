@@ -190,13 +190,12 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             }
 
             currentTrack.element.currentTime = spriteInfo.start;
+            currentTrack.element.volume = self.masterVolume;
 
             if (currentSound.mute) {
                 currentTrack.element.volume = 0;
             } else if (currentSound.volume !== 1) {
                 currentTrack.element.volume = currentSound.volume;
-            } else if (self.masterVolume !== 1) {
-                currentTrack.element.volume = self.masterVolume;
             }
 
             currentTrack.element.play();
@@ -263,7 +262,11 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
                 return this;
             },
             setVolume: function (value) {
-                if (currentSound.ended || !currentSound.started) {
+                if (currentSound.ended) {
+                    return this;
+                }
+                if (!currentSound.started) {
+                    currentSound.volume = value;
                     return this;
                 }
                 currentTrack.element.volume = currentSound.volume = value;
