@@ -1,5 +1,5 @@
 G.MyGameResources = (function () {
-    "use strict";
+    'use strict';
 
     // your files
 

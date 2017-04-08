@@ -1,5 +1,5 @@
 G.runMyScenes = (function (Scenes, Width, Height) {
-    "use strict";
+    'use strict';
 
     function runMyScenes(services) {
         // create your scenes and add them to the scene manager
