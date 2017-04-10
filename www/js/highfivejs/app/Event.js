@@ -8,6 +8,7 @@ H5.Event = {
     POINTER: 'pointer',
     DEVICE_ORIENTATION: 'device_orientation',
     PAGE_VISIBILITY: 'page_visibility',
+    WHEEL: 'wheel',
 
     TICK_START: 'tick_start',
     TICK_INPUT: 'tick_input',

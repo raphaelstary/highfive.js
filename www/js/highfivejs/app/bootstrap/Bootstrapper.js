@@ -8,6 +8,7 @@ H5.Bootstrapper = (function ($) {
         keyBoard: addKeyBoard,
         gamePad: addGamePad,
         pointer: addPointer,
+        wheel: addWheel,
 
         // system-services / device-events - choose [0...n]
         orientation: addScreenOrientation,
@@ -48,6 +49,7 @@ H5.Bootstrapper = (function ($) {
     var events;
     var device;
     var removeKeyListener;
+    var removeWheelListener;
     var noOneDidAnInit = true;
     var resourceLoadingQueue;
 
@@ -102,7 +104,7 @@ H5.Bootstrapper = (function ($) {
 
         resourceLoadingQueue.push(myResources);
 
-        return new $.App(globalServices, resourceLoadingQueue, installMyScenes, removeKeyListener);
+        return new $.App(globalServices, resourceLoadingQueue, installMyScenes, removeKeyListener, removeWheelListener);
     }
 
     function addLowResolutionRendering(width, height) {
@@ -160,6 +162,15 @@ H5.Bootstrapper = (function ($) {
         }
 
         removeKeyListener = $.installKeyBoard(events);
+        return Bootstrapper;
+    }
+
+    function addWheel() {
+        if (noOneDidAnInit) {
+            initBootstrap();
+        }
+
+        removeWheelListener = $.installWheel(events);
         return Bootstrapper;
     }
 
@@ -287,6 +298,7 @@ H5.Bootstrapper = (function ($) {
     installCanvas: H5.installCanvas,
     installResize: H5.installResize,
     installKeyBoard: H5.installKeyBoard,
+    installWheel: H5.installWheel,
     installGamePad: H5.installGamePad,
     installOrientation: H5.installOrientation,
     installFullScreen: H5.installFullScreen,

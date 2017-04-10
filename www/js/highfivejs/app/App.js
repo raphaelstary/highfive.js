@@ -2,11 +2,12 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
     getStage) {
     'use strict';
 
-    function App(services, resourcesLoadingQueue, runMyScenes, removeKeyHandler) {
+    function App(services, resourcesLoadingQueue, runMyScenes, removeKeyHandler, removeWheelHandler) {
         this.services = services;
         this.resourcesQueue = resourcesLoadingQueue;
         this.runMyScenes = runMyScenes;
         this.removeKeyHandler = removeKeyHandler;
+        this.removeWheelHandler = removeWheelHandler;
     }
 
     App.prototype.start = function (appInfo, hideLoadingScreen, callback) {
@@ -52,6 +53,9 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
                 self.stop();
                 if (self.removeKeyHandler) {
                     self.removeKeyHandler();
+                }
+                if (self.removeWheelHandler) {
+                    self.removeWheelHandler();
                 }
                 if (self.services.device.isFullScreen()) {
                     self.services.device.exitFullScreen();
