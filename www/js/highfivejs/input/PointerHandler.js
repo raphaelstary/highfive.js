@@ -30,12 +30,15 @@ H5.PointerHandler = (function (Event, Object, Math) {
     PointerHandler.prototype.pointerMove = function (event) {
         event.preventDefault();
         var current = this.activePointers[event.pointerId];
-        if (current && (current.type == Pointer.DOWN || current.type == Pointer.MOVE)) {
-            current.x = event.clientX;
-            current.y = event.clientY;
-            current.changed = true;
-            current.type = Pointer.MOVE;
-            this.changed = true;
+        if (current) {
+            var downButNotSameTick = current.type == Pointer.DOWN && !current.changed;
+            if (downButNotSameTick || current.type == Pointer.MOVE) {
+                current.x = event.clientX;
+                current.y = event.clientY;
+                current.changed = true;
+                current.type = Pointer.MOVE;
+                this.changed = true;
+            }
         }
     };
 
@@ -71,12 +74,15 @@ H5.PointerHandler = (function (Event, Object, Math) {
     PointerHandler.prototype.mouseMove = function (event) {
         event.preventDefault();
         var current = this.activePointers['mouse'];
-        if (current && (current.type == Pointer.DOWN || current.type == Pointer.MOVE)) {
-            current.x = event.clientX;
-            current.y = event.clientY;
-            current.changed = true;
-            current.type = Pointer.MOVE;
-            this.changed = true;
+        if (current) {
+            var downButNotSameTick = current.type == Pointer.DOWN && !current.changed;
+            if (downButNotSameTick || current.type == Pointer.MOVE) {
+                current.x = event.clientX;
+                current.y = event.clientY;
+                current.changed = true;
+                current.type = Pointer.MOVE;
+                this.changed = true;
+            }
         }
     };
 
