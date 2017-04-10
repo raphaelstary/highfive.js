@@ -310,6 +310,17 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
                         return this;
                     },
+                    and: function (keyCode) {
+                        if (command.and === undefined) {
+                            command.and = keyCode;
+                        } else if (command.and instanceof Array) {
+                            command.and.push(keyCode);
+                        } else {
+                            command.and = [command.and, keyCode];
+                        }
+
+                        return this;
+                    },
                     onDown: function (callback, self) {
                         if (self) {
                             command.onDown = callback.bind(self);
@@ -350,6 +361,12 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                                 });
                         } else if (command.or) {
                             isPressed = inputType.isPressed(command.code) || inputType.isPressed(command.or);
+                        } else if (command.and && command.and instanceof Array) {
+                            isPressed = inputType.isPressed(command.code) && command.and.every(function (code) {
+                                    return inputType.isPressed(code);
+                                });
+                        } else if (command.and) {
+                            isPressed = inputType.isPressed(command.code) && inputType.isPressed(command.and);
                         } else {
                             isPressed = inputType.isPressed(command.code);
                         }

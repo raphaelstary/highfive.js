@@ -9,6 +9,9 @@ H5.Key = {
     ALT: 18,
     ESC: 27,
 
+    EQUALS: 187,
+    MINUS: 189,
+
     W: 87,
     A: 65,
     S: 83,
