@@ -30,7 +30,7 @@ H5.PointerHandler = (function (Event, Object, Math) {
     PointerHandler.prototype.pointerMove = function (event) {
         event.preventDefault();
         var current = this.activePointers[event.pointerId];
-        if (current) {
+        if (current && (current.type == Pointer.DOWN || current.type == Pointer.MOVE)) {
             current.x = event.clientX;
             current.y = event.clientY;
             current.changed = true;
