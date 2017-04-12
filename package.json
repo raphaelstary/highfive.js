@@ -1,0 +1,30 @@
+{
+  "name": "highfive.js",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "html5/js game framework",
+  "main": "example/helloworld/main.js",
+  "directories": {
+    "example": "example",
+    "src": "src",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphaelstary/highfive.js.git"
+  },
+  "keywords": [
+    "html5",
+    "js",
+    "game",
+    "framework"
+  ],
+  "author": "Raphael Stary",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/raphaelstary/highfive.js/issues"
+  },
+  "homepage": "https://github.com/raphaelstary/highfive.js"
+}
