@@ -10,7 +10,7 @@ var MAIN_OUT_JS = 'index';
 var INDEX_OUT_HTML = 'index';
 var APP_OUT_CSS = 'app';
 
-var BASE_PATH = '../www';
+var BASE_PATH = '../src';
 var SRC_PATH = 'js';
 var BASE_OUT_PATH = '../../target';
 
