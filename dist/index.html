@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>highfive.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+
+<script src="node_modules/highfive.js/src/installNamespace.js"></script>
+<script src="node_modules/highfive.js/src/game/installGameNamespace.js"></script>
+
+<script src="node_modules/highfive.js/src/utils/iterateEntries.js"></script>
+<script src="node_modules/highfive.js/src/utils/iterateSomeEntries.js"></script>
+<script src="node_modules/highfive.js/src/utils/concatenateProperties.js"></script>
+<script src="node_modules/highfive.js/src/utils/getFunctionName.js"></script>
+<script src="node_modules/highfive.js/src/utils/Vectors.js"></script>
+<script src="node_modules/highfive.js/src/utils/EqTriangles.js"></script>
+<script src="node_modules/highfive.js/src/utils/Strings.js"></script>
+<script src="node_modules/highfive.js/src/utils/CallbackCounter.js"></script>
+<script src="node_modules/highfive.js/src/utils/Promise.js"></script>
+<script src="node_modules/highfive.js/src/utils/calcCantorPairing.js"></script>
+<script src="node_modules/highfive.js/src/utils/checkAndSet30fps.js"></script>
+<script src="node_modules/highfive.js/src/utils/ValueChecker.js"></script>
+<script src="node_modules/highfive.js/src/platform/Stats.js"></script>
+<script src="node_modules/highfive.js/src/platform/getGamepads.js"></script>
+<script src="node_modules/highfive.js/src/screen/getDevicePixelRatio.js"></script>
+<script src="node_modules/highfive.js/src/app/Event.js"></script>
+<script src="node_modules/highfive.js/src/render/Transition.js"></script>
+
+<script src="node_modules/highfive.js/src/audio/HtmlAudioManager.js"></script>
+<script src="node_modules/highfive.js/src/audio/HtmlAudioSprite.js"></script>
+<script src="node_modules/highfive.js/src/audio/WebAudioSprite.js"></script>
+<script src="node_modules/highfive.js/src/audio/bootstrap/SoundResources.js"></script>
+<script src="node_modules/highfive.js/src/audio/bootstrap/installHtmlAudioSprite.js"></script>
+<script src="node_modules/highfive.js/src/audio/bootstrap/installWebAudioSprite.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/motion/entity/LinePath.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/entity/CirclePath.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/entity/BezierCurvePath.js"></script>
+
+<script src="node_modules/highfive.js/src/utils/Repository.js"></script>
+<script src="node_modules/highfive.js/src/utils/KeyRepository.js"></script>
+<script src="node_modules/highfive.js/src/resizeutils/changePath.js"></script>
+<script src="node_modules/highfive.js/src/resizeutils/changeCoords.js"></script>
+<script src="node_modules/highfive.js/src/resizeutils/changeTouchable.js"></script>
+<script src="node_modules/highfive.js/src/resizeutils/changeRectangle.js"></script>
+<script src="node_modules/highfive.js/src/resizeutils/changeMask.js"></script>
+<script src="node_modules/highfive.js/src/resizeutils/fetchDrawableIntoTouchable.js"></script>
+
+<script src="node_modules/highfive.js/src/scene/position/calcScreenConst.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/add.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/changeSign.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/subtract.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/multiply.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/zero.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/wrap.js"></script>
+
+<script src="node_modules/highfive.js/src/scene/position/Height.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/Width.js"></script>
+<script src="node_modules/highfive.js/src/scene/position/Font.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/RectangleMask.js"></script>
+
+<script src="node_modules/highfive.js/src/scene/component/ScreenShaker.js"></script>
+<script src="node_modules/highfive.js/src/scene/component/FixRezScreenShaker.js"></script>
+
+<script src="node_modules/highfive.js/src/platform/UniversalTranslator.js"></script>
+<script src="node_modules/highfive.js/src/platform/addFontToDOM.js"></script>
+<script src="node_modules/highfive.js/src/platform/storage/lclStorage.js"></script>
+<script src="node_modules/highfive.js/src/platform/storage/Persistence.js"></script>
+<script src="node_modules/highfive.js/src/platform/Device.js"></script>
+<script src="node_modules/highfive.js/src/screen/FullScreenController.js"></script>
+<script src="node_modules/highfive.js/src/screen/OrientationLock.js"></script>
+
+<script src="node_modules/highfive.js/src/input/isHit.js"></script>
+<script src="node_modules/highfive.js/src/input/entity/GamePadAxis.js"></script>
+<script src="node_modules/highfive.js/src/input/entity/GamePadButton.js"></script>
+<script src="node_modules/highfive.js/src/input/entity/GamePad.js"></script>
+<script src="node_modules/highfive.js/src/input/entity/Key.js"></script>
+<script src="node_modules/highfive.js/src/input/entity/WiiUGamePad.js"></script>
+<script src="node_modules/highfive.js/src/input/KeyHandler.js"></script>
+<script src="node_modules/highfive.js/src/input/WheelHandler.js"></script>
+<script src="node_modules/highfive.js/src/input/GamePadHandler.js"></script>
+<script src="node_modules/highfive.js/src/input/PointerHandler.js"></script>
+<script src="node_modules/highfive.js/src/input/Taps.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/measureText.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/SubImage.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/ImageWrapper.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/TextWrapper.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Rectangle.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Quadrilateral.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/ABLine.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Circle.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/EquilateralTriangle.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Hexagon.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/DrawableLine.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Drawable.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Drawables.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/animation/entity/Animation.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/animation/entity/Animations.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/entity/Paths.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/sprite/entity/Sprite.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/sprite/entity/Sprites.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/CanvasImageCollisionDetector.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/animation/BasicAnimations.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/animation/AnimationHelper.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/animation/AnimationTimer.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/animation/PropertyAnimations.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/audio/AudioAnimations.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/sprite/SpriteAnimations.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/sprite/SpriteTimer.js"></script>
+<script src="node_modules/highfive.js/src/utils/inheritMethods.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/MotionHelper.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/MotionTimer.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/calcLinePoint.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/calcCirclePoint.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/calcBezierPoint.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/motion/Motions.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/draw/wrapText.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderQuadrilateral.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderABLine.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderPolygon.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderEqTriangle.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderImage.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderAtlas.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderText.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderEjectaText.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderCircle.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderCurve.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderHexagon.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderLine.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/renderRectangle.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/draw/Renderer.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/CallbackTimer.js"></script>
+
+<script src="node_modules/highfive.js/src/render/Stage.js"></script>
+
+<script src="node_modules/highfive.js/src/render/intern/draw/entity/Setter.js"></script>
+<script src="node_modules/highfive.js/src/render/intern/EntityServices.js"></script>
+<script src="node_modules/highfive.js/src/render/NewStageAPI.js"></script>
+
+<script src="node_modules/highfive.js/src/render/ImageCache.js"></script>
+<script src="node_modules/highfive.js/src/render/AtlasCache.js"></script>
+
+<script src="node_modules/highfive.js/src/input/bootstrap/installOneTimeTap.js"></script>
+<script src="node_modules/highfive.js/src/screen/Orientation.js"></script>
+<script src="node_modules/highfive.js/src/utils/range.js"></script>
+<script src="node_modules/highfive.js/src/scene/component/SelectionList.js"></script>
+<script src="node_modules/highfive.js/src/scene/MVVMScene.js"></script>
+<script src="node_modules/highfive.js/src/scene/SceneList.js"></script>
+<script src="node_modules/highfive.js/src/scene/SceneMap.js"></script>
+
+<script src="node_modules/highfive.js/src/analytics/HolmesConnector.js"></script>
+<script src="node_modules/highfive.js/src/analytics/bootstrap/installHolmes.js"></script>
+
+<script src="node_modules/highfive.js/src/analyticsutils/sendSystemEvent.js"></script>
+<script src="node_modules/highfive.js/src/game/Grid.js"></script>
+<script src="node_modules/highfive.js/src/game/GridHelper.js"></script>
+<script src="node_modules/highfive.js/src/game/GridViewHelper.js"></script>
+<script src="node_modules/highfive.js/src/game/FixRezGridViewHelper.js"></script>
+<script src="node_modules/highfive.js/src/game/EqTriangleGrid.js"></script>
+<script src="node_modules/highfive.js/src/game/EqTriangleGridHelper.js"></script>
+<script src="node_modules/highfive.js/src/game/EqTriangleViewHelper.js"></script>
+<script src="node_modules/highfive.js/src/game/HexViewHelper.js"></script>
+<script src="node_modules/highfive.js/src/game/Camera.js"></script>
+<script src="node_modules/highfive.js/src/game/PlayerControls.js"></script>
+
+<script src="node_modules/highfive.js/src/app/GameLoop.js"></script>
+<script src="node_modules/highfive.js/src/app/bootstrap/installLoop.js"></script>
+<script src="node_modules/highfive.js/src/render/bootstrap/getStage.js"></script>
+<script src="node_modules/highfive.js/src/render/bootstrap/AtlasResourceHelper.js"></script>
+<script src="node_modules/highfive.js/src/render/bootstrap/createAtlasPaths.js"></script>
+<script src="node_modules/highfive.js/src/render/bootstrap/ImageResourceHelper.js"></script>
+
+<script src="node_modules/highfive.js/src/net/bootstrap/AtlasLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/EjectaFontLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/FixedRezAtlasLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/FontLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/HtmlAudioLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/HtmlAudioSpriteLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/ImageLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/LocalesLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/SceneLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/bootstrap/WebAudioSpriteLoader.js"></script>
+<script src="node_modules/highfive.js/src/net/ResourceLoader.js"></script>
+
+<script src="node_modules/highfive.js/src/screen/ResizeHandler.js"></script>
+<script src="node_modules/highfive.js/src/screen/SimpleLoadingScreen.js"></script>
+<script src="node_modules/highfive.js/src/screen/OrientationHandler.js"></script>
+<script src="node_modules/highfive.js/src/screen/VisibilityHandler.js"></script>
+<script src="node_modules/highfive.js/src/screen/FullScreenHandler.js"></script>
+<script src="node_modules/highfive.js/src/platform/bootstrap/installCanvas.js"></script>
+<script src="node_modules/highfive.js/src/screen/bootstrap/installResize.js"></script>
+<script src="node_modules/highfive.js/src/screen/bootstrap/installOrientation.js"></script>
+<script src="node_modules/highfive.js/src/screen/bootstrap/installVisibility.js"></script>
+<script src="node_modules/highfive.js/src/screen/bootstrap/installFullScreen.js"></script>
+<script src="node_modules/highfive.js/src/input/bootstrap/installPointer.js"></script>
+<script src="node_modules/highfive.js/src/input/bootstrap/installKeyBoard.js"></script>
+<script src="node_modules/highfive.js/src/input/bootstrap/installWheel.js"></script>
+<script src="node_modules/highfive.js/src/input/bootstrap/installGamePad.js"></script>
+<script src="node_modules/highfive.js/src/app/EventBus.js"></script>
+<script src="node_modules/highfive.js/src/app/App.js"></script>
+<script src="node_modules/highfive.js/src/app/bootstrap/Bootstrapper.js"></script>
+
+</body>
+</html>

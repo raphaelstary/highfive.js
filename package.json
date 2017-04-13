@@ -4,12 +4,11 @@
   "description": "html5/js game framework",
   "main": "example/helloworld/main.js",
   "directories": {
+    "dist": "dist",
     "example": "example",
     "src": "src",
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test",
+    "tool": "tool"
   },
   "repository": {
     "type": "git",
@@ -26,5 +25,14 @@
   "bugs": {
     "url": "https://github.com/raphaelstary/highfive.js/issues"
   },
-  "homepage": "https://github.com/raphaelstary/highfive.js"
+  "homepage": "https://github.com/raphaelstary/highfive.js",
+  "devDependencies": {
+    "uglify-js": "^2.8.17"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "concat": "node tool/concatenate.js",
+    "minify": "uglifyjs dist/highfive.js > dist/h5-min.js",
+    "build": "npm run concat && npm run minify"
+  }
 }
