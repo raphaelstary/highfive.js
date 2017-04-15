@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 H5.changeTouchable = (function () {
     'use strict';
 

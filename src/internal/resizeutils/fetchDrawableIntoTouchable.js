@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 H5.fetchDrawableIntoTouchable = (function (changeTouchable) {
     'use strict';
 
