@@ -1,7 +1,7 @@
-H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
+H5.StageAPI = (function (Setter, iterateEntries, EntityServices) {
     'use strict';
 
-    function NewStageAPI(stage, gfx, resizer, width, height, timer) {
+    function StageAPI(stage, gfx, resizer, width, height, timer) {
         this.stage = stage;
         this.gfx = gfx;
         this.resizer = resizer;
@@ -19,7 +19,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
      * @param imgName
      * @return Drawable
      */
-    NewStageAPI.prototype.createImage = function (imgName) {
+    StageAPI.prototype.createImage = function (imgName) {
         return addImageServiceMethods(addServiceMethods(this.stage.drawFresh(0, 0, imgName), this), this);
     };
 
@@ -29,7 +29,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
      * @param text
      * @return Drawable
      */
-    NewStageAPI.prototype.createText = function (text) {
+    StageAPI.prototype.createText = function (text) {
         var drawable = this.stage.drawText(0, 0, text, 60, 'Arial', 'black');
         return addTextServiceMethods(addServiceMethods(drawable, this), this);
     };
@@ -40,17 +40,17 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
      * @param filled default false
      * @return Drawable
      */
-    NewStageAPI.prototype.createRectangle = function (filled) {
+    StageAPI.prototype.createRectangle = function (filled) {
         var drawable = this.stage.drawRectangle(0, 0, 100, 100, 'black', filled);
         return addRectangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
-    NewStageAPI.prototype.createQuadrilateral = function (filled) {
+    StageAPI.prototype.createQuadrilateral = function (filled) {
         var drawable = this.stage.drawQuadrilateral(0, 0, 0, 100, 100, 100, 100, 0, 'black', filled);
         return addQuadrilateralServiceMethods(drawable, this);
     };
 
-    NewStageAPI.prototype.createABLine = function () {
+    StageAPI.prototype.createABLine = function () {
         var drawable = this.stage.drawABLine(0, 0, 0, 100, 'black');
         return addABLineServiceMethods(drawable, this);
     };
@@ -61,7 +61,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
      * @param filled default false
      * @return Drawable
      */
-    NewStageAPI.prototype.createCircle = function (filled) {
+    StageAPI.prototype.createCircle = function (filled) {
         var drawable = this.stage.drawCircle(0, 0, 100, 'black', filled);
         return addCircleServiceMethods(addServiceMethods(drawable, this), this);
     };
@@ -71,7 +71,7 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
      *
      * @return Drawable
      */
-    NewStageAPI.prototype.createLine = function () {
+    StageAPI.prototype.createLine = function () {
         var drawable = this.stage.drawLine(0, 0, 100, 'black');
         return addLineServiceMethods(addServiceMethods(drawable, this), this);
     };
@@ -82,12 +82,12 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
      * @param filled default false
      * @return Drawable
      */
-    NewStageAPI.prototype.createEqTriangle = function (filled) {
+    StageAPI.prototype.createEqTriangle = function (filled) {
         var drawable = this.stage.drawEqTriangle(0, 0, 0, 100, 'black', filled);
         return addEqTriangleServiceMethods(addServiceMethods(drawable, this), this);
     };
 
-    NewStageAPI.prototype.createHexagon = function (filled) {
+    StageAPI.prototype.createHexagon = function (filled) {
         var drawable = this.stage.drawHexagon(0, 0, 0, 100, 'black', filled);
         return addHexagonServiceMethods(addServiceMethods(drawable, this), this);
     };
@@ -300,16 +300,16 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         return drawable;
     }
 
-    NewStageAPI.prototype.clear = function () {
+    StageAPI.prototype.clear = function () {
         this.stage.clear();
     };
 
-    NewStageAPI.prototype.update = function () {
+    StageAPI.prototype.update = function () {
         this.timer.update();
         this.stage.update();
     };
 
-    NewStageAPI.prototype.resize = function (event) {
+    StageAPI.prototype.resize = function (event) {
         this.screen.width = event.width;
         this.screen.height = event.height;
         if (this.gfx && this.gfx.resize) {
@@ -322,21 +322,21 @@ H5.NewStageAPI = (function (Setter, iterateEntries, EntityServices) {
         });
     };
 
-    NewStageAPI.prototype.getGraphic = function (imgPathName) {
+    StageAPI.prototype.getGraphic = function (imgPathName) {
         return this.stage.getGraphic(imgPathName);
     };
 
-    NewStageAPI.prototype.playAll = function () {
+    StageAPI.prototype.playAll = function () {
         this.stage.playAll();
     };
 
-    NewStageAPI.prototype.pauseAll = function () {
+    StageAPI.prototype.pauseAll = function () {
         this.stage.pauseAll();
     };
 
-    NewStageAPI.prototype.audioVolumeTo = function (audio, volume) {
+    StageAPI.prototype.audioVolumeTo = function (audio, volume) {
         return EntityServices.volumeTo(this.stage, audio, volume);
     };
 
-    return NewStageAPI;
+    return StageAPI;
 })(H5.Setter, H5.iterateEntries, H5.EntityServices);

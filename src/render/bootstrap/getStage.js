@@ -39,7 +39,7 @@ H5.getStage = (function ($) {
             'radius'
         ];
         var legacyStage = createLegacy(gfxCache, renderer);
-        var stage = new $.NewStageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
+        var stage = new $.StageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
             new $.CallbackTimer());
 
         if (!device.isLowRez) {
@@ -64,7 +64,7 @@ H5.getStage = (function ($) {
     BasicAnimationHelper: H5.AnimationHelper,
     BasicAnimationTimer: H5.AnimationTimer,
     BasicAnimations: H5.BasicAnimations,
-    NewStageAPI: H5.NewStageAPI,
+    StageAPI: H5.StageAPI,
     KeyRepository: H5.KeyRepository,
     CallbackTimer: H5.CallbackTimer,
     Event: H5.Event,
