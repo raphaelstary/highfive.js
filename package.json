@@ -31,8 +31,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "node tool/clean.js",
+    "init": "node --eval \"fs.mkdirSync('dist');\"",
+    "gen:html": "node tool/generateHtml.js",
     "concat": "node tool/concatenate.js",
     "minify": "uglifyjs dist/highfive.js > dist/h5-min.js",
-    "build": "npm run concat && npm run minify"
+    "build": "npm run clean && npm run init && npm run gen:html && npm run concat && npm run minify"
   }
 }
