@@ -1014,7 +1014,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             }
         }
 
-        // dependency injection for globals inside your view model
+        // dependency injection for globals inside your render model
         this.viewModel.nextScene = nextScene;
         this.viewModel.restartScene = restartScene;
         this.viewModel.stopScene = stopScene;
