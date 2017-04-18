@@ -38,6 +38,7 @@
     "minify": "uglifyjs dist/highfive.js > dist/h5-min.js",
     "build": "npm run clean && npm run init && npm run gen:html && npm run concat && npm run minify",
     "prepublish": "npm run build",
-    "postpublish": "npm run clean"
+    "postpublish": "npm run clean",
+    "postversion": "git push && git push --tags"
   }
 }
