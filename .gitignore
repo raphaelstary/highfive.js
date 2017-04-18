@@ -42,17 +42,6 @@ publish
 build/buildinfo.properties
 build/config/buildinfo.properties
 
-www-built
-www-ghdeploy
 */lib
 node_modules
-www/sandbox*
-www/gfx/test*
-www/audio
-atlas*.png
-atlas*.json
-audio.json
-audio.mp3
-audio.ogg
-scenes.json
-levels.json
+dist
