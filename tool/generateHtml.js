@@ -10,6 +10,7 @@ var template =
     '</head>\n' +
     '<body>\n' +
         '{scripts}' +
+    '\n' +
     '</body>\n' +
     '</html>\n';
 
