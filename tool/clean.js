@@ -43,4 +43,9 @@ function remove(filePath) {
     });
 }
 
-removeDirectory('dist');
+removeDirectory('dist').catch(function (error) {
+    if (error.code === 'ENOENT') {
+        return console.log('no dist/ dir');
+    }
+    console.log('error: ' + error);
+});
