@@ -44,3 +44,6 @@ build/config/buildinfo.properties
 
 */lib
 node_modules
+
+.npmignore
+.gitignore
