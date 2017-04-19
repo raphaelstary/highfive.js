@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 
 var concatenated = fs.readFileSync('dist/index.html', 'utf8')
