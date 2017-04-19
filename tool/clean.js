@@ -1,10 +1,10 @@
 'use strict';
 
-var fs = require('fs');
+let fs = require('fs');
 
 function removeDirectory(path) {
-    return new Promise(function (fulfill, reject) {
-        fs.rmdir(path, function (error) {
+    return new Promise((fulfill, reject) => {
+        fs.rmdir(path, error => {
             if (error) {
                 if (error.code === 'ENOTEMPTY') {
                     return removeFiles(path)
@@ -20,11 +20,9 @@ function removeDirectory(path) {
 }
 
 function removeFiles(dirPath) {
-    return new Promise(function (fulfill, reject) {
-        fs.readdir(dirPath, function (error, files) {
-            Promise.all(files.map(function (file) {
-                    return remove(dirPath + '/' + file);
-                }))
+    return new Promise((fulfill, reject) => {
+        fs.readdir(dirPath, (error, files) => {
+            Promise.all(files.map(file => remove(dirPath + '/' + file)))
                 .then(fulfill)
                 .catch(reject);
         });
@@ -32,8 +30,8 @@ function removeFiles(dirPath) {
 }
 
 function remove(filePath) {
-    return new Promise(function (fulfill, reject) {
-        fs.unlink(filePath, function (error) {
+    return new Promise((fulfill, reject) => {
+        fs.unlink(filePath, error => {
             if (error) {
                 if (error.code === 'EPERM') {
                     return removeDirectory(filePath).then(fulfill).catch(reject);
@@ -45,7 +43,7 @@ function remove(filePath) {
     });
 }
 
-removeDirectory('dist').catch(function (error) {
+removeDirectory('dist').catch(error => {
     if (error.code === 'ENOENT') {
         return console.log('no dist/ dir');
     }
