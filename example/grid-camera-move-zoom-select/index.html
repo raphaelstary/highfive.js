@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>highfive.js app</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<script src="../../src/publicexposedinternals/app/installNamespace.js"></script>
+<script src="../../src/publicexposedinternals/app/installGameNamespace.js"></script>
+
+<script src="../../src/utils/js/iterateEntries.js"></script>
+<script src="../../src/utils/js/iterateSomeEntries.js"></script>
+<script src="../../src/utils/js/concatenateProperties.js"></script>
+<script src="../../src/utils/js/getFunctionName.js"></script>
+<script src="../../src/utils/math/Vectors.js"></script>
+<script src="../../src/utils/math/EqTriangles.js"></script>
+<script src="../../src/utils/Strings.js"></script>
+<script src="../../src/utils/h5/CallbackCounter.js"></script>
+<script src="../../src/utils/polyfill/Promise.js"></script>
+<script src="../../src/utils/math/calcCantorPairing.js"></script>
+<script src="../../src/utils/h5/checkAndSet30fps.js"></script>
+<script src="../../src/utils/math/ValueChecker.js"></script>
+<script src="../../src/platform/Stats.js"></script>
+<script src="../../src/publicexposedinternals/platform/getGamepads.js"></script>
+<script src="../../src/screen/getDevicePixelRatio.js"></script>
+<script src="../../src/app/Event.js"></script>
+<script src="../../src/render/Transition.js"></script>
+
+<script src="../../src/publicexposedinternals/audio/HtmlAudioManager.js"></script>
+<script src="../../src/publicexposedinternals/audio/HtmlAudioSprite.js"></script>
+<script src="../../src/publicexposedinternals/audio/WebAudioSprite.js"></script>
+<script src="../../src/publicexposedinternals/audio/bootstrap/SoundResources.js"></script>
+<script src="../../src/publicexposedinternals/audio/bootstrap/installHtmlAudioSprite.js"></script>
+<script src="../../src/publicexposedinternals/audio/bootstrap/installWebAudioSprite.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/motion/entity/LinePath.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/entity/CirclePath.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/entity/BezierCurvePath.js"></script>
+
+<script src="../../src/utils/h5/Repository.js"></script>
+<script src="../../src/utils/h5/KeyRepository.js"></script>
+<script src="../../src/publicexposedinternals/resizeutils/changePath.js"></script>
+<script src="../../src/publicexposedinternals/resizeutils/changeCoords.js"></script>
+<script src="../../src/publicexposedinternals/resizeutils/changeTouchable.js"></script>
+<script src="../../src/publicexposedinternals/resizeutils/changeRectangle.js"></script>
+<script src="../../src/publicexposedinternals/resizeutils/changeMask.js"></script>
+<script src="../../src/publicexposedinternals/resizeutils/fetchDrawableIntoTouchable.js"></script>
+
+<script src="../../src/render/position/calcScreenConst.js"></script>
+<script src="../../src/render/position/add.js"></script>
+<script src="../../src/render/position/changeSign.js"></script>
+<script src="../../src/render/position/subtract.js"></script>
+<script src="../../src/render/position/multiply.js"></script>
+<script src="../../src/render/position/zero.js"></script>
+<script src="../../src/render/position/wrap.js"></script>
+
+<script src="../../src/render/position/Height.js"></script>
+<script src="../../src/render/position/Width.js"></script>
+<script src="../../src/render/position/Font.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/RectangleMask.js"></script>
+
+<script src="../../src/scene/video/ScreenShaker.js"></script>
+<script src="../../src/scene/video/FixRezScreenShaker.js"></script>
+
+<script src="../../src/publicexposedinternals/platform/UniversalTranslator.js"></script>
+<script src="../../src/publicexposedinternals/platform/addFontToDOM.js"></script>
+<script src="../../src/platform/storage/lclStorage.js"></script>
+<script src="../../src/platform/storage/Persistence.js"></script>
+<script src="../../src/publicexposedinternals/platform/Device.js"></script>
+<script src="../../src/publicexposedinternals/screen/FullScreenController.js"></script>
+<script src="../../src/publicexposedinternals/screen/OrientationLock.js"></script>
+
+<script src="../../src/input/isHit.js"></script>
+<script src="../../src/input/GamePadAxis.js"></script>
+<script src="../../src/input/GamePadButton.js"></script>
+<script src="../../src/publicexposedinternals/input/entity/GamePad.js"></script>
+<script src="../../src/input/Key.js"></script>
+<script src="../../src/publicexposedinternals/input/entity/WiiUGamePad.js"></script>
+<script src="../../src/publicexposedinternals/input/KeyHandler.js"></script>
+<script src="../../src/publicexposedinternals/input/WheelHandler.js"></script>
+<script src="../../src/publicexposedinternals/input/GamePadHandler.js"></script>
+<script src="../../src/publicexposedinternals/input/PointerHandler.js"></script>
+<script src="../../src/publicexposedinternals/input/Taps.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/measureText.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/SubImage.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/ImageWrapper.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/TextWrapper.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Rectangle.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Quadrilateral.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/ABLine.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Circle.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/EquilateralTriangle.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Hexagon.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/DrawableLine.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Drawable.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Drawables.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/animation/entity/Animation.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/animation/entity/Animations.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/entity/Paths.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/sprite/entity/Sprite.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/sprite/entity/Sprites.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/CanvasImageCollisionDetector.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/animation/BasicAnimations.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/animation/AnimationHelper.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/animation/AnimationTimer.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/animation/PropertyAnimations.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/audio/AudioAnimations.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/sprite/SpriteAnimations.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/sprite/SpriteTimer.js"></script>
+<script src="../../src/utils/js/inheritMethods.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/MotionHelper.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/MotionTimer.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/calcLinePoint.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/calcCirclePoint.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/calcBezierPoint.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/motion/Motions.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/draw/wrapText.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderQuadrilateral.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderABLine.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderPolygon.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderEqTriangle.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderImage.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderAtlas.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderText.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderEjectaText.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderCircle.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderCurve.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderHexagon.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderLine.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/renderRectangle.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/draw/Renderer.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/CallbackTimer.js"></script>
+
+<script src="../../src/publicexposedinternals/render/Stage.js"></script>
+
+<script src="../../src/publicexposedinternals/render/internal/draw/entity/Setter.js"></script>
+<script src="../../src/publicexposedinternals/render/internal/EntityServices.js"></script>
+<script src="../../src/publicexposedinternals/render/StageAPI.js"></script>
+
+<script src="../../src/publicexposedinternals/render/ImageCache.js"></script>
+<script src="../../src/publicexposedinternals/render/AtlasCache.js"></script>
+
+<script src="../../src/publicexposedinternals/input/bootstrap/installOneTimeTap.js"></script>
+<script src="../../src/screen/Orientation.js"></script>
+<script src="../../src/utils/math/range.js"></script>
+<script src="../../src/scene/ui/SelectionList.js"></script>
+<script src="../../src/scene/MVVMScene.js"></script>
+<script src="../../src/scene/SceneList.js"></script>
+<script src="../../src/scene/SceneMap.js"></script>
+
+<script src="../../src/publicexposedinternals/analytics/HolmesConnector.js"></script>
+<script src="../../src/publicexposedinternals/analytics/bootstrap/installHolmes.js"></script>
+
+<script src="../../src/analytics/sendSystemEvent.js"></script>
+<script src="../../src/game/grid/Grid.js"></script>
+<script src="../../src/game/grid/GridHelper.js"></script>
+<script src="../../src/game/grid/GridViewHelper.js"></script>
+<script src="../../src/game/grid/FixRezGridViewHelper.js"></script>
+<script src="../../src/game/grid/EqTriangleGrid.js"></script>
+<script src="../../src/game/grid/EqTriangleGridHelper.js"></script>
+<script src="../../src/game/grid/EqTriangleViewHelper.js"></script>
+<script src="../../src/game/grid/HexViewHelper.js"></script>
+<script src="../../src/scene/video/Camera.js"></script>
+<script src="../../src/input/PlayerControls.js"></script>
+
+<script src="../../src/publicexposedinternals/app/GameLoop.js"></script>
+<script src="../../src/publicexposedinternals/app/bootstrap/installLoop.js"></script>
+<script src="../../src/publicexposedinternals/render/bootstrap/getStage.js"></script>
+<script src="../../src/publicexposedinternals/render/bootstrap/AtlasResourceHelper.js"></script>
+<script src="../../src/publicexposedinternals/render/bootstrap/createAtlasPaths.js"></script>
+<script src="../../src/publicexposedinternals/render/bootstrap/ImageResourceHelper.js"></script>
+
+<script src="../../src/publicexposedinternals/net/bootstrap/AtlasLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/EjectaFontLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/FixedRezAtlasLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/FontLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/HtmlAudioLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/HtmlAudioSpriteLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/ImageLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/LocalesLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/SceneLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/bootstrap/WebAudioSpriteLoader.js"></script>
+<script src="../../src/publicexposedinternals/net/ResourceLoader.js"></script>
+
+<script src="../../src/publicexposedinternals/screen/ResizeHandler.js"></script>
+<script src="../../src/publicexposedinternals/screen/SimpleLoadingScreen.js"></script>
+<script src="../../src/publicexposedinternals/screen/OrientationHandler.js"></script>
+<script src="../../src/publicexposedinternals/screen/VisibilityHandler.js"></script>
+<script src="../../src/publicexposedinternals/screen/FullScreenHandler.js"></script>
+<script src="../../src/publicexposedinternals/platform/bootstrap/installCanvas.js"></script>
+<script src="../../src/publicexposedinternals/screen/bootstrap/installResize.js"></script>
+<script src="../../src/publicexposedinternals/screen/bootstrap/installOrientation.js"></script>
+<script src="../../src/publicexposedinternals/screen/bootstrap/installVisibility.js"></script>
+<script src="../../src/publicexposedinternals/screen/bootstrap/installFullScreen.js"></script>
+<script src="../../src/publicexposedinternals/input/bootstrap/installPointer.js"></script>
+<script src="../../src/publicexposedinternals/input/bootstrap/installKeyBoard.js"></script>
+<script src="../../src/publicexposedinternals/input/bootstrap/installWheel.js"></script>
+<script src="../../src/publicexposedinternals/input/bootstrap/installGamePad.js"></script>
+<script src="../../src/publicexposedinternals/app/EventBus.js"></script>
+<script src="../../src/publicexposedinternals/app/App.js"></script>
+<script src="../../src/app/Bootstrapper.js"></script>
+
+<!--my scenes start-->
+
+<script src="runMyScenes.js"></script>
+
+<!--main: app entry point & platform config-->
+<script src="main.js"></script>
+
+<!--my scenes end-->
+
+</body>
+</html>
