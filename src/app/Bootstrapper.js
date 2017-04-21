@@ -65,7 +65,7 @@ H5.Bootstrapper = (function ($) {
         resourceLoadingQueue = [];
     }
 
-    function buildApp(myResources, installMyScenes, optionalCanvas) {
+    function buildApp(installMyScenes, optionalMyCustomResources, optionalCanvas) {
         if (noOneDidAnInit) {
             initBootstrap();
         }
@@ -102,7 +102,9 @@ H5.Bootstrapper = (function ($) {
 
         noOneDidAnInit = true;
 
-        resourceLoadingQueue.push(myResources);
+        if (optionalMyCustomResources) {
+            resourceLoadingQueue.push(optionalMyCustomResources);
+        }
 
         return new $.App(globalServices, resourceLoadingQueue, installMyScenes, removeKeyListener, removeWheelListener);
     }
