@@ -70,8 +70,11 @@ H5.Vectors = (function (Math) {
             return pointY + magnitude * Math.sin(angle);
         },
 
-        getAngle: function (x, y) {
-            return Math.atan2(y, x);
+        getAngle: function (pointX, pointY, optionalCenterX, optionalCenterY) {
+            if (optionalCenterX !== undefined) {
+                return Math.atan2(pointY - optionalCenterY, pointX - optionalCenterX);
+            }
+            return Math.atan2(pointY, pointX);
         },
 
         getIntersectionPoint: function (a1_x, a1_y, a2_x, a2_y, b1_x, b1_y, b2_x, b2_y) {
