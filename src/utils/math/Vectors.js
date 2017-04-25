@@ -1,6 +1,8 @@
 H5.Vectors = (function (Math) {
     'use strict';
 
+    var TWO_PI = Math.PI * 2;
+
     return {
         get: function (pointA_X, pointA_Y, pointB_X, pointB_Y) {
             return {
@@ -58,8 +60,25 @@ H5.Vectors = (function (Math) {
             return radians * 180 / Math.PI;
         },
 
-        normalizeAngle: function (degree) {//todo: find out what's the right wording? shift, translate, transform, normalise?
+        normalizeAngleWithDegree: function (degree) {
             return (degree + 180 + 360) % 360 - 180;
+        },
+
+        /**
+         * Normalize an angle in a 2 pi wide interval around a center value.
+         *
+         * This method has three main uses:
+         *      normalize an angle between 0 and 2π:
+         *          angle = normalizeAngle(angle, Math.PI);
+         *
+         *      normalize an angle between -pi and +pi
+         *          angle = normalizeAngle(angle, 0);
+         *
+         *      compute the angle between two defining angular positions:
+         *          angle = normalizeAngle(end, start) - start;
+         */
+        normalizeAngle: function (radians, center) {
+            return radians - TWO_PI * Math.floor((radians + Math.PI - center) / TWO_PI);
         },
 
         getX: function (pointX, magnitude, angle) {
