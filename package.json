@@ -1,6 +1,6 @@
 {
   "name": "highfive.js",
-  "version": "0.18.0-SNAPSHOT",
+  "version": "0.18.0-SNAPSHOT.0",
   "description": "html5/js game engine",
   "main": "example/helloworld/main.js",
   "directories": {
