@@ -141,5 +141,13 @@ H5.Camera = (function () {
         this.__zoom = factor;
     };
 
+    Camera.prototype.zoomRelative = function (factor) {
+        this.__zoom += factor;
+    };
+
+    Camera.prototype.getZoom = function (factor) {
+        return this.__zoom;
+    };
+
     return Camera;
 })();
