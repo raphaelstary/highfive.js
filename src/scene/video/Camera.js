@@ -145,7 +145,7 @@ H5.Camera = (function () {
         this.__zoom += factor;
     };
 
-    Camera.prototype.getZoom = function (factor) {
+    Camera.prototype.getZoom = function () {
         return this.__zoom;
     };
 
