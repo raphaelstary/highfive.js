@@ -42,14 +42,22 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
 
         var gridViewHelper = new GridViewHelper(services.stage, services.device, 16, 9);
 
-        var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 9, grid.yTiles - 5);
+        function maxX() {
+            var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 9, grid.yTiles - 5);
+            return maxCameraPosition.x;
+        }
+
+        function maxY() {
+            var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 9, grid.yTiles - 5);
+            return maxCameraPosition.y;
+        }
         var viewPort = services.stage.createRectangle(false)
             .setPosition(Width.HALF, Height.HALF)
             .setWidth(Width.FULL)
             .setHeight(Height.FULL)
             .setShow(false);
 
-        var camera = new Camera(viewPort, maxCameraPosition.x, maxCameraPosition.y);
+        var camera = new Camera(viewPort, maxX, maxY, services.device);
 
         var entities = [];
 
@@ -65,7 +73,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
 
         function updateCamera() {
             entities.forEach(function (entity) {
-                camera.calcScreenPosition(entity.entity, entity.drawable);
+                camera.calculatePosition(entity.entity, entity.drawable);
             });
         }
 
@@ -78,7 +86,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
         function moveCursorTo(x, y) {
 
             // todo use camera to calc real position
-            // camera.calcScreenPosition()
+            // camera.calculatePosition()
 
             var coord = gridViewHelper.getCoordinates(x, y);
             cursorPosition.u = coord.u;

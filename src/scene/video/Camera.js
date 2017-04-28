@@ -14,14 +14,14 @@ H5.Camera = (function () {
         this.__maxYFn = maxYFn;
 
         /** @public */
-        this.isPositionLocked = false;
+        this.locked = false;
         /** @public */
-        this.isShow = true;
+        this.show = true;
         /** @public */
         this.zoomFactor = 1;
     }
 
-    Camera.prototype.calcScreenPosition = function (entity, drawable, ignoreScale, useDrawableScale) {
+    Camera.prototype.calculatePosition = function (entity, drawable, ignoreScale, forcedScaleFactor) {
         if (this.zoomFactor === 1) {
             var cornerX = this.__viewPort.getCornerX();
             var cornerY = this.__viewPort.getCornerY();
@@ -32,7 +32,7 @@ H5.Camera = (function () {
                 return;
             }
 
-            drawable.show = this.isShow;
+            drawable.show = this.show;
 
             drawable.x = entity.x - cornerX;
             drawable.y = entity.y - cornerY;
@@ -60,20 +60,22 @@ H5.Camera = (function () {
             return;
         }
 
-        drawable.show = this.isShow;
+        drawable.show = this.show;
 
         drawable.x = (entity.x - left) * this.zoomFactor;
         drawable.y = (entity.y - top) * this.zoomFactor;
-        if (useDrawableScale) {
-            if (drawable.currentScale === undefined) {
-                drawable.currentScale = drawable.scale;
-            }
-            drawable.scale = drawable.currentScale * this.zoomFactor;
+
+        if (forcedScaleFactor !== undefined) {
+            drawable.scale = forcedScaleFactor * this.zoomFactor;
         } else {
             drawable.scale = entity.scale * this.zoomFactor;
         }
     };
 
+    /**
+     * todo rework + change name & extract common feature set out of specific bullet code
+     * @deprecated
+     */
     Camera.prototype.calcBulletsScreenPosition = function (entity, drawable) {
         var cornerX = this.__viewPort.getCornerX();
         var cornerY = this.__viewPort.getCornerY();
@@ -90,7 +92,7 @@ H5.Camera = (function () {
             return;
         }
 
-        drawable.show = this.isShow;
+        drawable.show = this.show;
 
         drawable.data.ax = entity.data.ax - cornerX * this.__viewPort.scale;
         drawable.data.ay = entity.data.ay - cornerY * this.__viewPort.scale;
@@ -99,7 +101,7 @@ H5.Camera = (function () {
     };
 
     Camera.prototype.move = function (anchor) {
-        if (this.isPositionLocked) {
+        if (this.locked) {
             return;
         }
 
@@ -126,27 +128,27 @@ H5.Camera = (function () {
         }
     };
 
-    Camera.prototype.unlockPosition = function () {
-        this.isPositionLocked = false;
+    Camera.prototype.unlock = function () {
+        this.locked = false;
     };
 
-    Camera.prototype.lockPosition = function () {
-        this.isPositionLocked = true;
+    Camera.prototype.lock = function () {
+        this.locked = true;
     };
 
-    Camera.prototype.hideDrawables = function () {
-        this.isShow = false;
+    Camera.prototype.hideAll = function () {
+        this.show = false;
     };
 
-    Camera.prototype.showDrawables = function () {
-        this.isShow = true;
+    Camera.prototype.showAll = function () {
+        this.show = true;
     };
 
     Camera.prototype.zoom = function (factor) {
         this.zoomFactor = factor;
     };
 
-    Camera.prototype.zoomRelative = function (factor) {
+    Camera.prototype.zoomRelatively = function (factor) {
         this.zoomFactor += factor;
     };
 
