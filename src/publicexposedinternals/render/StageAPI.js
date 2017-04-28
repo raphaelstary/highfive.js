@@ -192,8 +192,6 @@ H5.StageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.setLineWidth = Setter.setLineWidth.bind(undefined, self.resizer.add.bind(self.resizer, 'lineWidth'),
             self.screen, drawable);
         drawable.setFilled = Setter.setFilled.bind(undefined, drawable);
-        //drawable.setQuadPosition = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer,
-        // 'position'), self.screen, drawable);
         drawable.setA = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_a'),
             self.screen, drawable, 'a');
         drawable.setB = Setter.setQuadPosition.bind(undefined, self.resizer.add.bind(self.resizer, 'position_b'),

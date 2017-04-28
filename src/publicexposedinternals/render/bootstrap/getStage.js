@@ -36,7 +36,9 @@ H5.getStage = (function ($) {
             'path_b',
             'path_c',
             'path_d',
-            'radius'
+            'radius',
+            'anchor',
+            'lineDash'
         ];
         var legacyStage = createLegacy(gfxCache, renderer);
         var stage = new $.StageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
