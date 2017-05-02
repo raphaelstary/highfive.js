@@ -1,4 +1,4 @@
-H5.Setter = (function (changeCoords) {
+H5.Setter = (function (changeCoords, Math) {
     'use strict';
 
     return {
@@ -38,35 +38,35 @@ H5.Setter = (function (changeCoords) {
         },
 
         setPosition: function (addToResizer, screen, drawable, xFn, yFn, resizeDependencies) {
-            drawable.x = xFn(screen.width, screen.height);
-            drawable.y = yFn(screen.height, screen.width);
+            drawable.x = Math.floor(xFn(screen.width, screen.height));
+            drawable.y = Math.floor(yFn(screen.height, screen.width));
 
             addToResizer(drawable, function (width, height) {
-                changeCoords(drawable, xFn(width, height), yFn(height, width));
+                changeCoords(drawable, Math.floor(xFn(width, height)), Math.floor(yFn(height, width)));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setAnchor: function (addToResizer, screen, drawable, xFn, yFn, resizeDependencies) {
-            drawable.anchorOffsetX = xFn(screen.width, screen.height);
-            drawable.anchorOffsetY = yFn(screen.height, screen.width);
+            drawable.anchorOffsetX = Math.floor(xFn(screen.width, screen.height));
+            drawable.anchorOffsetY = Math.floor(yFn(screen.height, screen.width));
 
             addToResizer(drawable, function (width, height) {
-                drawable.anchorOffsetX = xFn(width, height);
-                drawable.anchorOffsetY = yFn(height, width);
+                drawable.anchorOffsetX = Math.floor(xFn(width, height));
+                drawable.anchorOffsetY = Math.floor(yFn(height, width));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setQuadPosition: function (addToResizer, screen, drawable, property, xFn, yFn, resizeDependencies) {
-            drawable.data[property + 'x'] = xFn(screen.width, screen.height);
-            drawable.data[property + 'y'] = yFn(screen.height, screen.width);
+            drawable.data[property + 'x'] = Math.floor(xFn(screen.width, screen.height));
+            drawable.data[property + 'y'] = Math.floor(yFn(screen.height, screen.width));
 
             addToResizer(drawable, function (width, height) {
-                drawable.data[property + 'x'] = xFn(width, height);
-                drawable.data[property + 'y'] = yFn(height, width);
+                drawable.data[property + 'x'] = Math.floor(xFn(width, height));
+                drawable.data[property + 'y'] = Math.floor(yFn(height, width));
             }, resizeDependencies);
 
             return drawable;
@@ -74,51 +74,51 @@ H5.Setter = (function (changeCoords) {
 
         setQuadTotal: function (addToResizer, screen, drawable, a_xFn, a_yFn, b_xFn, b_yFn, c_xFn, c_yFn, d_xFn, d_yFn,
             resizeDependencies) {
-            drawable.data.ax = a_xFn(screen.width, screen.height);
-            drawable.data.ay = a_yFn(screen.height, screen.width);
-            drawable.data.bx = b_xFn(screen.width, screen.height);
-            drawable.data.by = b_yFn(screen.height, screen.width);
-            drawable.data.cx = c_xFn(screen.width, screen.height);
-            drawable.data.cy = c_yFn(screen.height, screen.width);
-            drawable.data.dx = d_xFn(screen.width, screen.height);
-            drawable.data.dy = d_yFn(screen.height, screen.width);
+            drawable.data.ax = Math.floor(a_xFn(screen.width, screen.height));
+            drawable.data.ay = Math.floor(a_yFn(screen.height, screen.width));
+            drawable.data.bx = Math.floor(b_xFn(screen.width, screen.height));
+            drawable.data.by = Math.floor(b_yFn(screen.height, screen.width));
+            drawable.data.cx = Math.floor(c_xFn(screen.width, screen.height));
+            drawable.data.cy = Math.floor(c_yFn(screen.height, screen.width));
+            drawable.data.dx = Math.floor(d_xFn(screen.width, screen.height));
+            drawable.data.dy = Math.floor(d_yFn(screen.height, screen.width));
 
             addToResizer(drawable, function (width, height) {
-                drawable.data.ax = a_xFn(width, height);
-                drawable.data.ay = a_yFn(height, width);
-                drawable.data.bx = b_xFn(width, height);
-                drawable.data.by = b_yFn(height, width);
-                drawable.data.cx = c_xFn(width, height);
-                drawable.data.cy = c_yFn(height, width);
-                drawable.data.dx = d_xFn(width, height);
-                drawable.data.dy = d_yFn(height, width);
+                drawable.data.ax = Math.floor(a_xFn(width, height));
+                drawable.data.ay = Math.floor(a_yFn(height, width));
+                drawable.data.bx = Math.floor(b_xFn(width, height));
+                drawable.data.by = Math.floor(b_yFn(height, width));
+                drawable.data.cx = Math.floor(c_xFn(width, height));
+                drawable.data.cy = Math.floor(c_yFn(height, width));
+                drawable.data.dx = Math.floor(d_xFn(width, height));
+                drawable.data.dy = Math.floor(d_yFn(height, width));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setTextSize: function (addToResizer, screen, drawable, sizeFn, resizeDependencies) {
-            drawable.data.size = sizeFn(screen.width, screen.height);
+            drawable.data.size = Math.floor(sizeFn(screen.width, screen.height));
             addToResizer(drawable, function (width, height) {
-                drawable.data.size = sizeFn(width, height);
+                drawable.data.size = Math.floor(sizeFn(width, height));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setTextMaxLineLength: function (addToResizer, screen, drawable, maxLineLengthFn, resizeDependencies) {
-            drawable.data.maxLineLength = maxLineLengthFn(screen.width, screen.height);
+            drawable.data.maxLineLength = Math.floor(maxLineLengthFn(screen.width, screen.height));
             addToResizer(drawable, function (width, height) {
-                drawable.data.maxLineLength = maxLineLengthFn(width, height);
+                drawable.data.maxLineLength = Math.floor(maxLineLengthFn(width, height));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setTextLineHeight: function (addToResizer, screen, drawable, lineHeightFn, resizeDependencies) {
-            drawable.data.lineHeight = lineHeightFn(screen.height, screen.width);
+            drawable.data.lineHeight = Math.floor(lineHeightFn(screen.height, screen.width));
             addToResizer(drawable, function (width, height) {
-                drawable.data.lineHeight = lineHeightFn(height, width);
+                drawable.data.lineHeight = Math.floor(lineHeightFn(height, width));
             }, resizeDependencies);
 
             return drawable;
@@ -133,36 +133,36 @@ H5.Setter = (function (changeCoords) {
         },
 
         setLength: function (addToResizer, screen, drawable, lengthFn, resizeDependencies) {
-            drawable.data.length = lengthFn(screen.width, screen.height);
+            drawable.data.length = Math.floor(lengthFn(screen.width, screen.height));
             addToResizer(drawable, function (width, height) {
-                drawable.data.length = lengthFn(width, height);
+                drawable.data.length = Math.floor(lengthFn(width, height));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setWidth: function (addToResizer, screen, drawable, widthFn, resizeDependencies) {
-            drawable.data.width = widthFn(screen.width, screen.height);
+            drawable.data.width = Math.floor(widthFn(screen.width, screen.height));
             addToResizer(drawable, function (width, height) {
-                drawable.data.width = widthFn(width, height);
+                drawable.data.width = Math.floor(widthFn(width, height));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setHeight: function (addToResizer, screen, drawable, heightFn, resizeDependencies) {
-            drawable.data.height = heightFn(screen.height, screen.width);
+            drawable.data.height = Math.floor(heightFn(screen.height, screen.width));
             addToResizer(drawable, function (width, height) {
-                drawable.data.height = heightFn(height, width);
+                drawable.data.height = Math.floor(heightFn(height, width));
             }, resizeDependencies);
 
             return drawable;
         },
 
         setLineWidth: function (addToResizer, screen, drawable, lineWidthFn, resizeDependencies) {
-            drawable.data.lineWidth = lineWidthFn(screen.width, screen.height);
+            drawable.data.lineWidth = Math.floor(lineWidthFn(screen.width, screen.height));
             addToResizer(drawable, function (width, height) {
-                drawable.data.lineWidth = lineWidthFn(width, height);
+                drawable.data.lineWidth = Math.floor(lineWidthFn(width, height));
             }, resizeDependencies);
 
             return drawable;
@@ -186,9 +186,9 @@ H5.Setter = (function (changeCoords) {
         },
 
         setRadius: function (addToResizer, screen, drawable, radiusFn, resizeDependencies) {
-            drawable.data.radius = radiusFn(screen.width, screen.height);
+            drawable.data.radius = Math.floor(radiusFn(screen.width, screen.height));
             addToResizer(drawable, function (width, height) {
-                drawable.data.radius = radiusFn(width, height);
+                drawable.data.radius = Math.floor(radiusFn(width, height));
             }, resizeDependencies);
 
             return drawable;
@@ -209,4 +209,4 @@ H5.Setter = (function (changeCoords) {
             drawable.mask = drawableShapeMask;
         }
     };
-})(H5.changeCoords);
+})(H5.changeCoords, Math);

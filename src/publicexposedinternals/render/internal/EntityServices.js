@@ -1,4 +1,4 @@
-H5.EntityServices = (function (Transition, changePath, changeCoords) {
+H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
     'use strict';
 
     function duration(animation, duration) {
@@ -42,13 +42,13 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
                 resizer.removeKey('path', drawable);
 
                 resizer.add('position', drawable, function (width, height) {
-                    changeCoords(drawable, xFn(width, height), yFn(height, width));
+                    changeCoords(drawable, Math.floor(xFn(width, height)), Math.floor(yFn(height, width)));
                 }, resizeDependencies);
 
             };
 
-            var path = stage.getPath(drawable.x, drawable.y, xFn(screen.width, screen.height),
-                yFn(screen.height, screen.width), 120, Transition.LINEAR, false);
+            var path = stage.getPath(drawable.x, drawable.y, Math.floor(xFn(screen.width, screen.height)),
+                Math.floor(yFn(screen.height, screen.width)), 120, Transition.LINEAR, false);
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
@@ -60,7 +60,8 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
             stage.move(drawable, path, enhancedCallBack);
 
             resizer.add('path', drawable, function (width, height) {
-                changePath(path, drawable.x, drawable.y, xFn(width, height), yFn(height, width));
+                changePath(path, drawable.x, drawable.y, Math.floor(xFn(width, height)),
+                    Math.floor(yFn(height, width)));
             }, resizeDependencies);
 
             return addServiceMethods(path);
@@ -71,14 +72,15 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
                 resizer.removeKey('path_' + property, drawable);
 
                 resizer.add('position_' + property, drawable, function (width, height) {
-                    drawable.data[property + 'x'] = xFn(width, height);
-                    drawable.data[property + 'y'] = yFn(height, width);
+                    drawable.data[property + 'x'] = Math.floor(xFn(width, height));
+                    drawable.data[property + 'y'] = Math.floor(yFn(height, width));
                 }, resizeDependencies);
 
             };
 
             var path = stage.getPath(drawable.data[property + 'x'], drawable.data[property + 'y'],
-                xFn(screen.width, screen.height), yFn(screen.height, screen.width), 120, Transition.LINEAR, false);
+                Math.floor(xFn(screen.width, screen.height)), Math.floor(yFn(screen.height, screen.width)), 120,
+                Transition.LINEAR, false);
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
@@ -90,8 +92,8 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
             stage.moveQuad(property, drawable, path, enhancedCallBack);
 
             resizer.add('path_' + property, drawable, function (width, height) {
-                changePath(path, drawable.data[property + 'x'], drawable.data[property + 'y'], xFn(width, height),
-                    yFn(height, width));
+                changePath(path, drawable.data[property + 'x'], drawable.data[property + 'y'],
+                    Math.floor(xFn(width, height)), Math.floor(yFn(height, width)));
             }, resizeDependencies);
 
             return addServiceMethods(path);
@@ -102,13 +104,13 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
                 resizer.removeKey('path', drawable);
 
                 //resizer.add('position', drawable, function (width, height) {
-                //    changeCoords(drawable, xFn(width, height), yFn(height, width));
+                //    changeCoords(drawable, Math.floor(xFn(width, height)), Math.floor(yFn(height, width)));
                 //}, resizeDependencies);
 
             };
 
-            var path = stage.getPath(xFn(screen.width, screen.height), yFn(screen.height, screen.width), drawable.x,
-                drawable.y, 120, Transition.LINEAR, false);
+            var path = stage.getPath(Math.floor(xFn(screen.width, screen.height)),
+                Math.floor(yFn(screen.height, screen.width)), drawable.x, drawable.y, 120, Transition.LINEAR, false);
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
@@ -120,7 +122,8 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
             stage.move(drawable, path, enhancedCallBack);
 
             resizer.add('path', drawable, function (width, height) {
-                changePath(path, xFn(width, height), yFn(height, width), drawable.x, drawable.y);
+                changePath(path, Math.floor(xFn(width, height)), Math.floor(yFn(height, width)), drawable.x,
+                    drawable.y);
             }, resizeDependencies);
 
             return addServiceMethods(path);
@@ -217,4 +220,4 @@ H5.EntityServices = (function (Transition, changePath, changeCoords) {
             return addServiceMethods(animation);
         }
     };
-})(H5.Transition, H5.changePath, H5.changeCoords);
+})(H5.Transition, H5.changePath, H5.changeCoords, Math);

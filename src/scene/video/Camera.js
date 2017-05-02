@@ -1,4 +1,4 @@
-H5.Camera = (function (concatenateProperties, Math) {
+H5.Camera = (function (Math) {
     'use strict';
 
     function Camera(viewPort, maxXFn, maxYFn, device) {
@@ -25,12 +25,14 @@ H5.Camera = (function (concatenateProperties, Math) {
         this.__calculatePositionData(sourceDrawable, targetDrawable);
     };
 
-    Camera.prototype.updatePositionReference = function (sourceDrawable, targetDrawable, scale, anchorX, anchorY) {
-        this.__calculatePositionData(sourceDrawable, targetDrawable, true, scale, anchorX, anchorY);
+    Camera.prototype.updatePositionReference = function (sourceDrawable, targetDrawable, scale, offsetX, offsetY,
+        rotationOffsetX, rotationOffsetY) {
+        this.__calculatePositionData(sourceDrawable, targetDrawable, true, scale, offsetX, offsetY, rotationOffsetX,
+            rotationOffsetY);
     };
 
     Camera.prototype.__calculatePositionData = function (entity, drawable, justUseEntitiesPosition, forcedScaleFactor,
-        forcedAnchorX, forcesAnchorY) {
+        forcedOffsetX, forcedOffsetY, forcedRotationOffsetX, forcedRotationOffsetY) {
 
         if (!this.show) {
             drawable.show = false;
@@ -48,15 +50,22 @@ H5.Camera = (function (concatenateProperties, Math) {
             }
 
             if (!justUseEntitiesPosition) {
-                var id = drawable.id;
-                var zIndex = drawable.zIndex;
-                concatenateProperties(entity, drawable);
-                drawable.id = id;
-                drawable.zIndex = zIndex;
+                drawable.rotation = entity.rotation;
+                drawable.alpha = entity.alpha;
+                drawable.scale = entity.scale;
+                drawable.rotationAnchorOffsetX = entity.rotationAnchorOffsetX;
+                drawable.rotationAnchorOffsetY = entity.rotationAnchorOffsetY;
+                drawable.anchorOffsetX = entity.anchorOffsetX;
+                drawable.anchorOffsetY = entity.anchorOffsetY;
+                drawable.flipHorizontally = entity.flipHorizontally;
+                drawable.flipVertically = entity.flipVertically;
+
             } else {
                 drawable.scale = forcedScaleFactor !== undefined ? forcedScaleFactor : 1;
-                drawable.anchorOffsetX = forcedAnchorX !== undefined ? forcedAnchorX : 0;
-                drawable.anchorOffsetY = forcesAnchorY !== undefined ? forcesAnchorY : 0;
+                drawable.anchorOffsetX = forcedOffsetX !== undefined ? forcedOffsetX : 0;
+                drawable.anchorOffsetY = forcedOffsetY !== undefined ? forcedOffsetY : 0;
+                drawable.rotationAnchorOffsetX = forcedRotationOffsetX !== undefined ? forcedRotationOffsetX : 0;
+                drawable.rotationAnchorOffsetY = forcedRotationOffsetY !== undefined ? forcedRotationOffsetY : 0;
             }
 
             drawable.x = entity.x - cornerX;
@@ -84,25 +93,33 @@ H5.Camera = (function (concatenateProperties, Math) {
         }
 
         if (!justUseEntitiesPosition) {
-            var tempId = drawable.id;
-            var tempZIndex = drawable.zIndex;
-            concatenateProperties(entity, drawable);
-            drawable.id = tempId;
-            drawable.zIndex = tempZIndex;
+            drawable.rotation = entity.rotation;
+            drawable.alpha = entity.alpha;
+            drawable.flipHorizontally = entity.flipHorizontally;
+            drawable.flipVertically = entity.flipVertically;
 
             drawable.scale = entity.scale * this.zoomFactor;
             drawable.anchorOffsetX = Math.floor(entity.anchorOffsetX * this.zoomFactor);
             drawable.anchorOffsetY = Math.floor(entity.anchorOffsetY * this.zoomFactor);
 
+            drawable.rotationAnchorOffsetX = Math.floor(entity.rotationAnchorOffsetX * this.zoomFactor);
+            drawable.rotationAnchorOffsetY = Math.floor(entity.rotationAnchorOffsetY * this.zoomFactor);
+
         } else {
             var scale = forcedScaleFactor !== undefined ? forcedScaleFactor : 1;
             drawable.scale = scale * this.zoomFactor;
 
-            var offsetX = forcedAnchorX !== undefined ? forcedAnchorX : 0;
+            var offsetX = forcedOffsetX !== undefined ? forcedOffsetX : 0;
             drawable.anchorOffsetX = Math.floor(offsetX * this.zoomFactor);
 
-            var offsetY = forcesAnchorY !== undefined ? forcesAnchorY : 0;
+            var offsetY = forcedOffsetY !== undefined ? forcedOffsetY : 0;
             drawable.anchorOffsetY = Math.floor(offsetY * this.zoomFactor);
+
+            var rotationOffsetX = forcedRotationOffsetX !== undefined ? forcedRotationOffsetX : 0;
+            drawable.rotationAnchorOffsetX = Math.floor(rotationOffsetX * this.zoomFactor);
+
+            var rotationOffsetY = forcedRotationOffsetY !== undefined ? forcedRotationOffsetY : 0;
+            drawable.rotationAnchorOffsetY = Math.floor(rotationOffsetY * this.zoomFactor);
         }
 
         drawable.x = Math.floor((entity.x - left) * this.zoomFactor);
@@ -191,4 +208,4 @@ H5.Camera = (function (concatenateProperties, Math) {
     };
 
     return Camera;
-})(H5.concatenateProperties, Math);
+})(Math);
