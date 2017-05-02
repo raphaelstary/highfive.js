@@ -51,6 +51,22 @@ H5.Drawable = (function (Math, TextWrapper, SubImage, ImageWrapper, Circle, Draw
         return this.y + this.getHeightHalf();
     };
 
+    Drawable.prototype.getCornerXAnchored = function () {
+        return this.x + this.anchorOffsetX - this.getWidthHalf();
+    };
+
+    Drawable.prototype.getCornerYAnchored = function () {
+        return this.y + this.anchorOffsetY - this.getHeightHalf();
+    };
+
+    Drawable.prototype.getEndXAnchored = function () {
+        return this.x + this.anchorOffsetX + this.getWidthHalf();
+    };
+
+    Drawable.prototype.getEndYAnchored = function () {
+        return this.y + this.anchorOffsetY + this.getHeightHalf();
+    };
+
     Drawable.prototype.getWidth = function () {
         return Math.floor(this.__getWidth() * this.scale);
     };

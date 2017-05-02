@@ -1,4 +1,4 @@
-H5.Camera = (function () {
+H5.Camera = (function (concatenateProperties, Math) {
     'use strict';
 
     function Camera(viewPort, maxXFn, maxYFn, device) {
@@ -21,24 +21,47 @@ H5.Camera = (function () {
         this.zoomFactor = 1;
     }
 
-    Camera.prototype.calculatePosition = function (entity, drawable, ignoreScale, forcedScaleFactor) {
+    Camera.prototype.updateBinding = function (sourceDrawable, targetDrawable) {
+        this.__calculatePositionData(sourceDrawable, targetDrawable);
+    };
+
+    Camera.prototype.updatePositionReference = function (sourceDrawable, targetDrawable, scale, anchorX, anchorY) {
+        this.__calculatePositionData(sourceDrawable, targetDrawable, true, scale, anchorX, anchorY);
+    };
+
+    Camera.prototype.__calculatePositionData = function (entity, drawable, justUseEntitiesPosition, forcedScaleFactor,
+        forcedAnchorX, forcesAnchorY) {
+
+        if (!this.show) {
+            drawable.show = false;
+            return;
+        }
+
         if (this.zoomFactor === 1) {
             var cornerX = this.__viewPort.getCornerX();
             var cornerY = this.__viewPort.getCornerY();
-            if (entity.getEndX() < cornerX || entity.getCornerX() > this.__viewPort.getEndX() ||
-                entity.getEndY() < cornerY || entity.getCornerY() > this.__viewPort.getEndY()) {
+            if (entity.getEndXAnchored() < cornerX || entity.getCornerXAnchored() > this.__viewPort.getEndX() ||
+                entity.getEndYAnchored() < cornerY || entity.getCornerYAnchored() > this.__viewPort.getEndY()) {
 
                 drawable.show = false;
                 return;
             }
 
-            drawable.show = this.show;
+            if (!justUseEntitiesPosition) {
+                var id = drawable.id;
+                var zIndex = drawable.zIndex;
+                concatenateProperties(entity, drawable);
+                drawable.id = id;
+                drawable.zIndex = zIndex;
+            } else {
+                drawable.scale = forcedScaleFactor !== undefined ? forcedScaleFactor : 1;
+                drawable.anchorOffsetX = forcedAnchorX !== undefined ? forcedAnchorX : 0;
+                drawable.anchorOffsetY = forcesAnchorY !== undefined ? forcesAnchorY : 0;
+            }
 
             drawable.x = entity.x - cornerX;
             drawable.y = entity.y - cornerY;
-            if (!ignoreScale) {
-                drawable.scale = entity.scale;
-            }
+            drawable.show = true;
 
             return;
         }
@@ -50,26 +73,41 @@ H5.Camera = (function () {
         var top = this.__viewPort.y - heightHalf;
         var bottom = this.__viewPort.y + heightHalf;
 
-        var entityRight = entity.getEndX();
-        var entityLeft = entity.getCornerX();
-        var entityBottom = entity.getEndY();
-        var entityTop = entity.getCornerY();
+        var entityRight = entity.getEndXAnchored();
+        var entityLeft = entity.getCornerXAnchored();
+        var entityBottom = entity.getEndYAnchored();
+        var entityTop = entity.getCornerYAnchored();
 
         if (entityRight < left || entityLeft > right || entityBottom < top || entityTop > bottom) {
             drawable.show = false;
             return;
         }
 
-        drawable.show = this.show;
+        if (!justUseEntitiesPosition) {
+            var tempId = drawable.id;
+            var tempZIndex = drawable.zIndex;
+            concatenateProperties(entity, drawable);
+            drawable.id = tempId;
+            drawable.zIndex = tempZIndex;
 
-        drawable.x = (entity.x - left) * this.zoomFactor;
-        drawable.y = (entity.y - top) * this.zoomFactor;
-
-        if (forcedScaleFactor !== undefined) {
-            drawable.scale = forcedScaleFactor * this.zoomFactor;
-        } else {
             drawable.scale = entity.scale * this.zoomFactor;
+            drawable.anchorOffsetX = Math.floor(entity.anchorOffsetX * this.zoomFactor);
+            drawable.anchorOffsetY = Math.floor(entity.anchorOffsetY * this.zoomFactor);
+
+        } else {
+            var scale = forcedScaleFactor !== undefined ? forcedScaleFactor : 1;
+            drawable.scale = scale * this.zoomFactor;
+
+            var offsetX = forcedAnchorX !== undefined ? forcedAnchorX : 0;
+            drawable.anchorOffsetX = Math.floor(offsetX * this.zoomFactor);
+
+            var offsetY = forcesAnchorY !== undefined ? forcesAnchorY : 0;
+            drawable.anchorOffsetY = Math.floor(offsetY * this.zoomFactor);
         }
+
+        drawable.x = Math.floor((entity.x - left) * this.zoomFactor);
+        drawable.y = Math.floor((entity.y - top) * this.zoomFactor);
+        drawable.show = true;
     };
 
     /**
@@ -153,4 +191,4 @@ H5.Camera = (function () {
     };
 
     return Camera;
-})();
+})(H5.concatenateProperties, Math);

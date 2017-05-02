@@ -73,7 +73,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
 
         function updateCamera() {
             entities.forEach(function (entity) {
-                camera.calculatePosition(entity.entity, entity.drawable);
+                camera.updateBinding(entity.entity, entity.drawable);
             });
         }
 
@@ -86,7 +86,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
         function moveCursorTo(x, y) {
 
             // todo use camera to calc real position
-            // camera.calculatePosition()
+            // camera.updateBinding
 
             var coord = gridViewHelper.getCoordinates(x, y);
             cursorPosition.u = coord.u;
