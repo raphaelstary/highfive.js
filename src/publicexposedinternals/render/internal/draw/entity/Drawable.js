@@ -68,19 +68,19 @@ H5.Drawable = (function (Math, TextWrapper, SubImage, ImageWrapper, Circle, Draw
     };
 
     Drawable.prototype.getWidth = function () {
-        return Math.floor(this.__getWidth() * this.scale);
+        return Math.round(this.__getWidth() * this.scale);
     };
 
     Drawable.prototype.getWidthHalf = function () {
-        return Math.floor(this.__getWidth() / 2 * this.scale);
+        return Math.round(this.__getWidth() / 2 * this.scale);
     };
 
     Drawable.prototype.getHeightHalf = function () {
-        return Math.floor(this.__getHeight() / 2 * this.scale);
+        return Math.round(this.__getHeight() / 2 * this.scale);
     };
 
     Drawable.prototype.getHeight = function () {
-        return Math.floor(this.__getHeight() * this.scale);
+        return Math.round(this.__getHeight() * this.scale);
     };
 
     Drawable.prototype.__getHeight = function () {
