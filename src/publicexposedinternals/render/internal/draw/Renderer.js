@@ -7,7 +7,7 @@ H5.Renderer = (function (Object, Math, $) {
 
         this.screenWidth = screen.width;
         this.screenHeight = screen.height;
-        this.drawableDict = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+        this.drawableDict = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
     }
 
     Renderer.prototype.resize = function (event) {
