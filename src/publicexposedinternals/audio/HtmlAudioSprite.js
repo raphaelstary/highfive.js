@@ -242,6 +242,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             },
             volumeTo: function (value, duration, callback, that) {
                 if (currentSound.ended || !currentSound.started) {
+                    currentSound.volume = value;
                     return animationMock;
                 }
 
