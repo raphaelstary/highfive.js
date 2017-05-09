@@ -356,14 +356,14 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
         this.renderer.clear();
     };
 
-    Stage.prototype.update = function () {
-        // move stuff
+    Stage.prototype.updateMove = function () {
         this.timer.update();
         this.motions.update();
         this.spriteAnimations.update();
         this.animations.update();
+    };
 
-        // draw stuff
+    Stage.prototype.updateDraw = function () {
         this.renderer.draw();
     };
 

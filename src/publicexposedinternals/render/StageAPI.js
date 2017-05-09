@@ -302,9 +302,13 @@ H5.StageAPI = (function (Setter, iterateEntries, EntityServices) {
         this.stage.clear();
     };
 
-    StageAPI.prototype.update = function () {
+    StageAPI.prototype.updateMove = function () {
         this.timer.update();
-        this.stage.update();
+        this.stage.updateMove();
+    };
+
+    StageAPI.prototype.updateDraw = function () {
+        this.stage.updateDraw();
     };
 
     StageAPI.prototype.resize = function (event) {
