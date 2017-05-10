@@ -168,11 +168,21 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
 
         gamePad.basicRegister = gamePad.register;
         gamePad.basicCancel = gamePad.cancel;
+
+        var started;
+        var notCaptured;
+        gamePad.captureGesture = function () {
+            if (started) {
+                notCaptured = false;
+            }
+        };
+
         gamePad.register = function (events) {
             this.basicRegister(events);
 
             var neutral = true;
-            var started = false;
+            notCaptured = true;
+            started = false;
             var start = {
                 x: 0,
                 y: 0
@@ -203,26 +213,31 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
                 } else if (neutral && started) {
                     // end gesture
 
-                    var swipe = interpretSwipe(start, end);
-                    if (swipe == Direction.DOWN) {
-                        if (gestures.down) {
-                            gestures.down();
+                    if (notCaptured) {
+
+                        var swipe = interpretSwipe(start, end);
+                        if (swipe == Direction.DOWN) {
+                            if (gestures.down) {
+                                gestures.down();
+                            }
+                        } else if (swipe == Direction.LEFT) {
+                            if (gestures.left) {
+                                gestures.left();
+                            }
+                        } else if (swipe == Direction.UP) {
+                            if (gestures.up) {
+                                gestures.up();
+                            }
+                        } else if (swipe == Direction.RIGHT) {
+                            if (gestures.right) {
+                                gestures.right();
+                            }
                         }
-                    } else if (swipe == Direction.LEFT) {
-                        if (gestures.left) {
-                            gestures.left();
-                        }
-                    } else if (swipe == Direction.UP) {
-                        if (gestures.up) {
-                            gestures.up();
-                        }
-                    } else if (swipe == Direction.RIGHT) {
-                        if (gestures.right) {
-                            gestures.right();
-                        }
+
                     }
 
                     // clean up
+                    notCaptured = true;
                     started = false;
                     start.x = 0;
                     start.y = 0;
