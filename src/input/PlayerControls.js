@@ -412,6 +412,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
             cancel: function () {
                 if (unsubscribe) {
                     unsubscribe();
+                    commands.forEach(function (command) {
+                        command.isPressed = false;
+                    });
                 }
 
                 return this;
