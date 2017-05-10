@@ -99,10 +99,6 @@ H5.WebAudioSprite = (function (iterateEntries) {
                 return this;
             },
             stop: function () {
-                if (currentAudio.ended || !currentAudio.started) {
-                    return this;
-                }
-
                 self.__stop(track);
                 return this;
             },
@@ -145,6 +141,13 @@ H5.WebAudioSprite = (function (iterateEntries) {
     };
 
     WebAudioSprite.prototype.__stop = function (track) {
+        if (track.node.ended) {
+            return;
+        }
+        if (!track.node.started) {
+            this.__ended(track);
+            return;
+        }
         track.source.stop();
     };
 
