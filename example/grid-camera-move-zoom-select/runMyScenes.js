@@ -43,12 +43,12 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
         var gridViewHelper = new GridViewHelper(services.stage, services.device, 16, 9);
 
         function maxX() {
-            var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 9, grid.yTiles - 5);
+            var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 0.5, grid.yTiles - 0.5);
             return maxCameraPosition.x;
         }
 
         function maxY() {
-            var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 9, grid.yTiles - 5);
+            var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 0.5, grid.yTiles - 0.5);
             return maxCameraPosition.y;
         }
         var viewPort = services.stage.createRectangle(false)
