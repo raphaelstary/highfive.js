@@ -163,23 +163,25 @@ H5.Camera = (function (Math) {
         this.__viewPort.x = anchor.x;
         this.__viewPort.y = anchor.y;
 
-        var minX = this.__viewPort.getWidthHalf() / this.zoomFactor;
-        var minY = this.__viewPort.getHeightHalf() / this.zoomFactor;
-        var maxX = this.zoomFactor !== 1 ? this.__maxXFn(this.__device.width, this.__device.height) + minX :
-            this.__maxXFn(this.__device.width, this.__device.height);
-        var maxY = this.zoomFactor !== 1 ? this.__maxYFn(this.__device.height, this.__device.width) + minY :
-            this.__maxYFn(this.__device.height, this.__device.width);
-        if (this.__viewPort.x < minX) {
-            this.__viewPort.x = minX;
+        var widthHalf = this.__viewPort.getWidthHalf() / this.zoomFactor;
+        var heightHalf = this.__viewPort.getHeightHalf() / this.zoomFactor;
+
+        var left = widthHalf;
+        var right = this.__maxXFn(this.__device.width, this.__device.height) - widthHalf;
+        var top = heightHalf;
+        var bottom = this.__maxYFn(this.__device.height, this.__device.width) - heightHalf;
+
+        if (this.__viewPort.x < left) {
+            this.__viewPort.x = left;
         }
-        if (this.__viewPort.x > maxX) {
-            this.__viewPort.x = maxX;
+        if (this.__viewPort.x > right) {
+            this.__viewPort.x = right;
         }
-        if (this.__viewPort.y < minY) {
-            this.__viewPort.y = minY;
+        if (this.__viewPort.y < top) {
+            this.__viewPort.y = top;
         }
-        if (this.__viewPort.y > maxY) {
-            this.__viewPort.y = maxY;
+        if (this.__viewPort.y > bottom) {
+            this.__viewPort.y = bottom;
         }
     };
 
