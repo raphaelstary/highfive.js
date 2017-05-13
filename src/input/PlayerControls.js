@@ -1,4 +1,4 @@
-H5.PlayerControls = (function (Event, Array, Math, Vectors) {
+H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
     'use strict';
 
     var Action = {
@@ -422,13 +422,6 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         };
     }
 
-    var Direction = {
-        LEFT: 'left',
-        RIGHT: 'right',
-        UP: 'up',
-        DOWN: 'down'
-    };
-
     function interpretSwipe(start, end) {
         var vector = Vectors.get(start.x, start.y, end.x, end.y);
         if (Vectors.squaredMagnitude(vector.x, vector.y) < 0.25 * 0.25) {
@@ -459,6 +452,23 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
         return Direction.RIGHT;
     }
 
+    var MAGIC_NR = 25;
+
+    /**
+     * check a gesture if it's a swipe or a tap, and if it's a swipe get its direction
+     *
+     * @param start {pointer}
+     * @param end {pointer}
+     * @returns {Direction|boolean} swipe direction or false if it's no swipe and more like a tap
+     */
+    function interpretSwipeDirection(start, end) {
+        var vector = Vectors.get(start.x, start.y, end.x, end.y);
+        if (Vectors.squaredMagnitude(vector.x, vector.y) > MAGIC_NR * MAGIC_NR) {
+            return getDirection(vector);
+        }
+        return false;
+    }
+
     function shouldIgnore(conditions, negativeConditions, inputType) {
         var isNotMet = conditions.some(function (keyValuePair) {
             return inputType[keyValuePair.key] != keyValuePair.value;
@@ -475,6 +485,7 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors) {
     return {
         getGamePad: createGamePadControls,
         getTvOSRemote: createTvOSRemoteControls,
-        getKeyBoard: createKeyBoardControls
+        getKeyBoard: createKeyBoardControls,
+        getSwipeDirection: interpretSwipeDirection
     };
-})(H5.Event, Array, Math, H5.Vectors);
+})(H5.Event, Array, Math, H5.Vectors, H5.Direction);
