@@ -1,9 +1,23 @@
 H5.installResize = (function (window, ResizeHandler, Event) {
     'use strict';
 
-    function installResize(events, device) {
+    /**
+     *
+     * @param {EventBus} events
+     * @param {Device} device
+     * @param {mapResize} [mapDimensions]
+     */
+    function installResize(events, device, mapDimensions) {
         var resizeHandler = new ResizeHandler(events, device);
-        window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
+
+        if (mapDimensions) {
+            window.addEventListener('resize', function (event) {
+                mapDimensions(event).then(resizeHandler.handleResize.bind(resizeHandler));
+            });
+        } else {
+            window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));
+        }
+
         events.subscribe(Event.RESIZE, function (event) {
             if (!device.isLowRez) {
                 device.width = event.width;
@@ -22,6 +36,16 @@ H5.installResize = (function (window, ResizeHandler, Event) {
                 devicePixelRatio: this.devicePixelRatio
             });
         };
+
+        if (mapDimensions) {
+            mapDimensions({
+                target: {
+                    innerWidth: device.cssWidth,
+                    innerHeight: device.cssHeight
+                }
+            })
+                .then(resizeHandler.handleResize.bind(resizeHandler));
+        }
     }
 
     return installResize;

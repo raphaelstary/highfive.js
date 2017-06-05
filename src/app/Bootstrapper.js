@@ -149,12 +149,23 @@ H5.Bootstrapper = (function ($) {
         return Bootstrapper;
     }
 
-    function addResize() {
+    /**
+     * @callback mapResize
+     * @param {Event} event
+     * @returns {Promise} has to be called with adapted data
+     */
+
+    /**
+     *
+     * @param {mapResize} [mapCanvasDimensions]
+     * @return {Bootstrapper}
+     */
+    function addResize(mapCanvasDimensions) {
         if (noOneDidAnInit) {
             initBootstrap();
         }
 
-        $.installResize(events, device);
+        $.installResize(events, device, mapCanvasDimensions);
         return Bootstrapper;
     }
 
