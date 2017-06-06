@@ -19,8 +19,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         event.preventDefault();
         this.activePointers[event.pointerId] = {
             id: event.pointerId,
-            x: event.clientX,
-            y: event.clientY,
+            x: event.clientX - event.target.offsetLeft,
+            y: event.clientY - event.target.offsetTop,
             changed: true,
             type: Pointer.DOWN
         };
@@ -33,8 +33,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         if (current) {
             var downButNotSameTick = current.type == Pointer.DOWN && !current.changed;
             if (downButNotSameTick || current.type == Pointer.MOVE) {
-                current.x = event.clientX;
-                current.y = event.clientY;
+                current.x = event.clientX - event.target.offsetLeft;
+                current.y = event.clientY - event.target.offsetTop;
                 current.changed = true;
                 current.type = Pointer.MOVE;
                 this.changed = true;
@@ -46,8 +46,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         event.preventDefault();
         var current = this.activePointers[event.pointerId];
         if (current) {
-            current.x = event.clientX;
-            current.y = event.clientY;
+            current.x = event.clientX - event.target.offsetLeft;
+            current.y = event.clientY - event.target.offsetTop;
             current.changed = true;
             current.type = Pointer.UP;
             this.changed = true;
@@ -63,8 +63,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         event.preventDefault();
         this.activePointers['mouse'] = {
             id: 'mouse',
-            x: event.clientX,
-            y: event.clientY,
+            x: event.clientX - event.target.offsetLeft,
+            y: event.clientY - event.target.offsetTop,
             changed: true,
             type: Pointer.DOWN
         };
@@ -77,8 +77,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         if (current) {
             var downButNotSameTick = current.type == Pointer.DOWN && !current.changed;
             if (downButNotSameTick || current.type == Pointer.MOVE) {
-                current.x = event.clientX;
-                current.y = event.clientY;
+                current.x = event.clientX - event.target.offsetLeft;
+                current.y = event.clientY - event.target.offsetTop;
                 current.changed = true;
                 current.type = Pointer.MOVE;
                 this.changed = true;
@@ -90,8 +90,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         event.preventDefault();
         var current = this.activePointers['mouse'];
         if (current) {
-            current.x = event.clientX;
-            current.y = event.clientY;
+            current.x = event.clientX - event.target.offsetLeft;
+            current.y = event.clientY - event.target.offsetTop;
             current.changed = true;
             current.type = Pointer.UP;
             this.changed = true;
@@ -110,8 +110,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         for (var i = 0; i < touches.length; i++) {
             this.activePointers[touches[i].identifier] = {
                 id: touches[i].identifier,
-                x: touches[i].clientX,
-                y: touches[i].clientY,
+                x: touches[i].clientX - event.target.offsetLeft,
+                y: touches[i].clientY - event.target.offsetTop,
                 changed: true,
                 type: Pointer.DOWN
             };
@@ -125,8 +125,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         for (var i = 0; i < touches.length; i++) {
             var ref = touches[i];
             var current = this.activePointers[ref.identifier];
-            current.x = ref.clientX;
-            current.y = ref.clientY;
+            current.x = ref.clientX - event.target.offsetLeft;
+            current.y = ref.clientY - event.target.offsetTop;
             current.changed = true;
             current.type = Pointer.MOVE;
             this.changed = true;
@@ -139,8 +139,8 @@ H5.PointerHandler = (function (Event, Object, Math) {
         for (var i = 0; i < touches.length; i++) {
             var ref = touches[i];
             var current = this.activePointers[ref.identifier];
-            current.x = ref.clientX;
-            current.y = ref.clientY;
+            current.x = ref.clientX - event.target.offsetLeft;
+            current.y = ref.clientY - event.target.offsetTop;
             current.changed = true;
             current.type = Pointer.UP;
             this.changed = true;
