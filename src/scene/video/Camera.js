@@ -167,20 +167,26 @@ H5.Camera = (function (Math) {
         var heightHalf = this.__viewPort.getHeightHalf() / this.zoomFactor;
 
         var left = widthHalf;
-        var right = this.__maxXFn(this.__device.width, this.__device.height) - widthHalf;
+        var maxX = this.__maxXFn(this.__device.width, this.__device.height, this.zoomFactor);
+        if (maxX < widthHalf * 2) {
+            maxX = Math.floor(widthHalf * 2);
+        }
+        var right = maxX - widthHalf;
         var top = heightHalf;
-        var bottom = this.__maxYFn(this.__device.height, this.__device.width) - heightHalf;
+        var maxY = this.__maxYFn(this.__device.height, this.__device.width, this.zoomFactor);
+        if (maxY < heightHalf * 2) {
+            maxY = Math.floor(heightHalf * 2);
+        }
+        var bottom = maxY - heightHalf;
 
         if (this.__viewPort.x < left) {
             this.__viewPort.x = left;
-        }
-        if (this.__viewPort.x > right) {
+        } else if (this.__viewPort.x > right) {
             this.__viewPort.x = right;
         }
         if (this.__viewPort.y < top) {
             this.__viewPort.y = top;
-        }
-        if (this.__viewPort.y > bottom) {
+        } else if (this.__viewPort.y > bottom) {
             this.__viewPort.y = bottom;
         }
     };
