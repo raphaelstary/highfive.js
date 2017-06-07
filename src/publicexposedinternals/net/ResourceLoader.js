@@ -147,6 +147,8 @@ H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
                     elem.ctx.decodeAudioData(audioData, function (buffer) {
                         elem.file.buffer = buffer;
                         self.onResourceLoad();
+                    }, function (exception) {
+                        console.log('error with decoding audio data: ' + exception.err);
                     });
                 };
                 xhrAudio.send();

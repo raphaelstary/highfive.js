@@ -35,4 +35,4 @@ H5.WebAudioSpriteLoader = (function (AudioContext, WebAudioSprite, installWebAud
             installWebAudioSprite(services.events, services.music);
         }
     };
-})(window.AudioContext, H5.WebAudioSprite, H5.installWebAudioSprite);
+})(window.AudioContext || window.webkitAudioContext, H5.WebAudioSprite, H5.installWebAudioSprite);
