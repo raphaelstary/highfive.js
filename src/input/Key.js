@@ -5,6 +5,7 @@ H5.Key = {
     RIGHT: 39,
     ENTER: 13,
     SPACE: 32,
+    SHIFT: 16,
     CTRL: 17,
     ALT: 18,
     ESC: 27,
