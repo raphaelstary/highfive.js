@@ -28,7 +28,8 @@
   },
   "homepage": "https://github.com/raphaelstary/highfive.js",
   "devDependencies": {
-    "uglify-js": "^2.8.17"
+    "uglify-js": "^2.8.17",
+    "http-server": "^0.10.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -40,6 +41,7 @@
     "build": "npm run clean && npm run init && npm run gen:html && npm run concat && npm run minify",
     "prepublish": "npm run build",
     "postpublish": "npm run clean",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "start": "http-server -o example/helloworld/index.html"
   }
 }
