@@ -1,11 +1,12 @@
-G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition, range, GridViewHelper) {
+G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition, range, GridViewHelper, location) {
     'use strict';
 
-    var WIDTH_TILES = 16 * 3;
-    var HEIGHT_TILES = 9 * 3;
     var MonkeyFaceImages = [
         'monkey-1-face', 'monkey-2-face', 'monkey-3-face', 'monkey-4-face'
     ];
+    var params = getUrlParams(location.search);
+    var WIDTH_TILES = params.width ? parseInt(params.width) : 16 * 3;
+    var HEIGHT_TILES = params.height ? parseInt(params.height) : 9 * 3;
 
     function runMonkeyTest(services) {
         var stage = services.stage;
@@ -72,5 +73,13 @@ G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition
         }
     }
 
+    function getUrlParams(url) {
+        var urlParams = {};
+        url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (str, key, value) {
+            urlParams[key] = value;
+        });
+        return urlParams;
+    }
+
     return runMonkeyTest;
-})(H5.Width, H5.Height, H5.Event, H5.Stats, H5.Font, Math, H5.Transition, H5.range, H5.GridViewHelper);
+})(H5.Width, H5.Height, H5.Event, H5.Stats, H5.Font, Math, H5.Transition, H5.range, H5.GridViewHelper, window.location);
