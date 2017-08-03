@@ -2,136 +2,159 @@ H5.Renderer = (function (Object, Math, $) {
     'use strict';
 
     function Renderer(screen) {
-        this.screen = screen;
-        this.ctx = screen.getContext('2d');
+        this.__screen = screen;
+        this.__ctx = screen.getContext('2d');
 
-        this.screenWidth = screen.width;
-        this.screenHeight = screen.height;
-        this.drawableDict = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+        this.__screenWidth = screen.width;
+        this.__screenHeight = screen.height;
+
+        this.__drawables = [];
     }
 
     Renderer.prototype.resize = function (event) {
         if (event.devicePixelRatio > 1) {
-            this.screen.style.width = event.cssWidth + 'px';
-            this.screen.style.height = event.cssHeight + 'px';
-            this.screen.width = this.screenWidth = event.width;
-            this.screen.height = this.screenHeight = event.height;
+            this.__screen.style.width = event.cssWidth + 'px';
+            this.__screen.style.height = event.cssHeight + 'px';
+            this.__screen.width = this.__screenWidth = event.width;
+            this.__screen.height = this.__screenHeight = event.height;
         } else {
-            this.screen.width = this.screenWidth = event.width;
-            this.screen.height = this.screenHeight = event.height;
+            this.__screen.width = this.__screenWidth = event.width;
+            this.__screen.height = this.__screenHeight = event.height;
         }
     };
 
     Renderer.prototype.add = function (drawable) {
-        this.drawableDict[drawable.zIndex][drawable.id] = drawable;
+        for (var i = 0; i < this.__drawables.length; i++) {
+            if (drawable.zIndex < this.__drawables[i].zIndex) {
+                this.__drawables.splice(i, 0, drawable);
+                return;
+            }
+        }
+        this.__drawables.push(drawable);
     };
 
     Renderer.prototype.remove = function (drawable) {
-        delete this.drawableDict[drawable.zIndex][drawable.id];
+        for (var i = 0; i < this.__drawables.length; i++) {
+            if (this.__drawables[i].id == drawable.id) {
+                this.__drawables.splice(i, 1);
+                return;
+            }
+        }
     };
 
     Renderer.prototype.has = function (drawable) {
-        return this.drawableDict[drawable.zIndex][drawable.id] !== undefined;
+        for (var i = 0; i < this.__drawables.length; i++) {
+            if (this.__drawables[i].id == drawable.id) {
+                return true;
+            }
+        }
+        return false;
     };
 
     Renderer.prototype.changeZIndex = function (drawable, newZIndex) {
-        this.drawableDict[newZIndex][drawable.id] = this.drawableDict[drawable.zIndex][drawable.id];
-        delete this.drawableDict[drawable.zIndex][drawable.id];
+        for (var i = 0; i < this.__drawables.length; i++) {
+            if (this.__drawables[i].id == drawable.id) {
+                this.__drawables.splice(i, 1);
+                break;
+            }
+        }
+
         drawable.zIndex = newZIndex;
+
+        for (var j = 0; j < this.__drawables.length; j++) {
+            if (drawable.zIndex < this.__drawables[j].zIndex) {
+                this.__drawables.splice(j, 0, drawable);
+                return;
+            }
+        }
+        this.__drawables.push(drawable);
     };
 
     Renderer.prototype.clear = function () {
-        this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
+        this.__ctx.clearRect(0, 0, this.__screenWidth, this.__screenHeight);
     };
 
     Renderer.prototype.draw = function () {
-        var self = this;
-        Object.keys(self.drawableDict).forEach(function (key) {
-            iterate(self.drawableDict[key]);
-        });
+        for (var i = 0; i < this.__drawables.length; i++) {
+            var drawable = this.__drawables[i];
+            if (!drawable.show) {
+                return;
+            }
 
-        function iterate(layer) {
-            Object.keys(layer).forEach(function (key) {
-                var drawable = layer[key];
-                if (!drawable.show) {
-                    return;
+            this.__ctx.save();
+
+            if (drawable.mask) {
+                if (drawable.mask.rotation) {
+                    this.__ctx.translate(drawable.mask.getRotationAnchorX(), drawable.mask.getRotationAnchorY());
+                    this.__ctx.rotate(drawable.mask.rotation);
+                    this.__ctx.translate(-drawable.mask.getRotationAnchorX(), -drawable.mask.getRotationAnchorY());
                 }
 
-                self.ctx.save();
+                this.__ctx.beginPath();
+                if (drawable.mask.data instanceof $.Rectangle) {
+                    this.__ctx.rect(drawable.mask.getCornerX() - 0.5, drawable.mask.getCornerY() - 0.5,
+                        drawable.mask.getWidth(), drawable.mask.getHeight());
 
-                if (drawable.mask) {
-                    if (drawable.mask.rotation) {
-                        self.ctx.translate(drawable.mask.getRotationAnchorX(), drawable.mask.getRotationAnchorY());
-                        self.ctx.rotate(drawable.mask.rotation);
-                        self.ctx.translate(-drawable.mask.getRotationAnchorX(), -drawable.mask.getRotationAnchorY());
-                    }
+                } else if (drawable.mask.data instanceof $.Circle) {
+                    this.__ctx.arc(drawable.mask.x, drawable.mask.y, drawable.mask.getWidthHalf(), 0, 2 * Math.PI);
 
-                    self.ctx.beginPath();
-                    if (drawable.mask.data instanceof $.Rectangle) {
-                        self.ctx.rect(drawable.mask.getCornerX() - 0.5, drawable.mask.getCornerY() - 0.5,
-                            drawable.mask.getWidth(), drawable.mask.getHeight());
-
-                    } else if (drawable.mask.data instanceof $.Circle) {
-                        self.ctx.arc(drawable.mask.x, drawable.mask.y, drawable.mask.getWidthHalf(), 0, 2 * Math.PI);
-
-                    }
-
-                    self.ctx.closePath();
-                    self.ctx.clip();
-
-                    if (drawable.mask.rotation) {
-                        self.ctx.translate(drawable.mask.getRotationAnchorX(), drawable.mask.getRotationAnchorY());
-                        self.ctx.rotate(-drawable.mask.rotation);
-                        self.ctx.translate(-drawable.mask.getRotationAnchorX(), -drawable.mask.getRotationAnchorY());
-                    }
                 }
 
-                if (drawable.alpha || drawable.alpha === 0) {
-                    self.ctx.globalAlpha = drawable.alpha;
+                this.__ctx.closePath();
+                this.__ctx.clip();
+
+                if (drawable.mask.rotation) {
+                    this.__ctx.translate(drawable.mask.getRotationAnchorX(), drawable.mask.getRotationAnchorY());
+                    this.__ctx.rotate(-drawable.mask.rotation);
+                    this.__ctx.translate(-drawable.mask.getRotationAnchorX(), -drawable.mask.getRotationAnchorY());
                 }
+            }
 
-                if (drawable.flipHorizontally) {
-                    self.ctx.translate(drawable.getWidth(), 0);
-                    self.ctx.scale(-1, 1);
-                    if (drawable.rotation) {
-                        self.ctx.translate(-drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
-                        self.ctx.rotate(drawable.rotation);
-                        self.ctx.translate(drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
-                    }
-                } else {
-                    if (drawable.rotation) {
-                        self.ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
-                        self.ctx.rotate(drawable.rotation);
-                        self.ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
-                    }
+            if (drawable.alpha || drawable.alpha === 0) {
+                this.__ctx.globalAlpha = drawable.alpha;
+            }
+
+            if (drawable.flipHorizontally) {
+                this.__ctx.translate(drawable.getWidth(), 0);
+                this.__ctx.scale(-1, 1);
+                if (drawable.rotation) {
+                    this.__ctx.translate(-drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
+                    this.__ctx.rotate(drawable.rotation);
+                    this.__ctx.translate(drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
                 }
-
-                self.ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);
-
-                if (drawable.data instanceof $.EquilateralTriangle) {
-                    $.renderEqTriangle(self.ctx, drawable);
-                } else if (drawable.data instanceof $.SubImage) {
-                    $.renderAtlas(self.ctx, drawable);
-                } else if (drawable.data instanceof $.TextWrapper) {
-                    $.renderText(self.ctx, drawable);
-                } else if (drawable.data instanceof $.Rectangle) {
-                    $.renderRectangle(self.ctx, drawable);
-                } else if (drawable.data instanceof $.DrawableLine) {
-                    $.renderLine(self.ctx, drawable);
-                } else if (drawable.data instanceof $.Circle) {
-                    $.renderCircle(self.ctx, drawable);
-                } else if (drawable.data instanceof $.ImageWrapper) {
-                    $.renderImage(self.ctx, drawable);
-                } else if (drawable.data instanceof $.Quadrilateral) {
-                    $.renderQuadrilateral(self.ctx, drawable);
-                } else if (drawable.data instanceof $.ABLine) {
-                    $.renderABLine(self.ctx, drawable);
-                } else if (drawable.data instanceof $.Hexagon) {
-                    $.renderHexagon(self.ctx, drawable);
+            } else {
+                if (drawable.rotation) {
+                    this.__ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
+                    this.__ctx.rotate(drawable.rotation);
+                    this.__ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
                 }
+            }
 
-                self.ctx.restore();
-            });
+            this.__ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);
+
+            if (drawable.data instanceof $.EquilateralTriangle) {
+                $.renderEqTriangle(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.SubImage) {
+                $.renderAtlas(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.TextWrapper) {
+                $.renderText(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.Rectangle) {
+                $.renderRectangle(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.DrawableLine) {
+                $.renderLine(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.Circle) {
+                $.renderCircle(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.ImageWrapper) {
+                $.renderImage(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.Quadrilateral) {
+                $.renderQuadrilateral(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.ABLine) {
+                $.renderABLine(this.__ctx, drawable);
+            } else if (drawable.data instanceof $.Hexagon) {
+                $.renderHexagon(this.__ctx, drawable);
+            }
+
+            this.__ctx.restore();
         }
     };
 
