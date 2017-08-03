@@ -9,23 +9,23 @@ G.runMyScenes = (function (Scenes, Width, Height) {
         scenes.put('my-scene', function (next) {
             var hello = services.stage.createText('Hello World :)').setPosition(Width.HALF, Height.HALF);
 
-            services.timer.doLater(function () {
+            services.timer.in(30, function () {
                 hello.remove();
 
                 next('my-other-scene');
 
-            }, 30);
+            });
         });
 
         scenes.put('my-other-scene', function (next) {
             var hallo = services.stage.createText('Hallo Welt (:').setPosition(Width.HALF, Height.HALF);
 
-            services.timer.doLater(function () {
+            services.timer.in(30, function () {
                 hallo.remove();
 
                 next('my-scene');
 
-            }, 30);
+            });
         });
 
         scenes.next('my-scene');
