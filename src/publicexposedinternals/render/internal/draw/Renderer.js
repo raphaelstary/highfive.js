@@ -78,7 +78,7 @@ H5.Renderer = (function (Object, Math, $) {
         for (var i = 0; i < this.__drawables.length; i++) {
             var drawable = this.__drawables[i];
             if (!drawable.show) {
-                return;
+                continue;
             }
 
             this.__ctx.save();
