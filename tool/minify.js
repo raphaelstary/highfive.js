@@ -1,6 +1,7 @@
 'use strict';
 
 let fs = require('fs');
+let UglifyJS = require('uglify-js');
 
 let concatenated = fs.readFileSync('dist/index.html', 'utf8')
     .split('\n')
@@ -10,3 +11,6 @@ let concatenated = fs.readFileSync('dist/index.html', 'utf8')
     .join('\n');
 
 fs.writeFileSync('dist/highfive.js', concatenated, 'utf8');
+
+let minified = UglifyJS.minify(concatenated, {fromString: true}).code;
+fs.writeFileSync('dist/h5-min.js', minified, 'utf8');
