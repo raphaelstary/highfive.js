@@ -1,9 +1,9 @@
 'use strict';
 
-let fs = require('fs');
-let UglifyJS = require('uglify-js');
+const fs = require('fs');
+const UglifyJS = require('uglify-js');
 
-let concatenated = fs.readFileSync('dist/index.html', 'utf8')
+const concatenated = fs.readFileSync('dist/index.html', 'utf8')
     .split('\n')
     .filter(line => line.trim().startsWith('<script'))
     .map(tag => tag.match(/src="(.+?)"/)[1])
@@ -12,5 +12,5 @@ let concatenated = fs.readFileSync('dist/index.html', 'utf8')
 
 fs.writeFileSync('dist/highfive.js', concatenated, 'utf8');
 
-let minified = UglifyJS.minify(concatenated, {fromString: true}).code;
+const minified = UglifyJS.minify(concatenated, {fromString: true}).code;
 fs.writeFileSync('dist/h5-min.js', minified, 'utf8');

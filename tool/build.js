@@ -1,6 +1,6 @@
 'use strict';
 
-let fs = require('fs');
+const fs = require('fs');
 fs.mkdirSync('dist');
 
 require('./generateHtml');
