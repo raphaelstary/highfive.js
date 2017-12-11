@@ -3,7 +3,6 @@ highfive.js
 
 html5/js game engine
 
-*Tip: need help with structuring your highfive.js app? - check out the [highfive.js-app-template](https://github.com/raphaelstary/highfive.js-app-template)*
 
 Install with [npm](https://www.npmjs.com)
 -----------
