@@ -35,4 +35,3 @@ Alternatives
 -------------------------
 - Download releases from https://github.com/raphaelstary/highfive.js/releases
 - Clone the repo: `git clone https://github.com/raphaelstary/highfive.js.git` and start with `example/helloworld/`
-- Use the ***highfive.js app template*** https://github.com/raphaelstary/highfive.js-app-template
