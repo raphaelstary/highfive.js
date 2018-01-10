@@ -33,10 +33,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "node tool/clean.js",
-    "build": "node tool/clean.js && node tool/build.js",
-    "prepublishOnly": "npm run build",
-    "postpublish": "node tool/clean.js",
+    "clean": "rm -rf dist/",
+    "build": "rm -rf dist/ && mkdir dist/ && node tool/build.js",
+    "prepublishOnly": "rm -rf dist/ && mkdir dist/ && node tool/build.js",
+    "postpublish": "rm -rf dist/",
     "postversion": "git push && git push --tags",
     "start": "http-server -o example/helloworld/index.html"
   }
