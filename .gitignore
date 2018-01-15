@@ -45,3 +45,4 @@ build/config/buildinfo.properties
 */lib
 node_modules
 dist
+package-lock.json
