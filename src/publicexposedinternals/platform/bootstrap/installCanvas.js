@@ -39,6 +39,10 @@ H5.installCanvas = (function (document, Event, Math) {
                 scaledHeight = pixelHeight * scale;
                 scaledCanvas.width = scaledWidth;
                 scaledCanvas.height = scaledHeight;
+                if (event.devicePixelRatio > 1) {
+                    scaledCanvas.style.width = Math.floor(scaledWidth / event.devicePixelRatio) + 'px';
+                    scaledCanvas.style.height = Math.floor(scaledHeight / event.devicePixelRatio) + 'px';
+                }
                 device.screenScale = scale;
 
                 var context = scaledCanvas.getContext('2d');
