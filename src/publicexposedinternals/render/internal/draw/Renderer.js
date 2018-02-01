@@ -114,6 +114,10 @@ H5.Renderer = (function (Object, Math, $) {
                 this.__ctx.globalAlpha = drawable.alpha;
             }
 
+            if (drawable.compositeOperation) {
+                this.__ctx.globalCompositeOperation = drawable.compositeOperation;
+            }
+
             if (drawable.flipHorizontally) {
                 this.__ctx.translate(drawable.getWidth(), 0);
                 this.__ctx.scale(-1, 1);
