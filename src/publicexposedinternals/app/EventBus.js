@@ -9,14 +9,16 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
     }
 
     EventBus.prototype.update = function () {
-        Object.keys(this.pending).forEach(function (key) {
-            var payload = this.pending[key];
-            var subscribers = this.dict[key];
-            Object.keys(subscribers).forEach(function (subscriberKey) {
-                subscribers[subscriberKey](payload);
-            });
-            delete this.pending[key];
-        }, this);
+        Object.keys(this.pending)
+            .forEach(function (key) {
+                var payload = this.pending[key];
+                var subscribers = this.dict[key];
+                Object.keys(subscribers)
+                    .forEach(function (subscriberKey) {
+                        subscribers[subscriberKey](payload);
+                    });
+                delete this.pending[key];
+            }, this);
     };
 
     EventBus.prototype.fire = function (eventName, payload) {
@@ -33,9 +35,10 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
     EventBus.prototype.fireSync = function (eventName, payload) {
         var dict = this.dict[eventName];
         if (dict) {
-            Object.keys(dict).forEach(function (key) {
-                dict[key](payload);
-            });
+            Object.keys(dict)
+                .forEach(function (key) {
+                    dict[key](payload);
+                });
         }
     };
 

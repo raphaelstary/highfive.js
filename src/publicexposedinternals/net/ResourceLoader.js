@@ -110,9 +110,10 @@ H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
 
                 xhr.onload = function () {
                     var json = JSON.parse(this.responseText);
-                    Object.keys(json).forEach(function (key) {
-                        elem.file[key] = json[key];
-                    });
+                    Object.keys(json)
+                        .forEach(function (key) {
+                            elem.file[key] = json[key];
+                        });
 
                     self.onResourceLoad();
                 };

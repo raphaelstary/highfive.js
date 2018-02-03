@@ -36,10 +36,11 @@ H5.KeyRepository = (function (Object) {
         var self = this;
         var alreadyCalledMap = {};
 
-        Object.keys(this.dict).forEach(function (idKey) {
-            var wrapper = this.dict[idKey];
-            callWrapper(idKey, wrapper);
-        }, this);
+        Object.keys(this.dict)
+            .forEach(function (idKey) {
+                var wrapper = this.dict[idKey];
+                callWrapper(idKey, wrapper);
+            }, this);
 
         function callWrapper(id, keyWrapper) {
             alreadyCalledMap[id] = true;

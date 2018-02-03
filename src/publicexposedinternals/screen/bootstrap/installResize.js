@@ -12,7 +12,8 @@ H5.installResize = (function (window, ResizeHandler, Event) {
 
         if (mapDimensions) {
             window.addEventListener('resize', function (event) {
-                mapDimensions(event).then(resizeHandler.handleResize.bind(resizeHandler));
+                mapDimensions(event)
+                    .then(resizeHandler.handleResize.bind(resizeHandler));
             });
         } else {
             window.addEventListener('resize', resizeHandler.handleResize.bind(resizeHandler));

@@ -19,10 +19,11 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
     }
 
     function generateHash(s) {
-        return s.split('').reduce(function (a, b) {
-            a = ((a << 5) - a) + b.charCodeAt(0);
-            return a & a;
-        }, 0);
+        return s.split('')
+            .reduce(function (a, b) {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0);
     }
 
     function createRectangle(seed, x, y, width, height, color, filled, lineWidth, zIndex, alpha, rotation, scale) {

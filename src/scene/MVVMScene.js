@@ -29,8 +29,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         var taps = [];
 
         function isHit(pointer, drawable) {
-            return pointer.x > drawable.getCornerX() && pointer.x < drawable.getEndX() &&
-                pointer.y > drawable.getCornerY() && pointer.y < drawable.getEndY();
+            return pointer.x > drawable.getCornerX() && pointer.x < drawable.getEndX() && pointer.y >
+                drawable.getCornerY() && pointer.y < drawable.getEndY();
         }
 
         //var currentFrameNumber = 0;
@@ -161,8 +161,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
             }
 
             return function (width, height) {
-                return Math.floor(width / 2 +
-                    ((x - sceneRect.width / 2) / relativeToSize_elemHeight) * yFn(relativeToSize_elemHeight)(height));
+                return Math.floor(width / 2 + ((x - sceneRect.width / 2) / relativeToSize_elemHeight) *
+                    yFn(relativeToSize_elemHeight)(height));
             };
         }
 
@@ -193,8 +193,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                 if (elem.type == 'image') {
                     var imgName = elem.filename.substring(0, elem.filename.lastIndexOf('.'));
 
-                    drawable = this.stage.createImage(imgName).setPosition(x, y).setAlpha(elem.alpha)
-                        .setRotation(elem.rotation).setScale(elem.scale);
+                    drawable = this.stage.createImage(imgName)
+                        .setPosition(x, y)
+                        .setAlpha(elem.alpha)
+                        .setRotation(elem.rotation)
+                        .setScale(elem.scale);
                     if (elem.zIndex != undefined && elem.zIndex != 3) {
                         drawable.setZIndex(elem.zIndex);
                     }
@@ -209,12 +212,19 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     var txtKey = elem.tags ? getTagValue('txt')(elem.tags) : undefined;
                     var msg = txtKey ? self.messages.get(self.viewName, txtKey) : elem.msg;
 
-                    drawable = this.stage.createText(msg).setPosition(x, y).setSize(txtSize(elem.size))
-                        .setFont(elem.font).setColor(elem.color).setRotation(elem.rotation).setAlpha(elem.alpha)
+                    drawable = this.stage.createText(msg)
+                        .setPosition(x, y)
+                        .setSize(txtSize(elem.size))
+                        .setFont(elem.font)
+                        .setColor(elem.color)
+                        .setRotation(elem.rotation)
+                        .setAlpha(elem.alpha)
                         .setScale(elem.scale);
-                    if (elem.fontStyle && elem.fontStyle.trim().toLowerCase() != 'regular' &&
-                        elem.fontStyle.trim().toLowerCase() != 'normal') {
-                        var style = elem.fontStyle.trim().toLowerCase();
+                    if (elem.fontStyle && elem.fontStyle.trim()
+                            .toLowerCase() != 'regular' && elem.fontStyle.trim()
+                            .toLowerCase() != 'normal') {
+                        var style = elem.fontStyle.trim()
+                            .toLowerCase();
                         drawable.setStyle(style == 'light' ? 'lighter' : style);
                     }
 
@@ -242,11 +252,15 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     }
 
                 } else if (elem.type == 'line') {
-                    drawable = this.stage.createLine().setPosition(x, y).setLength(txtSize(elem.length))
+                    drawable = this.stage.createLine()
+                        .setPosition(x, y)
+                        .setLength(txtSize(elem.length))
                         .setColor(elem.color);
 
                     drawable.setLineWidth(txtSize(elem.lineWidth));
-                    drawable.setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
+                    drawable.setAlpha(elem.alpha)
+                        .setRotation(elem.rotation)
+                        .setScale(elem.scale);
 
                     if (elem.zIndex != undefined && elem.zIndex != 3) {
                         drawable.setZIndex(elem.zIndex);
@@ -259,7 +273,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     }
 
                 } else if (elem.type == 'circle') {
-                    drawable = this.stage.createCircle(elem.filled).setPosition(x, y).setRadius(txtSize(elem.radius))
+                    drawable = this.stage.createCircle(elem.filled)
+                        .setPosition(x, y)
+                        .setRadius(txtSize(elem.radius))
                         .setColor(elem.color);
 
                     drawable.setLineWidth(txtSize(elem.lineWidth));
@@ -307,8 +323,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             return foundSmth;
                         });
 
-                        drawable = this.stage.createRectangle().setPosition(x, y).setWidth(widthFn(elem.width))
-                            .setHeight(heightFn(elem.height)).setColor('blue');
+                        drawable = this.stage.createRectangle()
+                            .setPosition(x, y)
+                            .setWidth(widthFn(elem.width))
+                            .setHeight(heightFn(elem.height))
+                            .setColor('blue');
                         drawable.setZIndex(11);
                         drawable.hide();
 
@@ -343,9 +362,14 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
 
                     } else {
 
-                        drawable = this.stage.createRectangle(elem.filled).setPosition(x, y)
-                            .setWidth(widthFn(elem.width)).setHeight(heightFn(elem.height)).setColor(elem.color)
-                            .setAlpha(elem.alpha).setRotation(elem.rotation).setScale(elem.scale);
+                        drawable = this.stage.createRectangle(elem.filled)
+                            .setPosition(x, y)
+                            .setWidth(widthFn(elem.width))
+                            .setHeight(heightFn(elem.height))
+                            .setColor(elem.color)
+                            .setAlpha(elem.alpha)
+                            .setRotation(elem.rotation)
+                            .setScale(elem.scale);
                         if (elem.zIndex != undefined && elem.zIndex != 3) {
                             drawable.setZIndex(elem.zIndex);
                         }
@@ -396,8 +420,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         return foundSmth;
                     });
 
-                    drawable = this.stage.createRectangle().setPosition(xFn(elem.input.x), yFn(elem.input.y))
-                        .setWidth(xFn(elem.input.width)).setHeight(yFn(elem.input.height)).setColor('#fff');
+                    drawable = this.stage.createRectangle()
+                        .setPosition(xFn(elem.input.x), yFn(elem.input.y))
+                        .setWidth(xFn(elem.input.width))
+                        .setHeight(yFn(elem.input.height))
+                        .setColor('#fff');
                     drawable.hide();
 
                     if (elem.input.viewId) {
@@ -415,9 +442,14 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     var btnTxtKey = getTagValue('txt')(elem.text.tags);
                     var btnMsg = btnTxtKey ? self.messages.get(self.viewName, btnTxtKey) : elem.text.msg;
 
-                    drawable = this.stage.createText(btnMsg).setPosition(xFn(elem.text.x), yFn(elem.text.y))
-                        .setSize(txtSize(elem.text.size)).setFont(elem.text.font).setColor(elem.text.color)
-                        .setRotation(elem.text.rotation).setAlpha(elem.text.alpha).setScale(elem.text.scale);
+                    drawable = this.stage.createText(btnMsg)
+                        .setPosition(xFn(elem.text.x), yFn(elem.text.y))
+                        .setSize(txtSize(elem.text.size))
+                        .setFont(elem.text.font)
+                        .setColor(elem.text.color)
+                        .setRotation(elem.text.rotation)
+                        .setAlpha(elem.text.alpha)
+                        .setScale(elem.text.scale);
                     if (elem.zIndex + 1 != 3) {
                         drawable.setZIndex(elem.zIndex + 1);
                     }
@@ -434,8 +466,10 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     if (elem.background.type == 'image') {
                         var bgName = elem.background.filename.substring(0, elem.background.filename.lastIndexOf('.'));
                         drawable = this.stage.createImage(bgName)
-                            .setPosition(xFn(elem.background.x), yFn(elem.background.y)).setAlpha(elem.background.alpha)
-                            .setRotation(elem.background.rotation).setScale(elem.background.scale);
+                            .setPosition(xFn(elem.background.x), yFn(elem.background.y))
+                            .setAlpha(elem.background.alpha)
+                            .setRotation(elem.background.rotation)
+                            .setScale(elem.background.scale);
                         if (elem.zIndex != undefined && elem.zIndex != 3) {
                             drawable.setZIndex(elem.zIndex);
                         }
@@ -448,9 +482,12 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     } else if (elem.background.type == 'rectangle') {
                         drawable = this.stage.createRectangle(elem.background.filled)
                             .setPosition(xFn(elem.background.x), yFn(elem.background.y))
-                            .setWidth(xFn(elem.background.width)).setHeight(yFn(elem.background.height))
-                            .setColor(elem.background.color).setAlpha(elem.background.alpha)
-                            .setRotation(elem.background.rotation).setScale(elem.background.scale);
+                            .setWidth(xFn(elem.background.width))
+                            .setHeight(yFn(elem.background.height))
+                            .setColor(elem.background.color)
+                            .setAlpha(elem.background.alpha)
+                            .setRotation(elem.background.rotation)
+                            .setScale(elem.background.scale);
                         if (elem.zIndex != undefined && elem.zIndex != 3) {
                             drawable.setZIndex(elem.zIndex);
                         }
@@ -472,8 +509,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         maskX = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.mask.height, elem.mask.x);
                     }
 
-                    var mask = this.stage.createRectangle().setPosition(maskX, maskY).setWidth(xFn(elem.mask.width))
-                        .setHeight(yFn(elem.mask.height)).setRotation(elem.mask.rotation);
+                    var mask = this.stage.createRectangle()
+                        .setPosition(maskX, maskY)
+                        .setWidth(xFn(elem.mask.width))
+                        .setHeight(yFn(elem.mask.height))
+                        .setRotation(elem.mask.rotation);
                     if (self.parentSceneRect) {
                         var maskWidth = function (maskWidth) {
                             return function (width) {
@@ -485,7 +525,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                 return calcScreenConst(height, self.parentSceneRect.height, maskHeight);
                             };
                         };
-                        mask.setWidth(maskWidth(elem.mask.width)).setHeight(maskHeight(elem.mask.height));
+                        mask.setWidth(maskWidth(elem.mask.width))
+                            .setHeight(maskHeight(elem.mask.height));
                     }
                     drawable.setMask(mask);
                 }
@@ -619,7 +660,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             //if (lastFrame.time != currentFrameNumber % timing) {
                             //    console.log(drawable.id + " starts alpha animation - from: " + lastFrame.time + " @ "
                             // + currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.opacity); }
-                            drawable.opacityTo(frame.opacity).setDuration(duration).setCallback(continueMove);
+                            drawable.opacityTo(frame.opacity)
+                                .setDuration(duration)
+                                .setCallback(continueMove);
                         }
 
                         function continueMove() {
@@ -701,7 +744,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             //if (lastFrame.time != currentFrameNumber % timing) {
                             //    console.log(drawable.id + " starts rotate animation - from: " + lastFrame.time + " @
                             // " + currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.rotation); }
-                            drawable.rotateTo(frame.rotation).setDuration(duration).setCallback(continueMove);
+                            drawable.rotateTo(frame.rotation)
+                                .setDuration(duration)
+                                .setCallback(continueMove);
                         }
 
                         function continueMove() {
@@ -781,7 +826,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             //if (lastFrame.time != currentFrameNumber % timing) {
                             //    console.log(drawable.id + " starts scale animation - from: " + lastFrame.time + " @ "
                             // + currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.scale); }
-                            drawable.scaleTo(frame.scale).setDuration(duration).setCallback(continueMove);
+                            drawable.scaleTo(frame.scale)
+                                .setDuration(duration)
+                                .setCallback(continueMove);
                         }
 
                         function continueMove() {
@@ -868,7 +915,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             //        currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.x + " " +
                             //        frame.y);
                             //}
-                            drawable.moveTo(x, y).setDuration(duration).setCallback(continueMove);
+                            drawable.moveTo(x, y)
+                                .setDuration(duration)
+                                .setCallback(continueMove);
                         }
 
                         function continueMove() {

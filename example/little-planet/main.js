@@ -4,5 +4,6 @@ window.onload = function () {
     H5.Bootstrapper
         .responsive()
         .pointer()
-        .build(G.runMyScenes).start();
+        .build(G.runMyScenes)
+        .start();
 };

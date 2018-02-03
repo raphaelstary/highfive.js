@@ -1,12 +1,12 @@
 {
-    "en": {
-        "scene_name": {
-            "key": "message"
-        }
-    },
-    "de": {
-        "scene_name": {
-            "key": "Text"
-        }
+  "en": {
+    "scene_name": {
+      "key": "message"
     }
+  },
+  "de": {
+    "scene_name": {
+      "key": "Text"
+    }
+  }
 }

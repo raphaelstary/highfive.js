@@ -154,21 +154,22 @@ H5.PointerHandler = (function (Event, Object, Math) {
 
     PointerHandler.prototype.update = function () {
         if (this.changed) {
-            Object.keys(this.activePointers).forEach(function (pointerId) {
-                var pointer = this.activePointers[pointerId];
-                if (pointer.changed) {
-                    if (this.device.screenScale) {
-                        pointer.x = Math.floor(pointer.x / this.device.screenScale);
-                        pointer.y = Math.floor(pointer.y / this.device.screenScale);
+            Object.keys(this.activePointers)
+                .forEach(function (pointerId) {
+                    var pointer = this.activePointers[pointerId];
+                    if (pointer.changed) {
+                        if (this.device.screenScale) {
+                            pointer.x = Math.floor(pointer.x / this.device.screenScale);
+                            pointer.y = Math.floor(pointer.y / this.device.screenScale);
+                        }
+                        if (this.device.devicePixelRatio > 1) {
+                            pointer.x = Math.floor(pointer.x * this.device.devicePixelRatio);
+                            pointer.y = Math.floor(pointer.y * this.device.devicePixelRatio);
+                        }
+                        this.events.fireSync(Event.POINTER, pointer);
+                        pointer.changed = false;
                     }
-                    if (this.device.devicePixelRatio > 1) {
-                        pointer.x = Math.floor(pointer.x * this.device.devicePixelRatio);
-                        pointer.y = Math.floor(pointer.y * this.device.devicePixelRatio);
-                    }
-                    this.events.fireSync(Event.POINTER, pointer);
-                    pointer.changed = false;
-                }
-            }, this);
+                }, this);
             this.changed = false;
         }
 

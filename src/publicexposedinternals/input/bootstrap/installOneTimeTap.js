@@ -7,6 +7,7 @@ H5.installOneTimeTap = (function (window) {
         }
 
         element.addEventListener('click', handleClick);
+
         function handleClick(event) {
             event.preventDefault();
 

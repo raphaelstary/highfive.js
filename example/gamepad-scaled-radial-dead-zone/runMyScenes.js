@@ -45,20 +45,38 @@ G.runMyScenes = (function (Event, Width, Height, Font, Math, Vectors) {
 
     function setupGamePadDebugTxt(services, force) {
 
-        var xAxisTxt = services.stage.createText('0').setPosition(Width.get(2), Height.get(1080, 940))
-            .setSize(Font._60).setZIndex(11).setColor('black');
-        var yAxisTxt = services.stage.createText('0').setPosition(Width.get(2), Height.get(1080, 960))
-            .setSize(Font._60).setZIndex(11).setColor('black');
+        var xAxisTxt = services.stage.createText('0')
+            .setPosition(Width.get(2), Height.get(1080, 940))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
+        var yAxisTxt = services.stage.createText('0')
+            .setPosition(Width.get(2), Height.get(1080, 960))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
 
-        var xForceTxt = services.stage.createText('0').setPosition(Width.get(2), Height.get(1080, 980))
-            .setSize(Font._60).setZIndex(11).setColor('black');
-        var yForceTxt = services.stage.createText('0').setPosition(Width.get(2), Height.get(1080, 1000))
-            .setSize(Font._60).setZIndex(11).setColor('black');
+        var xForceTxt = services.stage.createText('0')
+            .setPosition(Width.get(2), Height.get(1080, 980))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
+        var yForceTxt = services.stage.createText('0')
+            .setPosition(Width.get(2), Height.get(1080, 1000))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
 
-        var xForceScaled = services.stage.createText('0').setPosition(Width.get(2), Height.get(1080, 1020))
-            .setSize(Font._60).setZIndex(11).setColor('black');
-        var yForceScaled = services.stage.createText('0').setPosition(Width.get(2), Height.get(1080, 1040))
-            .setSize(Font._60).setZIndex(11).setColor('black');
+        var xForceScaled = services.stage.createText('0')
+            .setPosition(Width.get(2), Height.get(1080, 1020))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
+        var yForceScaled = services.stage.createText('0')
+            .setPosition(Width.get(2), Height.get(1080, 1040))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
 
         var xAxis = 0;
         var yAxis = 0;

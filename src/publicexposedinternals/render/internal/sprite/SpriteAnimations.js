@@ -24,26 +24,27 @@ H5.SpriteAnimations = (function (Object, iterateEntries) {
     };
 
     SpriteAnimations.prototype.nextFrame = function () {
-        Object.keys(this.animationsDict).forEach(function (key) {
-            var animation = this.animationsDict[key];
-            var drawable = animation.drawable;
-            var sprite = animation.sprite;
+        Object.keys(this.animationsDict)
+            .forEach(function (key) {
+                var animation = this.animationsDict[key];
+                var drawable = animation.drawable;
+                var sprite = animation.sprite;
 
-            drawable.data = sprite.frames[++animation.time];
-            if (animation.time >= sprite.frames.length) {
+                drawable.data = sprite.frames[++animation.time];
+                if (animation.time >= sprite.frames.length) {
 
-                if (sprite.loop) {
-                    animation.time = 0;
-                    drawable.data = sprite.frames[0];
-                } else {
-                    delete this.animationsDict[key];
+                    if (sprite.loop) {
+                        animation.time = 0;
+                        drawable.data = sprite.frames[0];
+                    } else {
+                        delete this.animationsDict[key];
+                    }
+
+                    if (animation.callback) {
+                        animation.callback();
+                    }
                 }
-
-                if (animation.callback) {
-                    animation.callback();
-                }
-            }
-        }, this);
+            }, this);
     };
 
     SpriteAnimations.prototype.update = function () {

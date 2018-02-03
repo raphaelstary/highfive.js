@@ -11,14 +11,22 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
         services.sceneStorage.fpsTotal = 0;
         services.sceneStorage.fpsCount = 0;
 
-        var ms = services.stage.createText('0').setPosition(Width.get(1920, 1880), Height.get(1080, 1020))
-            .setSize(Font._60).setZIndex(11).setColor('black');
-        var fps = services.stage.createText('0').setPosition(Width.get(1920, 1880), Height.get(1080, 1040))
-            .setSize(Font._60).setZIndex(11).setColor('black');
+        var ms = services.stage.createText('0')
+            .setPosition(Width.get(1920, 1880), Height.get(1080, 1020))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
+        var fps = services.stage.createText('0')
+            .setPosition(Width.get(1920, 1880), Height.get(1080, 1040))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
 
         services.events.subscribe(Event.TICK_DRAW, function () {
-            ms.data.msg = Stats.getMs().toString() + ' ms';
-            fps.data.msg = Stats.getFps().toString() + ' fps';
+            ms.data.msg = Stats.getMs()
+                .toString() + ' ms';
+            fps.data.msg = Stats.getFps()
+                .toString() + ' fps';
 
             services.sceneStorage.msTotal += Stats.getMs();
             services.sceneStorage.msCount++;
@@ -51,6 +59,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
             var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 0.5, grid.yTiles - 0.5);
             return maxCameraPosition.y;
         }
+
         var viewPort = services.stage.createRectangle(false)
             .setPosition(Width.HALF, Height.HALF)
             .setWidth(Width.FULL)
@@ -66,7 +75,8 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
                 var color = column ? 'grey' : 'green';
                 entities.push({
                     drawable: gridViewHelper.createRect(u, v, color),
-                    entity: gridViewHelper.createRect(u, v, color).setShow(false)
+                    entity: gridViewHelper.createRect(u, v, color)
+                        .setShow(false)
                 });
             });
         });
@@ -127,22 +137,40 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
         }
 
         var keyBoard = PlayerControls.getKeyBoard();
-        keyBoard.add(Key.LEFT).onDown(left);
-        keyBoard.add(Key.RIGHT).onDown(right);
-        keyBoard.add(Key.UP).onDown(up);
-        keyBoard.add(Key.DOWN).onDown(down);
-        keyBoard.add(Key.CTRL).and(Key.EQUALS).onDown(zoomIn);
-        keyBoard.add(Key.CTRL).and(Key.MINUS).onDown(zoomOut);
+        keyBoard.add(Key.LEFT)
+            .onDown(left);
+        keyBoard.add(Key.RIGHT)
+            .onDown(right);
+        keyBoard.add(Key.UP)
+            .onDown(up);
+        keyBoard.add(Key.DOWN)
+            .onDown(down);
+        keyBoard.add(Key.CTRL)
+            .and(Key.EQUALS)
+            .onDown(zoomIn);
+        keyBoard.add(Key.CTRL)
+            .and(Key.MINUS)
+            .onDown(zoomOut);
         keyBoard.register(services.events);
 
         var gamePad = PlayerControls.getGamePad();
-        gamePad.add(GamePadButton.D_PAD_LEFT).onDown(left);
-        gamePad.add(GamePadButton.D_PAD_RIGHT).onDown(right);
-        gamePad.add(GamePadButton.D_PAD_UP).onDown(up);
-        gamePad.add(GamePadButton.D_PAD_DOWN).onDown(down);
-        gamePad.add(GamePadButton.LEFT_BUMPER).onDown(zoomIn);
-        gamePad.add(GamePadButton.RIGHT_BUMPER).onDown(zoomOut);
-        gamePad.addLeftStick(0.4).onDirectionLeft(left).onDirectionUp(up).onDirectionRight(right).onDirectionDown(down);
+        gamePad.add(GamePadButton.D_PAD_LEFT)
+            .onDown(left);
+        gamePad.add(GamePadButton.D_PAD_RIGHT)
+            .onDown(right);
+        gamePad.add(GamePadButton.D_PAD_UP)
+            .onDown(up);
+        gamePad.add(GamePadButton.D_PAD_DOWN)
+            .onDown(down);
+        gamePad.add(GamePadButton.LEFT_BUMPER)
+            .onDown(zoomIn);
+        gamePad.add(GamePadButton.RIGHT_BUMPER)
+            .onDown(zoomOut);
+        gamePad.addLeftStick(0.4)
+            .onDirectionLeft(left)
+            .onDirectionUp(up)
+            .onDirectionRight(right)
+            .onDirectionDown(down);
         gamePad.register(services.events);
 
         var startX;
@@ -293,9 +321,11 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
         var cursorPosition = gridViewHelper.getCoordinates(viewPort.x, viewPort.y);
         var cursor = {
             drawable: gridViewHelper.createRect(cursorPosition.u, cursorPosition.v, 'blue'),
-            entity: gridViewHelper.createRect(cursorPosition.u, cursorPosition.v, 'blue').setShow(false)
+            entity: gridViewHelper.createRect(cursorPosition.u, cursorPosition.v, 'blue')
+                .setShow(false)
         };
-        cursor.drawable.setFilled(false).setZIndex(6);
+        cursor.drawable.setFilled(false)
+            .setZIndex(6);
         entities.push(cursor);
 
         camera.move(cursor.entity);

@@ -42,8 +42,8 @@ H5.GridViewHelper = (function (Height, Math, add) {
         var position = this.getPosition(u, v);
         var lengthHalfScaled = Math.floor(length / 2 * scale);
 
-        if (isHit(x, y, position.x - lengthHalfScaled, position.x + lengthHalfScaled, position.y - lengthHalfScaled,
-                position.y + lengthHalfScaled)) {
+        if (isHit(x, y, position.x - lengthHalfScaled, position.x + lengthHalfScaled, position.y -
+                lengthHalfScaled, position.y + lengthHalfScaled)) {
 
             return {
                 u: u,
@@ -107,28 +107,37 @@ H5.GridViewHelper = (function (Height, Math, add) {
             return self.__edgeLength(height) - 1;
         }
 
-        return this.stage.createRectangle(true).setPosition(this.__getX(u), this.__getY(v)).setWidth(getWidth)
-            .setHeight(getHeight).setColor(color);
+        return this.stage.createRectangle(true)
+            .setPosition(this.__getX(u), this.__getY(v))
+            .setWidth(getWidth)
+            .setHeight(getHeight)
+            .setColor(color);
     };
 
     GridViewHelper.prototype.createRectBackground = function (u, v, color, zIndex) {
-        return this.createRect(u, v, color).setZIndex(zIndex);
+        return this.createRect(u, v, color)
+            .setZIndex(zIndex);
     };
 
     GridViewHelper.prototype.move = function (drawable, u, v, speed, callback, xOffset, yOffset, dependencies) {
         if (xOffset && yOffset) {
             return drawable.moveTo(add(this.__getX(u), xOffset), add(this.__getY(v), yOffset), dependencies)
-                .setDuration(speed).setCallback(callback);
+                .setDuration(speed)
+                .setCallback(callback);
         }
         if (xOffset) {
-            return drawable.moveTo(add(this.__getX(u), xOffset), this.__getY(v), dependencies).setDuration(speed)
+            return drawable.moveTo(add(this.__getX(u), xOffset), this.__getY(v), dependencies)
+                .setDuration(speed)
                 .setCallback(callback);
         }
         if (yOffset) {
-            return drawable.moveTo(this.__getX(u), add(this.__getY(v), yOffset), dependencies).setDuration(speed)
+            return drawable.moveTo(this.__getX(u), add(this.__getY(v), yOffset), dependencies)
+                .setDuration(speed)
                 .setCallback(callback);
         }
-        return drawable.moveTo(this.__getX(u), this.__getY(v), dependencies).setDuration(speed).setCallback(callback);
+        return drawable.moveTo(this.__getX(u), this.__getY(v), dependencies)
+            .setDuration(speed)
+            .setCallback(callback);
     };
 
     GridViewHelper.prototype.setPosition = function (drawable, u, v, dependencies) {

@@ -56,23 +56,29 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
     };
 
     FixRezGridViewHelper.prototype.createRectBackground = function (u, v, color, zIndex) {
-        return this.createRect(u, v, color).setZIndex(zIndex);
+        return this.createRect(u, v, color)
+            .setZIndex(zIndex);
     };
 
     FixRezGridViewHelper.prototype.move = function (drawable, u, v, speed, callback, xOffset, yOffset) {
         if (xOffset && yOffset) {
             return drawable.moveTo(wrap(this.getX(u) + xOffset), wrap(this.getY(v) + yOffset))
-                .setDuration(speed).setCallback(callback);
+                .setDuration(speed)
+                .setCallback(callback);
         }
         if (xOffset) {
-            return drawable.moveTo(wrap(this.getX(u) + xOffset), wrap(this.getY(v))).setDuration(speed)
+            return drawable.moveTo(wrap(this.getX(u) + xOffset), wrap(this.getY(v)))
+                .setDuration(speed)
                 .setCallback(callback);
         }
         if (yOffset) {
-            return drawable.moveTo(wrap(this.getX(u)), wrap(this.getY(v) + yOffset)).setDuration(speed)
+            return drawable.moveTo(wrap(this.getX(u)), wrap(this.getY(v) + yOffset))
+                .setDuration(speed)
                 .setCallback(callback);
         }
-        return drawable.moveTo(wrap(this.getX(u)), wrap(this.getY(v))).setDuration(speed).setCallback(callback);
+        return drawable.moveTo(wrap(this.getX(u)), wrap(this.getY(v)))
+            .setDuration(speed)
+            .setCallback(callback);
     };
 
     FixRezGridViewHelper.prototype.setPosition = function (drawable, u, v) {

@@ -19,7 +19,8 @@ H5.SoundResources = (function (Object, HtmlAudioManager) {
             return soundDict;
         }
 
-        var soundDict = dictKeys.map(toAudioFile, this).reduce(filesToDict, {});
+        var soundDict = dictKeys.map(toAudioFile, this)
+            .reduce(filesToDict, {});
         return new HtmlAudioManager(soundDict);
     };
 

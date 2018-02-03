@@ -30,7 +30,7 @@ H5.Stats = (function (Math, Date) {
 
             if (time > previousTime + 1000) {
 
-                fps = Math.round(( frames * 1000 ) / ( time - previousTime ));
+                fps = Math.round((frames * 1000) / (time - previousTime));
                 fpsMin = Math.min(fpsMin, fps);
                 fpsMax = Math.max(fpsMax, fps);
 

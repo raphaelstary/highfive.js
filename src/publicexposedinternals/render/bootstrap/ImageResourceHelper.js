@@ -29,9 +29,10 @@ H5.ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Mat
         var pixelRatio = getDevicePixelRatio();
         var gfxCache = new ImageCache(Math.floor(width * pixelRatio), Math.floor(height * pixelRatio), defaultSize);
 
-        Object.keys(images).forEach(function (key) {
-            gfxCache.add(key, images[key]);
-        });
+        Object.keys(images)
+            .forEach(function (key) {
+                gfxCache.add(key, images[key]);
+            });
 
         return gfxCache;
     }

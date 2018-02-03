@@ -93,7 +93,7 @@ H5.Transition = (function (Math) {
 
     function sinusoidalEasingOutAndIn(currentTime, startValue, changeInValue, duration) {
         if ((currentTime /= duration / 2) < 1) {
-            return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2) ) + startValue;
+            return changeInValue / 2 * (Math.sin(Math.PI * currentTime / 2)) + startValue;
         }
         return -changeInValue / 2 * (Math.cos(Math.PI * --currentTime / 2) - 2) + startValue;
     }

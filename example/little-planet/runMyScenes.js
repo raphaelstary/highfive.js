@@ -118,14 +118,22 @@ G.runMyScenes = (function (Width, Height, Math, Vectors, Event, Stats, Font) {
         services.sceneStorage.fpsTotal = 0;
         services.sceneStorage.fpsCount = 0;
 
-        var ms = services.stage.createText('0').setPosition(Width.get(10, 9), Height.get(20, 19))
-            .setSize(Font._60).setZIndex(11).setColor('black');
-        var fps = services.stage.createText('0').setPosition(Width.get(10, 9), Height.get(40, 39))
-            .setSize(Font._60).setZIndex(11).setColor('black');
+        var ms = services.stage.createText('0')
+            .setPosition(Width.get(10, 9), Height.get(20, 19))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
+        var fps = services.stage.createText('0')
+            .setPosition(Width.get(10, 9), Height.get(40, 39))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
 
         services.events.subscribe(Event.TICK_CAMERA, function () {
-            ms.data.msg = Stats.getMs().toString() + ' ms';
-            fps.data.msg = Stats.getFps().toString() + ' fps';
+            ms.data.msg = Stats.getMs()
+                .toString() + ' ms';
+            fps.data.msg = Stats.getFps()
+                .toString() + ' fps';
 
             services.sceneStorage.msTotal += Stats.getMs();
             services.sceneStorage.msCount++;

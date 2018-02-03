@@ -24,10 +24,11 @@ H5.Repository = (function (Object) {
         var self = this;
         var alreadyCalledMap = {};
 
-        Object.keys(this.dict).forEach(function (key) {
-            var wrapper = this.dict[key];
-            callItem(key, wrapper.fn, wrapper.dependencies);
-        }, this);
+        Object.keys(this.dict)
+            .forEach(function (key) {
+                var wrapper = this.dict[key];
+                callItem(key, wrapper.fn, wrapper.dependencies);
+            }, this);
 
         function callItem(id, fn, dependencies) {
             alreadyCalledMap[id] = true;

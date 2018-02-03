@@ -20,12 +20,13 @@ H5.UniversalTranslator = (function (defaultLanguage, Repository) {
 
     UniversalTranslator.prototype.getLanguages = function () {
         var languages = [];
-        Object.keys(this.locales).forEach(function (language) {
-            languages.push({
-                language: language,
-                name: this.locales[language].display_name
-            });
-        }, this);
+        Object.keys(this.locales)
+            .forEach(function (language) {
+                languages.push({
+                    language: language,
+                    name: this.locales[language].display_name
+                });
+            }, this);
         return languages;
     };
 

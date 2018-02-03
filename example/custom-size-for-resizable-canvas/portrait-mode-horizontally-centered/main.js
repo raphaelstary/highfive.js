@@ -66,5 +66,6 @@ window.onload = function () {
                     // return;
                 }
             });
-        }).start();
+        })
+        .start();
 };

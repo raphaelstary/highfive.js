@@ -8,9 +8,10 @@ H5.inheritMethods = (function (Object) {
             }
 
             (function (propertyKey) {
-                var hasSameMethod = Object.getOwnPropertyNames(targetPrototype).some(function (elem) {
-                    return elem == propertyKey;
-                });
+                var hasSameMethod = Object.getOwnPropertyNames(targetPrototype)
+                    .some(function (elem) {
+                        return elem == propertyKey;
+                    });
 
                 if (!hasSameMethod) {
                     target[propertyKey] = source[propertyKey].bind(source);

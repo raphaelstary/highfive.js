@@ -42,40 +42,42 @@ H5.BasicAnimations = (function (Object, iterateEntries) {
     };
 
     BasicAnimations.prototype.update = function () {
-        Object.keys(this.dict).forEach(function (key) {
-            var list = this.dict[key];
-            if (!list) {
-                return;
-            }
+        Object.keys(this.dict)
+            .forEach(function (key) {
+                var list = this.dict[key];
+                if (!list) {
+                    return;
+                }
 
-            for (var i = list.length - 1; i >= 0; i--) {
-                var wrapper = list[i];
-                var animation = wrapper.animation;
-                if (animation.duration > wrapper.time) {
+                for (var i = list.length - 1; i >= 0; i--) {
+                    var wrapper = list[i];
+                    var animation = wrapper.animation;
+                    if (animation.duration > wrapper.time) {
 
-                    var value = animation.timingFn(wrapper.time, animation.start, animation.length, animation.duration);
-                    wrapper.setter(value, wrapper.time);
-                    wrapper.time++;
+                        var value = animation.timingFn(wrapper.time, animation.start, animation.length,
+                            animation.duration);
+                        wrapper.setter(value, wrapper.time);
+                        wrapper.time++;
 
-                } else {
-                    wrapper.setter(animation.end, wrapper.time);
-
-                    if (animation.loop) {
-                        wrapper.time = 0;
                     } else {
-                        list.splice(i, 1);
-                    }
+                        wrapper.setter(animation.end, wrapper.time);
 
-                    if (wrapper.callback) {
-                        wrapper.callback();
+                        if (animation.loop) {
+                            wrapper.time = 0;
+                        } else {
+                            list.splice(i, 1);
+                        }
+
+                        if (wrapper.callback) {
+                            wrapper.callback();
+                        }
                     }
                 }
-            }
 
-            if (list.length == 0) {
-                delete this.dict[key];
-            }
-        }, this);
+                if (list.length == 0) {
+                    delete this.dict[key];
+                }
+            }, this);
     };
 
     BasicAnimations.prototype.remove = function (drawable) {

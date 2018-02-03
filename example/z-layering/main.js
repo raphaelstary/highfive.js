@@ -43,9 +43,10 @@ window.onload = function () {
             function initFutureZIndexChange() {
                 timer.in(30, function () {
                     // drawables.unshift(drawables.pop());
-                    drawables.reverse().forEach(function (drawable, index) {
-                        drawable.setZIndex(index);
-                    });
+                    drawables.reverse()
+                        .forEach(function (drawable, index) {
+                            drawable.setZIndex(index);
+                        });
                     initFutureZIndexChange();
                 });
             }

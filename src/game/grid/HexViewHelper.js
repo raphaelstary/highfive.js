@@ -46,8 +46,8 @@ H5.HexViewHelper = (function (Width, Math) {
                 if (self.adjustCenter) {
                     return Math.floor(self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset);
                 }
-                return Math.floor(
-                    self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset + calcWidth / 2);
+                return Math.floor(self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset +
+                    calcWidth / 2);
             };
         })(this);
     };

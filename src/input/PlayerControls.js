@@ -197,7 +197,7 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
                 }
 
                 neutral = !(gamePad.isDPadDownPressed() || gamePad.isDPadLeftPressed() || gamePad.isDPadUpPressed() ||
-                gamePad.isDPadRightPressed());
+                    gamePad.isDPadRightPressed());
 
                 if (!neutral && !started) {
                     // start gesture
@@ -372,14 +372,14 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
                         var isPressed;
                         if (command.or && command.or instanceof Array) {
                             isPressed = inputType.isPressed(command.code) || command.or.some(function (code) {
-                                    return inputType.isPressed(code);
-                                });
+                                return inputType.isPressed(code);
+                            });
                         } else if (command.or) {
                             isPressed = inputType.isPressed(command.code) || inputType.isPressed(command.or);
                         } else if (command.and && command.and instanceof Array) {
                             isPressed = inputType.isPressed(command.code) && command.and.every(function (code) {
-                                    return inputType.isPressed(code);
-                                });
+                                return inputType.isPressed(code);
+                            });
                         } else if (command.and) {
                             isPressed = inputType.isPressed(command.code) && inputType.isPressed(command.and);
                         } else {

@@ -22,14 +22,22 @@ G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition
         sceneStorage.fpsTotal = 0;
         sceneStorage.fpsCount = 0;
 
-        var ms = stage.createText('0').setPosition(Width.get(10, 9), Height.get(20, 19))
-            .setSize(Font._60).setZIndex(11).setColor('black');
-        var fps = stage.createText('0').setPosition(Width.get(10, 9), Height.get(40, 39))
-            .setSize(Font._60).setZIndex(11).setColor('black');
+        var ms = stage.createText('0')
+            .setPosition(Width.get(10, 9), Height.get(20, 19))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
+        var fps = stage.createText('0')
+            .setPosition(Width.get(10, 9), Height.get(40, 39))
+            .setSize(Font._60)
+            .setZIndex(11)
+            .setColor('black');
 
         events.subscribe(Event.TICK_CAMERA, function () {
-            ms.data.msg = Stats.getMs().toString() + ' ms';
-            fps.data.msg = Stats.getFps().toString() + ' fps';
+            ms.data.msg = Stats.getMs()
+                .toString() + ' ms';
+            fps.data.msg = Stats.getFps()
+                .toString() + ' fps';
 
             sceneStorage.msTotal += Stats.getMs();
             sceneStorage.msCount++;
