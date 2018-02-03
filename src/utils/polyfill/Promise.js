@@ -24,7 +24,8 @@ H5.Promise = (function (CallbackCounter) {
         return promise;
     };
 
-    Promise.race = function (iterable) {
+    // Promise.race = function (iterable) {
+    Promise.race = function () {
         // todo implement
     };
 
