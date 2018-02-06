@@ -29,16 +29,9 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         var taps = [];
 
         function isHit(pointer, drawable) {
-            return pointer.x > drawable.getCornerX() && pointer.x < drawable.getEndX() && pointer.y >
-                drawable.getCornerY() && pointer.y < drawable.getEndY();
+            return pointer.x > drawable.getCornerX() && pointer.x < drawable.getEndX() && pointer.y
+                > drawable.getCornerY() && pointer.y < drawable.getEndY();
         }
-
-        //var currentFrameNumber = 0;
-        //var tick = 0;
-        //var frameListenerId = this.events.subscribe(Event.TICK_START, function () {
-        //    if (++tick % 2 == 0)
-        //        currentFrameNumber++;
-        //});
 
         var paused = false;
         var tapListenerId = this.events.subscribe(Event.POINTER, function (pointer) {
@@ -155,14 +148,14 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         function getXPositionRelativeToSize_anchorWithHalf(sceneRect, relativeToSize_elemHeight, x) {
             if (self.anchorXFn && self.parentSceneRect) {
                 return function (width, height) {
-                    return Math.floor(width / 2 + ((x - self.parentSceneRect.width / 2) / relativeToSize_elemHeight) *
-                        yFn(relativeToSize_elemHeight)(height));
+                    return Math.floor(width / 2 + (x - self.parentSceneRect.width / 2) / relativeToSize_elemHeight
+                        * yFn(relativeToSize_elemHeight)(height));
                 };
             }
 
             return function (width, height) {
-                return Math.floor(width / 2 + ((x - sceneRect.width / 2) / relativeToSize_elemHeight) *
-                    yFn(relativeToSize_elemHeight)(height));
+                var y = yFn(relativeToSize_elemHeight)(height);
+                return Math.floor(width / 2 + (x - sceneRect.width / 2) / relativeToSize_elemHeight * y);
             };
         }
 
@@ -178,15 +171,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                 var y = yFn(elem.y);
 
                 var isRelativeToSize_widthHalf = elem.tags && hasPositionTag_relativeToSize(elem.tags);
-                //&& hasAnchorTag_widthHalf(elem.tags);
                 if (isRelativeToSize_widthHalf) {
-                    //if (hasAnchorTag_left(elem.tags)) {
-                    //    x = getXPositionRelativeToSize_anchorLeft(elem.height, elem.x);
-                    //
-                    //} else {
-                    // very specific use case
                     x = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.height, elem.x);
-                    //}
                 }
 
                 var drawable;
@@ -220,11 +206,10 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         .setRotation(elem.rotation)
                         .setAlpha(elem.alpha)
                         .setScale(elem.scale);
-                    if (elem.fontStyle && elem.fontStyle.trim()
-                            .toLowerCase() != 'regular' && elem.fontStyle.trim()
-                            .toLowerCase() != 'normal') {
-                        var style = elem.fontStyle.trim()
-                            .toLowerCase();
+                    var fontStyle = elem.fontStyle.trim()
+                        .toLowerCase();
+                    if (elem.fontStyle && fontStyle != 'regular' && fontStyle != 'normal') {
+                        var style = fontStyle;
                         drawable.setStyle(style == 'light' ? 'lighter' : style);
                     }
 
@@ -292,9 +277,11 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     }
 
                 } else if (elem.type == 'rectangle') {
-                    var isInput = !elem.tags ? false : elem.tags.some(function (tag) {
+
+                    var tagIsInput = function (tag) {
                         return tag == 'input';
-                    });
+                    };
+                    var isInput = elem.tags ? elem.tags.some(tagIsInput) : false;
                     if (isInput) {
                         var pointerUpFnName = null;
                         var hasUp = elem.tags.some(function (tag) {
@@ -346,9 +333,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         }
 
                         drawables.push(drawable);
-                        var tap = {
-                            rectangle: drawable
-                        };
+                        var tap = {rectangle: drawable};
                         if (hasDown) {
                             tap.down = this.viewModel[pointerDownFnName].bind(this.viewModel);
                         }
@@ -379,11 +364,15 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         }
                         if (elem.lineWidth !== undefined && elem.lineDash !== undefined) {
                             var dashSet = [
-                                txtSize(elem.lineDash[0] * elem.lineWidth), txtSize(elem.lineDash[1] * elem.lineWidth)
+                                txtSize(elem.lineDash[0] * elem.lineWidth),
+                                txtSize(elem.lineDash[1] * elem.lineWidth)
                             ];
                             drawable.setLineDash(dashSet);
                         } else if (elem.lineDash !== undefined) {
-                            drawable.setLineDash([txtSize(elem.lineDash[0]), txtSize(elem.lineDash[1])]);
+                            drawable.setLineDash([
+                                txtSize(elem.lineDash[0]),
+                                txtSize(elem.lineDash[1])
+                            ]);
                         }
 
                         drawables.push(drawable);
@@ -424,8 +413,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         .setPosition(xFn(elem.input.x), yFn(elem.input.y))
                         .setWidth(xFn(elem.input.width))
                         .setHeight(yFn(elem.input.height))
-                        .setColor('#fff');
-                    drawable.hide();
+                        .setColor('#fff')
+                        .hide();
 
                     if (elem.input.viewId) {
                         this.viewModel[elem.input.viewId] = drawable;
@@ -648,28 +637,15 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             if (duration < 1) {
                                 continueMove();
                             } else {
-                                //if (lastFrame.time != currentFrameNumber % timing) {
-                                //    console.log(drawable.id + " starts alpha do_later - from: " + lastFrame.time +
-                                //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
-                                //        frame.opacity);
-                                //}
-
                                 self.timer.in(duration, continueMove);
                             }
                         } else {
-                            //if (lastFrame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " starts alpha animation - from: " + lastFrame.time + " @ "
-                            // + currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.opacity); }
                             drawable.opacityTo(frame.opacity)
                                 .setDuration(duration)
                                 .setCallback(continueMove);
                         }
 
                         function continueMove() {
-                            //if (frame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " ends alpha - from: " + frame.time + " @ " +
-                            //        currentFrameNumber % timing + " value: " + frame.opacity);
-                            //}
                             if (itIsOver) {
                                 return;
                             }
@@ -695,26 +671,16 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     };
 
                                     var duration = (timing - frame.time) * 2 - 1;
-                                    //if (duration < 1) {
-                                    //    restart();
-                                    //} else {
                                     self.timer.in(duration, restart);
-                                    //}
+                                } else if (initialDelay) {
+                                    drawable.setAlpha(currentFrame.opacity);
+                                    fadeWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, timing);
                                 } else {
-                                    if (initialDelay) {
-                                        drawable.setAlpha(currentFrame.opacity);
-                                        fadeWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
-                                            timing);
-                                    } else {
-                                        drawable.setAlpha(framesCopy[0].opacity);
-                                        fadeWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay,
-                                            timing);
-                                    }
+                                    drawable.setAlpha(framesCopy[0].opacity);
+                                    fadeWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay, timing);
                                 }
-                            } else {
-                                if (callback) {
-                                    callback();
-                                }
+                            } else if (callback) {
+                                callback();
                             }
                         }
                     }
@@ -733,27 +699,15 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             if (duration < 1) {
                                 continueMove();
                             } else {
-                                //if (lastFrame.time != currentFrameNumber % timing) {
-                                //    console.log(drawable.id + " starts rotate do_later - from: " + lastFrame.time +
-                                //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
-                                //        frame.rotation);
-                                //}
                                 self.timer.in(duration, continueMove);
                             }
                         } else {
-                            //if (lastFrame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " starts rotate animation - from: " + lastFrame.time + " @
-                            // " + currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.rotation); }
                             drawable.rotateTo(frame.rotation)
                                 .setDuration(duration)
                                 .setCallback(continueMove);
                         }
 
                         function continueMove() {
-                            //if (frame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " ends rotate - from: " + frame.time + " @ " +
-                            //        currentFrameNumber % timing + " value: " + frame.rotation);
-                            //}
                             if (itIsOver) {
                                 return;
                             }
@@ -782,21 +736,16 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     } else {
                                         self.timer.in(duration, restart);
                                     }
+                                } else if (initialDelay) {
+                                    drawable.setRotation(currentFrame.rotation);
+                                    rotateWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, timing);
                                 } else {
-                                    if (initialDelay) {
-                                        drawable.setRotation(currentFrame.rotation);
-                                        rotateWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
-                                            timing);
-                                    } else {
-                                        drawable.setRotation(framesCopy[0].rotation);
-                                        rotateWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay,
-                                            timing);
-                                    }
+                                    drawable.setRotation(framesCopy[0].rotation);
+                                    rotateWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay,
+                                        timing);
                                 }
-                            } else {
-                                if (callback) {
-                                    callback();
-                                }
+                            } else if (callback) {
+                                callback();
                             }
                         }
                     }
@@ -815,27 +764,15 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             if (duration < 1) {
                                 continueMove();
                             } else {
-                                //if (lastFrame.time != currentFrameNumber % timing) {
-                                //    console.log(drawable.id + " starts scale do_later - from: " + lastFrame.time +
-                                //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
-                                //        frame.scale);
-                                //}
                                 self.timer.in(duration, continueMove);
                             }
                         } else {
-                            //if (lastFrame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " starts scale animation - from: " + lastFrame.time + " @ "
-                            // + currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.scale); }
                             drawable.scaleTo(frame.scale)
                                 .setDuration(duration)
                                 .setCallback(continueMove);
                         }
 
                         function continueMove() {
-                            //if (frame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " ends scale - from: " + frame.time + " @ " +
-                            //        currentFrameNumber % timing + " value: " + frame.scale);
-                            //}
                             if (itIsOver) {
                                 return;
                             }
@@ -866,21 +803,16 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                     } else {
                                         self.timer.in(duration, restart);
                                     }
+                                } else if (initialDelay) {
+                                    drawable.setScale(currentFrame.scale);
+                                    scaleWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay, timing);
                                 } else {
-                                    if (initialDelay) {
-                                        drawable.setScale(currentFrame.scale);
-                                        scaleWithKeyFrames(drawable, currentFrame, framesCopy, loop, initialDelay,
-                                            timing);
-                                    } else {
-                                        drawable.setScale(framesCopy[0].scale);
-                                        scaleWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay,
-                                            timing);
-                                    }
+                                    drawable.setScale(framesCopy[0].scale);
+                                    scaleWithKeyFrames(drawable, framesCopy[0], framesCopy, loop, initialDelay, timing);
                                 }
-                            } else {
-                                if (callback) {
-                                    callback();
-                                }
+
+                            } else if (callback) {
+                                callback();
                             }
                         }
                     }
@@ -900,31 +832,17 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             if (duration < 1) {
                                 continueMove();
                             } else {
-                                //if (lastFrame.time != currentFrameNumber % timing) {
-                                //    console.log(drawable.id + " starts move do_later - from: " + lastFrame.time +
-                                //        " @ " + currentFrameNumber % timing + " to: " + frame.time + " value: " +
-                                //        frame.x + " " + frame.y);
-                                //}
                                 self.timer.in(duration, continueMove);
                             }
                         } else {
                             var x = customXFn ? customXFn(frame.x) : xFn(frame.x);
                             var y = customYFn ? customYFn(frame.y) : yFn(frame.y);
-                            //if (lastFrame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " starts move animation - from: " + lastFrame.time + " @ " +
-                            //        currentFrameNumber % timing + " to: " + frame.time + " value: " + frame.x + " " +
-                            //        frame.y);
-                            //}
                             drawable.moveTo(x, y)
                                 .setDuration(duration)
                                 .setCallback(continueMove);
                         }
 
                         function continueMove() {
-                            //if (frame.time != currentFrameNumber % timing) {
-                            //    console.log(drawable.id + " ends move - from: " + frame.time + " @ " +
-                            //        currentFrameNumber % timing + " value: " + frame.x + " " + frame.y);
-                            //}
                             if (itIsOver) {
                                 return;
                             }
@@ -980,10 +898,8 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                                             timing, customXFn, customYFn);
                                     }
                                 }
-                            } else {
-                                if (callback) {
-                                    callback();
-                                }
+                            } else if (callback) {
+                                callback();
                             }
                         }
                     }
@@ -1008,7 +924,6 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                 drawable.remove();
             });
             self.events.unsubscribe(tapListenerId);
-            //self.events.unsubscribe(frameListenerId);
 
             return true;
         }
@@ -1070,7 +985,6 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
         this.viewModel.pauseScene = pauseScene;
         this.viewModel.resumeScene = resumeScene;
         this.viewModel.drawables = drawables;
-        //this.viewModel.sceneRect = sceneRect;
 
         this.events.subscribe(Event.PAUSE, function () {
             paused = true;

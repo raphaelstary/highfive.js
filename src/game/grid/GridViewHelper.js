@@ -13,9 +13,9 @@ H5.GridViewHelper = (function (Height, Math, add) {
     }
 
     GridViewHelper.prototype.getEdgeLengthFn = function () {
-        return (function (self) {
+        return (function (thisArg) {
             return function (width, height) {
-                return self.__edgeLength(height);
+                return thisArg.__edgeLength(height);
             };
         })(this);
     };
@@ -42,8 +42,8 @@ H5.GridViewHelper = (function (Height, Math, add) {
         var position = this.getPosition(u, v);
         var lengthHalfScaled = Math.floor(length / 2 * scale);
 
-        if (isHit(x, y, position.x - lengthHalfScaled, position.x + lengthHalfScaled, position.y -
-                lengthHalfScaled, position.y + lengthHalfScaled)) {
+        if (isHit(x, y, position.x - lengthHalfScaled, position.x + lengthHalfScaled, position.y
+                - lengthHalfScaled, position.y + lengthHalfScaled)) {
 
             return {
                 u: u,
@@ -98,7 +98,6 @@ H5.GridViewHelper = (function (Height, Math, add) {
     GridViewHelper.prototype.createRect = function (u, v, color) {
         var self = this;
 
-        //noinspection JSUnusedLocalSymbols
         function getWidth(width, height) {
             return self.__edgeLength(height) - 1;
         }
@@ -147,9 +146,8 @@ H5.GridViewHelper = (function (Height, Math, add) {
     GridViewHelper.prototype.__edgeLength = function (height) {
         if (this.bottomOffset) {
             return Height.get(this.yTiles)(height - (this.__getTopOffset(height) + this.bottomOffset(height)));
-        } else {
-            return Height.get(this.yTiles)(height - this.__getTopOffset(height));
         }
+        return Height.get(this.yTiles)(height - this.__getTopOffset(height));
     };
 
     GridViewHelper.prototype.__xOffset = function (width, length) {

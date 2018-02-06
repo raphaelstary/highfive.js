@@ -6,10 +6,10 @@ H5.SelectionList = (function () {
         this.selection = null;
     }
 
-    SelectionList.prototype.add = function (drawable, callback, self) {
+    SelectionList.prototype.add = function (drawable, callback, thisArg) {
         var item = {
             selection: drawable,
-            callback: self ? callback.bind(self) : callback
+            callback: thisArg ? callback.bind(thisArg) : callback
         };
 
         if (this.options.length == 0) {

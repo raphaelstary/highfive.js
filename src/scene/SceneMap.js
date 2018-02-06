@@ -1,12 +1,12 @@
-H5.SceneMap = (function (Object) {
+H5.SceneMap = (function (Object, Error) {
     'use strict';
 
     function SceneMap() {
         this.scenes = {};
     }
 
-    SceneMap.prototype.put = function (name, callback, self) {
-        this.scenes[name] = self ? callback.bind(self) : callback;
+    SceneMap.prototype.put = function (name, callback, thisArg) {
+        this.scenes[name] = thisArg ? callback.bind(thisArg) : callback;
     };
 
     SceneMap.prototype.next = function (name, customParam) {
@@ -15,13 +15,13 @@ H5.SceneMap = (function (Object) {
 
         if (!sceneFn) {
             if (Object.keys(this.scenes).length < 1) {
-                throw 'No scenes configured';
+                throw new Error('No scenes configured');
             }
-            throw 'scene "' + name + '" not configured';
+            throw new Error('scene "' + name + '" not configured');
         }
 
         sceneFn(this.next.bind(this), customParam);
     };
 
     return SceneMap;
-})(Object);
+})(Object, Error);

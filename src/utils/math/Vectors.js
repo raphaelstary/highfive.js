@@ -33,7 +33,6 @@ H5.Vectors = (function (Math) {
         },
 
         normalRight: function (x, y) {
-            //noinspection JSSuspiciousNameCombination
             return {
                 x: -y,
                 y: x
@@ -41,7 +40,6 @@ H5.Vectors = (function (Math) {
         },
 
         normalLeft: function (x, y) {
-            //noinspection JSSuspiciousNameCombination
             return {
                 x: y,
                 y: -x

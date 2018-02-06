@@ -1,16 +1,15 @@
-H5.ImageLoader = (function () {
+H5.ImageLoader = (function (Error) {
     'use strict';
 
-    //noinspection JSUnusedLocalSymbols
     return {
-        register: function (info) {
-            throw 'not implemented';
+        register: function () { // register: function (info) {
+            throw new Error('not implemented');
         },
-        load: function (resourceLoader) {
-            throw 'not implemented';
+        load: function () { // load: function (resourceLoader) {
+            throw new Error('not implemented');
         },
-        process: function (services) {
-            throw 'not implemented';
+        process: function () { // process: function (services) {
+            throw new Error('not implemented');
         }
     };
-})();
+})(Error);

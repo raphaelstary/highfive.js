@@ -5,7 +5,7 @@ H5.Rectangle = (function () {
         this.width = width;
         this.height = height;
         this.color = color;
-        this.filled = filled !== undefined ? filled : false;
+        this.filled = filled === undefined ? false : filled;
         this.lineWidth = lineWidth;
     }
 

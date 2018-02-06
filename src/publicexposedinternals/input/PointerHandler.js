@@ -61,7 +61,7 @@ H5.PointerHandler = (function (Event, Object, Math) {
 
     PointerHandler.prototype.mouseDown = function (event) {
         event.preventDefault();
-        this.activePointers['mouse'] = {
+        this.activePointers.mouse = {
             id: 'mouse',
             x: event.clientX - event.target.offsetLeft,
             y: event.clientY - event.target.offsetTop,
@@ -73,7 +73,7 @@ H5.PointerHandler = (function (Event, Object, Math) {
 
     PointerHandler.prototype.mouseMove = function (event) {
         event.preventDefault();
-        var current = this.activePointers['mouse'];
+        var current = this.activePointers.mouse;
         if (current) {
             var downButNotSameTick = current.type == Pointer.DOWN && !current.changed;
             if (downButNotSameTick || current.type == Pointer.MOVE) {
@@ -88,7 +88,7 @@ H5.PointerHandler = (function (Event, Object, Math) {
 
     PointerHandler.prototype.mouseUp = function (event) {
         event.preventDefault();
-        var current = this.activePointers['mouse'];
+        var current = this.activePointers.mouse;
         if (current) {
             current.x = event.clientX - event.target.offsetLeft;
             current.y = event.clientY - event.target.offsetTop;

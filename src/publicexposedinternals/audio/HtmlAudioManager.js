@@ -27,13 +27,13 @@ H5.HtmlAudioManager = (function (iterateEntries) {
         });
     };
 
-    HtmlAudioManager.prototype.onEnded = function (audio, fn, self, once) {
+    HtmlAudioManager.prototype.onEnded = function (audio, fn, thisArg, once) {
         function extendedCallback() {
             if (once) {
                 audio.removeEventListener('ended', extendedCallback);
             }
-            if (self) {
-                fn.call(self);
+            if (thisArg) {
+                fn.call(thisArg);
             } else {
                 fn();
             }

@@ -42,10 +42,10 @@ H5.WebAudioSprite = (function (iterateEntries) {
         iterateEntries(this.tracks, this.__setVolume.bind(this, value));
     };
 
-    WebAudioSprite.prototype.masterVolumeTo = function (value, duration, callback, self) {
+    WebAudioSprite.prototype.masterVolumeTo = function (value, duration, callback, thisArg) {
         this.masterVolume = value;
         iterateEntries(this.tracks, this.__volumeTo.bind(this, value, duration, null, null));
-        this.timer.in(duration, callback, self);
+        this.timer.in(duration, callback, thisArg);
     };
 
     WebAudioSprite.prototype.play = function (name) {
@@ -114,8 +114,8 @@ H5.WebAudioSprite = (function (iterateEntries) {
                 self.__volumeTo(value, duration, callback, that, track);
                 return this;
             },
-            setCallback: function (callback, self) {
-                currentAudio.callback = self ? callback.bind(self) : callback;
+            setCallback: function (callback, thisArg) {
+                currentAudio.callback = thisArg ? callback.bind(thisArg) : callback;
                 return this;
             },
             setLoop: function (loop) {
@@ -172,11 +172,11 @@ H5.WebAudioSprite = (function (iterateEntries) {
         }
     };
 
-    WebAudioSprite.prototype.__volumeTo = function (value, duration, callback, self, track) {
+    WebAudioSprite.prototype.__volumeTo = function (value, duration, callback, thisArg, track) {
         track.node.volume = value;
         track.gain.gain.exponentialRampToValueAtTime(value, this.ctx.currentTime + duration / this.frameRate);
         if (callback) {
-            this.timer.in(duration, callback, self);
+            this.timer.in(duration, callback, thisArg);
         }
     };
 

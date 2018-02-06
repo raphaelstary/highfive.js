@@ -3,7 +3,7 @@ H5.Sprite = (function () {
 
     function Sprite(frames, loop) {
         this.frames = frames;
-        this.loop = loop !== undefined ? loop : true;
+        this.loop = loop === undefined ? true : loop;
     }
 
     return Sprite;

@@ -1,4 +1,4 @@
-H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
+H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio, Error) {
     'use strict';
 
     var ResourceType = {
@@ -129,7 +129,7 @@ H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
                     if (Blob) {
                         elem.file.blob = new Blob([xhrFont.response], {type: 'application/font-woff'});
                     } else {
-                        console.log('error: Blob constructing not supported');
+                        throw new Error('Blob constructing not supported');
                     }
 
                     self.onResourceLoad();
@@ -149,7 +149,7 @@ H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
                         elem.file.buffer = buffer;
                         self.onResourceLoad();
                     }, function (exception) {
-                        console.log('error with decoding audio data: ' + exception.err);
+                        throw new Error('error with decoding audio data: ' + exception.err);
                     });
                 };
                 xhrAudio.send();
@@ -173,4 +173,4 @@ H5.ResourceLoader = (function (Blob, Image, Object, JSON, Audio) {
     };
 
     return ResourceLoader;
-})(Blob, Image, Object, JSON, Audio);
+})(Blob, Image, Object, JSON, Audio, Error);

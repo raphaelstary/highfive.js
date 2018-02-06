@@ -60,7 +60,7 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings, isNaN) {
     };
 
     GridHelper.prototype.__getTile = function (u, v, isBackground) {
-        var type = !isBackground ? this.grid.get(u, v) : this.grid.getBackground(u, v);
+        var type = isBackground ? this.grid.getBackground(u, v) : this.grid.get(u, v);
         if (type !== undefined) {
             return {
                 u: u,
@@ -164,7 +164,7 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings, isNaN) {
 
     GridHelper.prototype.isNeighbor = function (a_u, a_v, b_u, b_v) {
         var deltaX = Math.abs(a_u - b_u);
-        if (deltaX > 1 || (a_u === b_u && a_v === b_v)) {
+        if (deltaX > 1 || a_u === b_u && a_v === b_v) {
             return false;
         }
         var deltaY = Math.abs(a_v - b_v);
@@ -188,7 +188,7 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings, isNaN) {
 
         for (var y = 0; y < this.grid.yTiles; y++) {
             for (var x = 0; x < this.grid.xTiles; x++) {
-                var tile = !isBackground ? this.grid.get(x, y) : this.grid.getBackground(x, y);
+                var tile = isBackground ? this.grid.getBackground(x, y) : this.grid.get(x, y);
                 if (tile !== undefined) {
                     if (isNaN(tile)) {
                         if (Strings.startsWidth(tile, tileName)) {
@@ -198,14 +198,12 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings, isNaN) {
                                 type: tile
                             });
                         }
-                    } else {
-                        if (tile === tileName) {
-                            tiles.push({
-                                u: x,
-                                v: y,
-                                type: tile
-                            });
-                        }
+                    } else if (tile === tileName) {
+                        tiles.push({
+                            u: x,
+                            v: y,
+                            type: tile
+                        });
                     }
                 }
             }
@@ -217,7 +215,7 @@ H5.GridHelper = (function (Math, calcCantorPairing, Strings, isNaN) {
     GridHelper.prototype.getTile = function (tileName, isBackground) {
         for (var y = 0; y < this.grid.yTiles; y++) {
             for (var x = 0; x < this.grid.xTiles; x++) {
-                var tile = !isBackground ? this.grid.get(x, y) : this.grid.getBackground(x, y);
+                var tile = isBackground ? this.grid.getBackground(x, y) : this.grid.get(x, y);
                 if (tile && Strings.startsWidth(tile, tileName)) {
                     return {
                         u: x,

@@ -7,7 +7,7 @@ H5.Persistence = (function (localStorage, parseInt, JSON) {
 
     function loadInteger(key) {
         var value = localStorage.getItem(key);
-        if (value == null) {
+        if (value === null) {
             return 0;
         }
         return parseInt(value);
@@ -15,7 +15,7 @@ H5.Persistence = (function (localStorage, parseInt, JSON) {
 
     function loadObject(key) {
         var data = localStorage.getItem(key);
-        if (data == null) {
+        if (data === null) {
             return undefined;
         }
         return JSON.parse(data);
@@ -23,7 +23,7 @@ H5.Persistence = (function (localStorage, parseInt, JSON) {
 
     function loadString(key) {
         var value = localStorage.getItem(key);
-        if (value == null) {
+        if (value === null) {
             return '';
         }
         return value;

@@ -9,7 +9,7 @@ H5.SpriteAnimations = (function (Object, iterateEntries) {
     }
 
     SpriteAnimations.prototype.set30fps = function (is30fps) {
-        this.is30fps = is30fps !== undefined ? is30fps : true;
+        this.is30fps = is30fps === undefined ? true : is30fps;
     };
 
     SpriteAnimations.prototype.animate = function (drawable, sprite, callback) {

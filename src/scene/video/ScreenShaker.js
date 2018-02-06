@@ -82,11 +82,7 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
                             item._startValueX = item.x;
                         }
 
-                        if (offSet !== 0) {
-                            item.x = item._startValueX + offSet;
-                        } else {
-                            item.x = item._startValueX;
-                        }
+                        item.x = item._startValueX + offSet;
                     }, this);
 
             } else if (this.bigShaking) {
@@ -102,16 +98,10 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
                             item._startValueX = item.x;
                             item._startValueY = item.y;
                         }
-                        if (offSetX !== 0) {
-                            item.x = item._startValueX + offSetX;
-                        } else {
-                            item.x = item._startValueX;
-                        }
-                        if (offSetY !== 0) {
-                            item.y = item._startValueY + offSetY;
-                        } else {
-                            item.y = item._startValueY;
-                        }
+
+                        item.x = item._startValueX + offSetX;
+                        item.y = item._startValueY + offSetY;
+
                     }, this);
             }
 
@@ -139,12 +129,12 @@ H5.ScreenShaker = (function (Math, Object, calcScreenConst) {
     };
 
     function elasticOutShake(currentTime, duration, amplitude, period) {
-        if (currentTime === 0 || (currentTime /= duration) === 1) {
+        var temp = currentTime / duration;
+        if (currentTime === 0 || temp === 1) {
             return 0;
         }
 
-        return Math.floor(amplitude * Math.pow(2, -10 * currentTime) *
-            Math.sin((currentTime * duration) * (2 * Math.PI) / period));
+        return Math.floor(amplitude * Math.pow(2, -10 * temp) * Math.sin(temp * duration * 2 * Math.PI / period));
     }
 
     ScreenShaker.prototype.add = function (drawable) {

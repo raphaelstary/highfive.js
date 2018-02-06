@@ -12,12 +12,6 @@ H5.measureText = (function () {
         ctx.fillStyle = text.color;
         ctx.font = text.size + 'px ' + text.fontFamily;
 
-        //        if (text.rotation) {
-        //            ctx.translate(elem.x, elem.y);
-        //            ctx.rotate(text.rotation);
-        //            ctx.translate(-elem.x, -elem.y);
-        //        }
-
         var textMetrics = ctx.measureText(text.msg);
 
         return {

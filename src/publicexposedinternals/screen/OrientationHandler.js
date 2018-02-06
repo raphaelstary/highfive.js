@@ -7,7 +7,8 @@ H5.OrientationHandler = (function (window, Orientation, screen, Event) {
     }
 
     OrientationHandler.prototype.orientationType = function () {
-        var currentOrientation = /portrait/i.test(screen.orientation.type) ? Orientation.PORTRAIT :
+        var currentOrientation = /portrait/i.test(screen.orientation.type) ?
+            Orientation.PORTRAIT :
             Orientation.LANDSCAPE;
         this.__fireEvent(currentOrientation);
     };
@@ -38,8 +39,7 @@ H5.OrientationHandler = (function (window, Orientation, screen, Event) {
     };
 
     OrientationHandler.prototype.handleResize = function () {
-        var currentOrientation = (window.innerWidth > window.innerHeight) ? Orientation.LANDSCAPE :
-            Orientation.PORTRAIT;
+        var currentOrientation = window.innerWidth > window.innerHeight ? Orientation.LANDSCAPE : Orientation.PORTRAIT;
         this.__fireEvent(currentOrientation);
     };
 

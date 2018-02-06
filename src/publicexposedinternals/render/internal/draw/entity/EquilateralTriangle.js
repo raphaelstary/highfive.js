@@ -5,7 +5,7 @@ H5.EquilateralTriangle = (function () {
         this.angle = angle;
         this.radius = radius;
         this.color = color;
-        this.filled = filled !== undefined ? filled : false;
+        this.filled = filled === undefined ? false : filled;
         this.lineWidth = lineWidth;
     }
 

@@ -2,7 +2,7 @@ H5.renderPolygon = (function (Math) {
     'use strict';
 
     function renderPolygon(ctx, x, y, polygon, sides, scale) {
-        var angle = (Math.PI * 2) / sides;
+        var angle = Math.PI * 2 / sides;
         var anticlockwise = false;
         angle = anticlockwise ? -angle : angle;
         var radius;

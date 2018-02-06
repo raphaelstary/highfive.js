@@ -85,5 +85,5 @@ H5.sendSystemEvent = (function (Event, location, navigator, Promise, getGamepads
     }
 
     return sendSystemEvent;
-})(H5.Event, window.location, window.navigator, H5.Promise, H5.getGamepads, Date, window.navigator.language ||
-    window.navigator.userLanguage);
+})(H5.Event, window.location, window.navigator, H5.Promise, H5.getGamepads, Date, window.navigator.language
+    || window.navigator.userLanguage);

@@ -21,8 +21,8 @@ H5.Drawables = (function (Drawable, TextWrapper, Rectangle, RectangleMask, Circl
     function generateHash(s) {
         return s.split('')
             .reduce(function (a, b) {
-                a = ((a << 5) - a) + b.charCodeAt(0);
-                return a & a;
+                var tmp = (a << 5) - a + b.charCodeAt(0);
+                return tmp & tmp;
             }, 0);
     }
 

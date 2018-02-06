@@ -38,7 +38,12 @@ window.onload = function () {
                 .setColor('goldenrod')
                 .setZIndex(3);
 
-            var drawables = [drawable1, drawable2, drawable3, drawable4];
+            var drawables = [
+                drawable1,
+                drawable2,
+                drawable3,
+                drawable4
+            ];
 
             function initFutureZIndexChange() {
                 timer.in(30, function () {

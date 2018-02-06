@@ -12,7 +12,8 @@ H5.HtmlAudioLoader = (function (SoundResources) {
             format = optionalExtension;
         },
         load: function (resourceLoader) {
-            sounds = new SoundResources(resourceLoader, path, format).createHtmlAudioSounds(dict);
+            sounds = new SoundResources(resourceLoader, path, format)
+                .createHtmlAudioSounds(dict);
         },
         process: function (services) {
             services.sounds = sounds;

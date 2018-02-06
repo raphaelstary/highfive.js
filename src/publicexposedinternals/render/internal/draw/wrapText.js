@@ -23,8 +23,8 @@ H5.wrapText = (function (Math) {
         var totalHeight = readyLines.length * lineHeight / 2;
         var newStartY = y - Math.floor(totalHeight / 2);
 
-        context.font = drawable.data.fontStyle + ' ' + Math.floor(drawable.data.size * drawable.scale) + 'px ' +
-            drawable.data.fontFamily;
+        context.font = drawable.data.fontStyle + ' ' + Math.floor(drawable.data.size * drawable.scale) + 'px '
+            + drawable.data.fontFamily;
 
         for (var i = 0; i < readyLines.length; i++) {
             context.fillText(readyLines[i], x, newStartY);

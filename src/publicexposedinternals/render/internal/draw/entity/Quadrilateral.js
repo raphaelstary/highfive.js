@@ -12,7 +12,7 @@ H5.Quadrilateral = (function () {
         this.dy = dy;
         this.color = color;
         this.lineColor = '#000000';
-        this.filled = filled !== undefined ? filled : false;
+        this.filled = filled === undefined ? false : filled;
         this.lineWidth = lineWidth;
     }
 

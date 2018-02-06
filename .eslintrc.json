@@ -1,0 +1,242 @@
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "H5": false,
+    "G": false
+  },
+  "extends": "eslint:all",
+  "rules": {
+    // init
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    // overwrite
+    "id-length": [
+      "warn",
+      {
+        "min": 2,
+        "max": 20,
+        "exceptions": [
+          "i",
+          "j",
+          "u",
+          "v",
+          "x",
+          "y",
+          "z",
+          "id"
+        ]
+      }
+    ],
+    "wrap-iife": [
+      "error",
+      "inside"
+    ],
+    "func-names": [
+      "error",
+      "never"
+    ],
+    "max-params": [
+      "warn",
+      {
+        "max": 7
+      }
+    ],
+    "one-var": [
+      "error",
+      "never"
+    ],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
+    "func-style": [
+      "warn",
+      "declaration"
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 120
+      }
+    ],
+    "no-magic-numbers": [
+      "warn",
+      {
+        "ignore": [
+          -0.1,
+          -0.2,
+          -0.25,
+          -0.3,
+          -0.4,
+          -0.5,
+          -0.6,
+          -0.7,
+          -0.75,
+          -0.8,
+          -0.9,
+          -1,
+          -2,
+          -3,
+          -4,
+          -5,
+          -6,
+          -7,
+          -8,
+          -9,
+          -10,
+          -45,
+          -90,
+          -100,
+          -180,
+          -360,
+          0,
+          0.1,
+          0.2,
+          0.25,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.75,
+          0.8,
+          0.9,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          45,
+          90,
+          100,
+          180,
+          360
+        ],
+        "ignoreArrayIndexes": true
+      }
+    ],
+    "no-underscore-dangle": [
+      "warn",
+      {
+        "allowAfterThis": true
+      }
+    ],
+    "max-statements": "warn",
+    "dot-location": [
+      "error",
+      "property"
+    ],
+    "quote-props": [
+      "error",
+      "as-needed"
+    ],
+    "camelcase": "warn",
+    "function-paren-newline": [
+      "error",
+      "never"
+    ],
+    "max-lines": "warn",
+    "newline-per-chained-call": [
+      "error",
+      {
+        "ignoreChainWithDepth": 1
+      }
+    ],
+    "complexity": "warn",
+    "object-curly-newline": [
+      "error",
+      {
+        "minProperties": 2
+      }
+    ],
+    "no-warning-comments": "warn",
+    "consistent-this": [
+      "error",
+      "self"
+    ],
+    "valid-jsdoc": "warn",
+    "operator-linebreak": [
+      "error",
+      "before",
+      {
+        "overrides": {
+          "?": "after",
+          ":": "after"
+        }
+      }
+    ],
+    "multiline-ternary": [
+      "error",
+      "always-multiline"
+    ],
+    "block-scoped-var": "warn",
+    "radix": [
+      "error",
+      "as-needed"
+    ],
+    "consistent-return": "warn",
+    "callback-return": "warn",
+    "no-invalid-this": "warn",
+    "no-useless-call": "warn",
+    "no-implicit-globals": "warn",
+    "guard-for-in": "warn",
+    "max-depth": "warn",
+    // disable
+    "sort-keys": "off",
+    "vars-on-top": "off",
+    "padded-blocks": "off",
+    "eqeqeq": "off",
+    "require-jsdoc": "off",
+    "capitalized-comments": "off",
+    "prefer-arrow-callback": "off",
+    "prefer-template": "off",
+    "prefer-spread": "off",
+    "prefer-destructuring": "off",
+    "object-shorthand": "off",
+    "no-var": "off",
+    "no-plusplus": "off",
+    "no-undefined": "off",
+    "init-declarations": "off",
+    "no-mixed-operators": "off",
+    "line-comment-position": "off",
+    "no-inline-comments": "off",
+    "no-shadow": "off",
+    "no-continue": "off",
+    "no-use-before-define": "off",
+    "no-ternary": "off",
+    "no-prototype-builtins": "off",
+    "no-bitwise": "off",
+    "no-sync": "off",
+    "default-case": "off",
+    "no-multi-assign": "off",
+    "wrap-regex": "off"
+  }
+}

@@ -21,7 +21,5 @@ H5.Sprites = (function (Sprite) {
         return new Sprite(frames, loop);
     }
 
-    return {
-        get: createNew
-    };
+    return {get: createNew};
 })(H5.Sprite);

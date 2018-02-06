@@ -1,4 +1,4 @@
-H5.SceneList = (function () {
+H5.SceneList = (function (Error) {
     'use strict';
 
     function SceneList() {
@@ -9,7 +9,7 @@ H5.SceneList = (function () {
     SceneList.prototype.add = function (sceneFn, oneTime) {
         this.scenes.push({
             sceneFn: sceneFn,
-            oneTime: oneTime == null ? false : oneTime
+            oneTime: oneTime == undefined ? false : oneTime
         });
     };
 
@@ -21,7 +21,7 @@ H5.SceneList = (function () {
         var scene = this.scenes.shift();
 
         if (!scene) {
-            throw 'No scenes configured';
+            throw new Error('No scenes configured');
         }
 
         if (!scene.oneTime) {
@@ -37,4 +37,4 @@ H5.SceneList = (function () {
     };
 
     return SceneList;
-})();
+})(Error);

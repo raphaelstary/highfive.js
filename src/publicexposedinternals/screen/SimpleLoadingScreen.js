@@ -42,8 +42,8 @@ H5.SimpleLoadingScreen = (function (Math) {
         this.centerX = Math.floor(width / 2);
         this.startBarX = width / 4;
         this.startBarY = height / 6;
-        this.barWidth = width - (this.startBarX * 2);
-        this.barHeight = height - (this.startBarY * 2);
+        this.barWidth = width - this.startBarX * 2;
+        this.barHeight = height - this.startBarY * 2;
     };
 
     SimpleLoadingScreen.prototype._initialRendering = function () {

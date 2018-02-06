@@ -1,8 +1,13 @@
 H5.Stats = (function (Math, Date) {
     'use strict';
-    var startTime = Date.now(), previousTime = startTime;
-    var ms = 0, msMin = Infinity, msMax = 0;
-    var fps = 0, fpsMin = Infinity, fpsMax = 0;
+    var startTime = Date.now();
+    var previousTime = startTime;
+    var ms = 0;
+    var msMin = Infinity;
+    var msMax = 0;
+    var fps = 0;
+    var fpsMin = Infinity;
+    var fpsMax = 0;
     var frames = 0;
 
     return {
@@ -22,21 +27,13 @@ H5.Stats = (function (Math, Date) {
             msMin = Math.min(msMin, ms);
             msMax = Math.max(msMax, ms);
 
-            //this.data.ms = ms;
-            //this.data.msMin = msMin;
-            //this.data.msMax = msMax;
-
             frames++;
 
             if (time > previousTime + 1000) {
 
-                fps = Math.round((frames * 1000) / (time - previousTime));
+                fps = Math.round(frames * 1000 / (time - previousTime));
                 fpsMin = Math.min(fpsMin, fps);
                 fpsMax = Math.max(fpsMax, fps);
-
-                //this.data.fps = fps;
-                //this.data.fpsMin = fpsMin;
-                //this.data.fpsMax = fpsMax;
 
                 previousTime = time;
                 frames = 0;

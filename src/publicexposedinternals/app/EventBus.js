@@ -24,10 +24,10 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
     EventBus.prototype.fire = function (eventName, payload) {
         var subscribers = this.dict[eventName];
         if (subscribers) {
-            if (payload != null) {
-                this.pending[eventName] = payload;
-            } else {
+            if (payload == undefined) {
                 this.pending[eventName] = true;
+            } else {
+                this.pending[eventName] = payload;
             }
         }
     };
@@ -42,13 +42,13 @@ H5.EventBus = (function (iterateSomeEntries, Object) {
         }
     };
 
-    EventBus.prototype.subscribe = function (eventName, callback, self) {
+    EventBus.prototype.subscribe = function (eventName, callback, thisArg) {
         if (!this.dict[eventName]) {
             this.dict[eventName] = {};
         }
 
         var id = this.idGenerator++;
-        this.dict[eventName][id] = self ? callback.bind(self) : callback;
+        this.dict[eventName][id] = thisArg ? callback.bind(thisArg) : callback;
         return id;
     };
 

@@ -5,18 +5,22 @@ H5.Camera = (function (Math) {
         this.__viewPort = viewPort;
         this.__device = device;
 
-        // 1st universe grid tiles (u,v)
-        // 2nd universe px screen coordinates (x,y)
-        // 3rd universe px space coordinates (x,y)
-        // - while screen coordinates are relative, space coordinates are an absolute representation of tiles in px
+        /**
+         * 1st universe grid tiles (u,v)
+         * 2nd universe px screen coordinates (x,y)
+         * 3rd universe px space coordinates (x,y)
+         * - while screen coordinates are relative, space coordinates are an absolute representation of tiles in px
+         */
 
         this.__maxXFn = maxXFn;
         this.__maxYFn = maxYFn;
 
         /** @public */
         this.locked = false;
+
         /** @public */
         this.show = true;
+
         /** @public */
         this.zoomFactor = 1;
     }
@@ -42,14 +46,20 @@ H5.Camera = (function (Math) {
         if (this.zoomFactor === 1) {
             var cornerX = this.__viewPort.getCornerX();
             var cornerY = this.__viewPort.getCornerY();
-            if (entity.getEndXAnchored() < cornerX || entity.getCornerXAnchored() > this.__viewPort.getEndX() ||
-                entity.getEndYAnchored() < cornerY || entity.getCornerYAnchored() > this.__viewPort.getEndY()) {
+            if (entity.getEndXAnchored() < cornerX || entity.getCornerXAnchored() > this.__viewPort.getEndX()
+                || entity.getEndYAnchored() < cornerY || entity.getCornerYAnchored() > this.__viewPort.getEndY()) {
 
                 drawable.show = false;
                 return;
             }
 
-            if (!justUseEntitiesPosition) {
+            if (justUseEntitiesPosition) {
+                drawable.scale = forcedScaleFactor === undefined ? 1 : forcedScaleFactor;
+                drawable.anchorOffsetX = forcedOffsetX === undefined ? 0 : forcedOffsetX;
+                drawable.anchorOffsetY = forcedOffsetY === undefined ? 0 : forcedOffsetY;
+                drawable.rotationAnchorOffsetX = forcedRotationOffsetX === undefined ? 0 : forcedRotationOffsetX;
+                drawable.rotationAnchorOffsetY = forcedRotationOffsetY === undefined ? 0 : forcedRotationOffsetY;
+            } else {
                 drawable.rotation = entity.rotation;
                 drawable.alpha = entity.alpha;
                 drawable.scale = entity.scale;
@@ -59,13 +69,6 @@ H5.Camera = (function (Math) {
                 drawable.anchorOffsetY = entity.anchorOffsetY;
                 drawable.flipHorizontally = entity.flipHorizontally;
                 drawable.flipVertically = entity.flipVertically;
-
-            } else {
-                drawable.scale = forcedScaleFactor !== undefined ? forcedScaleFactor : 1;
-                drawable.anchorOffsetX = forcedOffsetX !== undefined ? forcedOffsetX : 0;
-                drawable.anchorOffsetY = forcedOffsetY !== undefined ? forcedOffsetY : 0;
-                drawable.rotationAnchorOffsetX = forcedRotationOffsetX !== undefined ? forcedRotationOffsetX : 0;
-                drawable.rotationAnchorOffsetY = forcedRotationOffsetY !== undefined ? forcedRotationOffsetY : 0;
             }
 
             drawable.x = entity.x - cornerX;
@@ -92,7 +95,22 @@ H5.Camera = (function (Math) {
             return;
         }
 
-        if (!justUseEntitiesPosition) {
+        if (justUseEntitiesPosition) {
+            var scale = forcedScaleFactor === undefined ? 1 : forcedScaleFactor;
+            drawable.scale = scale * this.zoomFactor;
+
+            var offsetX = forcedOffsetX === undefined ? 0 : forcedOffsetX;
+            drawable.anchorOffsetX = Math.floor(offsetX * this.zoomFactor);
+
+            var offsetY = forcedOffsetY === undefined ? 0 : forcedOffsetY;
+            drawable.anchorOffsetY = Math.floor(offsetY * this.zoomFactor);
+
+            var rotationOffsetX = forcedRotationOffsetX === undefined ? 0 : forcedRotationOffsetX;
+            drawable.rotationAnchorOffsetX = Math.floor(rotationOffsetX * this.zoomFactor);
+
+            var rotationOffsetY = forcedRotationOffsetY === undefined ? 0 : forcedRotationOffsetY;
+            drawable.rotationAnchorOffsetY = Math.floor(rotationOffsetY * this.zoomFactor);
+        } else {
             drawable.rotation = entity.rotation;
             drawable.alpha = entity.alpha;
             drawable.flipHorizontally = entity.flipHorizontally;
@@ -105,21 +123,6 @@ H5.Camera = (function (Math) {
             drawable.rotationAnchorOffsetX = Math.floor(entity.rotationAnchorOffsetX * this.zoomFactor);
             drawable.rotationAnchorOffsetY = Math.floor(entity.rotationAnchorOffsetY * this.zoomFactor);
 
-        } else {
-            var scale = forcedScaleFactor !== undefined ? forcedScaleFactor : 1;
-            drawable.scale = scale * this.zoomFactor;
-
-            var offsetX = forcedOffsetX !== undefined ? forcedOffsetX : 0;
-            drawable.anchorOffsetX = Math.floor(offsetX * this.zoomFactor);
-
-            var offsetY = forcedOffsetY !== undefined ? forcedOffsetY : 0;
-            drawable.anchorOffsetY = Math.floor(offsetY * this.zoomFactor);
-
-            var rotationOffsetX = forcedRotationOffsetX !== undefined ? forcedRotationOffsetX : 0;
-            drawable.rotationAnchorOffsetX = Math.floor(rotationOffsetX * this.zoomFactor);
-
-            var rotationOffsetY = forcedRotationOffsetY !== undefined ? forcedRotationOffsetY : 0;
-            drawable.rotationAnchorOffsetY = Math.floor(rotationOffsetY * this.zoomFactor);
         }
 
         drawable.x = Math.floor((entity.x - left) * this.zoomFactor);
@@ -140,8 +143,8 @@ H5.Camera = (function (Math) {
         var bottom = entity.data.ay > entity.data.by ? entity.data.ay : entity.data.by;
         var top = entity.data.ay < entity.data.by ? entity.data.ay : entity.data.by;
 
-        if (right < cornerX || left > this.__viewPort.getEndX() || bottom < cornerY ||
-            top > this.__viewPort.getEndY()) {
+        if (right < cornerX || left > this.__viewPort.getEndX() || bottom < cornerY || top
+            > this.__viewPort.getEndY()) {
 
             drawable.show = false;
             return;

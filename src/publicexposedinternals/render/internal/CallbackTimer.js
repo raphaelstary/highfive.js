@@ -25,20 +25,20 @@ H5.CallbackTimer = (function () {
         }
     };
 
-    CallbackTimer.prototype.doLater = function (callback, duration, self) {
-        this.in(duration, callback, self);
+    CallbackTimer.prototype.doLater = function (callback, duration, thisArg) {
+        this.in(duration, callback, thisArg);
     };
 
-    CallbackTimer.prototype.in = function (ticks, callback, self) {
+    CallbackTimer.prototype.in = function (ticks, callback, thisArg) {
         this.todos.push({
             duration: ticks,
             time: 0,
-            callback: self ? callback.bind(self) : callback
+            callback: thisArg ? callback.bind(thisArg) : callback
         });
     };
 
-    CallbackTimer.prototype.nextTick = function (callback, self) {
-        this.in(-1, callback, self);
+    CallbackTimer.prototype.nextTick = function (callback, thisArg) {
+        this.in(-1, callback, thisArg);
     };
 
     CallbackTimer.prototype.pause = function () {

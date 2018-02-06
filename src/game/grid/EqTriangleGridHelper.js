@@ -31,13 +31,12 @@ H5.EqTriangleGridHelper = (function (Math) {
                 y: lastY,
                 side: 'left'
             };
-        } else {
-            return {
-                x: -(Math.floor(lastY / 2) + 1),
-                y: lastY,
-                side: 'right'
-            };
         }
+        return {
+            x: -(Math.floor(lastY / 2) + 1),
+            y: lastY,
+            side: 'right'
+        };
     };
 
     EqTriangleGridHelper.prototype.getBottomRight = function () {
@@ -49,13 +48,12 @@ H5.EqTriangleGridHelper = (function (Math) {
                 y: lastY,
                 side: 'left'
             };
-        } else {
-            return {
-                x: lastX - (Math.floor(lastY / 2) + 1),
-                y: lastY,
-                side: 'right'
-            };
         }
+        return {
+            x: lastX - (Math.floor(lastY / 2) + 1),
+            y: lastY,
+            side: 'right'
+        };
     };
 
     EqTriangleGridHelper.prototype.getEmptyNeighbors = function (u, v, side) {
@@ -143,14 +141,12 @@ H5.EqTriangleGridHelper = (function (Math) {
                 side = 'right';
                 x = (u + Math.floor(v / 2)) * 2 + 1;
             }
+        } else if (u % 2 == 0) {
+            side = 'right';
+            x = Math.floor(u / 2) - (Math.floor(v / 2) + 1);
         } else {
-            if (u % 2 == 0) {
-                side = 'right';
-                x = Math.floor(u / 2) - (Math.floor(v / 2) + 1);
-            } else {
-                side = 'left';
-                x = Math.floor(u / 2) - (Math.floor(v / 2) + 1);
-            }
+            side = 'left';
+            x = Math.floor(u / 2) - (Math.floor(v / 2) + 1);
         }
         return {
             x: x,

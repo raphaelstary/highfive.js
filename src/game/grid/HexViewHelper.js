@@ -35,33 +35,33 @@ H5.HexViewHelper = (function (Width, Math) {
     };
 
     HexViewHelper.prototype.getXFn = function (u, v) {
-        return (function (self) {
+        return (function (thisArg) {
             return function (width, height) {
-                var calcWidth = self.getWidth(width, height);
+                var calcWidth = thisArg.getWidth(width, height);
                 var xOffset = 0;
-                var totalWidth = calcWidth * self.xTiles;
+                var totalWidth = calcWidth * thisArg.xTiles;
                 if (totalWidth < width) {
                     xOffset = (width - totalWidth) / 2;
                 }
-                if (self.adjustCenter) {
-                    return Math.floor(self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset);
+                if (thisArg.adjustCenter) {
+                    return Math.floor(thisArg.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset);
                 }
-                return Math.floor(self.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset +
-                    calcWidth / 2);
+                return Math.floor(thisArg.getSize(width, height) * Math.sqrt(3) * (u + 0.5 * (v & 1)) + xOffset
+                    + calcWidth / 2);
             };
         })(this);
     };
 
     HexViewHelper.prototype.getYFn = function (v) {
-        return (function (self) {
+        return (function (thisArg) {
             return function (height, width) {
-                var size = self.getSize(width, height);
+                var size = thisArg.getSize(width, height);
                 var yOffset = 0;
-                var totalHeight = size * self.yTiles * 2;
+                var totalHeight = size * thisArg.yTiles * 2;
                 if (totalHeight < height) {
                     yOffset = (height - totalHeight) / 2;
                 }
-                return Math.floor(size * 3 / 2 * v + size + self.topOffset(height) / 2 + yOffset);
+                return Math.floor(size * 3 / 2 * v + size + thisArg.topOffset(height) / 2 + yOffset);
             };
         })(this);
     };

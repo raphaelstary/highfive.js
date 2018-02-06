@@ -4,7 +4,7 @@ H5.Circle = (function () {
     function Circle(radius, color, filled, lineWidth) {
         this.radius = radius;
         this.color = color;
-        this.filled = filled !== undefined ? filled : false;
+        this.filled = filled === undefined ? false : filled;
         this.lineWidth = lineWidth;
     }
 

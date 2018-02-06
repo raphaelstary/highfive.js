@@ -4,11 +4,12 @@ H5.installVisibility = (function (VisibilityHandler, document, Event) {
     function installVisibility(events, device) {
         var handler = new VisibilityHandler(events);
 
-        if (document.hidden !== undefined) {
-            document.addEventListener('visibilitychange', handler.handleVisibility.bind(handler));
-        } else {
+        if (document.hidden === undefined) {
             return;
         }
+
+        document.addEventListener('visibilitychange', handler.handleVisibility.bind(handler));
+
         device.pageHidden = handler.lastState;
         events.subscribe(Event.PAGE_VISIBILITY, function (hidden) {
             device.pageHidden = hidden;

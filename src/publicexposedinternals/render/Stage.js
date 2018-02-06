@@ -348,8 +348,8 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
     };
 
     Stage.prototype.has = function (drawable) {
-        return this.renderer.has(drawable) || this.motions.has(drawable) || this.spriteAnimations.has(drawable) ||
-            this.animations.has(drawable);
+        return this.renderer.has(drawable) || this.motions.has(drawable) || this.spriteAnimations.has(drawable)
+            || this.animations.has(drawable);
     };
 
     Stage.prototype.clear = function () {

@@ -1,7 +1,6 @@
 H5.AtlasCache = (function (SubImage, Math, iterateEntries) {
     'use strict';
 
-    //noinspection JSUnusedLocalSymbols
     function AtlasCache(width, height, defaultScreenHeight) {
         this.defaultScreenHeight = defaultScreenHeight || 3840;
         this.atlasDict = {};
@@ -30,8 +29,8 @@ H5.AtlasCache = (function (SubImage, Math, iterateEntries) {
     AtlasCache.prototype._createSubImage = function (elem, atlas, scale) {
         return new SubImage(elem.frame.x, elem.frame.y, elem.frame.w, elem.frame.h, this._getOffSetFromCenterX(elem, 1),
             this._getOffSetFromCenterY(elem, 1), elem.spriteSourceSize.w, elem.spriteSourceSize.h,
-            this._getOffSetFromCenterX(elem, scale), this._getOffSetFromCenterY(elem, scale), elem.spriteSourceSize.w *
-            scale, elem.spriteSourceSize.h * scale, atlas);
+            this._getOffSetFromCenterX(elem, scale), this._getOffSetFromCenterY(elem, scale), elem.spriteSourceSize.w
+            * scale, elem.spriteSourceSize.h * scale, atlas);
     };
 
     AtlasCache.prototype.get = function (key) {

@@ -12,18 +12,18 @@ H5.ResizeHandler = (function (getDevicePixelRatio, Event, Math) {
 
         var pixelRatio = getDevicePixelRatio();
 
-        if (!this.device.isLowRez) {
+        if (this.device.isLowRez) {
             this.events.fire(Event.RESIZE, {
-                width: Math.floor(width * pixelRatio),
-                height: Math.floor(height * pixelRatio),
+                width: this.device.width,
+                height: this.device.height,
                 cssWidth: width,
                 cssHeight: height,
                 devicePixelRatio: pixelRatio
             });
         } else {
             this.events.fire(Event.RESIZE, {
-                width: this.device.width,
-                height: this.device.height,
+                width: Math.floor(width * pixelRatio),
+                height: Math.floor(height * pixelRatio),
                 cssWidth: width,
                 cssHeight: height,
                 devicePixelRatio: pixelRatio

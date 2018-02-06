@@ -34,7 +34,7 @@ H5.EqTriangles = (function (Math) {
             return a + a / 2 * v + a * u;
         },
 
-        rightY: function rightY(u, v, a) {
+        rightY: function (u, v, a) {
             return this.radius(a) + this.height(a) * v;
         },
         leftX: function (u, v, a) {

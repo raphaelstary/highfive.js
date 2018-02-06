@@ -16,8 +16,8 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
         return animation;
     }
 
-    function callback(animation, callback, self) {
-        animation.__callback = self ? callback.bind(self) : callback;
+    function callback(animation, callback, thisArg) {
+        animation.__callback = thisArg ? callback.bind(thisArg) : callback;
         return animation;
     }
 
@@ -102,11 +102,6 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
         moveFrom: function (stage, resizer, screen, drawable, xFn, yFn, resizeDependencies) {
             var registerResizeAfterMove = function () {
                 resizer.removeKey('path', drawable);
-
-                //resizer.add('position', drawable, function (width, height) {
-                //    changeCoords(drawable, Math.floor(xFn(width, height)), Math.floor(yFn(height, width)));
-                //}, resizeDependencies);
-
             };
 
             var path = stage.getPath(Math.floor(xFn(screen.width, screen.height)),
@@ -147,7 +142,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
             resizer.remove(drawable);
             if (drawable.mask) {
                 this.remove(stage, resizer, drawable.mask);
-                delete  drawable.mask;
+                delete drawable.mask;
             }
             stage.remove(drawable);
             return drawable;

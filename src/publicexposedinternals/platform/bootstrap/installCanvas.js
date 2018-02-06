@@ -8,7 +8,7 @@ H5.installCanvas = (function (document, Event, Math) {
             canvas.width = pixelWidth;
             canvas.height = pixelHeight;
 
-            canvas.style['display'] = 'none';
+            canvas.style.display = 'none';
 
             var scale = height / pixelHeight;
             var scaledWidth = pixelWidth * scale;

@@ -126,12 +126,10 @@ H5.Renderer = (function (Object, Math, $) {
                     this.__ctx.rotate(drawable.rotation);
                     this.__ctx.translate(drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
                 }
-            } else {
-                if (drawable.rotation) {
-                    this.__ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
-                    this.__ctx.rotate(drawable.rotation);
-                    this.__ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
-                }
+            } else if (drawable.rotation) {
+                this.__ctx.translate(drawable.getRotationAnchorX(), drawable.getRotationAnchorY());
+                this.__ctx.rotate(drawable.rotation);
+                this.__ctx.translate(-drawable.getRotationAnchorX(), -drawable.getRotationAnchorY());
             }
 
             this.__ctx.translate(drawable.anchorOffsetX, drawable.anchorOffsetY);

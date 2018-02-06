@@ -10,7 +10,8 @@ H5.EjectaFontLoader = (function ($, H5) {
         load: function () {
             $.ejecta.loadFont(font);
         },
-        process: function (services) {
+        process: function () {
+            // do nothing
         }
     };
 })(window, H5);

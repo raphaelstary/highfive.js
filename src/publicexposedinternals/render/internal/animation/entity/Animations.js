@@ -9,7 +9,5 @@ H5.Animations = (function (Animation, Math) {
         return new Animation(startValue, endValue, length, speed, spacingFn, loop);
     }
 
-    return {
-        get: createNew
-    };
+    return {get: createNew};
 })(H5.Animation, Math);

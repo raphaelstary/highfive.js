@@ -7,7 +7,7 @@ H5.Animation = (function () {
         this.length = valueRangeLength;
         this.duration = duration;
         this.timingFn = timingFn;
-        this.loop = loop !== undefined ? loop : false;
+        this.loop = loop === undefined ? false : loop;
     }
 
     return Animation;

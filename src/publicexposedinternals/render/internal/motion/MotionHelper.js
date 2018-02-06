@@ -37,12 +37,10 @@ H5.MotionHelper = (function () {
                     } else {
                         self.motions.animate(drawable, pathReturn, fromAtoB);
                     }
+                } else if (callbackReturn) {
+                    self.motions.animate(drawable, pathReturn, callbackReturn);
                 } else {
-                    if (callbackReturn) {
-                        self.motions.animate(drawable, pathReturn, callbackReturn);
-                    } else {
-                        self.motions.animate(drawable, pathReturn);
-                    }
+                    self.motions.animate(drawable, pathReturn);
                 }
             }
         }

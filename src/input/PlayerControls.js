@@ -67,9 +67,9 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
     }
 
     function getRegisterCallbackFunction(store, name) {
-        return function (callback, self) {
-            if (self) {
-                store[name] = callback.bind(self);
+        return function (callback, thisArg) {
+            if (thisArg) {
+                store[name] = callback.bind(thisArg);
             } else {
                 store[name] = callback;
             }
@@ -97,10 +97,8 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
                 if (store.down) {
                     store.down();
                 }
-            } else {
-                if (store.neutral) {
-                    store.neutral();
-                }
+            } else if (store.neutral) {
+                store.neutral();
             }
         }
     }
@@ -196,8 +194,8 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
                     return;
                 }
 
-                neutral = !(gamePad.isDPadDownPressed() || gamePad.isDPadLeftPressed() || gamePad.isDPadUpPressed() ||
-                    gamePad.isDPadRightPressed());
+                neutral = !(gamePad.isDPadDownPressed() || gamePad.isDPadLeftPressed() || gamePad.isDPadUpPressed()
+                    || gamePad.isDPadRightPressed());
 
                 if (!neutral && !started) {
                     // start gesture
@@ -320,7 +318,10 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
                         } else if (command.or instanceof Array) {
                             command.or.push(keyCode);
                         } else {
-                            command.or = [command.or, keyCode];
+                            command.or = [
+                                command.or,
+                                keyCode
+                            ];
                         }
 
                         return this;
@@ -331,23 +332,26 @@ H5.PlayerControls = (function (Event, Array, Math, Vectors, Direction) {
                         } else if (command.and instanceof Array) {
                             command.and.push(keyCode);
                         } else {
-                            command.and = [command.and, keyCode];
+                            command.and = [
+                                command.and,
+                                keyCode
+                            ];
                         }
 
                         return this;
                     },
-                    onDown: function (callback, self) {
-                        if (self) {
-                            command.onDown = callback.bind(self);
+                    onDown: function (callback, thisArg) {
+                        if (thisArg) {
+                            command.onDown = callback.bind(thisArg);
                         } else {
                             command.onDown = callback;
                         }
 
                         return this;
                     },
-                    onUp: function (callback, self) {
-                        if (self) {
-                            command.onUp = callback.bind(self);
+                    onUp: function (callback, thisArg) {
+                        if (thisArg) {
+                            command.onUp = callback.bind(thisArg);
                         } else {
                             command.onUp = callback;
                         }

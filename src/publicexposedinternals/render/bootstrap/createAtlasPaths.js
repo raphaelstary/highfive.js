@@ -53,8 +53,8 @@ H5.createAtlasPaths = (function () {
             names.forEach(function (name) {
                 aggregatedPaths.push({
                     gfx: (optionalGfxPath || DEFAULT_GFX_PATH) + name + (optionalGfxExtension || DEFAULT_GFX_EXTENSION),
-                    data: (optionalDataPath || DEFAULT_DATA_PATH) + name +
-                    (optionalDataExtension || DEFAULT_DATA_EXTENSION)
+                    data: (optionalDataPath || DEFAULT_DATA_PATH) + name + (optionalDataExtension
+                        || DEFAULT_DATA_EXTENSION)
                 });
             });
 

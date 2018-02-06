@@ -1,4 +1,4 @@
-H5.GamePad = (function (Button, Axis) {
+H5.GamePad = (function (Button, Axis, Error) {
     'use strict';
 
     function GamePad(index) {
@@ -10,8 +10,8 @@ H5.GamePad = (function (Button, Axis) {
         var pad = gamepads[this.index];
 
         if (!pad) {
-            console.log('error: gamepad + ' + this.index + ' + not found');
-            return;
+            // todo rework
+            throw new Error('gamepad + ' + this.index + ' + not found');
         }
 
         if (pad.timestamp > this.lastUpdate) {
@@ -100,4 +100,4 @@ H5.GamePad = (function (Button, Axis) {
     };
 
     return GamePad;
-})(H5.GamePadButton, H5.GamePadAxis);
+})(H5.GamePadButton, H5.GamePadAxis, Error);

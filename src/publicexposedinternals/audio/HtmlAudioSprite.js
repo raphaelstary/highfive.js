@@ -122,7 +122,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
         });
     };
 
-    HtmlAudioSprite.prototype.masterVolumeTo = function (value, duration, callback, self) {
+    HtmlAudioSprite.prototype.masterVolumeTo = function (value, duration, callback, thisArg) {
         this.masterVolume = value;
         this.tracks.forEach(function (track) {
             if (track.playing) {
@@ -131,7 +131,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             this.stage.audioVolumeTo(track.element, value)
                 .setDuration(duration);
         }, this);
-        this.timer.in(duration, callback, self);
+        this.timer.in(duration, callback, thisArg);
     };
 
     var animationMock = {
@@ -150,15 +150,16 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
     var audioMock = {
         trackAvailable: false,
         stop: function () {
+            // do nothing
         },
         mute: returnThis,
         unmute: returnThis,
         volumeTo: function () {
             return animationMock;
         },
-        setCallback: function (callback, self) {
-            if (self) {
-                callback.call(self);
+        setCallback: function (callback, thisArg) {
+            if (thisArg) {
+                callback.call(thisArg);
             } else {
                 callback();
             }
@@ -185,7 +186,6 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             });
 
             if (!currentTrack) {
-                console.log('no audio track available');
                 return audioMock;
             }
 
@@ -254,8 +254,8 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
 
                 return this;
             },
-            setCallback: function (callback, self) {
-                currentSound.callback = self ? callback.bind(self) : callback;
+            setCallback: function (callback, thisArg) {
+                currentSound.callback = thisArg ? callback.bind(thisArg) : callback;
                 return this;
             },
             setLoop: function (loop) {

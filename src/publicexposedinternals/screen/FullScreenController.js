@@ -4,8 +4,8 @@ H5.FullScreenController = (function (document, navigator) {
     function FullScreenController(screen) {
         this.screen = screen;
 
-        this.isSupported = document.fullscreenEnabled || document.webkitFullscreenEnabled ||
-            document.mozFullScreenEnabled || document.msFullscreenEnabled;
+        this.isSupported = document.fullscreenEnabled || document.webkitFullscreenEnabled
+            || document.mozFullScreenEnabled || document.msFullscreenEnabled;
     }
 
     FullScreenController.prototype.request = function () {
@@ -22,8 +22,8 @@ H5.FullScreenController = (function (document, navigator) {
     };
 
     FullScreenController.prototype.isFullScreen = function () {
-        return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement ||
-            document.msFullscreenElement || navigator.standalone) != null;
+        return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement
+            || document.msFullscreenElement || navigator.standalone) != undefined;
     };
 
     FullScreenController.prototype.__isSupported = function () {

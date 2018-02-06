@@ -10,21 +10,6 @@ H5.ImageResourceHelper = (function (ImageCache, Object, getDevicePixelRatio, Mat
         });
     }
 
-    function registerSprites(resourceLoader, spriteInfoPairs, images) {
-        spriteInfoPairs.forEach(function (info) {
-            for (var i = 0; i < info.numberOfFrames; i++) {
-                var name;
-                if (i < 10) {
-                    name = info.name + '_000' + i;
-                    images[name] = resourceLoader.addImage(GFX_FOLDER + name + FILE_EXT);
-                } else {
-                    name = info.name + '_00' + i;
-                    images[name] = resourceLoader.addImage(GFX_FOLDER + name + FILE_EXT);
-                }
-            }
-        });
-    }
-
     function processImages(images, width, height, defaultSize) {
         var pixelRatio = getDevicePixelRatio();
         var gfxCache = new ImageCache(Math.floor(width * pixelRatio), Math.floor(height * pixelRatio), defaultSize);

@@ -17,9 +17,8 @@ H5.EqTriangleGrid = (function (Math) {
     EqTriangleGrid.prototype.getLeft = function (u, v) {
         if (v % 2 == 0) {
             return this.map[v][(u + Math.floor(v / 2)) * 2];
-        } else {
-            return this.map[v][(u + Math.floor(v / 2)) * 2 + 1];
         }
+        return this.map[v][(u + Math.floor(v / 2)) * 2 + 1];
     };
 
     EqTriangleGrid.prototype.setLeft = function (u, v) {
@@ -33,9 +32,8 @@ H5.EqTriangleGrid = (function (Math) {
     EqTriangleGrid.prototype.getRight = function (u, v) {
         if (v % 2 == 0) {
             return this.map[v][(u + Math.floor(v / 2)) * 2 + 1];
-        } else {
-            return this.map[v][(u + Math.floor(v / 2)) * 2 + 2];
         }
+        return this.map[v][(u + Math.floor(v / 2)) * 2 + 2];
     };
 
     EqTriangleGrid.prototype.setRight = function (u, v) {

@@ -1,10 +1,10 @@
 H5.iterateEntries = (function (Object) {
     'use strict';
 
-    function iterateEntries(dictionary, callback, self) {
+    function iterateEntries(dictionary, callback, thisArg) {
         Object.keys(dictionary)
             .forEach(function (key) {
-                callback.call(self, dictionary[key], key);
+                callback.call(thisArg, dictionary[key], key);
             });
     }
 

@@ -170,7 +170,8 @@ H5.Setter = (function (changeCoords, Math) {
 
         setLineDash: function (addToResizer, screen, drawable, lineDashSet, resizeDependencies) {
             drawable.data.lineDash = [
-                lineDashSet[0](screen.width, screen.height), lineDashSet[1](screen.width, screen.height)
+                lineDashSet[0](screen.width, screen.height),
+                lineDashSet[1](screen.width, screen.height)
             ];
             addToResizer(drawable, function (width, height) {
                 drawable.data.lineDash[0] = lineDashSet[0](width, height);

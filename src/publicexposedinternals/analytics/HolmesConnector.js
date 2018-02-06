@@ -40,7 +40,6 @@ H5.HolmesConnector = (function (Persistence, JSON, XMLHttpRequest, localStorage)
             tenant: this.tenantCode
         };
         for (var key in data) {
-            //noinspection JSUnfilteredForInLoop
             payload[key] = data[key];
         }
 

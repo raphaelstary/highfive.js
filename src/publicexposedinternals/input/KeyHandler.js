@@ -3,12 +3,13 @@ H5.KeyHandler = (function (Event) {
 
     function KeyHandler(events) {
         this.events = events;
-        this.pressedKeys = {
-            isPressed: function (code) {
-                return this[code];
-            }
-        };
+        this.pressedKeys = {isPressed: isPressed};
+
         this.changed = false;
+    }
+
+    function isPressed(code) {
+        return this[code];
     }
 
     KeyHandler.prototype.keyDown = function (event) {

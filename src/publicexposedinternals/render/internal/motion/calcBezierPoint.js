@@ -9,10 +9,10 @@ H5.calcBezierPoint = (function () {
         var ttt = tt * time;
 
         function calcTerms(p0, p1, p2, p3) {
-            return uuu * p0 //first term
-                + 3 * uu * time * p1 //second term
-                + 3 * u * tt * p2 //third term
-                + ttt * p3; //fourth term
+            return uuu * p0 // first term
+                + 3 * uu * time * p1 // second term
+                + 3 * u * tt * p2 // third term
+                + ttt * p3; // fourth term
         }
 
         return {

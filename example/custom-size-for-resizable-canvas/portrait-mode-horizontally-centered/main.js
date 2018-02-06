@@ -57,8 +57,8 @@ window.onload = function () {
                     return;
                 }
 
-                if (pushed && pointer.id == pushingPointerId && pointer.type == 'move' &&
-                    !H5.isHit(pointer, helloWorld)) {
+                if (pushed && pointer.id == pushingPointerId && pointer.type == 'move' && !H5.isHit(pointer,
+                        helloWorld)) {
 
                     helloWorld.setColor('white');
                     pushed = false;

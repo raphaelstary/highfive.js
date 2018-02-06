@@ -3,7 +3,7 @@ H5.CallbackCounter = (function () {
 
     function CallbackCounter(callback, forcedCount) {
         this.__countForced = forcedCount !== undefined;
-        this.counter = forcedCount !== undefined ? forcedCount : 0;
+        this.counter = forcedCount === undefined ? 0 : forcedCount;
         this.callback = callback;
     }
 

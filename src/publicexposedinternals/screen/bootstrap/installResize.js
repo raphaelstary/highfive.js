@@ -39,12 +39,11 @@ H5.installResize = (function (window, ResizeHandler, Event) {
         };
 
         if (mapDimensions) {
-            mapDimensions({
-                target: {
-                    innerWidth: device.cssWidth,
-                    innerHeight: device.cssHeight
-                }
-            })
+            var newTarget = {
+                innerWidth: device.cssWidth,
+                innerHeight: device.cssHeight
+            };
+            mapDimensions({target: newTarget})
                 .then(resizeHandler.handleResize.bind(resizeHandler));
         }
     }

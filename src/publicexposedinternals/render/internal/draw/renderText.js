@@ -15,14 +15,14 @@ H5.renderText = (function (wrapText, Math) {
         ctx.fillStyle = drawable.data.color;
         ctx.font = drawable.data.fontStyle + ' ' + drawable.data.size + 'px ' + drawable.data.fontFamily;
 
-        var txtIsToLong = drawable.data.maxLineLength && ctx.measureText(drawable.data.msg).width >
-            drawable.data.maxLineLength;
+        var txtIsToLong = drawable.data.maxLineLength && ctx.measureText(drawable.data.msg).width
+            > drawable.data.maxLineLength;
         if (txtIsToLong) {
             wrapText(ctx, drawable.data.msg, drawable.x, drawable.y, drawable.data.maxLineLength,
                 drawable.data.lineHeight, drawable);
         } else {
-            ctx.font = drawable.data.fontStyle + ' ' + Math.floor(drawable.data.size * drawable.scale) + 'px ' +
-                drawable.data.fontFamily;
+            ctx.font = drawable.data.fontStyle + ' ' + Math.floor(drawable.data.size * drawable.scale) + 'px '
+                + drawable.data.fontFamily;
             ctx.fillText(drawable.data.msg, drawable.x, drawable.y);
         }
     }

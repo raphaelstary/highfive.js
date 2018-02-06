@@ -2,7 +2,10 @@ G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition
     'use strict';
 
     var MonkeyFaceImages = [
-        'monkey-1-face', 'monkey-2-face', 'monkey-3-face', 'monkey-4-face'
+        'monkey-1-face',
+        'monkey-2-face',
+        'monkey-3-face',
+        'monkey-4-face'
     ];
     var params = getUrlParams(location.search);
     var WIDTH_TILES = params.width ? parseInt(params.width) : 16 * 3;

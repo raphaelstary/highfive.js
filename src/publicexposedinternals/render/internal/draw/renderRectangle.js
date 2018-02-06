@@ -2,9 +2,11 @@ H5.renderRectangle = (function (Math) {
     'use strict';
 
     function renderRectangle(ctx, drawable) {
-        var x = drawable.justHeightScale ? drawable.x - Math.floor(drawable.__getWidth() / 2) - 0.5 :
+        var x = drawable.justHeightScale ?
+            drawable.x - Math.floor(drawable.__getWidth() / 2) - 0.5 :
             drawable.getCornerX() - 0.5;
-        var y = drawable.justWidthScale ? drawable.y - Math.floor(drawable.__getHeight() / 2) - 0.5 :
+        var y = drawable.justWidthScale ?
+            drawable.y - Math.floor(drawable.__getHeight() / 2) - 0.5 :
             drawable.getCornerY() - 0.5;
         var width = drawable.justHeightScale ? Math.floor(drawable.__getWidth()) : drawable.getWidth();
         var height = drawable.justWidthScale ? Math.floor(drawable.__getHeight()) : drawable.getHeight();

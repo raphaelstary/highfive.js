@@ -10,7 +10,7 @@ H5.GamePadHandler = (function (GamePad, Event, getGamepads) {
         this.gamePads.push(new GamePad(event.gamepad.index));
     };
 
-    //todo rework
+    // todo rework
     GamePadHandler.prototype.detect = function () {
         var pads = getGamepads();
 
@@ -25,12 +25,12 @@ H5.GamePadHandler = (function (GamePad, Event, getGamepads) {
     };
 
     GamePadHandler.prototype.shouldDetect = function () {
-        //todo rework
+        // todo rework
         return this.gamePads.length < 1;
     };
 
-    GamePadHandler.prototype.disconnect = function (event) {
-        //todo implement
+    GamePadHandler.prototype.disconnect = function () { // function (event) {
+        // todo implement
     };
 
     GamePadHandler.prototype.update = function () {
