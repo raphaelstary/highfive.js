@@ -87,7 +87,7 @@ H5.Transition = (function (Math) {
 
     function quadraticEasingOut(currentTime, startValue, changeInValue, duration) {
         var temp = currentTime / duration;
-        return -changeInValue * temp * (currentTime - 2) + startValue;
+        return -changeInValue * temp * (temp - 2) + startValue;
     }
 
     //    not working :( ... don't copy random shit from the fucking internet
