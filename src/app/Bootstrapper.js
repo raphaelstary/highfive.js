@@ -156,11 +156,13 @@ H5.Bootstrapper = (function ($) {
      */
 
     /**
-     *
-     * @param {mapResize} [mapCanvasDimensions]
-     * @return {Bootstrapper}
+     * @param {mapResize} [mapCanvasDimensions] resize callback function
+     * @return {Bootstrapper} return this to chain calls
      */
     function addResize(mapCanvasDimensions) {
+        if (!mapCanvasDimensions) {
+            throw new $.Error('no resize callback function provided');
+        }
         if (noOneDidAnInit) {
             initBootstrap();
         }
@@ -337,5 +339,6 @@ H5.Bootstrapper = (function ($) {
     ImageLoader: H5.ImageLoader,
     LocalesLoader: H5.LocalesLoader,
     SceneLoader: H5.SceneLoader,
-    WebAudioSpriteLoader: H5.WebAudioSpriteLoader
+    WebAudioSpriteLoader: H5.WebAudioSpriteLoader,
+    Error: Error
 });
