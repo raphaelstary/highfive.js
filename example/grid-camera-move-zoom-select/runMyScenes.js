@@ -1,38 +1,9 @@
 G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, Event, PlayerControls, Key,
-    GamePadButton, Stats, Font, Vectors, Object) {
+    GamePadButton, Vectors, Object, setupFPSMeter) {
     'use strict';
 
     function runMyScenes(services) {
-        services.events.subscribe(Event.TICK_START, Stats.start);
-        services.events.subscribe(Event.TICK_END, Stats.end);
-
-        services.sceneStorage.msTotal = 0;
-        services.sceneStorage.msCount = 0;
-        services.sceneStorage.fpsTotal = 0;
-        services.sceneStorage.fpsCount = 0;
-
-        var ms = services.stage.createText('0')
-            .setPosition(Width.get(1920, 1880), Height.get(1080, 1020))
-            .setSize(Font._60)
-            .setZIndex(11)
-            .setColor('black');
-        var fps = services.stage.createText('0')
-            .setPosition(Width.get(1920, 1880), Height.get(1080, 1040))
-            .setSize(Font._60)
-            .setZIndex(11)
-            .setColor('black');
-
-        services.events.subscribe(Event.TICK_DRAW, function () {
-            ms.data.msg = Stats.getMs()
-                .toString() + ' ms';
-            fps.data.msg = Stats.getFps()
-                .toString() + ' fps';
-
-            services.sceneStorage.msTotal += Stats.getMs();
-            services.sceneStorage.msCount++;
-            services.sceneStorage.fpsTotal += Stats.getFps();
-            services.sceneStorage.fpsCount++;
-        });
+        setupFPSMeter(services);
 
         // create your scenes and add them to the scene manager
 
@@ -333,4 +304,4 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
 
     return runMyScenes;
 })(H5.Grid, H5.GridViewHelper, H5.Width, H5.Height, H5.Camera, H5.range, H5.Event, H5.PlayerControls, H5.Key,
-    H5.GamePadButton, H5.Stats, H5.Font, H5.Vectors, Object);
+    H5.GamePadButton, H5.Vectors, Object, H5.setupFPSMeter);

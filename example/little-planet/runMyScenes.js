@@ -1,4 +1,4 @@
-G.runMyScenes = (function (Width, Height, Math, Vectors, Event, Stats, Font) {
+G.runMyScenes = (function (Width, Height, Math, Vectors, Event, setupFPSMeter) {
     'use strict';
 
     var TILES_COUNT = 28;
@@ -110,37 +110,8 @@ G.runMyScenes = (function (Width, Height, Math, Vectors, Event, Stats, Font) {
             }
         });
 
-        services.events.subscribe(Event.TICK_START, Stats.start);
-        services.events.subscribe(Event.TICK_END, Stats.end);
-
-        services.sceneStorage.msTotal = 0;
-        services.sceneStorage.msCount = 0;
-        services.sceneStorage.fpsTotal = 0;
-        services.sceneStorage.fpsCount = 0;
-
-        var ms = services.stage.createText('0')
-            .setPosition(Width.get(10, 9), Height.get(20, 19))
-            .setSize(Font._60)
-            .setZIndex(11)
-            .setColor('black');
-        var fps = services.stage.createText('0')
-            .setPosition(Width.get(10, 9), Height.get(40, 39))
-            .setSize(Font._60)
-            .setZIndex(11)
-            .setColor('black');
-
-        services.events.subscribe(Event.TICK_CAMERA, function () {
-            ms.data.msg = Stats.getMs()
-                .toString() + ' ms';
-            fps.data.msg = Stats.getFps()
-                .toString() + ' fps';
-
-            services.sceneStorage.msTotal += Stats.getMs();
-            services.sceneStorage.msCount++;
-            services.sceneStorage.fpsTotal += Stats.getFps();
-            services.sceneStorage.fpsCount++;
-        });
+        setupFPSMeter(services);
     }
 
     return runMyScenes;
-})(H5.Width, H5.Height, Math, H5.Vectors, H5.Event, H5.Stats, H5.Font);
+})(H5.Width, H5.Height, Math, H5.Vectors, H5.Event, H5.setupFPSMeter);

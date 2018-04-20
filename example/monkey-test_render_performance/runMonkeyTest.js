@@ -1,4 +1,4 @@
-G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition, range, GridViewHelper, location) {
+G.runMonkeyTest = (function (Width, Height, Event, setupFPSMeter, Math, Transition, range, GridViewHelper, location) {
     'use strict';
 
     var MonkeyFaceImages = [
@@ -13,40 +13,9 @@ G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition
 
     function runMonkeyTest(services) {
         var stage = services.stage;
-        var events = services.events;
         var device = services.device;
-        var sceneStorage = services.sceneStorage;
 
-        events.subscribe(Event.TICK_START, Stats.start);
-        events.subscribe(Event.TICK_END, Stats.end);
-
-        sceneStorage.msTotal = 0;
-        sceneStorage.msCount = 0;
-        sceneStorage.fpsTotal = 0;
-        sceneStorage.fpsCount = 0;
-
-        var ms = stage.createText('0')
-            .setPosition(Width.get(10, 9), Height.get(20, 19))
-            .setSize(Font._60)
-            .setZIndex(11)
-            .setColor('black');
-        var fps = stage.createText('0')
-            .setPosition(Width.get(10, 9), Height.get(40, 39))
-            .setSize(Font._60)
-            .setZIndex(11)
-            .setColor('black');
-
-        events.subscribe(Event.TICK_CAMERA, function () {
-            ms.data.msg = Stats.getMs()
-                .toString() + ' ms';
-            fps.data.msg = Stats.getFps()
-                .toString() + ' fps';
-
-            sceneStorage.msTotal += Stats.getMs();
-            sceneStorage.msCount++;
-            sceneStorage.fpsTotal += Stats.getFps();
-            sceneStorage.fpsCount++;
-        });
+        setupFPSMeter(services);
 
         var gridViewHelper = new GridViewHelper(stage, device, WIDTH_TILES, HEIGHT_TILES);
         startParade(gridViewHelper);
@@ -93,4 +62,4 @@ G.runMonkeyTest = (function (Width, Height, Event, Stats, Font, Math, Transition
     }
 
     return runMonkeyTest;
-})(H5.Width, H5.Height, H5.Event, H5.Stats, H5.Font, Math, H5.Transition, H5.range, H5.GridViewHelper, window.location);
+})(H5.Width, H5.Height, H5.Event, H5.setupFPSMeter, Math, H5.Transition, H5.range, H5.GridViewHelper, window.location);
