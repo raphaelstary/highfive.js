@@ -160,9 +160,6 @@ H5.Bootstrapper = (function ($) {
      * @return {Bootstrapper} return this to chain calls
      */
     function addResize(mapCanvasDimensions) {
-        if (!mapCanvasDimensions) {
-            throw new $.Error('no resize callback function provided');
-        }
         if (noOneDidAnInit) {
             initBootstrap();
         }
