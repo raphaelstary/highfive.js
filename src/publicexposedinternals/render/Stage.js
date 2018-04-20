@@ -34,7 +34,7 @@ H5.Stage = (function (Sprites, Drawables, Paths, Animations, Math) {
 
     Stage.prototype.getDrawableText = function (x, y, zIndex, msg, size, fontFamily, color, rotation, alpha, fontStyle,
         maxLineLength, lineHeight, scale) {
-        return Drawables.getTxt(this.renderer.ctx, ++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation,
+        return Drawables.getTxt(this.renderer.__ctx, ++this._id, x, y, zIndex, msg, size, fontFamily, color, rotation,
             alpha, fontStyle, maxLineLength, lineHeight, scale);
     };
 
