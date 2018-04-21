@@ -2,47 +2,63 @@ H5.SelectionList = (function () {
     'use strict';
 
     function SelectionList() {
-        this.options = [];
-        this.selection = null;
+        this.__options = [];
+        this.__selection = undefined;
+
+        this.selection = undefined;
+        this.references = undefined;
     }
 
-    SelectionList.prototype.add = function (drawable, callback, thisArg) {
+    SelectionList.prototype.add = function (drawable, callback, thisArg, references) {
         var item = {
             selection: drawable,
-            callback: thisArg ? callback.bind(thisArg) : callback
+            callback: thisArg ? callback.bind(thisArg) : callback,
+            references: references
         };
 
-        if (this.options.length == 0) {
-            this.selection = item.callback;
+        if (this.__options.length == 0) {
+            this.__selection = item.callback;
         }
-        if (this.options.length != 0) {
+        if (this.__options.length != 0) {
             drawable.setShow(false);
         }
 
-        this.options.push(item);
+        this.__options.push(item);
+
+        if (this.__options.length == 1) {
+            this.selection = drawable;
+            this.references = references;
+        }
     };
 
     SelectionList.prototype.previous = function () {
-        var newSelection = this.options.pop();
+        var newSelection = this.__options.pop();
         newSelection.selection.show = true;
-        if (this.options[0]) {
-            this.options[0].selection.show = false;
-        }
-        this.options.unshift(newSelection);
 
-        this.selection = newSelection.callback;
+        this.selection = newSelection.selection;
+        this.references = newSelection.references;
+
+        if (this.__options[0]) {
+            this.__options[0].selection.show = false;
+        }
+        this.__options.unshift(newSelection);
+
+        this.__selection = newSelection.callback;
     };
 
     SelectionList.prototype.next = function () {
-        this.options.push(this.options.shift());
-        this.options[this.options.length - 1].selection.show = false;
-        this.options[0].selection.show = true;
+        this.__options.push(this.__options.shift());
+        this.__options[this.__options.length - 1].selection.show = false;
+        this.__options[0].selection.show = true;
 
-        this.selection = this.options[0].callback;
+        this.selection = this.__options[0].selection;
+        this.references = this.__options[0].references;
+
+        this.__selection = this.__options[0].callback;
     };
 
     SelectionList.prototype.execute = function () {
-        this.selection();
+        this.__selection();
     };
 
     return SelectionList;
