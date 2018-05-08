@@ -41,7 +41,13 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
                 }
             });
 
-            sceneServices.stage = getStage(self.services.screen, sceneServices.gfxCache, self.services.device, events);
+            sceneServices.visuals = getStage(self.services.screen, sceneServices.gfxCache, self.services.device,
+                events);
+
+            /**
+             * @deprecated use services.visuals instead
+             */
+            sceneServices.stage = sceneServices.visuals;
             sceneServices.loop = self.loop = installLoop(sceneServices.stage, events);
 
             var timer = new CallbackTimer();
