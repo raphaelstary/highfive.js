@@ -10,7 +10,7 @@ window.onload = function () {
                 .getResolver();
         })
         .build(function (services) {
-            var title = services.stage.createImage('animation-test_0000')
+            var title = services.visuals.createImage('animation-test_0000')
                 .setPosition(H5.Width.HALF, H5.Height.HALF);
             var spriteAnimation = title.animate('animation-test', 110)
                 .setCallback(function () {

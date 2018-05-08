@@ -7,31 +7,31 @@ window.onload = function () {
             var Width = H5.Width;
             var Height = H5.Height;
             var Font = H5.Font;
-            var stage = services.stage;
+            var visuals = services.visuals;
             var timer = services.timer;
 
-            var drawable1 = stage.createRectangle(true)
+            var drawable1 = visuals.createRectangle(true)
                 .setWidth(Font.get(3))
                 .setHeight(Height.THIRD)
                 .setPosition(Width.get(15, 6), Height.get(5))
                 .setColor('darkorchid')
                 .setZIndex(0);
 
-            var drawable2 = stage.createRectangle(true)
+            var drawable2 = visuals.createRectangle(true)
                 .setWidth(Font.get(3))
                 .setHeight(Height.THIRD)
                 .setPosition(Width.get(15, 7), Height.get(5, 2))
                 .setColor('darkmagenta')
                 .setZIndex(1);
 
-            var drawable3 = stage.createRectangle(true)
+            var drawable3 = visuals.createRectangle(true)
                 .setWidth(Font.get(3))
                 .setHeight(Height.THIRD)
                 .setPosition(Width.get(15, 8), Height.get(5, 3))
                 .setColor('darkslateblue')
                 .setZIndex(2);
 
-            var drawable4 = stage.createRectangle(true)
+            var drawable4 = visuals.createRectangle(true)
                 .setWidth(Font.get(3))
                 .setHeight(Height.THIRD)
                 .setPosition(Width.get(15, 9), Height.get(5, 4))

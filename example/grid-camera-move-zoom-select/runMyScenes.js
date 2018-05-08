@@ -19,7 +19,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
 
         var grid = new Grid(levelWrapper);
 
-        var gridViewHelper = new GridViewHelper(services.stage, services.device, 16, 9);
+        var gridViewHelper = new GridViewHelper(services.visuals, services.device, 16, 9);
 
         function maxX() {
             var maxCameraPosition = gridViewHelper.getPosition(grid.xTiles - 0.5, grid.yTiles - 0.5);
@@ -31,7 +31,7 @@ G.runMyScenes = (function (Grid, GridViewHelper, Width, Height, Camera, range, E
             return maxCameraPosition.y;
         }
 
-        var viewPort = services.stage.createRectangle(false)
+        var viewPort = services.visuals.createRectangle(false)
             .setPosition(Width.HALF, Height.HALF)
             .setWidth(Width.FULL)
             .setHeight(Height.FULL)

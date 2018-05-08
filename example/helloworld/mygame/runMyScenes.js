@@ -7,7 +7,7 @@ G.runMyScenes = (function (Scenes, Width, Height) {
         var scenes = new Scenes();
 
         scenes.put('my-scene', function (next) {
-            var hello = services.stage.createText('Hello World :)')
+            var hello = services.visuals.createText('Hello World :)')
                 .setPosition(Width.HALF, Height.HALF);
 
             services.timer.in(30, function () {
@@ -19,7 +19,7 @@ G.runMyScenes = (function (Scenes, Width, Height) {
         });
 
         scenes.put('my-other-scene', function (next) {
-            var hallo = services.stage.createText('Hallo Welt (:')
+            var hallo = services.visuals.createText('Hallo Welt (:')
                 .setPosition(Width.HALF, Height.HALF);
 
             services.timer.in(30, function () {

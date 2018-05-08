@@ -36,7 +36,7 @@ window.onload = function () {
             });
         })
         .build(function (services) {
-            services.stage.createText('Hello World :)')
+            services.visuals.createText('Hello World :)')
                 .setColor('white')
                 .setSize(H5.Font.get(20))
                 .setPosition(H5.Width.HALF, H5.Height.HALF);

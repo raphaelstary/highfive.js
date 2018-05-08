@@ -12,12 +12,12 @@ G.runMonkeyTest = (function (Width, Height, Event, setupFPSMeter, Math, Transiti
     var HEIGHT_TILES = params.height ? parseInt(params.height) : 9 * 3;
 
     function runMonkeyTest(services) {
-        var stage = services.stage;
+        var visuals = services.visuals;
         var device = services.device;
 
         setupFPSMeter(services);
 
-        var gridViewHelper = new GridViewHelper(stage, device, WIDTH_TILES, HEIGHT_TILES);
+        var gridViewHelper = new GridViewHelper(visuals, device, WIDTH_TILES, HEIGHT_TILES);
         startParade(gridViewHelper);
     }
 

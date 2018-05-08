@@ -5,7 +5,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
     function MVVMScene(model, view, viewModel, viewName, parentSceneRect, anchorXFn, anchorYFn) {
         this.services = model;
 
-        this.stage = model.stage;
+        this.visuals = model.visuals;
         this.sceneStorage = model.sceneStorage;
         this.messages = model.messages;
         this.timer = model.timer;
@@ -179,7 +179,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                 if (elem.type == 'image') {
                     var imgName = elem.filename.substring(0, elem.filename.lastIndexOf('.'));
 
-                    drawable = this.stage.createImage(imgName)
+                    drawable = this.visuals.createImage(imgName)
                         .setPosition(x, y)
                         .setAlpha(elem.alpha)
                         .setRotation(elem.rotation)
@@ -198,7 +198,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     var txtKey = elem.tags ? getTagValue('txt')(elem.tags) : undefined;
                     var msg = txtKey ? self.messages.get(self.viewName, txtKey) : elem.msg;
 
-                    drawable = this.stage.createText(msg)
+                    drawable = this.visuals.createText(msg)
                         .setPosition(x, y)
                         .setSize(txtSize(elem.size))
                         .setFont(elem.font)
@@ -237,7 +237,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     }
 
                 } else if (elem.type == 'line') {
-                    drawable = this.stage.createLine()
+                    drawable = this.visuals.createLine()
                         .setPosition(x, y)
                         .setLength(txtSize(elem.length))
                         .setColor(elem.color);
@@ -258,7 +258,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     }
 
                 } else if (elem.type == 'circle') {
-                    drawable = this.stage.createCircle(elem.filled)
+                    drawable = this.visuals.createCircle(elem.filled)
                         .setPosition(x, y)
                         .setRadius(txtSize(elem.radius))
                         .setColor(elem.color);
@@ -310,7 +310,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                             return foundSmth;
                         });
 
-                        drawable = this.stage.createRectangle()
+                        drawable = this.visuals.createRectangle()
                             .setPosition(x, y)
                             .setWidth(widthFn(elem.width))
                             .setHeight(heightFn(elem.height))
@@ -347,7 +347,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
 
                     } else {
 
-                        drawable = this.stage.createRectangle(elem.filled)
+                        drawable = this.visuals.createRectangle(elem.filled)
                             .setPosition(x, y)
                             .setWidth(widthFn(elem.width))
                             .setHeight(heightFn(elem.height))
@@ -409,7 +409,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         return foundSmth;
                     });
 
-                    drawable = this.stage.createRectangle()
+                    drawable = this.visuals.createRectangle()
                         .setPosition(xFn(elem.input.x), yFn(elem.input.y))
                         .setWidth(xFn(elem.input.width))
                         .setHeight(yFn(elem.input.height))
@@ -431,7 +431,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                     var btnTxtKey = getTagValue('txt')(elem.text.tags);
                     var btnMsg = btnTxtKey ? self.messages.get(self.viewName, btnTxtKey) : elem.text.msg;
 
-                    drawable = this.stage.createText(btnMsg)
+                    drawable = this.visuals.createText(btnMsg)
                         .setPosition(xFn(elem.text.x), yFn(elem.text.y))
                         .setSize(txtSize(elem.text.size))
                         .setFont(elem.text.font)
@@ -454,7 +454,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
 
                     if (elem.background.type == 'image') {
                         var bgName = elem.background.filename.substring(0, elem.background.filename.lastIndexOf('.'));
-                        drawable = this.stage.createImage(bgName)
+                        drawable = this.visuals.createImage(bgName)
                             .setPosition(xFn(elem.background.x), yFn(elem.background.y))
                             .setAlpha(elem.background.alpha)
                             .setRotation(elem.background.rotation)
@@ -469,7 +469,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         }
 
                     } else if (elem.background.type == 'rectangle') {
-                        drawable = this.stage.createRectangle(elem.background.filled)
+                        drawable = this.visuals.createRectangle(elem.background.filled)
                             .setPosition(xFn(elem.background.x), yFn(elem.background.y))
                             .setWidth(xFn(elem.background.width))
                             .setHeight(yFn(elem.background.height))
@@ -498,7 +498,7 @@ H5.MVVMScene = (function (iterateEntries, Width, Height, Event, Math, calcScreen
                         maskX = getXPositionRelativeToSize_anchorWithHalf(sceneRect, elem.mask.height, elem.mask.x);
                     }
 
-                    var mask = this.stage.createRectangle()
+                    var mask = this.visuals.createRectangle()
                         .setPosition(maskX, maskY)
                         .setWidth(xFn(elem.mask.width))
                         .setHeight(yFn(elem.mask.height))

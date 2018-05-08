@@ -31,8 +31,8 @@ H5.Buttons = (function () {
     // - add event listener functions (like PlayerControls for gamepad + keyboard)
     //     -> therefore consolidate every 2nd screen scene class
 
-    function getButton(stage, drawable, imgName, pressedImgName) {
-        return new Button(drawable, stage.getGraphic(imgName), stage.getGraphic(pressedImgName));
+    function getButton(visuals, drawable, imgName, pressedImgName) {
+        return new Button(drawable, visuals.getGraphic(imgName), visuals.getGraphic(pressedImgName));
     }
 
     function getDown(button, callback) {

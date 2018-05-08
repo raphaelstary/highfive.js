@@ -37,7 +37,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
     }
 
     return {
-        moveTo: function (stage, resizer, screen, drawable, xFn, yFn, resizeDependencies) {
+        moveTo: function (visuals, resizer, screen, drawable, xFn, yFn, resizeDependencies) {
             var registerResizeAfterMove = function () {
                 resizer.removeKey('path', drawable);
 
@@ -47,7 +47,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
 
             };
 
-            var path = stage.getPath(drawable.x, drawable.y, Math.floor(xFn(screen.width, screen.height)),
+            var path = visuals.getPath(drawable.x, drawable.y, Math.floor(xFn(screen.width, screen.height)),
                 Math.floor(yFn(screen.height, screen.width)), 120, Transition.LINEAR, false);
 
             var enhancedCallBack = function () {
@@ -57,7 +57,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
                 }
             };
 
-            stage.move(drawable, path, enhancedCallBack);
+            visuals.move(drawable, path, enhancedCallBack);
 
             resizer.add('path', drawable, function (width, height) {
                 changePath(path, drawable.x, drawable.y, Math.floor(xFn(width, height)),
@@ -67,7 +67,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
             return addServiceMethods(path);
         },
 
-        moveQuadTo: function (stage, resizer, screen, drawable, property, xFn, yFn, resizeDependencies) {
+        moveQuadTo: function (visuals, resizer, screen, drawable, property, xFn, yFn, resizeDependencies) {
             var registerResizeAfterMove = function () {
                 resizer.removeKey('path_' + property, drawable);
 
@@ -78,7 +78,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
 
             };
 
-            var path = stage.getPath(drawable.data[property + 'x'], drawable.data[property + 'y'],
+            var path = visuals.getPath(drawable.data[property + 'x'], drawable.data[property + 'y'],
                 Math.floor(xFn(screen.width, screen.height)), Math.floor(yFn(screen.height, screen.width)), 120,
                 Transition.LINEAR, false);
 
@@ -89,7 +89,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
                 }
             };
 
-            stage.moveQuad(property, drawable, path, enhancedCallBack);
+            visuals.moveQuad(property, drawable, path, enhancedCallBack);
 
             resizer.add('path_' + property, drawable, function (width, height) {
                 changePath(path, drawable.data[property + 'x'], drawable.data[property + 'y'],
@@ -99,12 +99,12 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
             return addServiceMethods(path);
         },
 
-        moveFrom: function (stage, resizer, screen, drawable, xFn, yFn, resizeDependencies) {
+        moveFrom: function (visuals, resizer, screen, drawable, xFn, yFn, resizeDependencies) {
             var registerResizeAfterMove = function () {
                 resizer.removeKey('path', drawable);
             };
 
-            var path = stage.getPath(Math.floor(xFn(screen.width, screen.height)),
+            var path = visuals.getPath(Math.floor(xFn(screen.width, screen.height)),
                 Math.floor(yFn(screen.height, screen.width)), drawable.x, drawable.y, 120, Transition.LINEAR, false);
 
             var enhancedCallBack = function () {
@@ -114,7 +114,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
                 }
             };
 
-            stage.move(drawable, path, enhancedCallBack);
+            visuals.move(drawable, path, enhancedCallBack);
 
             resizer.add('path', drawable, function (width, height) {
                 changePath(path, Math.floor(xFn(width, height)), Math.floor(yFn(height, width)), drawable.x,
@@ -127,98 +127,98 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
             drawable.show = value;
             return drawable;
         },
-        show: function (stage, drawable) {
-            stage.draw(drawable);
+        show: function (visuals, drawable) {
+            visuals.draw(drawable);
             return drawable;
         },
-        hide: function (stage, drawable) {
-            stage.remove(drawable);
+        hide: function (visuals, drawable) {
+            visuals.remove(drawable);
             return drawable;
         },
-        unmask: function (stage, resizer, drawable) {
-            this.remove(stage, resizer, drawable.mask);
+        unmask: function (visuals, resizer, drawable) {
+            this.remove(visuals, resizer, drawable.mask);
         },
-        remove: function (stage, resizer, drawable) {
+        remove: function (visuals, resizer, drawable) {
             resizer.remove(drawable);
             if (drawable.mask) {
-                this.remove(stage, resizer, drawable.mask);
+                this.remove(visuals, resizer, drawable.mask);
                 delete drawable.mask;
             }
-            stage.remove(drawable);
+            visuals.remove(drawable);
             return drawable;
         },
-        pause: function (stage, drawable) {
-            stage.pause(drawable);
+        pause: function (visuals, drawable) {
+            visuals.pause(drawable);
             return drawable;
         },
-        play: function (stage, drawable) {
-            stage.play(drawable);
+        play: function (visuals, drawable) {
+            visuals.play(drawable);
             return drawable;
         },
-        rotateTo: function (stage, drawable, angle) {
+        rotateTo: function (visuals, drawable, angle) {
             var enhancedCallBack = function () {
                 if (animation.__callback) {
                     animation.__callback();
                 }
             };
-            var animation = stage.animateRotation(drawable, angle, 120, Transition.LINEAR, false, enhancedCallBack);
+            var animation = visuals.animateRotation(drawable, angle, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
         },
-        rotationPattern: function (stage, drawable, valuePairs, loop) {
-            stage.animateRotationPattern(drawable, valuePairs, loop);
+        rotationPattern: function (visuals, drawable, valuePairs, loop) {
+            visuals.animateRotationPattern(drawable, valuePairs, loop);
             return drawable;
         },
-        opacityTo: function (stage, drawable, alpha) {
+        opacityTo: function (visuals, drawable, alpha) {
             var enhancedCallBack = function () {
                 if (animation.__callback) {
                     animation.__callback();
                 }
             };
-            var animation = stage.animateAlpha(drawable, alpha, 120, Transition.LINEAR, false, enhancedCallBack);
+            var animation = visuals.animateAlpha(drawable, alpha, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
         },
-        opacityPattern: function (stage, drawable, valuePairs, loop) {
-            stage.animateAlphaPattern(drawable, valuePairs, loop);
+        opacityPattern: function (visuals, drawable, valuePairs, loop) {
+            visuals.animateAlphaPattern(drawable, valuePairs, loop);
             return drawable;
         },
-        scaleTo: function (stage, drawable, scale) {
+        scaleTo: function (visuals, drawable, scale) {
             var enhancedCallBack = function () {
                 if (animation.__callback) {
                     animation.__callback();
                 }
             };
-            var animation = stage.animateScale(drawable, scale, 120, Transition.LINEAR, false, enhancedCallBack);
+            var animation = visuals.animateScale(drawable, scale, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
         },
-        scalePattern: function (stage, drawable, valuePairs, loop) {
-            stage.animateScalePattern(drawable, valuePairs, loop);
+        scalePattern: function (visuals, drawable, valuePairs, loop) {
+            visuals.animateScalePattern(drawable, valuePairs, loop);
             return drawable;
         },
-        sprite: function (stage, drawable, imgPathName, numberOfFrames, loop) {
-            var sprite = stage.getSprite(imgPathName, numberOfFrames, loop);
+        sprite: function (visuals, drawable, imgPathName, numberOfFrames, loop) {
+            var sprite = visuals.getSprite(imgPathName, numberOfFrames, loop);
             var enhancedCallBack = function () {
                 if (sprite.__callback) {
                     sprite.__callback();
                 }
             };
-            stage.animate(drawable, sprite, enhancedCallBack);
+            visuals.animate(drawable, sprite, enhancedCallBack);
 
             sprite.setLoop = looping.bind(undefined, sprite);
             sprite.setCallback = callback.bind(undefined, sprite);
             sprite.finish = function () {
                 // todo: fix api soon plz -> should be prefixed as private member
-                stage.spriteAnimations.remove(drawable);
+                visuals.spriteAnimations.remove(drawable);
             };
 
             return sprite;
         },
-        volumeTo: function (stage, audio, volume) {
+        volumeTo: function (visuals, audio, volume) {
             var enhancedCallBack = function () {
                 if (animation.__callback) {
                     animation.__callback();
                 }
             };
-            var animation = stage.animateVolume(audio, volume, 120, Transition.LINEAR, false, enhancedCallBack);
+            var animation = visuals.animateVolume(audio, volume, 120, Transition.LINEAR, false, enhancedCallBack);
             return addServiceMethods(animation);
         }
     };

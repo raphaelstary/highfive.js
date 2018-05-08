@@ -7,7 +7,7 @@ G.runMyScenes = (function (Width, Height, Math, Vectors, Event, setupFPSMeter) {
     var TWO_PI = Math.PI * 2;
 
     function runMyScenes(services) {
-        var stage = services.stage;
+        var visuals = services.visuals;
         var device = services.device;
 
         function getRadius(width, height) {
@@ -50,7 +50,7 @@ G.runMyScenes = (function (Width, Height, Math, Vectors, Event, setupFPSMeter) {
             };
         }
 
-        var planet = stage.createCircle(true)
+        var planet = visuals.createCircle(true)
             .setColor('#6495ED')
             .setPosition(Width.HALF, Height.HALF)
             .setRotation(0)
@@ -59,7 +59,7 @@ G.runMyScenes = (function (Width, Height, Math, Vectors, Event, setupFPSMeter) {
         var tiles = [];
         for (var i = 0; i < TILES_COUNT; i++) {
             var rotation = ARC_ANGLE * i + PI_HALF;
-            tiles.push(stage.createRectangle(true)
+            tiles.push(visuals.createRectangle(true)
                 .setColor('#519657')
                 .setPosition(getTileX(i), getTileY(i))
                 .setRotation(rotation)

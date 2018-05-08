@@ -18,7 +18,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
         this.callback = undefined;
     }
 
-    function HtmlAudioSprite(info, audioElementOrElements, timer, stage) {
+    function HtmlAudioSprite(info, audioElementOrElements, timer, visuals) {
         this.info = info;
 
         if (audioElementOrElements instanceof Array) {
@@ -30,7 +30,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
         }
 
         this.timer = timer;
-        this.stage = stage;
+        this.visuals = visuals;
 
         this.masterVolume = 1;
     }
@@ -128,7 +128,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
             if (track.playing) {
                 track.currentSound.volume = value;
             }
-            this.stage.audioVolumeTo(track.element, value)
+            this.visuals.audioVolumeTo(track.element, value)
                 .setDuration(duration);
         }, this);
         this.timer.in(duration, callback, thisArg);
@@ -247,7 +247,7 @@ H5.HtmlAudioSprite = (function (Array, Transition) {
                 }
 
                 currentSound.volume = value;
-                self.stage.audioVolumeTo(currentTrack.element, value)
+                self.visuals.audioVolumeTo(currentTrack.element, value)
                     .setDuration(duration)
                     .setSpacing(Transition.EASE_OUT_EXPO)
                     .setCallback(callback, that);

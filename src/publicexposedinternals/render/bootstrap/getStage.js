@@ -41,14 +41,14 @@ H5.getStage = (function ($) {
             'lineDash'
         ];
         var legacyStage = createLegacy(gfxCache, renderer);
-        var stage = new $.StageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
+        var visuals = new $.StageAPI(legacyStage, gfxCache, new $.KeyRepository(repoKeys), device.width, device.height,
             new $.CallbackTimer());
 
         if (!device.isLowRez) {
-            events.subscribe($.Event.RESIZE, stage.resize.bind(stage));
+            events.subscribe($.Event.RESIZE, visuals.resize.bind(visuals));
         }
 
-        return stage;
+        return visuals;
     }
 
     return function (screen, gfxCache, device, events) {

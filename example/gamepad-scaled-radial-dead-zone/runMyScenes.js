@@ -9,7 +9,7 @@ G.runMyScenes = (function (Event, Width, Height, Font, Math, Vectors) {
 
         setupGamePadDebugTxt(services, force);
 
-        var cursor = services.stage.createCircle()
+        var cursor = services.visuals.createCircle()
             .setPosition(Width.HALF, Height.HALF)
             .setColor('#039be5')
             .setLineWidth(Font.get(720, 4))
@@ -45,34 +45,34 @@ G.runMyScenes = (function (Event, Width, Height, Font, Math, Vectors) {
 
     function setupGamePadDebugTxt(services, force) {
 
-        var xAxisTxt = services.stage.createText('0')
+        var xAxisTxt = services.visuals.createText('0')
             .setPosition(Width.get(2), Height.get(1080, 940))
             .setSize(Font._60)
             .setZIndex(11)
             .setColor('black');
-        var yAxisTxt = services.stage.createText('0')
+        var yAxisTxt = services.visuals.createText('0')
             .setPosition(Width.get(2), Height.get(1080, 960))
             .setSize(Font._60)
             .setZIndex(11)
             .setColor('black');
 
-        var xForceTxt = services.stage.createText('0')
+        var xForceTxt = services.visuals.createText('0')
             .setPosition(Width.get(2), Height.get(1080, 980))
             .setSize(Font._60)
             .setZIndex(11)
             .setColor('black');
-        var yForceTxt = services.stage.createText('0')
+        var yForceTxt = services.visuals.createText('0')
             .setPosition(Width.get(2), Height.get(1080, 1000))
             .setSize(Font._60)
             .setZIndex(11)
             .setColor('black');
 
-        var xForceScaled = services.stage.createText('0')
+        var xForceScaled = services.visuals.createText('0')
             .setPosition(Width.get(2), Height.get(1080, 1020))
             .setSize(Font._60)
             .setZIndex(11)
             .setColor('black');
-        var yForceScaled = services.stage.createText('0')
+        var yForceScaled = services.visuals.createText('0')
             .setPosition(Width.get(2), Height.get(1080, 1040))
             .setSize(Font._60)
             .setZIndex(11)

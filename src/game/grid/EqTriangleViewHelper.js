@@ -1,8 +1,8 @@
 H5.EqTriangleViewHelper = (function (Math, Transition, Width, EqTriangles) {
     'use strict';
 
-    function EqTriangleViewHelper(stage, timer, xTilesCount) {
-        this.stage = stage;
+    function EqTriangleViewHelper(visuals, timer, xTilesCount) {
+        this.visuals = visuals;
         this.timer = timer;
         this.count = xTilesCount;
     }
@@ -29,10 +29,10 @@ H5.EqTriangleViewHelper = (function (Math, Transition, Width, EqTriangles) {
         var triangle;
 
         if (side == L_SIDE) {
-            triangle = this.stage.drawEqTriangle(this.__leftX(u, v), this.__leftY(u, v), L_SIDE_START_ANGLE,
+            triangle = this.visuals.drawEqTriangle(this.__leftX(u, v), this.__leftY(u, v), L_SIDE_START_ANGLE,
                 this.__getRadius.bind(this), WHITE, true);
         } else if (side == R_SIDE) {
-            triangle = this.stage.drawEqTriangle(this.__rightX(u, v), this.__rightY(u, v), R_SIDE_START_ANGLE,
+            triangle = this.visuals.drawEqTriangle(this.__rightX(u, v), this.__rightY(u, v), R_SIDE_START_ANGLE,
                 this.__getRadius.bind(this), WHITE, true);
         }
 

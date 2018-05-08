@@ -200,8 +200,8 @@ H5.Setter = (function (changeCoords, Math) {
             return drawable;
         },
 
-        setGraphic: function (stage, drawable, imgName) {
-            drawable.data = stage.getGraphic(imgName);
+        setGraphic: function (visuals, drawable, imgName) {
+            drawable.data = visuals.getGraphic(imgName);
             return drawable;
         },
 

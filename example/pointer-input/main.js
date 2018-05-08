@@ -4,7 +4,7 @@ window.onload = function () {
     H5.Bootstrapper
         .pointer()
         .build(function (services) {
-            var helloWorld = services.stage.createText('touch me, click me, tap me :)')
+            var helloWorld = services.visuals.createText('touch me, click me, tap me :)')
                 .setColor('white')
                 .setSize(H5.Font.get(20))
                 .setPosition(H5.Width.HALF, H5.Height.HALF);

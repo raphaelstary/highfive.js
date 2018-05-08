@@ -10,12 +10,12 @@ H5.setupFPSMeter = (function (Event, Stats, Width, Height, Font) {
         services.sceneStorage.fpsTotal = 0;
         services.sceneStorage.fpsCount = 0;
 
-        var ms = services.stage.createText('0')
+        var ms = services.visuals.createText('0')
             .setPosition(Width.get(1920, 1880), Height.get(1080, 1020))
             .setSize(Font.get(50))
             .setZIndex(111)
             .setColor('grey');
-        var fps = services.stage.createText('0')
+        var fps = services.visuals.createText('0')
             .setPosition(Width.get(1920, 1880), Height.get(1080, 1040))
             .setSize(Font.get(50))
             .setZIndex(111)

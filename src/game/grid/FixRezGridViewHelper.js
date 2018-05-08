@@ -1,8 +1,8 @@
 H5.FixRezGridViewHelper = (function (Math, wrap) {
     'use strict';
 
-    function FixRezGridViewHelper(stage, width, height, edgeLength, topOffset) {
-        this.stage = stage;
+    function FixRezGridViewHelper(visuals, width, height, edgeLength, topOffset) {
+        this.visuals = visuals;
         this.width = width;
         this.height = height;
         this.xTiles = width / edgeLength;
@@ -30,7 +30,7 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
     };
 
     FixRezGridViewHelper.prototype.createBackground = function (u, v, name, zIndex, xOffset, yOffset) {
-        var drawable = this.stage.createImage(name);
+        var drawable = this.visuals.createImage(name);
         if (xOffset && yOffset) {
             drawable.setPosition(wrap(this.getX(u) + xOffset), wrap(this.getY(v) + yOffset));
         } else if (xOffset) {
@@ -48,7 +48,7 @@ H5.FixRezGridViewHelper = (function (Math, wrap) {
     };
 
     FixRezGridViewHelper.prototype.createRect = function (u, v, color) {
-        return this.stage.createRectangle(true)
+        return this.visuals.createRectangle(true)
             .setPosition(wrap(this.getX(u)), wrap(this.getY(v)))
             .setWidth(wrap(this.edgeLength - 1))
             .setHeight(wrap(this.edgeLength - 1))

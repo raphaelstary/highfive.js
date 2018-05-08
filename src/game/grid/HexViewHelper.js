@@ -1,8 +1,8 @@
 H5.HexViewHelper = (function (Width, Math) {
     'use strict';
 
-    function HexViewHelper(stage, xTilesCount, yTilesCount, topOffset, bottomOffset, adjustCenter) {
-        this.stage = stage;
+    function HexViewHelper(visuals, xTilesCount, yTilesCount, topOffset, bottomOffset, adjustCenter) {
+        this.visuals = visuals;
         this.xTiles = xTilesCount;
         this.yTiles = yTilesCount;
         this.topOffset = topOffset;
@@ -67,7 +67,7 @@ H5.HexViewHelper = (function (Width, Math) {
     };
 
     HexViewHelper.prototype.create = function (u, v) {
-        return this.stage.createHexagon()
+        return this.visuals.createHexagon()
             .setPosition(this.getXFn(u, v), this.getYFn(v))
             .setRadius(this.getSize.bind(this))
             .setAngle(POINTY_TOPPED_ANGLE);

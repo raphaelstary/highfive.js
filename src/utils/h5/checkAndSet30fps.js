@@ -1,7 +1,7 @@
 H5.checkAndSet30fps = (function (Math) {
     'use strict';
 
-    function checkAndSet30fps(sceneStorage, stage, shaker) {
+    function checkAndSet30fps(sceneStorage, visuals, shaker) {
         var fpsMean = Math.round(sceneStorage.fpsTotal / sceneStorage.fpsCount);
         var msMean = Math.round(sceneStorage.msTotal / sceneStorage.msCount);
         sceneStorage.fpsTotal = 0;
@@ -12,13 +12,13 @@ H5.checkAndSet30fps = (function (Math) {
         sceneStorage.lowPerformance = msMean > 15;
         if (fpsMean < 40) {
             sceneStorage.do30fps = true;
-            stage.stage.spriteAnimations.set30fps();
+            visuals.visuals.spriteAnimations.set30fps();
             if (shaker) {
                 shaker.__init(true);
             }
         } else {
             sceneStorage.do30fps = false;
-            stage.stage.spriteAnimations.set30fps(false);
+            visuals.visuals.spriteAnimations.set30fps(false);
         }
 
         return {

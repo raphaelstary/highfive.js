@@ -1,8 +1,8 @@
 H5.GridViewHelper = (function (Height, Math, add) {
     'use strict';
 
-    function GridViewHelper(stage, device, xTilesCount, yTilesCount, topOffset, bottomOffset) {
-        this.stage = stage;
+    function GridViewHelper(visuals, device, xTilesCount, yTilesCount, topOffset, bottomOffset) {
+        this.visuals = visuals;
         this.device = device;
         this.xTiles = xTilesCount;
         this.yTiles = yTilesCount;
@@ -67,7 +67,7 @@ H5.GridViewHelper = (function (Height, Math, add) {
 
     GridViewHelper.prototype.createBackground = function (u, v, name, zIndex, defaultTileHeight, xOffset, yOffset,
         dependencies) {
-        var drawable = this.stage.createImage(name);
+        var drawable = this.visuals.createImage(name);
         if (xOffset && yOffset) {
             drawable.setPosition(add(this.__getX(u), xOffset), add(this.__getY(v), yOffset), dependencies);
         } else if (xOffset) {
@@ -106,7 +106,7 @@ H5.GridViewHelper = (function (Height, Math, add) {
             return self.__edgeLength(height) - 1;
         }
 
-        return this.stage.createRectangle(true)
+        return this.visuals.createRectangle(true)
             .setPosition(this.__getX(u), this.__getY(v))
             .setWidth(getWidth)
             .setHeight(getHeight)

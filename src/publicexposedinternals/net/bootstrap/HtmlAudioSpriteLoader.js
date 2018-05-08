@@ -32,8 +32,8 @@ H5.HtmlAudioSpriteLoader = (function (HtmlAudioSprite, installHtmlAudioSprite) {
             }
         },
         postProcess: function (services) {
-            services.sfx = new HtmlAudioSprite(sfxInfo.spritemap, sfxTracks, services.timer, services.stage);
-            services.music = new HtmlAudioSprite(musicInfo.spritemap, music, services.timer, services.stage);
+            services.sfx = new HtmlAudioSprite(sfxInfo.spritemap, sfxTracks, services.timer, services.visuals);
+            services.music = new HtmlAudioSprite(musicInfo.spritemap, music, services.timer, services.visuals);
 
             installHtmlAudioSprite(services.events, services.sfx);
             installHtmlAudioSprite(services.events, services.music);

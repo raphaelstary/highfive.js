@@ -48,7 +48,7 @@ H5.App = (function (ResourceLoader, SimpleLoadingScreen, installLoop, concatenat
              * @deprecated use services.visuals instead
              */
             sceneServices.stage = sceneServices.visuals;
-            sceneServices.loop = self.loop = installLoop(sceneServices.stage, events);
+            sceneServices.loop = self.loop = installLoop(sceneServices.visuals, events);
 
             var timer = new CallbackTimer();
             events.subscribe(Event.TICK_START, timer.update.bind(timer));
