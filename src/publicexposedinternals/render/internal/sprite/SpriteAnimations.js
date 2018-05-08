@@ -30,7 +30,7 @@ H5.SpriteAnimations = (function (Object, iterateEntries) {
                 var drawable = animation.drawable;
                 var sprite = animation.sprite;
 
-                drawable.data = sprite.frames[++animation.time];
+                animation.time++;
                 if (animation.time >= sprite.frames.length) {
 
                     if (sprite.loop) {
@@ -43,6 +43,9 @@ H5.SpriteAnimations = (function (Object, iterateEntries) {
                     if (animation.callback) {
                         animation.callback();
                     }
+
+                } else {
+                    drawable.data = sprite.frames[animation.time];
                 }
             }, this);
     };
