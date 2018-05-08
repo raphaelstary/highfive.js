@@ -1,0 +1,21 @@
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    touch-action: none;
+
+    /*display: -webkit-flex;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    touch-action: none;
+    background-color: cornflowerblue;
+}
