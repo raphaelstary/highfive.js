@@ -13,6 +13,7 @@ window.onload = function () {
             var title = services.visuals.createImage('animation-test_0000')
                 .setPosition(H5.Width.HALF, H5.Height.HALF);
             var spriteAnimation = title.animate('animation-test', 110)
+                .setLoop(true)
                 .setCallback(function () {
                     // console.log('1st run is over');
 
@@ -22,11 +23,11 @@ window.onload = function () {
 
                         // console.log('let\'s over');
                         title.animate('animation-test', 110)
-                            .setLoop(false)
                             .setCallback(function () {
 
                                 // console.log('one more time - now forever');
-                                title.animate('animation-test', 110);
+                                title.animate('animation-test', 110)
+                                    .setLoop(true);
 
                             });
                     });
