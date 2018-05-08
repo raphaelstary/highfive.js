@@ -11,7 +11,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
         return animation;
     }
 
-    function loop(animation, loop) {
+    function looping(animation, loop) {
         animation.loop = loop;
         return animation;
     }
@@ -29,7 +29,7 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
     function addServiceMethods(animation) {
         animation.setDuration = duration.bind(undefined, animation);
         animation.setSpacing = spacing.bind(undefined, animation);
-        animation.setLoop = loop.bind(undefined, animation);
+        animation.setLoop = looping.bind(undefined, animation);
         animation.setCallback = callback.bind(undefined, animation);
         animation.finish = finish.bind(undefined, animation);
 
@@ -197,13 +197,20 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
         sprite: function (stage, drawable, imgPathName, numberOfFrames, loop) {
             var sprite = stage.getSprite(imgPathName, numberOfFrames, loop);
             var enhancedCallBack = function () {
-                if (drawable.__callback) {
-                    drawable.__callback();
+                if (sprite.__callback) {
+                    sprite.__callback();
                 }
             };
             stage.animate(drawable, sprite, enhancedCallBack);
 
-            return drawable;
+            sprite.setLoop = looping.bind(undefined, sprite);
+            sprite.setCallback = callback.bind(undefined, sprite);
+            sprite.finish = function () {
+                // todo: fix api soon plz -> should be prefixed as private member
+                stage.spriteAnimations.remove(drawable);
+            };
+
+            return sprite;
         },
         volumeTo: function (stage, audio, volume) {
             var enhancedCallBack = function () {
