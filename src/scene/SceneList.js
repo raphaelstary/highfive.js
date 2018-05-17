@@ -28,7 +28,8 @@ H5.SceneList = (function (Error) {
             this.temp.push(scene);
         }
 
-        scene.sceneFn(this.next.bind(this), customParam);
+        scene.sceneFn(customParam)
+            .then(this.next.bind(this));
     };
 
     SceneList.prototype.rewind = function () {
