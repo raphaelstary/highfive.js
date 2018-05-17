@@ -20,7 +20,8 @@ H5.SceneMap = (function (Object, Error) {
             throw new Error('scene "' + name + '" not configured');
         }
 
-        sceneFn(this.next.bind(this), customParam);
+        sceneFn(customParam)
+            .then(this.next.bind(this));
     };
 
     return SceneMap;

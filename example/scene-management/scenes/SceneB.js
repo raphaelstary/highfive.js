@@ -1,4 +1,4 @@
-G.SceneB = (function (Width, Height) {
+G.SceneB = (function (Width, Height, Promise) {
     'use strict';
 
     function SceneB(services) {
@@ -6,16 +6,22 @@ G.SceneB = (function (Width, Height) {
         this.__timer = services.timer;
     }
 
-    SceneB.prototype.show = function (next) {
+    SceneB.prototype.show = function () {
         var hello = this.__visuals.createText('Scene B says, "Hello" (:')
             .setPosition(Width.HALF, Height.HALF);
 
         this.__timer.in(60, function () {
             hello.remove();
 
-            next('scene-a');
+            nextScene('scene-a');
+        });
+
+        var nextScene;
+
+        return new Promise(function (resolve) {
+            nextScene = resolve;
         });
     };
 
     return SceneB;
-})(H5.Width, H5.Height);
+})(H5.Width, H5.Height, H5.Promise);
