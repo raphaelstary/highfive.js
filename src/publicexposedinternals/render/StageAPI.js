@@ -130,8 +130,18 @@ H5.StageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.rotationPattern = EntityServices.rotationPattern.bind(undefined, thisArg.visuals, drawable);
         drawable.scaleTo = EntityServices.scaleTo.bind(undefined, thisArg.visuals, drawable);
         drawable.scalePattern = EntityServices.scalePattern.bind(undefined, thisArg.visuals, drawable);
+
+        /**
+         * @deprecated renamed to alphaTo
+         */
         drawable.opacityTo = EntityServices.opacityTo.bind(undefined, thisArg.visuals, drawable);
+        drawable.alphaTo = EntityServices.opacityTo.bind(undefined, thisArg.visuals, drawable);
+
+        /**
+         * @deprecated renamed to alphaPattern
+         */
         drawable.opacityPattern = EntityServices.opacityPattern.bind(undefined, thisArg.visuals, drawable);
+        drawable.alphaPattern = EntityServices.opacityPattern.bind(undefined, thisArg.visuals, drawable);
 
         return drawable;
     }
@@ -204,8 +214,18 @@ H5.StageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.rotationPattern = EntityServices.rotationPattern.bind(undefined, thisArg.visuals, drawable);
         drawable.scaleTo = EntityServices.scaleTo.bind(undefined, thisArg.visuals, drawable);
         drawable.scalePattern = EntityServices.scalePattern.bind(undefined, thisArg.visuals, drawable);
+
+        /**
+         * @deprecated renamed to alphaTo
+         */
         drawable.opacityTo = EntityServices.opacityTo.bind(undefined, thisArg.visuals, drawable);
+        drawable.alphaTo = EntityServices.opacityTo.bind(undefined, thisArg.visuals, drawable);
+
+        /**
+         * @deprecated renamed to alphaPattern
+         */
         drawable.opacityPattern = EntityServices.opacityPattern.bind(undefined, thisArg.visuals, drawable);
+        drawable.alphaPattern = EntityServices.opacityPattern.bind(undefined, thisArg.visuals, drawable);
 
         // quad stuff
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
@@ -264,8 +284,18 @@ H5.StageAPI = (function (Setter, iterateEntries, EntityServices) {
         drawable.rotationPattern = EntityServices.rotationPattern.bind(undefined, thisArg.visuals, drawable);
         drawable.scaleTo = EntityServices.scaleTo.bind(undefined, thisArg.visuals, drawable);
         drawable.scalePattern = EntityServices.scalePattern.bind(undefined, thisArg.visuals, drawable);
+
+        /**
+         * @deprecated renamed to alphaTo
+         */
         drawable.opacityTo = EntityServices.opacityTo.bind(undefined, thisArg.visuals, drawable);
+        drawable.alphaTo = EntityServices.opacityTo.bind(undefined, thisArg.visuals, drawable);
+
+        /**
+         * @deprecated renamed to alphaPattern
+         */
         drawable.opacityPattern = EntityServices.opacityPattern.bind(undefined, thisArg.visuals, drawable);
+        drawable.alphaPattern = EntityServices.opacityPattern.bind(undefined, thisArg.visuals, drawable);
 
         // quad stuff
         drawable.setColor = Setter.setColor.bind(undefined, drawable);
