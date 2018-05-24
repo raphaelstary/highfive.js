@@ -16,6 +16,10 @@ H5.Promise = (function (CallbackCounter) {
     };
 
     Promise.all = function (promises) {
+        if (promises.length == 0) {
+            return Promise.resolve();
+        }
+
         var promise = new Promise();
         var counter = new CallbackCounter(promise.__resolve.bind(promise), promises.length);
         promises.forEach(function (promise) {
