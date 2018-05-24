@@ -15,7 +15,7 @@ H5.CallbackCounter = (function () {
     };
 
     CallbackCounter.prototype.__onProgress = function () {
-        if (--this.counter === 0) {
+        if (--this.counter < 1) {
             this.__onComplete();
         }
     };
