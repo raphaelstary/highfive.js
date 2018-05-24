@@ -104,8 +104,12 @@ H5.EntityServices = (function (Transition, changePath, changeCoords, Math) {
                 resizer.removeKey('path', drawable);
             };
 
-            var path = visuals.getPath(Math.floor(xFn(screen.width, screen.height)),
-                Math.floor(yFn(screen.height, screen.width)), drawable.x, drawable.y, 120, Transition.LINEAR, false);
+            var fromX = Math.floor(xFn(screen.width, screen.height));
+            var fromY = Math.floor(yFn(screen.height, screen.width));
+            var path = visuals.getPath(fromX, fromY, drawable.x, drawable.y, 120, Transition.LINEAR, false);
+
+            drawable.x = fromX;
+            drawable.y = fromY;
 
             var enhancedCallBack = function () {
                 registerResizeAfterMove();
